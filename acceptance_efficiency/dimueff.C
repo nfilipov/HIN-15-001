@@ -151,7 +151,16 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy)
 
    TH1F *hdrmin = new TH1F("hdrmin","hdrmin",100,0,0.5);
    TH2F *hdrmindpt = new TH2F("hdrmindpt","hdrmindpt",100,0,0.5,100,0,1);
-   TH1F *hgenpt = new TH1F("hgenpt","hgenpt",100,0,50);
+   TH1F *hgenpt2 = new TH1F("hgenpt2","hgenpt2",100,0,50);
+   TH1F *hgenrap2 = new TH1F("hgenrap2","hgenrap2",100,-2.5,2.5);
+   TH1F *hgenpt = new TH1F("hgenpt","hgenpt",NPTNS,ptbins_NS);
+   TH1F *hgenrap = new TH1F("hgenrap","hgenrap",NRAPNS,rapbins_NS);
+   TH1F *hrecopt = new TH1F("hrecopt","hrecopt",NPTNS,ptbins_NS);
+   TH1F *hrecorap = new TH1F("hrecorap","hrecorap",NRAPNS,rapbins_NS);
+   TH1F *hrecocent = new TH1F("hrecocent","hrecocent",NCENTNS,(float*) centbins_NS);
+   TH1F *hrecopt2 = new TH1F("hrecopt2","hrecopt2",100,0,50);
+   TH1F *hrecorap2 = new TH1F("hrecorap2","hrecorap2",100,-2.5,2.5);
+   TH1F *hrecocent2 = new TH1F("hrecocent2","hrecocent2",40,0,40);
    
    TH1F *heffpt = new TH1F("heffpt","heffpt",NPTNS,ptbins_NS);
    TH1F *heffrap = new TH1F("heffrap","heffrap",NRAPNS,rapbins_NS);
@@ -186,6 +195,8 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy)
          if (ispbpb) weight = weight_shape(genupspt,YS);
          if (ispbpb) weight *= weightpt(genupspt,YS)*FindCenWeight(Centrality,YS);
          hgenpt->Fill(genupspt,weight);
+         hgenpt2->Fill(genupspt,weight);
+         hgenrap->Fill(genupsrap,weight);
 
          // if (tlvgen->M()<massmin || tlvgen->M()>massmax) continue;
          if (YS==1 && !smuacc_loose(tlvgenmup,tlvgenmum)) continue;
@@ -234,6 +245,16 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy)
             weighttp=weight_tp(tlvmup->Pt(),tlvmup->Eta(),ispbpb)*weight_tp(tlvmum->Pt(),tlvmum->Eta(),ispbpb);
             recupspt = tlvrecmin->Pt();
             recupsrap = tlvrecmin->Rapidity();
+         }
+
+         if (idok)
+         {
+            hrecopt->Fill(recupspt,weight);
+            hrecorap->Fill(recupsrap,weight);
+            hrecocent->Fill(Centrality,weight);
+            hrecopt2->Fill(recupspt,weight);
+            hrecorap2->Fill(recupsrap,weight);
+            hrecocent2->Fill(Centrality,weight);
          }
 
          for (unsigned int ibin=0; ibin<NPTNS+1; ibin++)
