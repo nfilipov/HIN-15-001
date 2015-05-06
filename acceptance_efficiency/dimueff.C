@@ -403,8 +403,8 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy)
       cout << "[" << binmin << "," << binmax << "]: " << val << " +/- " << err << endl;
       if (ibin>0) 
       {
-         heffpt->SetBinContent(ibin,val);
-         heffpt->SetBinError(ibin,err);
+         hefftppt->SetBinContent(ibin,val);
+         hefftppt->SetBinError(ibin,err);
       }
    }
    cout << endl << "rapidity" << endl;
@@ -417,8 +417,8 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy)
       cout << "[" << binmin << "," << binmax << "]: " << val << " +/- " << err << endl;
       if (ibin>0) 
       {
-         heffrap->SetBinContent(ibin,val);
-         heffrap->SetBinError(ibin,err);
+         hefftprap->SetBinContent(ibin,val);
+         hefftprap->SetBinError(ibin,err);
       }
    }
    if (ispbpb)
@@ -433,8 +433,8 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy)
          cout << "[" << binmin << "," << binmax << "]: " << val << " +/- " << err << endl;
          if (ibin>0) 
          {
-            heffcent->SetBinContent(ibin,val);
-            heffcent->SetBinError(ibin,err);
+            hefftpcent->SetBinContent(ibin,val);
+            hefftpcent->SetBinError(ibin,err);
          }
       }
    }
