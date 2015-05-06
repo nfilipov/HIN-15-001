@@ -3,7 +3,10 @@
 #include <TH2.h>
 #include <TStyle.h>
 #include <TCanvas.h>
+#include <TLatex.h>
+#include <TPad.h>
 #include <iostream>
+#include <algorithm>
 
 #ifndef __CINT__
 #include "RooGlobalFunc.h"
@@ -47,10 +50,12 @@ using namespace RooFit;
 const double ptbins_1S[NPT1S+1] = {0,2.5,5,8,12,20,40};
 const double rapbins_1S[NRAP1S+1] = {0,0.4,0.8,1.2,1.6,2,2.4};
 const int centbins_1S[NCENT1S+1] = {0,5./2.5,10./2.5,20./2.5,30./2.5,40./2.5,50./2.5,70./2.5,100./2.5};
+const float fcentbins_1S[NCENT1S+1] = {0,5./2.5,10./2.5,20./2.5,30./2.5,40./2.5,50./2.5,70./2.5,100./2.5};
 
-const double ptbins_2S[NPT2S+1] = {0,5,12,40};
+const double ptbins_2S[NPT2S+1] = {0,7,14,40};
 const double rapbins_2S[NRAP2S+1] = {0,1.2,2.4};
 const int centbins_2S[NCENT2S+1] = {0,10./2.5,30./2.5,50./2.5,100./2.5};
+const float fcentbins_2S[NCENT2S+1] = {0,10./2.5,30./2.5,50./2.5,100./2.5};
 
 void dimueff::Loop(int YS, bool ispbpb, int strategy)
    // YS = N for NS
@@ -121,21 +126,21 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy)
 
    for (int ibin=0; ibin<NPT1S+1; ibin++)
    {
-      hden_pt_NS[ibin] = new TH1F(Form("hden_pt_NS_%i",ibin),Form("hden_pt_NS_%i",ibin),700,5,12);
-      hnum_pt_NS[ibin] = new TH1F(Form("hnum_pt_NS_%i",ibin),Form("hnum_pt_NS_%i",ibin),700,5,12);
-      hnum_tp_pt_NS[ibin] = new TH1F(Form("hnum_tp_pt_NS_%i",ibin),Form("hnum_tp_pt_NS_%i",ibin),700,5,12);
+      hden_pt_NS[ibin] = new TH1F(Form("hden_pt_NS_%i",ibin),Form("hden_pt_NS_%i",ibin),250,7,12);
+      hnum_pt_NS[ibin] = new TH1F(Form("hnum_pt_NS_%i",ibin),Form("hnum_pt_NS_%i",ibin),250,7,12);
+      hnum_tp_pt_NS[ibin] = new TH1F(Form("hnum_tp_pt_NS_%i",ibin),Form("hnum_tp_pt_NS_%i",ibin),250,7,12);
    }
    for (int ibin=0; ibin<NRAP1S+1; ibin++)
    {
-      hden_rap_NS[ibin] = new TH1F(Form("hden_rap_NS_%i",ibin),Form("hden_rap_NS_%i",ibin),700,5,12);
-      hnum_rap_NS[ibin] = new TH1F(Form("hnum_rap_NS_%i",ibin),Form("hnum_rap_NS_%i",ibin),700,5,12);
-      hnum_tp_rap_NS[ibin] = new TH1F(Form("hnum_tp_rap_NS_%i",ibin),Form("hnum_tp_rap_NS_%i",ibin),700,5,12);
+      hden_rap_NS[ibin] = new TH1F(Form("hden_rap_NS_%i",ibin),Form("hden_rap_NS_%i",ibin),250,7,12);
+      hnum_rap_NS[ibin] = new TH1F(Form("hnum_rap_NS_%i",ibin),Form("hnum_rap_NS_%i",ibin),250,7,12);
+      hnum_tp_rap_NS[ibin] = new TH1F(Form("hnum_tp_rap_NS_%i",ibin),Form("hnum_tp_rap_NS_%i",ibin),250,7,12);
    }
    for (int ibin=0; ibin<NCENT1S+1; ibin++)
    {
-      hden_cent_NS[ibin] = new TH1F(Form("hden_cent_NS_%i",ibin),Form("hden_cent_NS_%i",ibin),700,5,12);
-      hnum_cent_NS[ibin] = new TH1F(Form("hnum_cent_NS_%i",ibin),Form("hnum_cent_NS_%i",ibin),700,5,12);
-      hnum_tp_cent_NS[ibin] = new TH1F(Form("hnum_tp_cent_NS_%i",ibin),Form("hnum_tp_cent_NS_%i",ibin),700,5,12);
+      hden_cent_NS[ibin] = new TH1F(Form("hden_cent_NS_%i",ibin),Form("hden_cent_NS_%i",ibin),250,7,12);
+      hnum_cent_NS[ibin] = new TH1F(Form("hnum_cent_NS_%i",ibin),Form("hnum_cent_NS_%i",ibin),250,7,12);
+      hnum_tp_cent_NS[ibin] = new TH1F(Form("hnum_tp_cent_NS_%i",ibin),Form("hnum_tp_cent_NS_%i",ibin),250,7,12);
    }
 
    const unsigned int NPTNS = !ispbpb || YS==1 ? NPT1S : NPT2S;
@@ -145,6 +150,7 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy)
    const double *ptbins_NS = !ispbpb || YS==1 ? ptbins_1S : ptbins_2S;
    const double *rapbins_NS = !ispbpb || YS==1 ? rapbins_1S : rapbins_2S;
    const int *centbins_NS = YS==1 ? centbins_1S : centbins_2S;
+   const float *fcentbins_NS = YS==1 ? fcentbins_1S : fcentbins_2S;
 
    const double massmin = YS==1 ? 9.0 : (YS==2 ? 9.5 : 9.8);
    const double massmax = YS==1 ? 10.0 : (YS==2 ? 10.5 : 10.8);
@@ -157,17 +163,17 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy)
    TH1F *hgenrap = new TH1F("hgenrap","hgenrap",NRAPNS,rapbins_NS);
    TH1F *hrecopt = new TH1F("hrecopt","hrecopt",NPTNS,ptbins_NS);
    TH1F *hrecorap = new TH1F("hrecorap","hrecorap",NRAPNS,rapbins_NS);
-   TH1F *hrecocent = new TH1F("hrecocent","hrecocent",NCENTNS,(float*) centbins_NS);
+   TH1F *hrecocent = new TH1F("hrecocent","hrecocent",NCENTNS,fcentbins_NS);
    TH1F *hrecopt2 = new TH1F("hrecopt2","hrecopt2",100,0,50);
    TH1F *hrecorap2 = new TH1F("hrecorap2","hrecorap2",100,-2.5,2.5);
    TH1F *hrecocent2 = new TH1F("hrecocent2","hrecocent2",40,0,40);
    
    TH1F *heffpt = new TH1F("heffpt","heffpt",NPTNS,ptbins_NS);
    TH1F *heffrap = new TH1F("heffrap","heffrap",NRAPNS,rapbins_NS);
-   TH1F *heffcent = new TH1F("heffcent","heffcent",NCENTNS,(float*) centbins_NS);
+   TH1F *heffcent = new TH1F("heffcent","heffcent",NCENTNS,fcentbins_NS);
    TH1F *hefftppt = new TH1F("hefftppt","hefftppt",NPTNS,ptbins_NS);
    TH1F *hefftprap = new TH1F("hefftprap","hefftprap",NRAPNS,rapbins_NS);
-   TH1F *hefftpcent = new TH1F("hefftpcent","hefftpcent",NCENTNS,(float*) centbins_NS);
+   TH1F *hefftpcent = new TH1F("hefftpcent","hefftpcent",NCENTNS,fcentbins_NS);
 
    // don't read useless branches
    fChain->SetBranchStatus("Reco_mu*",0);  
@@ -197,6 +203,7 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy)
          hgenpt->Fill(genupspt,weight);
          hgenpt2->Fill(genupspt,weight);
          hgenrap->Fill(genupsrap,weight);
+         hgenrap2->Fill(genupsrap,weight);
 
          // if (tlvgen->M()<massmin || tlvgen->M()>massmax) continue;
          if (YS==1 && !smuacc_loose(tlvgenmup,tlvgenmum)) continue;
@@ -507,7 +514,7 @@ double dimueff::weightpt(double pt, int YS)
       scale[3] =  0.13702;
       scale[4] =  0.043731;
       scale[5] =  0.032069;
-      scale[6] =  0.032069;
+      scale[6] =  0.032069/18.93;
    }
    else 
       for (int i=0; i<7; i++) 
@@ -604,19 +611,19 @@ double dimueff::fitNS(TH1F *hist, double &err, int YS)
 
    // *************************************************** free param in the fit
    int nt = hist->Integral();
-   RooRealVar *nsig1f   = new RooRealVar("N_{#Upsilon(1S)}","nsig1S",nt,0.5*nt,1.5*nt);
+   RooRealVar *nsig1f   = new RooRealVar("N_{#Upsilon(1S)}","nsig1S",0.99,0.5,1.5);
    RooRealVar  *mean = new RooRealVar("mass1S","#Upsilon mean",M1S,M1S-0.1,M1S+0.1);
    // scale mean and resolution by mass ratio
    RooFormulaVar *mean1S = new RooFormulaVar("mean1S","@0",RooArgList(*mean));
 
    //detector resolution ?? where is this coming from?
-   RooRealVar    *sigma1  = new RooRealVar("#sigma_{CB1}","#sigma_{CB1}",1e-1,0,10); // 
+   RooRealVar    *sigma1  = new RooRealVar("#sigma_{CB1}","#sigma_{CB1}",7e-2,0,0.5); // 
    RooFormulaVar *sigma1S = new RooFormulaVar("sigma1S","@0"   ,RooArgList(*sigma1));
-   RooRealVar *alpha  = new RooRealVar("#alpha_{CB}","tail shift",1.7,0,10);    // MC 5tev 1S pol2 
-   RooRealVar *npow   = new RooRealVar("npow","power order",0.5,0,10);    // MC 5tev 1S pol2 
+   RooRealVar *alpha  = new RooRealVar("#alpha_{CB}","tail shift",1.5,0,10);    // MC 5tev 1S pol2 
+   RooRealVar *npow   = new RooRealVar("npow","power order",1.5,0,50);    // MC 5tev 1S pol2 
    RooRealVar *sigmaFraction = new RooRealVar("sigmaFraction","Sigma Fraction",0.8,0.,1.);
    // scale the sigmaGaus with sigma1S*scale=sigmaGaus now.
-   RooRealVar    *scaleWidth = new RooRealVar("#sigma_{CB2}/#sigma_{CB1}","scaleWidth",2.3,1.,2.7);
+   RooRealVar    *scaleWidth = new RooRealVar("#sigma_{CB2}/#sigma_{CB1}","scaleWidth",1.8,1.,3);
    RooFormulaVar *sigmaGaus = new RooFormulaVar("sigmaGaus","@0*@1", RooArgList(*sigma1,*scaleWidth));
    RooCBShape  *cb1S_1    = new RooCBShape ("cb1S_1", "FSR cb 1s",
          *mass,*mean1S,*sigma1,*alpha,*npow);
@@ -626,7 +633,7 @@ double dimueff::fitNS(TH1F *hist, double &err, int YS)
    RooAddPdf      *sig1S  = new RooAddPdf  ("cbcb","1S mass pdf",
          RooArgList(*cb1S_1,*cb1S_2),*sigmaFraction);
    // bkg Chebychev
-   RooRealVar *nbkgd   = new RooRealVar("n_{Bkgd}","nbkgd",0.01*nt,0,.1*nt);
+   RooRealVar *bkgdFraction   = new RooRealVar("BkgdFrac","bkgdFraction",0.01,0,1);
    RooRealVar *bkg_a1  = new RooRealVar("a1_bkg", "bkg_{a1}", 0.5, -50, 50);
    RooRealVar *bkg_a2  = new RooRealVar("a2_Bkg", "bkg_{a2}", -0.5, -50, 50);
    RooAbsPdf  *pdf_combinedbkgd  = new RooChebychev("bkgPdf","bkgPdf",
@@ -638,30 +645,142 @@ double dimueff::fitNS(TH1F *hist, double &err, int YS)
    // binnedData.Print("v");  
    RooFitResult *fit_2nd; 
    RooAbsPdf  *pdf             = new RooAddPdf ("pdf","total p.d.f.",
-         RooArgList(*pdf_combinedbkgd,*sig1S),
-         RooArgList(*nbkgd,*nsig1f));
-   RooAbsReal* nll = pdf->createNLL(binnedData,NumCPU(20)) ;
-   RooMinuit(*nll).migrad();
-   RooMinuit(*nll).hesse();
-   // fit_2nd = pdf->fitTo(binnedData,Extended(1),Minos(0),Save(0),SumW2Error(kTRUE),NumCPU(20),PrintLevel(-1));
+         RooArgList(*sig1S,*pdf_combinedbkgd),
+         RooArgList(*nsig1f));
+   // RooAbsReal* nll = pdf->createNLL(binnedData,NumCPU(20)) ;
+   // RooMinuit(*nll).migrad();
+   // RooMinuit(*nll).hesse();
+
+   fit_2nd = pdf->fitTo(binnedData,Extended(0),Hesse(1),Minos(1),Save(1),SumW2Error(kTRUE),NumCPU(20),PrintLevel(-1));
+   // fit_2nd = pdf->fitTo(binnedData,Extended(0),Hesse(1),Save(1),SumW2Error(kTRUE),NumCPU(20),PrintLevel(-1));
+   double val = nsig1f->getVal()*nt;
+   err = sqrt(pow(nsig1f->getError()*nt,2)+pow(val/nt,2)*nt);
+
+   RooPlot* frame = mass->frame(Name(Form("rooplot_%s",hist->GetName())),Bins(hist->GetNbinsX()),Range(hist->GetXaxis()->GetXmin(),hist->GetXaxis()->GetXmax()));
+   binnedData.plotOn(frame,DataError(RooAbsData::SumW2),Name("theData"),MarkerSize(0.8));
+   pdf->plotOn(frame,Components("cb1S_1"),Name("TheFirstCB"),LineColor(kTeal)); 
+   pdf->plotOn(frame,Components("cb1S_2"),Name("TheSecondCB"),LineColor(kOrange)); 
+   pdf->plotOn(frame,Components("bkgPdf"),Name("TheBackground"),LineColor(kDashed)); 
+   pdf->plotOn(frame,Name("thePdf"),LineColor(kBlue)); 
+
+   // RooArgSet * pars = pdf->getParameters(binnedData);
 
 
-   double val = nsig1f->getVal();
-   err = nsig1f->getError();
+   //plot data
+   TCanvas c(Form("canv_%s",hist->GetName())); c.cd();
+   binnedData.plotOn(frame,Name("theData"),MarkerSize(0.8)); 
+   pdf->plotOn(frame,Components("cb1S_1"),Name("TheFirstCB"),LineColor(kTeal)); 
+   pdf->plotOn(frame,Components("cb1S_2"),Name("TheSecondCB"),LineColor(kOrange)); 
+   pdf->plotOn(frame,Components("bkgPdf"),Name("TheBackground"),LineColor(kDashed)); 
+   pdf->plotOn(frame,Name("thePdf"),LineColor(kBlue)); 
+   frame->SetTitle("");
+   frame->GetXaxis()->SetTitle("m_{#mu^{+}#mu^{-}} (GeV/c^{2})");
+   frame->GetXaxis()->CenterTitle(kTRUE);
+   frame->GetYaxis()->SetTitleOffset(1.3);
+   frame->Draw();
+   c.Draw();
+   c.SaveAs(Form("%s.pdf",hist->GetName()));
+   c.SaveAs(Form("%s.png",hist->GetName()));
+   // fit_2nd->Print("v");
+   TCanvas cm(Form("cm_%s",hist->GetName()),"cm");
+   cm.cd();
+   TLatex latex1;
+   latex1.SetNDC();
+   TPad pPad1(Form("pPad1_%s",hist->GetName()),"pPad1",0.01,0.3-0.03,0.96,0.92);
+   pPad1.SetBottomMargin(0.03);
+   TPad pPad2(Form("pPad2_%s",hist->GetName()),"pPad2",0.05,0.05,1,0.3);
+   pPad2.SetTopMargin(0.0);
+   pPad2.SetBottomMargin(-0.1);
+   frame->SetMinimum(1);
+   pPad1.SetLogy();
+   // pPad2->SetBottomMargin(gStyle->GetPadBottomMargin()/0.3);
+   // pPad1->SetTopMargin(gStyle->GetPadTopMargin()/0.7);
+   pPad1.Draw();
+   pPad1.cd();
+   //  sig1S->paramOn(frame,Layout(0.12,0.5,0.38));
+   pPad1.Update();
+   frame->Draw();
+   latex1.SetTextSize(0.032);
+   // latex1.DrawLatex(0.15,1.-0.05*1.8,Form("%s",choseSampleLegend[choseSample]));
+   // latex1.DrawLatex(0.15,1.-0.05*4.5,Form("%.2f < |y| < %.2f",dimuYMin,dimuYMax)); 
+   // latex1.DrawLatex(0.15,1.-0.05*5.5,Form("%.1f < p_{T}^{#Upsilon} < %.1f",dimuPtMin,dimuPtMax));
+   // latex1.DrawLatex(0.15,1.-0.05*6.5,Form("p_{T}^{#mu1} > %.1f GeV/c",muonPtCut_min1));
+   // latex1.DrawLatex(0.15,1.-0.05*7.5,Form("p_{T}^{#mu2} > %.1f GeV/c",muonPtCut_min2));
 
-   TCanvas *c1 = new TCanvas(Form("canv_%s",hist->GetName()));
-   RooPlot* xframe = mass->frame();
-   binnedData.plotOn(xframe);
-   pdf->plotOn(xframe);
-   xframe->Draw();
+   latex1.DrawLatex(0.78,1.-0.05*3.5,Form("n_{CB} = %.2f",npow->getVal()));
+   latex1.DrawLatex(0.78,1.-0.05*4.5,Form("#alpha_{CB} = %.2f",alpha->getVal()));
+   latex1.DrawLatex(0.78,1.-0.05*5.5,Form("#sigma_{CB1} = %.2f",sigma1->getVal()));
+   latex1.DrawLatex(0.78,1.-0.05*6.5,Form("#sigma_{CB2}/#sigma_{CB1} = %.2f",scaleWidth->getVal()));
+   latex1.DrawLatex(0.72,1.-0.05*7.5,Form("normalisation = %.2f",sigmaFraction->getVal()));
+   latex1.DrawLatex(0.78,1.-0.05*8.5,Form("m_{0} = %.3f",mean1S->getVal()));
+   latex1.DrawLatex(0.78,1.-0.05*9.5,Form("Sig_{frac} = %.3f",nsig1f->getVal()));
+   cm.cd(0);
+   // TPad *pPad2 = new TPad("pPad2","pPad2",0.01,0.05,0.96,0.29);
+   pPad2.SetTopMargin(0.0);
+   pPad2.SetBottomMargin(-0.1);
+   pPad2.Draw();
+   pPad2.cd();
+   double chi2FromRoo = frame->chiSquare(fit_2nd->floatParsFinal().getSize());
+   cout<<"!!!!!!!! chi2 from simple pull= "<<frame->chiSquare()<<"\t chi2 from RooFit= "<<chi2FromRoo <<endl;
+   RooHist *phPullm = frame->pullHist(0,0,true); // this calcualtes the pulls taking the integral of the fit in each bin, instead of the value in the middle of the bid
+   phPullm->SetName("phPullm");
+   double *ypull     = phPullm->GetY();
+   double Chi2       = 0;
+   int nFullBinsPull = 0;
+   for (int i=0; i < hist->GetNbinsX(); i++) 
+   {
+      if (hist->GetBinContent(i) == 0) continue;
+      nFullBinsPull++;
+      Chi2 = Chi2 + pow(ypull[i],2);
+   }
+   // for writing on canvas
+   int nFitParam     = fit_2nd->floatParsFinal().getSize();
+   int Dof           = nFullBinsPull - nFitParam;
+   double UnNormChi2 = Chi2;
+   Chi2             /= (nFullBinsPull - nFitParam);
+
+   cout<<"!!!!! nFullBinsPull="<<nFullBinsPull<<"\tnFitParam="<<nFitParam<<endl;
+   // draw pulls
+   pPad2.cd();
+   double mFrameMax = 0;
+
+
+   RooPlot* prpFramePull = mass->frame(Name(Form("Pull_%s",hist->GetName())),Bins(hist->GetNbinsX()),Range(hist->GetXaxis()->GetXmin(),hist->GetXaxis()->GetXmax()));
+
+   prpFramePull->GetXaxis()->SetTitle("m_{#mu#mu} (GeV/c^{2})");
+   prpFramePull->GetXaxis()->CenterTitle(kTRUE);
+   prpFramePull->GetXaxis()->SetTitleSize(0.06);
+   prpFramePull->GetXaxis()->SetLabelSize(0.1);
+   prpFramePull->GetYaxis()->CenterTitle(kTRUE);
+   prpFramePull->GetYaxis()->SetTitleSize(0.08);
+   prpFramePull->GetYaxis()->SetLabelSize(0.1);
+   prpFramePull->GetYaxis()->SetTitleOffset(0.4);
+   prpFramePull->GetXaxis()->SetTitleOffset(0.6);
+
+   prpFramePull->GetYaxis()->SetTitle("Pull");
+   prpFramePull->addPlotable(phPullm,"PX");
+
+   if (prpFramePull->GetMinimum()*-1 > prpFramePull->GetMaximum()) mFrameMax = prpFramePull->GetMinimum()*-1;
+   else mFrameMax = prpFramePull->GetMaximum();
+   mFrameMax = min(5.,mFrameMax);
+   prpFramePull->SetMaximum(mFrameMax); 
+   prpFramePull->SetMinimum(-1*mFrameMax); 
+   prpFramePull->Draw();
+
+   latex1.SetTextSize(0.085);
+   double myChi2 = chi2FromRoo*Dof;
+   latex1.DrawLatex(0.7,1.-0.05*3.5,Form("#chi^{2}/ndf = %2.1f/%d",myChi2,Dof));
+   cm.SaveAs(Form("%s_pulls.pdf",hist->GetName()));
+   cm.SaveAs(Form("%s_pulls.png",hist->GetName()));
 
    // clean begind us
-   delete mass; delete nsig1f; delete mean; delete mean1S;
+   delete nsig1f;
+   delete mass; delete mean; delete mean1S;
    delete sigma1; delete sigma1S; delete alpha; delete npow;
    delete sigmaFraction; delete scaleWidth; delete sigmaGaus; delete cb1S_1; delete cb1S_2;
-   delete sig1S; delete nbkgd; delete bkg_a1; delete bkg_a2; delete pdf_combinedbkgd; delete pdf;
-   delete nll;
-   
+   delete sig1S; delete bkgdFraction; delete bkg_a1; delete bkg_a2; delete pdf_combinedbkgd; delete pdf;
+   // delete nll;
+
    return val;
 }
 
