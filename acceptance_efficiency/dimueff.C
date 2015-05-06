@@ -7,6 +7,7 @@
 #include <TPad.h>
 #include <iostream>
 #include <algorithm>
+#include <fstream>
 
 #ifndef __CINT__
 #include "RooGlobalFunc.h"
@@ -341,6 +342,7 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy)
    }
 
    // print results
+   ofstream textfile("results.txt");
    cout << "===========================" << endl;
    cout << "No tag and probe corrections" << endl;
    cout << "===========================" << endl;
@@ -352,6 +354,7 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy)
       double val = num_pt_NS[ibin]/den_pt_NS[ibin];
       double err = RError(num_pt_NS[ibin],numerr_pt_NS[ibin],den_pt_NS[ibin],denerr_pt_NS[ibin]);
       cout << "[" << binmin << "," << binmax << "]: " << val << " +/- " << err << endl;
+      textfile << "pt " << binmin << " " << binmax << " " << val << " " << err << endl;
       if (ibin>0) 
       {
          heffpt->SetBinContent(ibin,val);
@@ -366,6 +369,7 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy)
       double val = num_rap_NS[ibin]/den_rap_NS[ibin];
       double err = RError(num_rap_NS[ibin],numerr_rap_NS[ibin],den_rap_NS[ibin],denerr_rap_NS[ibin]);
       cout << "[" << binmin << "," << binmax << "]: " << val << " +/- " << err << endl;
+      textfile << "rapidity " << binmin << " " << binmax << " " << val << " " << err << endl;
       if (ibin>0) 
       {
          heffrap->SetBinContent(ibin,val);
@@ -382,6 +386,7 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy)
          double val = num_cent_NS[ibin]/den_cent_NS[ibin];
          double err = RError(num_cent_NS[ibin],numerr_cent_NS[ibin],den_cent_NS[ibin],denerr_cent_NS[ibin]);
          cout << "[" << binmin << "," << binmax << "]: " << val << " +/- " << err << endl;
+         textfile << "centrality " << binmin << " " << binmax << " " << val << " " << err << endl;
          if (ibin>0) 
          {
             heffcent->SetBinContent(ibin,val);
@@ -401,6 +406,7 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy)
       double val = num_tp_pt_NS[ibin]/den_pt_NS[ibin];
       double err = RError(num_tp_pt_NS[ibin],numerr_tp_pt_NS[ibin],den_pt_NS[ibin],denerr_pt_NS[ibin]);
       cout << "[" << binmin << "," << binmax << "]: " << val << " +/- " << err << endl;
+      textfile << "pt_TnP " << binmin << " " << binmax << " " << val << " " << err << endl;
       if (ibin>0) 
       {
          hefftppt->SetBinContent(ibin,val);
@@ -415,6 +421,7 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy)
       double val = num_tp_rap_NS[ibin]/den_rap_NS[ibin];
       double err = RError(num_tp_rap_NS[ibin],numerr_tp_rap_NS[ibin],den_rap_NS[ibin],denerr_rap_NS[ibin]);
       cout << "[" << binmin << "," << binmax << "]: " << val << " +/- " << err << endl;
+      textfile << "rapidity_TnP " << binmin << " " << binmax << " " << val << " " << err << endl;
       if (ibin>0) 
       {
          hefftprap->SetBinContent(ibin,val);
@@ -431,6 +438,7 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy)
          double val = num_tp_cent_NS[ibin]/den_cent_NS[ibin];
          double err = RError(num_tp_cent_NS[ibin],numerr_tp_cent_NS[ibin],den_cent_NS[ibin],denerr_cent_NS[ibin]);
          cout << "[" << binmin << "," << binmax << "]: " << val << " +/- " << err << endl;
+         textfile << "centrality_TnP " << binmin << " " << binmax << " " << val << " " << err << endl;
          if (ibin>0) 
          {
             hefftpcent->SetBinContent(ibin,val);
@@ -440,6 +448,7 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy)
    }
 
    f->Write(); f->Close();
+   textfile.close();
 }
 
 bool dimueff::smuacc_loose(TLorentzVector *tlv1, TLorentzVector *tlv2)
