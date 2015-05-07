@@ -8,5 +8,5 @@ void calc_effs(const char* thefiles, int YS=1, bool ispbpb=true, int strategy=0)
 {
    gROOT->LoadMacro("dimueff.C+");
    TChain *tch = new TChain("myTree"); tch->Add(thefiles);
-   dimueff toto(tch); toto.Loop();
+   dimueff toto(tch); toto.Loop(YS,ispbpb,strategy);
 }
