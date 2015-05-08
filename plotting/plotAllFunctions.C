@@ -39,7 +39,7 @@
      }
      if(par[4]>0){// endcap,
        if(par[3]<1) { // nominal case
-     	 f = (par[0]*TMath::Erf((xx-par[1])/par[2]))/(0.7364*TMath::Erf((x-1.2149)/2.3352));//(0.7364*TMath::Erf((xx-1.2538)/2.2530)); this is the old one...
+     	 f = (par[0]*TMath::Erf((xx-par[1])/par[2]))/(0.7364*TMath::Erf((xx-1.2149)/2.3352));//(0.7364*TMath::Erf((xx-1.2538)/2.2530)); this is the old one...
        }
        if(par[3]>0){ // variations
        	 f =   (par[0]*TMath::Erf((xx-par[1])/par[2])/ (0.7364*TMath::Erf((xx-1.2149)/2.3352)));  ///
@@ -272,7 +272,6 @@ void plotAllFunctions()
   //endcap pp:  (0.8299*TMath::Erf((pt-1.2785)/1.8833))/(0.7810*TMath::Erf((pt-1.3609)/2.1231))
   cBarrel_pp->cd(2);
   endcap=1;
-  cout << " DOING ENDCAP NOW" << endl;
   TF1 *g2 = new TF1("myFunc",myFunc,0,20,6);
   if (doOnlyNumerator){ g2= new TF1("myFunk",myNumerator,0,20,6);}
   j=0; // reset!
