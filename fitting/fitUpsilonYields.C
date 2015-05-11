@@ -79,7 +79,7 @@ void fitUpsilonYields(int ChooseSample =6,
 		      float muonPtMax = 4,  
 		      float muonEtaMin =-2.4,
 		      float muonEtaMax =2.4,
-		      float upsRapStart = -2.4, // it's a bit more complicated when doRap==1
+		      float upsRapStart = 0.0, // it's the absolute value (default) for y bins are symmetric in pp and pbpb.. must be over-ridden in pPb...
 		      float upsRapEnd = 2.4,
 		      float upsPtStart = 5,
 		      float upsPtEnd = 8,

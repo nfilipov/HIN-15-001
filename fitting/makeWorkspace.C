@@ -89,7 +89,8 @@ void makeWorkspace(RooWorkspace& ws, int ChooseSample,float muonEtaMin, float mu
   data0->Print();
   // //  }
   // //data = ( RooDataSet*) data0->reduce(EventRange(0,100000));//,Cut("invariantMass<11"));
-  TString cut_ap(Form("(%d<=Centrality && Centrality<%d) && (%.2f<muPlusEta && muPlusEta < %.2f) && (%.2f<muMinusEta && muMinusEta < %.2f) && (%.2f<upsPt && upsPt<%.2f)  &&((muPlusPt > %.2f && muMinusPt > %.2f) || (muPlusPt > %.2f && muMinusPt > %.2f))",upsCentralityStart,upsCentralityEnd,muonEtaMin,muonEtaMax,muonEtaMin,muonEtaMax,upsPtMin,upsPtMax,muonPtMin,muonPtMax,muonPtMax,muonPtMin));
+  TString cut_ap(Form("(%d<=Centrality && Centrality<%d) && (%.2f<muPlusEta && muPlusEta < %.2f) && (%.2f<muMinusEta && muMinusEta < %.2f) && (%.2f<upsPt && upsPt<%.2f) &&(abs(upsRapidity)>%.2f && abs(upsRapidity)<%.2f)  &&((muPlusPt > %.2f && muMinusPt > %.2f) || (muPlusPt > %.2f && muMinusPt > %.2f))",upsCentralityStart,upsCentralityEnd,muonEtaMin,muonEtaMax,muonEtaMin,muonEtaMax,upsPtMin,upsPtMax,upsRapMin,upsRapMax,muonPtMin,muonPtMax,muonPtMax,muonPtMin));
+  cout << cut_ap << endl;
   data =  ( RooDataSet*) data0->reduce(Cut(cut_ap));
   ws.import(*data);
   data->Print();
