@@ -37,6 +37,7 @@ void makeWorkspace(RooWorkspace& ws, int ChooseSample,float muonEtaMin, float mu
       // finput = "../dimuonTree_upsiMiniTree_AA2p76tev_ptmu3_july09_Run2011-2011_trigBit1_allTriggers0.root";// cent0-40 "td"
       // finput = "../dimuonTree_upsiMiniTree_AA276tevC0100_regit_ptmu4_Run210498-211631_trigBit1_allTriggers0.root"; // cent0-40 "nf"
       finput = "../dimuonTree_upsiMiniTree_AA2p76tev_ptmuSpecial_nov25_2013_trigBit1_allTriggers1_testNoCut.root"; // no cuts , so it has all the muons.
+      // finput = "../dimuonTree_upsiMiniTree_AA2p76tev_WithIDCuts_RunHIN-15-001_trigBit1_allTriggers0.root";//bold as can be : my tree!
       break;
     case 7://pp @ 2.76TeV
       gROOT->LoadMacro("bkgTable_pp.h");

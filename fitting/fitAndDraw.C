@@ -31,8 +31,9 @@ void fitAndDraw(RooWorkspace& w, TString figname_, TString outDatDir ,  TString 
   pdf->paramOn(frame,Layout(0.6,0.935,0.97));
   pPad1->Update();
   frame->Draw();
-  cm.SaveAs("_pulls.pdf");
   // output file names 
+  string outPdf = outFigDir+"/"+figname_+".pdf";
+  cm.SaveAs(outPdf.c_str());
   string outParameters = outDatDir+"/"+figname_+".txt";
   //string outParameters_forNote = outDatsDir+"/"+figname_+"forNote.txt";
   cout<<"Output file: " << outParameters<<endl;
@@ -52,22 +53,22 @@ void fitAndDraw(RooWorkspace& w, TString figname_, TString outDatDir ,  TString 
   RooRealVar *f3Svs1S       = (RooRealVar*) w.var("R_{#frac{3S}{1S}}");
   switch(chooseFitParams) {
   case 0:
-    outfileFitResults<<figname_<<" "<<nsig1f->getVal()<<" "<<nsig1f->getError()<<" "<<nsig2f->getVal()<<" "<<nsig2f->getError()<<" "<<nsig3f->getVal()<<" "<<nsig3f->getError()<<" "<<npow->getVal()<<" "<<npow->getError()<<" "<<alpha->getVal()<<" "<<alpha->getError()<<" "<<sigma1->getVal()<<" "<<sigma1->getError()<<" "<<scaleWidth->getVal()<<" "<<scaleWidth->getError()<<" "<<sigmaFraction->getVal()<<" "<< sigmaFraction->getError()<<" "<<(mean->getVal())-M1S<<" "<<mean->getError()<<" "<<baseNll<< endl;
+    outfileFitResults<<figname_<<" "<<nsig1f->getVal()<<" "<<nsig1f->getError()<<" "<<nsig2f->getVal()<<" "<<nsig2f->getError()<<" "<<nsig3f->getVal()<<" "<<nsig3f->getError()<<" "<<npow->getVal()<<" "<<npow->getError()<<" "<<alpha->getVal()<<" "<<alpha->getError()<<" "<<sigma1->getVal()<<" "<<sigma1->getError()<<" "<<scaleWidth->getVal()<<" "<<scaleWidth->getError()<<" "<<sigmaFraction->getVal()<<" "<< sigmaFraction->getError()<<" "<<(mean->getVal())-M1S<<" "<<mean->getError()<<" ,signif= "<<nsig1f->getVal()/nsig1f->getError()<<" "<<baseNll<< endl;
     // <<2*nFitParam+2*baseNll<<" "<<fit_2nd->edm()<<" "<<UnNormChi2<<" "<<UnNormChi2/Dof<<" "<<TMath::Prob(UnNormChi2,Dof)<<" "<<Dof<<" "<<nFitParam<<" "
     break;
   case 1 :
     cout << "option needs fixing." << endl;
-    outfileFitResults<<figname_<<" "<<nsig1f->getVal()<<" "<<nsig1f->getError()<<" "<<f2Svs1S->getVal()<<" "<<f2Svs1S->getError()<<" "<<f3Svs1S->getVal()<<" "<<f3Svs1S->getError()<<" "<<npow->getVal()<<" "<<npow->getError()<<" "<<alpha->getVal()<<" "<<alpha->getError()<<" "<<sigma1->getVal()<<" "<<sigma1->getError()<<" "<<baseNll<<endl;
+    outfileFitResults<<figname_<<" "<<nsig1f->getVal()<<" "<<nsig1f->getError()<<" "<<f2Svs1S->getVal()<<" "<<f2Svs1S->getError()<<" "<<f3Svs1S->getVal()<<" "<<f3Svs1S->getError()<<" "<<npow->getVal()<<" "<<npow->getError()<<" "<<alpha->getVal()<<" "<<alpha->getError()<<" "<<sigma1->getVal()<<" "<<sigma1->getError()<<" "<<scaleWidth->getVal()<<" "<<scaleWidth->getError()<<" "<<sigmaFraction->getVal()<<" "<< sigmaFraction->getError()<<" "<<(mean->getVal())-M1S<<" "<<mean->getError()<<" ,signif= "<<nsig1f->getVal()/nsig1f->getError()<<" "<<baseNll<< endl;
     //<<2*nFitParam+2*baseNll<<" "<<fit_2nd->edm()<<" "<<UnNormChi2<<" "<<UnNormChi2/Dof<<" "<<TMath::Prob(UnNormChi2,Dof)<<" "<<Dof<<" "<<nFitParam<<" "
     break;
   case 2 :
     cout << "option needs fixing." << endl;
-    outfileFitResults<<figname_<<" "<<nsig1f->getVal()<<" "<<nsig1f->getError()<<" "<<f2Svs1S->getVal()<<" "<<f2Svs1S->getError()<<" "<<f23vs1S->getVal()<<" "<<f23vs1S->getError()<<" "<<npow->getVal()<<" "<<npow->getError()<<" "<<alpha->getVal()<<" "<<alpha->getError()<<" "<<sigma1->getVal()<<" "<<sigma1->getError()<<" "<<baseNll<< endl;
+    outfileFitResults<<figname_<<" "<<nsig1f->getVal()<<" "<<nsig1f->getError()<<" "<<f2Svs1S->getVal()<<" "<<f2Svs1S->getError()<<" "<<f23vs1S->getVal()<<" "<<f23vs1S->getError()<<" "<<npow->getVal()<<" "<<npow->getError()<<" "<<alpha->getVal()<<" "<<alpha->getError()<<" "<<sigma1->getVal()<<" "<<sigma1->getError()<<" "<<scaleWidth->getVal()<<" "<<scaleWidth->getError()<<" "<<sigmaFraction->getVal()<<" "<< sigmaFraction->getError()<<" "<<(mean->getVal())-M1S<<" "<<mean->getError()<<" ,signif= "<<nsig1f->getVal()/nsig1f->getError()<<" "<<baseNll<< endl;
     //<<2*nFitParam+2*baseNll<<" "<<fit_2nd->edm()<<" "<<UnNormChi2<<" "<<UnNormChi2/Dof<<" "<<TMath::Prob(UnNormChi2,Dof)<<" "<<Dof<<" "<<nFitParam<<" "
     break;
   case 3 :
     cout << "option needs fixing." << endl;
-    outfileFitResults<<figname_<<" "<<nsig1f->getVal()<<" "<<nsig1f->getError()<<" "<<f2Svs1S->getVal()<<" "<<f2Svs1S->getError()<<" "<<f3Svs1S->getVal()<<" "<<f3Svs1S->getError()<<" "<<f3Svs2S->getVal()<<" "<<f3Svs2S->getError()<<" "<<alpha->getVal()<<" "<<alpha->getError()<<" "<<sigma1->getVal()<<" "<<sigma1->getError()<<" "<<baseNll<<  endl;
+    outfileFitResults<<figname_<<" "<<nsig1f->getVal()<<" "<<nsig1f->getError()<<" "<<f2Svs1S->getVal()<<" "<<f2Svs1S->getError()<<" "<<f3Svs1S->getVal()<<" "<<f3Svs1S->getError()<<" "<<f3Svs2S->getVal()<<" "<<f3Svs2S->getError()<<" "<<alpha->getVal()<<" "<<alpha->getError()<<" "<<sigma1->getVal()<<" "<<sigma1->getError()<<" "<<scaleWidth->getVal()<<" "<<scaleWidth->getError()<<" "<<sigmaFraction->getVal()<<" "<< sigmaFraction->getError()<<" "<<(mean->getVal())-M1S<<" "<<mean->getError()<<" ,signif= "<<nsig1f->getVal()/nsig1f->getError()<<" "<<baseNll<< endl;
     //<<2*nFitParam+2*baseNll<<" "<<fit_2nd->edm()<<" "<<UnNormChi2<<" "<<UnNormChi2/Dof<<" "<<TMath::Prob(UnNormChi2,Dof)<<" "<<Dof<<" "<<nFitParam<<" "
     break;
   default : break;
