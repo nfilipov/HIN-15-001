@@ -62,7 +62,6 @@
 
 // -------- make some local picks
 const bool doMinos      = 1;     //kFALSE;
-
 using namespace std;
 using namespace ROOT;
 using namespace RooFit;
@@ -87,8 +86,12 @@ void fitUpsilonYields(int ChooseSample =6,
 		      int upsCentralityStart = 0,
 		      int upsCentralityEnd =40,
 		      int signalModel = 4,
-		      TString outDatsDir          = "txtOutput",// dats dir outfile location
-
+		      TString outDatDir = "txtOutput",// dats dir outfile location
+		      TString outFigDir = "pdfOutput",
+		      const char* ChooseSampleCase = "pbpb",
+		      const char* outFilePrefix   = "yields", // yields, ratios
+		      int ChooseFitParams = 0
+		      
 		      ){
   cout << "welcome to FitUpsilonYields!"<<endl;
   gROOT->Macro("~/Project/ups2013/code/cm/logon.C+");
@@ -101,26 +104,25 @@ void fitUpsilonYields(int ChooseSample =6,
   makeWorkspace(*_ws,ChooseSample, muonEtaMin, muonEtaMax, muonPtMin,muonPtMax, upsRapStart, upsRapEnd, upsPtStart, upsPtEnd,upsCentralityStart,upsCentralityEnd);
   RooDataSet* data0_fit =(RooDataSet*) _ws::data; // Use the name space prefix operator to access the workspace contents
   // data0_fit->Print(); // to check it worked.
-  buildModel(*_ws,0,ChooseSample,whatBin,signalModel,bkgModel,doRap,doPt,doCent,useRef,muonPtMin,fsr); // builds the pdf and imports it to the rooworkspace
+  buildModel(*_ws,ChooseFitParams,ChooseSample,whatBin,signalModel,bkgModel,doRap,doPt,doCent,useRef,muonPtMin,fsr); // builds the pdf and imports it to the rooworkspace
   // _ws->Print(); //still checkin it worked.
-  RooFitResult* fitObject = _ws::pdf.fitTo(*data0_fit); // Fit gets into action.
-  _ws::pdf.Print("v");
-  
-  // RooRealVar* massUps =(RooRealVar*) _ws::invariantMass; //
-  // RooAbsPdf outPdf =(RooAbsPdf*) _ws::pdf;
-  fitAndDraw(*_ws);
-  /////////// next stuff to implement.
+  //  RooFitResult* fitObject = _ws::pdf.fitTo(*data0_fit); // Fit gets into action.
+  //_ws::pdf.Print("v");
   // write out the fitting params
-  //  string outParameters = outDatsDir+"/"+figName_+".txt";
- //  string outParameters_forNote = outDatsDir+"/"+figName_+"forNote.txt";
- //  cout<<"Output file: " << outParameters<<endl;
- //  ofstream outfileFitResults;
- //  // ofstream outfileFitResults_forNote;
- //  outfileFitResults.open(outParameters.c_str(), ios_base::out);  
- // TString figName_(Form("%s_%s_cent%d-%d_bkgModel%d_sigModel%d_muonEta%.2f%.2f_muonPt%.2f-%.2f_dimuPt%.2f%.2f_dimuY%.2f%.2f_trkRot%d_constrain%d_fsr%d_sigma%d_ref%d",
- // 			outFilePrefix,choseSampleCase,centMin,centMax,
- // 			bkgdModel, signalModel , muonEtaCut_min,muonEtaCut_max,muonPtCut_min1,muonPtCut_min2,dimuPtMin,dimuPtMax,dimuYMin,dimuYMax,doTrkRot,doConstrainFit,fixFSR,fixSigma1,useRef));
-
+  int centMin = upsCentralityStart;
+  int centMax = upsCentralityEnd;
+  if(ChooseSample==6 || ChooseSample==5 || (ChooseSample==8 && isHI)) 
+    {
+      if (upsCentralityStart==28) binw=0.14;  // little change on the fly.
+      centMin = (int)(upsCentralityStart*2.5);
+      centMax = (int)(upsCentralityEnd*2.5);
+    }
+  TString figName_(Form("%s_%s_cent%d%d_bkgModel%d_muonEta%.2f%.2f_muonPt%.2f-%.2f_dimuPt%.2f%.2f_dimuY%.2f%.2f_%d_ref%d_mass8p511p5",outFilePrefix,ChooseSampleCase,centMin,centMax,bkgModel,muonEtaMin,muonEtaMax,muonPtMin,muonPtMax,upsPtStart,upsPtEnd,upsRapStart,upsRapEnd,fsr,useRef));
+  figName_.ReplaceAll("-","M");
+  figName_.ReplaceAll(".","");
+  fitAndDraw(*_ws,figName_,outDatDir,outFigDir,ChooseFitParams);
+  //  // ofstream outfileFitResults_forNote;
+  //  outfileFitResults.open(outParameters.c_str(), ios_base::out);  
 }
 
 //_______________________________________________________________________

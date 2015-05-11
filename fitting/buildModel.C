@@ -45,7 +45,7 @@ void buildModel(RooWorkspace& w,int chooseFitParams, int chooseSample,int whatBi
       break;
     }  
 
-      RooRealVar  *mean = new RooRealVar("mass1S","#Upsilon mean",M1S,M1S-0.2,M1S+0.2);
+      RooRealVar  *mean = new RooRealVar("m_{#mu#mu;fit}","#Upsilon mean",M1S,M1S-0.2,M1S+0.2);
       RooConstVar *rat2 = new RooConstVar("rat2", "rat2", M2S/M1S);
       RooConstVar *rat3 = new RooConstVar("rat3", "rat3", M3S/M1S);
       // scale mean and resolution by mass ratio
@@ -59,7 +59,7 @@ void buildModel(RooWorkspace& w,int chooseFitParams, int chooseSample,int whatBi
       RooFormulaVar *sigma2S = new RooFormulaVar("sigma2S","@0*@1",RooArgList(*sigma1,*rat2));
       RooFormulaVar *sigma3S = new RooFormulaVar("sigma3S","@0*@1",RooArgList(*sigma1,*rat3));
       RooRealVar *alpha  = new RooRealVar("#alpha_{CB}","tail shift",0.91,alpha_min[whatBin],alpha_max[whatBin]);    // MC 5tev 1S pol2 
-      RooRealVar *npow   = new RooRealVar("npow","power order",1.775,npow_min[whatBin],npow_max[whatBin]);    // MC 5tev 1S pol2 
+      RooRealVar *npow   = new RooRealVar("n_{CB}","power order",1.775,npow_min[whatBin],npow_max[whatBin]);    // MC 5tev 1S pol2 
       RooRealVar *sigmaFraction = new RooRealVar("sigmaFraction","Sigma Fraction",0.,1.);
       // scale the sigmaGaus with sigma1S*scale=sigmaGaus now.
       RooRealVar    *scaleWidth = new RooRealVar("#sigma_{CB2}/#sigma_{CB1}","scaleWidth",1.,2.5);
