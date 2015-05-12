@@ -55,7 +55,7 @@ n --> 2^n -1
  */
 
 
-void MakeTree_2015(const char* inputOniaTree = "../UpsilonHistos_pbpb_m7-14gev_noCuts.root",
+void MakeTree_2015(const char* inputOniaTree = "../All_v2.24_Histos_Runs_211739-211831_GlbGlb_woPileUpRej_allPV.root",
 		   //miniUpsilon_Histos_Runs_210498-211631_HFvars_paapJune28.root",
 		   //  const char* runNumber = "211739-211831",
 		   //  const char* runNumber = "210498-211631",// whole pA run, with wrong alignment
@@ -64,13 +64,13 @@ void MakeTree_2015(const char* inputOniaTree = "../UpsilonHistos_pbpb_m7-14gev_n
 		   //const char* runNumber = "a",
 		   float newVtxProbCut   = 0.01,// default in the input tree is already 0.01
 		   float ptcut           = 0., // single muon cut pt
-		   int nTriggerBit       = 1, 
+		   int nTriggerBit       = 2, 
 		   // const char* dataSource= "upsiMiniTree_pp276tev_5p41_ptmu4_woPileup_june27",
 		   //   const char* dataSource= "upsiMiniTree_pA5tev_ptmu4_octb15_chunk1_runGT210658",
-		   const char* dataSource= "upsiMiniTree_AA2p76tev_noIDCuts_part3",
+		   const char* dataSource= "upsiMiniTree_pp2p76tev_noIDVars_GlbGlb",
 		   // const char* dataSource= "upsiMiniTree_pp7tev_dimu0v1_ptmu4",
 		   //   const char* dataSource= "upsiMiniTree_aa276tevC50100_ppofficial_trktrk_ptmu4",
-		   bool isAArereco       = true,// only for newly processed AA; old tree is with triger v1,v2 included
+		   bool isAArereco       = false,// only for newly processed AA; old tree is with triger v1,v2 included
 		   bool bAllTriggers     = false,
 		   bool addExtraCentrality = true,
 		   bool excludeWrongAlign_pa = false
@@ -635,7 +635,7 @@ void MakeTree_2015(const char* inputOniaTree = "../UpsilonHistos_pbpb_m7-14gev_n
 
 
   //____________________________________ loop over all events
-  for (int i=2e6; i<nentries; i++) 
+  for (int i=0; i<nentries; i++) 
     {
       t->GetEntry(i);
       //      if(excludeWrongAlign_pa && runNb<=210658) continue;
