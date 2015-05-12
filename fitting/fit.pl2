@@ -39,8 +39,8 @@ my $outFilePrefix          = $ChooseWhat2Fit[$ChooseFitParams];
 #then, the pt cut (can add vProb or other observables there in the same fashion)
 
 my $ptMuStart1 = 2;#single muon pt > 4GeV/c cut, that no-one wants to change... that makes me sad.
-my $ptMuEnd1 = 2;
-my $ptMuStart2 = 3;
+my $ptMuEnd1 = 3;
+my $ptMuStart2 = 2;
 my $ptMuEnd2 = 3;
 my @chooseptMu = ("","3","3.5","4","4.5");
 my @outPdfPrefix_ptMu1 = ("/pt0","/pt_3","/pt_3p5","/pt_4","/pt_4p5");
@@ -115,7 +115,7 @@ my $ptEnd=0;
 my @upsPtBinMin = ("0","2.5","5","8" ,"12","20" ,"0"  ,"5","0","0");  
 my @upsPtBinMax = ("2.5","5" , "8","12","20","40","5","12","20","50");
 my @binNameStartPt= ("/Pt_0","/Pt_2p5","/Pt_5","/Pt_8" ,"/Pt_12","/Pt_20" ,"/Pt_0","/Pt_5","/Pt_0","/Pt_0");  
-my @binNameEndPt=  ("_2p5","_5","_8","_12","_20","_50","_5","_12","_20","_50");
+my @binNameEndPt=  ("_2p5","_5","_8","_12","_20","_40","_5","_12","_20","_50");
 my $centstart=0;
 my $centend=4;
 my @centrality_min = ("0", "0","2","4", "8","12","16","20","28","20","0","4", "12","0","8"); 
@@ -132,6 +132,7 @@ my $outPdfFitsDir;
 my $DoRapNow=0;
 my $DoPtNow=1;
 for(my $isam=$samstart; $isam <=$samend ; $isam++){
+    if($DoPtNow==1 && $DoRapNow==1){print"Times have changed, please check the code."; last;}
     $outPdfSampleDir = $pdfDateDir.$sampleDir[$isam];
     $outTxtSampleDir = $txtDateDir.$sampleDir[$isam];
     if(! -e $outPdfSampleDir){ system("mkdir $outPdfSampleDir");}
@@ -140,13 +141,16 @@ for(my $isam=$samstart; $isam <=$samend ; $isam++){
     for (my $iPtMu1=$ptMuStart1; $iPtMu1<=$ptMuEnd1; $iPtMu1++)
     {
 	my  $ptMuPrefix = $outPdfPrefix_ptMu1[$iPtMu1];
-	$outPdfPtDir = $outPdfSampleDir.$ptMuPrefix;
-	$outTxtPtDir = $outTxtSampleDir.$ptMuPrefix;
+ 	my $outPdfPtDir = $outPdfSampleDir.$ptMuPrefix;
+	my $outTxtPtDir = $outTxtSampleDir.$ptMuPrefix;
+	say $outPdfPtDir;
 	for (my $iPtMu2=$ptMuStart2; $iPtMu2<=$ptMuEnd2; $iPtMu2++)
 	{
+	    if(($iPtMu2<$iPtMu1)){next;}
 	    my  $ptMuPrefix2 = $outPdfPrefix_ptMu2[$iPtMu2];
-	    $outPdfPtDir = $outPdfPtDir.$ptMuPrefix2;
-	    $outTxtPtDir = $outTxtPtDir.$ptMuPrefix2;
+	    my  $outPdfPtDir = $outPdfPtDir.$ptMuPrefix2;
+	    my  $outTxtPtDir = $outTxtPtDir.$ptMuPrefix2;
+	    say  $outPdfPtDir;
 	    if(! -e $outPdfPtDir){ system("mkdir $outPdfPtDir");}
 	    if(! -e $outTxtPtDir){ system("mkdir $outTxtPtDir");}
 	    if($isam != 7 && ($DoPtNow==0 &&$DoRapNow == 0))
@@ -166,7 +170,7 @@ for(my $isam=$samstart; $isam <=$samend ; $isam++){
 		    }
 		}
 	    }
-	    if($DoPtNow !=0)
+	    if($DoPtNow ==1)
 	    {	for($ObsPrefix[1])
 		{
 		    my  $outTxtObsDir = $outTxtPtDir.$_;
@@ -183,7 +187,7 @@ for(my $isam=$samstart; $isam <=$samend ; $isam++){
 		    }
 		}
 	    }
-	    if ($DoRapNow != 0)
+	    if ($DoRapNow == 1)
 	    {     for($ObsPrefix[2])
 		  {
 		      my  $outTxtObsDir = $outTxtPtDir.$_;
@@ -210,6 +214,7 @@ for(my $isam=$samstart; $isam <=$samend ; $isam++){
 my $whatBin;
 my $bkgModel;
 for(my $isam=$samstart; $isam <=$samend ; $isam++){
+    if($DoPtNow==1 && $DoRapNow==1){print"\n arf! \n"; last;}
     for($modelstart..$modelend){  #which usually is just modelstart = 3
 	$bkgModel=$_;
 	if($modelstart!=3){ $fsrstart=1, $fsrend=1;}
@@ -222,9 +227,10 @@ for(my $isam=$samstart; $isam <=$samend ; $isam++){
 	    $outTxtPtDir = $outTxtSampleDir.$ptMuPrefix;
 	    for (my $iPtMu2=$ptMuStart2; $iPtMu2<=$ptMuEnd2; $iPtMu2++)
 	    {
+		if(($iPtMu2<$iPtMu1)){next;}
 		my  $ptMuPrefix2 = $outPdfPrefix_ptMu2[$iPtMu2];
-		$outPdfPtDir = $outPdfPtDir.$ptMuPrefix2;
-		$outTxtPtDir = $outTxtPtDir.$ptMuPrefix2;
+		my  $outPdfPtDir = $outPdfPtDir.$ptMuPrefix2;
+		my  $outTxtPtDir = $outTxtPtDir.$ptMuPrefix2;
 		if($isam != 7 && ($DoPtNow==0 &&$DoRapNow == 0))
 		{	for($ObsPrefix[0])
 			{
@@ -244,7 +250,7 @@ for(my $isam=$samstart; $isam <=$samend ; $isam++){
 			    }
 			}
 		}
-		if($DoPtNow !=0)
+		if($DoPtNow ==1)
 		{	for($ObsPrefix[1])
 			{
 			    my  $outTxtObsDir = $outTxtPtDir.$_;
@@ -257,38 +263,22 @@ for(my $isam=$samstart; $isam <=$samend ; $isam++){
 				$outTxtFitsDir = $outTxtObsDir.$binNameStartPt[$_].$binNameEndPt[$_];
 				$outPdfFitsDir = $outPdfObsDir.$binNameStartPt[$_].$binNameEndPt[$_];
 				for($fsr[$fsrstart]..$fsr[$fsrend]){
-				    # say ;
-				    # say ;
-				    # say $_;
-				    # say $refstart; #I don't expect this to be varied, but left it for the code.
-				    # say $whatBin;
-				    # say $DoRapNow;
-				    # say $DoPtNow;
-				    # say ;
-				    # say $chooseptMu[$iPtMu2];
-				    # say ;
-				    # say $muonEtaMax;
-				    # say ;
-				    # say ;
-				    # say ;
-				    # say ;
-				    # say ;
-				    # say $centrality_max[0];
-				    # say $sigModel[$sigModelstart];
-				    # say $outTxtFitsDir;
-				    # say $outPdfFitsDir;
-				    # say ;
-				    # say $outFilePrefix;    
-				    # say ;
-
-				    system("root -l -b -q   'fitUpsilonYields.C($isam,$bkgModel,$_,$refstart,$whatBin,$DoRapNow,$DoPtNow,$chooseptMu[$iPtMu1],$chooseptMu[$iPtMu2], $muonEtaMin, $muonEtaMax,$abs_dimuYMin,$abs_dimuYMax,$upsPtBinMin[$whatBin],$upsPtBinMax[$whatBin], $centrality_min[0], $centrality_max[0],$sigModel[$sigModelstart],\"$outTxtFitsDir\",\"$outPdfFitsDir\",\"$choseSamples[$isam]\",\"$outFilePrefix\",$ChooseFitParams)'
-			"); 
-				    ## system("root -l -b -q '.L $workDir/fitUpsilonYields.C \ '");
+				    print"Cent: $centrality_min[0] - $centrality_max[0] \n BkgModel: $bkgModel \n Muon cut:	$muonEtaMin - $muonEtaMax\n";
+				    print"Save dir is: $outPdfFitsDir\n";
+				    print "fsr:$_ \n reference: $refstart\n";
+				    print " Sample is: $isam\n";
+				    # print  "vProb is: $vProb\n";
+				    print   "single Muon 1 pT > $chooseptMu[$iPtMu1]\n";
+				    print   "single Muon 2 pT > $chooseptMu[$iPtMu2]\n";
+				    print    " $upsPtBinMin[$whatBin] < pT_Ups < $upsPtBinMax[$whatBin] \n";
+				    print    " $abs_dimuYMin < |y_Ups| < $abs_dimuYMax \n";
+#				    say $chooseptMu[$iPtMu2];
+				  #  system("root -l -b -q   'fitUpsilonYields.C($isam,$bkgModel,$_,$refstart,$whatBin,$DoRapNow,$DoPtNow,$chooseptMu[$iPtMu1],$chooseptMu[$iPtMu2], $muonEtaMin, $muonEtaMax,$abs_dimuYMin,$abs_dimuYMax,$upsPtBinMin[$whatBin],$upsPtBinMax[$whatBin], $centrality_min[0], $centrality_max[0],$sigModel[$sigModelstart],\"$outTxtFitsDir\",\"$outPdfFitsDir\",\"$choseSamples[$isam]\",\"$outFilePrefix\",$ChooseFitParams)' "); 
 				}
 			    }
 			}
 		}
-		if ($DoRapNow != 0)
+		if ($DoRapNow == 1)
 		{     for($ObsPrefix[2])
 		      {
 			  # things get interesting here, cause the variable is in fact abs(y), not y.
@@ -301,7 +291,18 @@ for(my $isam=$samstart; $isam <=$samend ; $isam++){
 			      $outTxtFitsDir = $outTxtObsDir.$binNameStartRap[$_].$binNameEndRap[$_];
 			      $outPdfFitsDir = $outPdfObsDir.$binNameStartRap[$_].$binNameEndRap[$_];
 			      for($fsr[$fsrstart]..$fsr[$fsrend]){
-			      say $_;
+				  # say $_;
+				  print"Cent: $centrality_min[0] - $centrality_max[0] \n BkgModel: $bkgModel \n Muon cut:	$muonEtaMin - $muonEtaMax\n";
+				  print"Save dir is: $outPdfFitsDir\n";
+				  print "fsr:$_ \n reference: $refstart\n";
+				  print " Sample is: $isam\n";
+				  # print  "vProb is: $vProb\n";
+				  print   "single Muon 1 pT > $chooseptMu[$iPtMu1]\n";
+				  print   "single Muon 2 pT > $chooseptMu[$iPtMu2]\n";
+				  print    " $upsPtCutMin < pT_Ups < $upsPtCutMax \n";
+				  print    " $rapBinMin[$whatBin] < |y_Ups| < rapBinMax[$whatBin] \n";
+				  system("root -l -b -q   'fitUpsilonYields.C($isam,$bkgModel,$_,$refstart,$whatBin,$DoRapNow,$DoPtNow,$chooseptMu[$iPtMu1],$chooseptMu[$iPtMu2], $muonEtaMin, $muonEtaMax,$rapBinMin[$whatBin],$rapBinMax[$whatBin],$upsPtCutMin,$upsPtCutMax ,$centrality_min[0], $centrality_max[0],$sigModel[$sigModelstart],\"$outTxtFitsDir\",\"$outPdfFitsDir\",\"$choseSamples[$isam]\",\"$outFilePrefix\",$ChooseFitParams)' "); 
+#cautionary
 			      }
 			  }
 		      }
