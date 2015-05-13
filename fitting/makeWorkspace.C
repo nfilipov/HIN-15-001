@@ -36,8 +36,8 @@ void makeWorkspace(RooWorkspace& ws, int ChooseSample,float muonEtaMin, float mu
       // finput   = "../dimuonTree_upsiMiniTree_aa276tev_regitreco_glbglb_Runa_trigBit1_allTriggers0_pt4.root"; // cent 0-40 "cm" but doesnt have all the muons!
       // finput = "../dimuonTree_upsiMiniTree_AA2p76tev_ptmu3_july09_Run2011-2011_trigBit1_allTriggers0.root";// cent0-40 "td"
       // finput = "../dimuonTree_upsiMiniTree_AA276tevC0100_regit_ptmu4_Run210498-211631_trigBit1_allTriggers0.root"; // cent0-40 "nf"
-      finput = "../dimuonTree_upsiMiniTree_AA2p76tev_ptmuSpecial_nov25_2013_trigBit1_allTriggers1_testNoCut.root"; // no cuts , so it has all the muons.
-      // finput = "../dimuonTree_upsiMiniTree_AA2p76tev_WithIDCuts_RunHIN-15-001_trigBit1_allTriggers0.root";//bold as can be : my tree!
+      // finput = "../dimuonTree_upsiMiniTree_AA2p76tev_ptmuSpecial_nov25_2013_trigBit1_allTriggers1_testNoCut.root"; // no cuts , so it has all the muons.
+       finput = "../dimuonTree_upsiMiniTree_AA2p76tev_WithIDCuts_RunHIN-15-001_trigBit1_allTriggers0.root";//bold as can be : my tree!
       break;
     case 7://pp @ 2.76TeV
       gROOT->LoadMacro("bkgTable_pp.h");
@@ -47,7 +47,8 @@ void makeWorkspace(RooWorkspace& ws, int ChooseSample,float muonEtaMin, float mu
      
   	//finput   = "../dimuonTree_upsiMiniTree_pp276tev_5p41_ptmu2_Run211739-211831_GlbGlb_trigBit1_allTriggers0.root";} // Glb muons, all above 2 GeV, HLT_PAL1DoubleMuOpen
   	//finput = "../dimuonTree_upsiMiniTree_pp276tev_5p41_ptmu3_Run211739-211831_trigBit2_allTriggers0_testNoCut.root"; }// HLT_PAL1DoubleMu0HighQ triggered events
-  	finput = "../upsiMiniTree_ppData_GLBGLB_QQtrigbit2_Trig_analysisOK_20140729_cuts10-006.root"; //HLT_PAL1DoubleMu0_HighQ triggered events AND GlbGlb muons pairs matched to it!
+      //finput = "../upsiMiniTree_ppData_GLBGLB_QQtrigbit2_Trig_analysisOK_20140729_cuts10-006.root"; //HLT_PAL1DoubleMu0_HighQ triggered events AND GlbGlb muons pairs matched to it!
+      	finput ="../dimuonTree_upsiMiniTree_pp2p76tev_noIDVars_GlbGlb_RunHIN-15-001_trigBit2_allTriggers0.root";
       // if(isPA) { finput = "../dimuonTree_upsiMiniTree_pA5tev_18p4nb__Run210498-211256_trigBit1_allTriggers0_pt4.root";} //// pPb
       break;
     case 8:

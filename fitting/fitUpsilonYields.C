@@ -72,17 +72,17 @@ void fitUpsilonYields(int ChooseSample =6,
 		      int bkgModel=3, 
 		      int fsr=1,
 		      int useRef =2,//1: data-driven, 0: none fixed, 2: FSR from MC(standard case in 15-001)
-		      int whatBin =3,
-		      int doRap=0,
-		      int doPt=1,
+		      int whatBin =9,
+		      int doRap=1,
+		      int doPt=0,
 		      float muonPtMin=3.5,
 		      float muonPtMax = 4,  
 		      float muonEtaMin =-2.4,
 		      float muonEtaMax =2.4,
 		      float upsRapStart = 0.0, // it's the absolute value (default) for y bins are symmetric in pp and pbpb.. must be over-ridden in pPb...
 		      float upsRapEnd = 2.4,
-		      float upsPtStart = 5,
-		      float upsPtEnd = 8,
+		      float upsPtStart = 0,
+		      float upsPtEnd = 40,
 		      int upsCentralityStart = 0,
 		      int upsCentralityEnd =40,
 		      int signalModel = 4,
@@ -111,12 +111,7 @@ void fitUpsilonYields(int ChooseSample =6,
   // write out the fitting params
   int centMin = upsCentralityStart;
   int centMax = upsCentralityEnd;
-  if(ChooseSample==6 || ChooseSample==5 || (ChooseSample==8 && isHI)) 
-    {
-      if (upsCentralityStart==28) binw=0.14;  // little change on the fly.
-      centMin = (int)(upsCentralityStart*2.5);
-      centMax = (int)(upsCentralityEnd*2.5);
-    }
+
   TString figName_(Form("%s_%s_cent%d%d_bkgModel%d_muonEta%.2f%.2f_muonPt%.2f-%.2f_dimuPt%.2f%.2f_dimuY%.2f%.2f_%d_ref%d_mass8p511p5",outFilePrefix,ChooseSampleCase,centMin,centMax,bkgModel,muonEtaMin,muonEtaMax,muonPtMin,muonPtMax,upsPtStart,upsPtEnd,upsRapStart,upsRapEnd,fsr,useRef));
   figName_.ReplaceAll("-","M");
   figName_.ReplaceAll(".","");
