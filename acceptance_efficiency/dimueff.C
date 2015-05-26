@@ -35,6 +35,8 @@
 #include "RooChi2Var.h"
 #include "RooMinuit.h"
 
+#include "tnp_weight.h"
+
 #define NPT1S 6
 #define NRAP1S 6
 #define NCENT1S 8
@@ -58,7 +60,7 @@ const double rapbins_2S[NRAP2S+1] = {0,1.2,2.4};
 const int centbins_2S[NCENT2S+1] = {0,10./2.5,30./2.5,50./2.5,100./2.5};
 const float fcentbins_2S[NCENT2S+1] = {0,10./2.5,30./2.5,50./2.5,100./2.5};
 
-void dimueff::Loop(int YS, bool ispbpb, int strategy)
+void dimueff::Loop(int YS, bool ispbpb, int strategy, int var_tp)
    // YS = N for NS
    // ispbpb = true for PbPb, false for pp
    // strategy = 0 for fit + reco quantities
@@ -251,7 +253,7 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy)
                   && (Reco_QQ_trig[irecmin]&2)==2;
             TLorentzVector *tlvmup = (TLorentzVector*) Reco_QQ_mupl_4mom->At(irecmin);
             TLorentzVector *tlvmum = (TLorentzVector*) Reco_QQ_mumi_4mom->At(irecmin);
-            weighttp=weight_tp(tlvmup->Pt(),tlvmup->Eta(),ispbpb)*weight_tp(tlvmum->Pt(),tlvmum->Eta(),ispbpb);
+            weighttp=weight_tp(tlvmup->Pt(),tlvmup->Eta(),ispbpb,var_tp)*weight_tp(tlvmum->Pt(),tlvmum->Eta(),ispbpb,var_tp);
             recupspt = tlvrecmin->Pt();
             recupsrap = tlvrecmin->Rapidity();
          }
@@ -539,21 +541,21 @@ double dimueff::weightpt(double pt, int YS)
    else return scale[6];
 }
 
-double dimueff::weight_tp(double pt, double eta, bool ispbpb)
+double dimueff::weight_tp(double pt, double eta, bool ispbpb, int idx_variation)
 {
    if (!ispbpb)
    {
       if (fabs(eta)<1.6)
-         return (0.9588*TMath::Erf((pt-2.0009)/1.8998))/(0.9604*TMath::Erf((pt-2.0586)/2.1567));
+         return tnp_weight_pp_midrap(pt, idx_variation);
       else
-         return (0.7897*TMath::Erf((pt-0.7162)/2.6261))/(0.7364*TMath::Erf((pt-1.2149)/2.3352));
+         return tnp_weight_pp_fwdrap(pt, idx_variation);
    }
    else
    {
       if (fabs(eta)<1.6)
-         return (0.9555*TMath::Erf((pt-1.3240)/2.5683))/(0.9576*TMath::Erf((pt-1.7883)/2.6583));
+         return tnp_weight_pbpb_midrap(pt, idx_variation);
       else
-         return (0.8335*TMath::Erf((pt-1.2470)/1.9782))/(0.7948*TMath::Erf((pt-1.3091)/2.2783));
+         return tnp_weight_pbpb_fwdrap(pt, idx_variation);
    }
 }
 
