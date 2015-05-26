@@ -153,8 +153,8 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy)
    const int *centbins_NS = YS==1 ? centbins_1S : centbins_2S;
    const float *fcentbins_NS = YS==1 ? fcentbins_1S : fcentbins_2S;
 
-   const double massmin = YS==1 ? 9.0 : (YS==2 ? 9.5 : 9.8);
-   const double massmax = YS==1 ? 10.0 : (YS==2 ? 10.5 : 10.8);
+   const double massmin = YS==1 ? 8.0 : (YS==2 ? 8.5 : 8.8);
+   const double massmax = YS==1 ? 10.5 : (YS==2 ? 11 : 11.3);
 
    TH1F *hdrmin = new TH1F("hdrmin","hdrmin",100,0,0.5);
    TH2F *hdrmindpt = new TH2F("hdrmindpt","hdrmindpt",100,0,0.5,100,0,1);
@@ -178,6 +178,7 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy)
 
    // don't read useless branches
    fChain->SetBranchStatus("Reco_mu*",0);  
+   fChain->SetBranchStatus("Reco_trk*",0);  
    fChain->SetBranchStatus("Gen_mu*",0);  
 
    Long64_t nbytes = 0, nb = 0;
@@ -620,7 +621,7 @@ double dimueff::fitNS(TH1F *hist, double &err, int YS)
 
    // *************************************************** free param in the fit
    int nt = hist->Integral();
-   RooRealVar *nsig1f   = new RooRealVar("N_{#Upsilon(1S)}","nsig1S",0.99,0.5,1.5);
+   RooRealVar *nsig1f   = new RooRealVar("N_{#Upsilon(1S)}","nsig1S",0.99,0.95,1.05);
    RooRealVar  *mean = new RooRealVar("mass1S","#Upsilon mean",M1S,M1S-0.1,M1S+0.1);
    // scale mean and resolution by mass ratio
    RooFormulaVar *mean1S = new RooFormulaVar("mean1S","@0",RooArgList(*mean));
