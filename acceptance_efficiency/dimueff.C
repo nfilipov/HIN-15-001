@@ -96,7 +96,14 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int var_tp)
    Long64_t nentries = fChain->GetEntriesFast();
 
    TFile *f = new TFile("eff_output.root","RECREATE");
+   TDirectory *dir = f->mkdir("allhistos");
+   dir->cd();
 
+   double dummyerr;
+
+   ////////////////////////////////////////////////////////////////////////////
+   // let's go for some initializations and declarations
+   ////////////////////////////////////////////////////////////////////////////
    double den_pt_NS[NPT1S+1] = {0};
    double den_rap_NS[NRAP1S+1] = {0};
    double den_cent_NS[NCENT1S+1] = {0};
@@ -106,6 +113,12 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int var_tp)
    TH1F *hden_pt_NS[NPT1S+1] = {NULL};
    TH1F *hden_rap_NS[NRAP1S+1] = {NULL};
    TH1F *hden_cent_NS[NCENT1S+1] = {NULL};
+   double den_pt_1[NPT1S+1] = {0};double den_pt_2[NPT1S+1] = {0};double den_pt_3[NPT1S+1] = {0};double den_pt_4[NPT1S+1] = {0};double den_pt_5[NPT1S+1] = {0};
+   double den_rap_1[NRAP1S+1] = {0};double den_rap_2[NRAP1S+1] = {0};double den_rap_3[NRAP1S+1] = {0};double den_rap_4[NRAP1S+1] = {0};double den_rap_5[NRAP1S+1] = {0};
+   double den_cent_1[NCENT1S+1] = {0};double den_cent_2[NCENT1S+1] = {0};double den_cent_3[NCENT1S+1] = {0};double den_cent_4[NCENT1S+1] = {0};double den_cent_5[NCENT1S+1] = {0};
+   TH1F *hden_pt_1[NPT1S+1] = {NULL};TH1F *hden_pt_2[NPT1S+1] = {NULL};TH1F *hden_pt_3[NPT1S+1] = {NULL};TH1F *hden_pt_4[NPT1S+1] = {NULL};TH1F *hden_pt_5[NPT1S+1] = {NULL};
+   TH1F *hden_rap_1[NRAP1S+1] = {NULL};TH1F *hden_rap_2[NRAP1S+1] = {NULL};TH1F *hden_rap_3[NRAP1S+1] = {NULL};TH1F *hden_rap_4[NRAP1S+1] = {NULL};TH1F *hden_rap_5[NRAP1S+1] = {NULL};
+   TH1F *hden_cent_1[NCENT1S+1] = {NULL};TH1F *hden_cent_2[NCENT1S+1] = {NULL};TH1F *hden_cent_3[NCENT1S+1] = {NULL};TH1F *hden_cent_4[NCENT1S+1] = {NULL};TH1F *hden_cent_5[NCENT1S+1] = {NULL};
 
    double num_pt_NS[NPT1S+1] = {0};
    double num_rap_NS[NRAP1S+1] = {0};
@@ -116,6 +129,12 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int var_tp)
    TH1F *hnum_pt_NS[NPT1S+1] = {NULL};
    TH1F *hnum_rap_NS[NRAP1S+1] = {NULL};
    TH1F *hnum_cent_NS[NCENT1S+1] = {NULL};
+   double num_pt_1[NPT1S+1] = {0};double num_pt_2[NPT1S+1] = {0};double num_pt_3[NPT1S+1] = {0};double num_pt_4[NPT1S+1] = {0};double num_pt_5[NPT1S+1] = {0};
+   double num_rap_1[NRAP1S+1] = {0};double num_rap_2[NRAP1S+1] = {0};double num_rap_3[NRAP1S+1] = {0};double num_rap_4[NRAP1S+1] = {0};double num_rap_5[NRAP1S+1] = {0};
+   double num_cent_1[NCENT1S+1] = {0};double num_cent_2[NCENT1S+1] = {0};double num_cent_3[NCENT1S+1] = {0};double num_cent_4[NCENT1S+1] = {0};double num_cent_5[NCENT1S+1] = {0};
+   TH1F *hnum_pt_1[NPT1S+1] = {NULL};TH1F *hnum_pt_2[NPT1S+1] = {NULL};TH1F *hnum_pt_3[NPT1S+1] = {NULL};TH1F *hnum_pt_4[NPT1S+1] = {NULL};TH1F *hnum_pt_5[NPT1S+1] = {NULL};
+   TH1F *hnum_rap_1[NRAP1S+1] = {NULL};TH1F *hnum_rap_2[NRAP1S+1] = {NULL};TH1F *hnum_rap_3[NRAP1S+1] = {NULL};TH1F *hnum_rap_4[NRAP1S+1] = {NULL};TH1F *hnum_rap_5[NRAP1S+1] = {NULL};
+   TH1F *hnum_cent_1[NCENT1S+1] = {NULL};TH1F *hnum_cent_2[NCENT1S+1] = {NULL};TH1F *hnum_cent_3[NCENT1S+1] = {NULL};TH1F *hnum_cent_4[NCENT1S+1] = {NULL};TH1F *hnum_cent_5[NCENT1S+1] = {NULL};
 
    double num_tp_pt_NS[NPT1S+1] = {0};
    double num_tp_rap_NS[NRAP1S+1] = {0};
@@ -126,24 +145,75 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int var_tp)
    TH1F *hnum_tp_pt_NS[NPT1S+1] = {NULL};
    TH1F *hnum_tp_rap_NS[NRAP1S+1] = {NULL};
    TH1F *hnum_tp_cent_NS[NCENT1S+1] = {NULL};
+   double num_tp_pt_1[NPT1S+1] = {0};double num_tp_pt_2[NPT1S+1] = {0};double num_tp_pt_3[NPT1S+1] = {0};double num_tp_pt_4[NPT1S+1] = {0};double num_tp_pt_5[NPT1S+1] = {0};
+   double num_tp_rap_1[NRAP1S+1] = {0};double num_tp_rap_2[NRAP1S+1] = {0};double num_tp_rap_3[NRAP1S+1] = {0};double num_tp_rap_4[NRAP1S+1] = {0};double num_tp_rap_5[NRAP1S+1] = {0};
+   double num_tp_cent_1[NCENT1S+1] = {0};double num_tp_cent_2[NCENT1S+1] = {0};double num_tp_cent_3[NCENT1S+1] = {0};double num_tp_cent_4[NCENT1S+1] = {0};double num_tp_cent_5[NCENT1S+1] = {0};
+   TH1F *hnum_tp_pt_1[NPT1S+1] = {NULL};TH1F *hnum_tp_pt_2[NPT1S+1] = {NULL};TH1F *hnum_tp_pt_3[NPT1S+1] = {NULL};TH1F *hnum_tp_pt_4[NPT1S+1] = {NULL};TH1F *hnum_tp_pt_5[NPT1S+1] = {NULL};
+   TH1F *hnum_tp_rap_1[NRAP1S+1] = {NULL};TH1F *hnum_tp_rap_2[NRAP1S+1] = {NULL};TH1F *hnum_tp_rap_3[NRAP1S+1] = {NULL};TH1F *hnum_tp_rap_4[NRAP1S+1] = {NULL};TH1F *hnum_tp_rap_5[NRAP1S+1] = {NULL};
+   TH1F *hnum_tp_cent_1[NCENT1S+1] = {NULL};TH1F *hnum_tp_cent_2[NCENT1S+1] = {NULL};TH1F *hnum_tp_cent_3[NCENT1S+1] = {NULL};TH1F *hnum_tp_cent_4[NCENT1S+1] = {NULL};TH1F *hnum_tp_cent_5[NCENT1S+1] = {NULL};
 
    for (int ibin=0; ibin<NPT1S+1; ibin++)
    {
       hden_pt_NS[ibin] = new TH1F(Form("hden_pt_NS_%i",ibin),Form("hden_pt_NS_%i",ibin),250,7,12);
       hnum_pt_NS[ibin] = new TH1F(Form("hnum_pt_NS_%i",ibin),Form("hnum_pt_NS_%i",ibin),250,7,12);
       hnum_tp_pt_NS[ibin] = new TH1F(Form("hnum_tp_pt_NS_%i",ibin),Form("hnum_tp_pt_NS_%i",ibin),250,7,12);
+      hden_pt_1[ibin] = new TH1F(Form("hden_pt_1_%i",ibin),Form("hden_pt_1_%i",ibin),250,7,12);
+      hnum_pt_1[ibin] = new TH1F(Form("hnum_pt_1_%i",ibin),Form("hnum_pt_1_%i",ibin),250,7,12);
+      hnum_tp_pt_1[ibin] = new TH1F(Form("hnum_tp_pt_1_%i",ibin),Form("hnum_tp_pt_1_%i",ibin),250,7,12);
+      hden_pt_2[ibin] = new TH1F(Form("hden_pt_2_%i",ibin),Form("hden_pt_2_%i",ibin),250,7,12);
+      hnum_pt_2[ibin] = new TH1F(Form("hnum_pt_2_%i",ibin),Form("hnum_pt_2_%i",ibin),250,7,12);
+      hnum_tp_pt_2[ibin] = new TH1F(Form("hnum_tp_pt_2_%i",ibin),Form("hnum_tp_pt_2_%i",ibin),250,7,12);
+      hden_pt_3[ibin] = new TH1F(Form("hden_pt_3_%i",ibin),Form("hden_pt_3_%i",ibin),250,7,12);
+      hnum_pt_3[ibin] = new TH1F(Form("hnum_pt_3_%i",ibin),Form("hnum_pt_3_%i",ibin),250,7,12);
+      hnum_tp_pt_3[ibin] = new TH1F(Form("hnum_tp_pt_3_%i",ibin),Form("hnum_tp_pt_3_%i",ibin),250,7,12);
+      hden_pt_4[ibin] = new TH1F(Form("hden_pt_4_%i",ibin),Form("hden_pt_4_%i",ibin),250,7,12);
+      hnum_pt_4[ibin] = new TH1F(Form("hnum_pt_4_%i",ibin),Form("hnum_pt_4_%i",ibin),250,7,12);
+      hnum_tp_pt_4[ibin] = new TH1F(Form("hnum_tp_pt_4_%i",ibin),Form("hnum_tp_pt_4_%i",ibin),250,7,12);
+      hden_pt_5[ibin] = new TH1F(Form("hden_pt_5_%i",ibin),Form("hden_pt_5_%i",ibin),250,7,12);
+      hnum_pt_5[ibin] = new TH1F(Form("hnum_pt_5_%i",ibin),Form("hnum_pt_5_%i",ibin),250,7,12);
+      hnum_tp_pt_5[ibin] = new TH1F(Form("hnum_tp_pt_5_%i",ibin),Form("hnum_tp_pt_5_%i",ibin),250,7,12);
    }
    for (int ibin=0; ibin<NRAP1S+1; ibin++)
    {
       hden_rap_NS[ibin] = new TH1F(Form("hden_rap_NS_%i",ibin),Form("hden_rap_NS_%i",ibin),250,7,12);
       hnum_rap_NS[ibin] = new TH1F(Form("hnum_rap_NS_%i",ibin),Form("hnum_rap_NS_%i",ibin),250,7,12);
       hnum_tp_rap_NS[ibin] = new TH1F(Form("hnum_tp_rap_NS_%i",ibin),Form("hnum_tp_rap_NS_%i",ibin),250,7,12);
+      hden_rap_1[ibin] = new TH1F(Form("hden_rap_1_%i",ibin),Form("hden_rap_1_%i",ibin),250,7,12);
+      hnum_rap_1[ibin] = new TH1F(Form("hnum_rap_1_%i",ibin),Form("hnum_rap_1_%i",ibin),250,7,12);
+      hnum_tp_rap_1[ibin] = new TH1F(Form("hnum_tp_rap_1_%i",ibin),Form("hnum_tp_rap_1_%i",ibin),250,7,12);
+      hden_rap_2[ibin] = new TH1F(Form("hden_rap_2_%i",ibin),Form("hden_rap_2_%i",ibin),250,7,12);
+      hnum_rap_2[ibin] = new TH1F(Form("hnum_rap_2_%i",ibin),Form("hnum_rap_2_%i",ibin),250,7,12);
+      hnum_tp_rap_2[ibin] = new TH1F(Form("hnum_tp_rap_2_%i",ibin),Form("hnum_tp_rap_2_%i",ibin),250,7,12);
+      hden_rap_3[ibin] = new TH1F(Form("hden_rap_3_%i",ibin),Form("hden_rap_3_%i",ibin),250,7,12);
+      hnum_rap_3[ibin] = new TH1F(Form("hnum_rap_3_%i",ibin),Form("hnum_rap_3_%i",ibin),250,7,12);
+      hnum_tp_rap_3[ibin] = new TH1F(Form("hnum_tp_rap_3_%i",ibin),Form("hnum_tp_rap_3_%i",ibin),250,7,12);
+      hden_rap_4[ibin] = new TH1F(Form("hden_rap_4_%i",ibin),Form("hden_rap_4_%i",ibin),250,7,12);
+      hnum_rap_4[ibin] = new TH1F(Form("hnum_rap_4_%i",ibin),Form("hnum_rap_4_%i",ibin),250,7,12);
+      hnum_tp_rap_4[ibin] = new TH1F(Form("hnum_tp_rap_4_%i",ibin),Form("hnum_tp_rap_4_%i",ibin),250,7,12);
+      hden_rap_5[ibin] = new TH1F(Form("hden_rap_5_%i",ibin),Form("hden_rap_5_%i",ibin),250,7,12);
+      hnum_rap_5[ibin] = new TH1F(Form("hnum_rap_5_%i",ibin),Form("hnum_rap_5_%i",ibin),250,7,12);
+      hnum_tp_rap_5[ibin] = new TH1F(Form("hnum_tp_rap_5_%i",ibin),Form("hnum_tp_rap_5_%i",ibin),250,7,12);
    }
    for (int ibin=0; ibin<NCENT1S+1; ibin++)
    {
       hden_cent_NS[ibin] = new TH1F(Form("hden_cent_NS_%i",ibin),Form("hden_cent_NS_%i",ibin),250,7,12);
       hnum_cent_NS[ibin] = new TH1F(Form("hnum_cent_NS_%i",ibin),Form("hnum_cent_NS_%i",ibin),250,7,12);
       hnum_tp_cent_NS[ibin] = new TH1F(Form("hnum_tp_cent_NS_%i",ibin),Form("hnum_tp_cent_NS_%i",ibin),250,7,12);
+      hden_cent_1[ibin] = new TH1F(Form("hden_cent_1_%i",ibin),Form("hden_cent_1_%i",ibin),250,7,12);
+      hnum_cent_1[ibin] = new TH1F(Form("hnum_cent_1_%i",ibin),Form("hnum_cent_1_%i",ibin),250,7,12);
+      hnum_tp_cent_1[ibin] = new TH1F(Form("hnum_tp_cent_1_%i",ibin),Form("hnum_tp_cent_1_%i",ibin),250,7,12);
+      hden_cent_2[ibin] = new TH1F(Form("hden_cent_2_%i",ibin),Form("hden_cent_2_%i",ibin),250,7,12);
+      hnum_cent_2[ibin] = new TH1F(Form("hnum_cent_2_%i",ibin),Form("hnum_cent_2_%i",ibin),250,7,12);
+      hnum_tp_cent_2[ibin] = new TH1F(Form("hnum_tp_cent_2_%i",ibin),Form("hnum_tp_cent_2_%i",ibin),250,7,12);
+      hden_cent_3[ibin] = new TH1F(Form("hden_cent_3_%i",ibin),Form("hden_cent_3_%i",ibin),250,7,12);
+      hnum_cent_3[ibin] = new TH1F(Form("hnum_cent_3_%i",ibin),Form("hnum_cent_3_%i",ibin),250,7,12);
+      hnum_tp_cent_3[ibin] = new TH1F(Form("hnum_tp_cent_3_%i",ibin),Form("hnum_tp_cent_3_%i",ibin),250,7,12);
+      hden_cent_4[ibin] = new TH1F(Form("hden_cent_4_%i",ibin),Form("hden_cent_4_%i",ibin),250,7,12);
+      hnum_cent_4[ibin] = new TH1F(Form("hnum_cent_4_%i",ibin),Form("hnum_cent_4_%i",ibin),250,7,12);
+      hnum_tp_cent_4[ibin] = new TH1F(Form("hnum_tp_cent_4_%i",ibin),Form("hnum_tp_cent_4_%i",ibin),250,7,12);
+      hden_cent_5[ibin] = new TH1F(Form("hden_cent_5_%i",ibin),Form("hden_cent_5_%i",ibin),250,7,12);
+      hnum_cent_5[ibin] = new TH1F(Form("hnum_cent_5_%i",ibin),Form("hnum_cent_5_%i",ibin),250,7,12);
+      hnum_tp_cent_5[ibin] = new TH1F(Form("hnum_tp_cent_5_%i",ibin),Form("hnum_tp_cent_5_%i",ibin),250,7,12);
    }
 
    const unsigned int NPTNS = !ispbpb || YS==1 ? NPT1S : NPT2S;
@@ -158,6 +228,7 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int var_tp)
    const double massmin = YS==1 ? 8.0 : (YS==2 ? 8.5 : 8.8);
    const double massmax = YS==1 ? 10.5 : (YS==2 ? 11 : 11.3);
 
+   f->cd();
    TH1F *hdrmin = new TH1F("hdrmin","hdrmin",100,0,0.5);
    TH2F *hdrmindpt = new TH2F("hdrmindpt","hdrmindpt",100,0,0.5,100,0,1);
    TH1F *hgenpt2 = new TH1F("hgenpt2","hgenpt2",100,0,50);
@@ -183,6 +254,9 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int var_tp)
    fChain->SetBranchStatus("Reco_trk*",0);  
    fChain->SetBranchStatus("Gen_mu*",0);  
 
+   ////////////////////////////////////////////////////////////////////////////
+   // now, event loop
+   ////////////////////////////////////////////////////////////////////////////
    Long64_t nbytes = 0, nb = 0;
    for (Long64_t jentry=0; jentry<nentries;jentry++) {
       Long64_t ientry = LoadTree(jentry);
@@ -191,6 +265,7 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int var_tp)
       // if (Cut(ientry) < 0) continue;
 
       double weight=1.;
+      double weight1=1.; double weight2=1.; double weight3=1.; double weight4=1.; double weight5=1.;
 
       for (int igen=0; igen<Gen_QQ_size; igen++)
       {
@@ -204,6 +279,12 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int var_tp)
          double genupsrap = tlvgen->Rapidity();
          if (ispbpb) weight = weight_shape(genupspt,YS);
          if (ispbpb) weight *= weightpt(genupspt,YS)*FindCenWeight(Centrality,YS);
+         weight1 = weight*weightpt_syst(genupspt,1);
+         weight2 = weight*weightpt_syst(genupspt,2);
+         weight3 = weight*weightrap(genupsrap,3);
+         weight4 = weight*weightrap(genupsrap,4);
+         if (ispbpb) weight5 = weight*FindCenWeight(Centrality,YS,true)/FindCenWeight(Centrality,YS);
+
          hgenpt->Fill(genupspt,weight);
          hgenpt2->Fill(genupspt,weight);
          hgenrap->Fill(genupsrap,weight);
@@ -216,7 +297,7 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int var_tp)
          if (fabs(genupsrap)>rapbins_NS[NRAPNS]) continue;
 
          // reco-truth matching
-         double drmin=1e99,dptmin=1e99;
+         double drmin=9e99,dptmin=9e99;
          unsigned int irecmin=0;
          TLorentzVector *tlvrecmin=NULL;
          for (int irec=0; irec<Reco_QQ_size; irec++)
@@ -253,6 +334,8 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int var_tp)
                   && (Reco_QQ_trig[irecmin]&2)==2;
             TLorentzVector *tlvmup = (TLorentzVector*) Reco_QQ_mupl_4mom->At(irecmin);
             TLorentzVector *tlvmum = (TLorentzVector*) Reco_QQ_mumi_4mom->At(irecmin);
+            if (YS==1) idok = idok && smuacc_loose(tlvmup,tlvmum);
+            if (YS!=1) idok = idok && smuacc_tight(tlvmup,tlvmum);
             weighttp=weight_tp(tlvmup->Pt(),tlvmup->Eta(),ispbpb,var_tp)*weight_tp(tlvmum->Pt(),tlvmum->Eta(),ispbpb,var_tp);
             recupspt = tlvrecmin->Pt();
             recupsrap = tlvrecmin->Rapidity();
@@ -268,12 +351,22 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int var_tp)
             hrecocent2->Fill(Centrality,weight);
          }
 
+         ////////////////////////////////////////////////////////
+         // let's fill the numerator and denominator histograms
+         ////////////////////////////////////////////////////////
          for (unsigned int ibin=0; ibin<NPTNS+1; ibin++)
          {
             // if (ibin==0 && genupspt>ptbins_NS[NPTNS]) continue;
             if (ibin==0 || (genupspt>=ptbins_NS[ibin-1] && genupspt<ptbins_NS[ibin]))
+            {
                // den_pt_NS[ibin]+=weight;
                hden_pt_NS[ibin]->Fill(tlvgen->M(),weight);
+               hden_pt_1[ibin]->Fill(tlvgen->M(),weight1);
+               hden_pt_2[ibin]->Fill(tlvgen->M(),weight2);
+               hden_pt_3[ibin]->Fill(tlvgen->M(),weight3);
+               hden_pt_4[ibin]->Fill(tlvgen->M(),weight4);
+               hden_pt_5[ibin]->Fill(tlvgen->M(),weight5);
+            }
 
             double ptnum = (strategy==1 || strategy==3) ? genupspt : recupspt;
             if (ibin==0 || (ptnum>=ptbins_NS[ibin-1] && ptnum<ptbins_NS[ibin]))
@@ -281,16 +374,27 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int var_tp)
                {
                   // num_pt_NS[ibin]+=weight;
                   // num_tp_pt_NS[ibin]+=weight*weighttp;
-                  hnum_pt_NS[ibin]->Fill(tlvrecmin->M(),weight);
-                  hnum_tp_pt_NS[ibin]->Fill(tlvrecmin->M(),weight*weighttp);
+                  hnum_pt_NS[ibin]->Fill(tlvrecmin->M(),weight); hnum_tp_pt_NS[ibin]->Fill(tlvrecmin->M(),weight*weighttp);
+                  hnum_pt_1[ibin]->Fill(tlvrecmin->M(),weight1); hnum_tp_pt_1[ibin]->Fill(tlvrecmin->M(),weight1*weighttp);
+                  hnum_pt_2[ibin]->Fill(tlvrecmin->M(),weight2); hnum_tp_pt_2[ibin]->Fill(tlvrecmin->M(),weight2*weighttp);
+                  hnum_pt_3[ibin]->Fill(tlvrecmin->M(),weight3); hnum_tp_pt_3[ibin]->Fill(tlvrecmin->M(),weight3*weighttp);
+                  hnum_pt_4[ibin]->Fill(tlvrecmin->M(),weight4); hnum_tp_pt_4[ibin]->Fill(tlvrecmin->M(),weight4*weighttp);
+                  hnum_pt_5[ibin]->Fill(tlvrecmin->M(),weight5); hnum_tp_pt_5[ibin]->Fill(tlvrecmin->M(),weight5*weighttp);
                }
          }
          for (unsigned int ibin=0; ibin<NRAPNS+1; ibin++)
          {
             // if (ibin==0 && fabs(genupsrap)>rapbins_NS[NRAPNS]) continue;
             if (ibin==0 || (genupsrap>=rapbins_NS[ibin-1] && genupsrap<rapbins_NS[ibin]))
+            {
                // den_rap_NS[ibin]+=weight;
                hden_rap_NS[ibin]->Fill(tlvgen->M(),weight);
+               hden_rap_1[ibin]->Fill(tlvgen->M(),weight1);
+               hden_rap_2[ibin]->Fill(tlvgen->M(),weight2);
+               hden_rap_3[ibin]->Fill(tlvgen->M(),weight3);
+               hden_rap_4[ibin]->Fill(tlvgen->M(),weight4);
+               hden_rap_5[ibin]->Fill(tlvgen->M(),weight5);
+            }
 
             double rapnum = (strategy==1 || strategy==3) ? genupsrap : recupsrap;
             if (ibin==0 || (rapnum>=rapbins_NS[ibin-1] && rapnum<rapbins_NS[ibin]))
@@ -298,41 +402,91 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int var_tp)
                {
                   // num_rap_NS[ibin]+=weight;
                   // num_tp_rap_NS[ibin]+=weight*weighttp;
-                  hnum_rap_NS[ibin]->Fill(tlvrecmin->M(),weight);
-                  hnum_tp_rap_NS[ibin]->Fill(tlvrecmin->M(),weight*weighttp);
+                  hnum_rap_NS[ibin]->Fill(tlvrecmin->M(),weight); hnum_tp_rap_NS[ibin]->Fill(tlvrecmin->M(),weight*weighttp);
+                  hnum_rap_1[ibin]->Fill(tlvrecmin->M(),weight1); hnum_tp_rap_1[ibin]->Fill(tlvrecmin->M(),weight1*weighttp);
+                  hnum_rap_2[ibin]->Fill(tlvrecmin->M(),weight2); hnum_tp_rap_2[ibin]->Fill(tlvrecmin->M(),weight2*weighttp);
+                  hnum_rap_3[ibin]->Fill(tlvrecmin->M(),weight3); hnum_tp_rap_3[ibin]->Fill(tlvrecmin->M(),weight3*weighttp);
+                  hnum_rap_4[ibin]->Fill(tlvrecmin->M(),weight4); hnum_tp_rap_4[ibin]->Fill(tlvrecmin->M(),weight4*weighttp);
+                  hnum_rap_5[ibin]->Fill(tlvrecmin->M(),weight5); hnum_tp_rap_5[ibin]->Fill(tlvrecmin->M(),weight5*weighttp);
                }
          }
          if (ispbpb)
             for (unsigned int ibin=0; ibin<NCENTNS+1; ibin++)
             {
                if (ibin!=0 && (Centrality<centbins_NS[ibin-1] || Centrality>=centbins_NS[ibin])) continue;
-               // den_cent_NS[ibin]+=weight;
-               hden_cent_NS[ibin]->Fill(tlvgen->M(),weight);
+               {
+                  // den_cent_NS[ibin]+=weight;
+                  hden_cent_NS[ibin]->Fill(tlvgen->M(),weight);
+                  hden_cent_1[ibin]->Fill(tlvgen->M(),weight1);
+                  hden_cent_2[ibin]->Fill(tlvgen->M(),weight2);
+                  hden_cent_3[ibin]->Fill(tlvgen->M(),weight3);
+                  hden_cent_4[ibin]->Fill(tlvgen->M(),weight4);
+                  hden_cent_5[ibin]->Fill(tlvgen->M(),weight5);
+               }
 
                if (idok)
                {
                   // num_cent_NS[ibin]+=weight;
                   // num_tp_cent_NS[ibin]+=weight*weighttp;
-                  hnum_cent_NS[ibin]->Fill(tlvrecmin->M(),weight);
-                  hnum_tp_cent_NS[ibin]->Fill(tlvrecmin->M(),weight*weighttp);
+                  hnum_cent_NS[ibin]->Fill(tlvrecmin->M(),weight); hnum_tp_cent_NS[ibin]->Fill(tlvrecmin->M(),weight*weighttp);
+                  hnum_cent_1[ibin]->Fill(tlvrecmin->M(),weight1); hnum_tp_cent_1[ibin]->Fill(tlvrecmin->M(),weight1*weighttp);
+                  hnum_cent_2[ibin]->Fill(tlvrecmin->M(),weight2); hnum_tp_cent_2[ibin]->Fill(tlvrecmin->M(),weight2*weighttp);
+                  hnum_cent_3[ibin]->Fill(tlvrecmin->M(),weight3); hnum_tp_cent_3[ibin]->Fill(tlvrecmin->M(),weight3*weighttp);
+                  hnum_cent_4[ibin]->Fill(tlvrecmin->M(),weight4); hnum_tp_cent_4[ibin]->Fill(tlvrecmin->M(),weight4*weighttp);
+                  hnum_cent_5[ibin]->Fill(tlvrecmin->M(),weight5); hnum_tp_cent_5[ibin]->Fill(tlvrecmin->M(),weight5*weighttp);
                }
             }
 
       }
    }
+   ////////////////////////////////////////////////////////////////////////////
+   // end of event loop
+   ////////////////////////////////////////////////////////////////////////////
 
+   ////////////////////////////////////////////////////////////////////////////
    // compute numerators
+   ////////////////////////////////////////////////////////////////////////////
    for (unsigned int ibin=0; ibin<NPTNS+1; ibin++)
    {
       den_pt_NS[ibin] = countNS(hden_pt_NS[ibin],massmin,massmax,denerr_pt_NS[ibin]);
       num_pt_NS[ibin] = (strategy<2) ? fitNS(hnum_pt_NS[ibin],numerr_pt_NS[ibin],YS) : countNS(hnum_pt_NS[ibin],massmin,massmax,numerr_pt_NS[ibin]);
       num_tp_pt_NS[ibin] = (strategy<2) ? fitNS(hnum_tp_pt_NS[ibin],numerr_tp_pt_NS[ibin],YS) : countNS(hnum_tp_pt_NS[ibin],massmin,massmax,numerr_tp_pt_NS[ibin]);
+      den_pt_1[ibin] = countNS(hden_pt_1[ibin],massmin,massmax,dummyerr);
+      num_pt_1[ibin] = (strategy<2) ? fitNS(hnum_pt_1[ibin],dummyerr,YS) : countNS(hnum_pt_1[ibin],massmin,massmax,dummyerr);
+      num_tp_pt_1[ibin] = (strategy<2) ? fitNS(hnum_tp_pt_1[ibin],dummyerr,YS) : countNS(hnum_tp_pt_1[ibin],massmin,massmax,dummyerr);
+      den_pt_2[ibin] = countNS(hden_pt_2[ibin],massmin,massmax,dummyerr);
+      num_pt_2[ibin] = (strategy<2) ? fitNS(hnum_pt_2[ibin],dummyerr,YS) : countNS(hnum_pt_2[ibin],massmin,massmax,dummyerr);
+      num_tp_pt_2[ibin] = (strategy<2) ? fitNS(hnum_tp_pt_2[ibin],dummyerr,YS) : countNS(hnum_tp_pt_2[ibin],massmin,massmax,dummyerr);
+      den_pt_3[ibin] = countNS(hden_pt_3[ibin],massmin,massmax,dummyerr);
+      num_pt_3[ibin] = (strategy<2) ? fitNS(hnum_pt_3[ibin],dummyerr,YS) : countNS(hnum_pt_3[ibin],massmin,massmax,dummyerr);
+      num_tp_pt_3[ibin] = (strategy<2) ? fitNS(hnum_tp_pt_3[ibin],dummyerr,YS) : countNS(hnum_tp_pt_3[ibin],massmin,massmax,dummyerr);
+      den_pt_4[ibin] = countNS(hden_pt_4[ibin],massmin,massmax,dummyerr);
+      num_pt_4[ibin] = (strategy<2) ? fitNS(hnum_pt_4[ibin],dummyerr,YS) : countNS(hnum_pt_4[ibin],massmin,massmax,dummyerr);
+      num_tp_pt_4[ibin] = (strategy<2) ? fitNS(hnum_tp_pt_4[ibin],dummyerr,YS) : countNS(hnum_tp_pt_4[ibin],massmin,massmax,dummyerr);
+      den_pt_5[ibin] = countNS(hden_pt_5[ibin],massmin,massmax,dummyerr);
+      num_pt_5[ibin] = (strategy<2) ? fitNS(hnum_pt_5[ibin],dummyerr,YS) : countNS(hnum_pt_5[ibin],massmin,massmax,dummyerr);
+      num_tp_pt_5[ibin] = (strategy<2) ? fitNS(hnum_tp_pt_5[ibin],dummyerr,YS) : countNS(hnum_tp_pt_5[ibin],massmin,massmax,dummyerr);
    }
    for (unsigned int ibin=0; ibin<NRAPNS+1; ibin++)
    {
       den_rap_NS[ibin] = countNS(hden_rap_NS[ibin],massmin,massmax,denerr_rap_NS[ibin]);
       num_rap_NS[ibin] = (strategy<2) ? fitNS(hnum_rap_NS[ibin],numerr_rap_NS[ibin],YS) : countNS(hnum_rap_NS[ibin],massmin,massmax,numerr_rap_NS[ibin]);
       num_tp_rap_NS[ibin] = (strategy<2) ? fitNS(hnum_tp_rap_NS[ibin],numerr_tp_rap_NS[ibin],YS) : countNS(hnum_tp_rap_NS[ibin],massmin,massmax,numerr_tp_rap_NS[ibin]);
+      den_rap_1[ibin] = countNS(hden_rap_1[ibin],massmin,massmax,dummyerr);
+      num_rap_1[ibin] = (strategy<2) ? fitNS(hnum_rap_1[ibin],dummyerr,YS) : countNS(hnum_rap_1[ibin],massmin,massmax,dummyerr);
+      num_tp_rap_1[ibin] = (strategy<2) ? fitNS(hnum_tp_rap_1[ibin],dummyerr,YS) : countNS(hnum_tp_rap_1[ibin],massmin,massmax,dummyerr);
+      den_rap_2[ibin] = countNS(hden_rap_2[ibin],massmin,massmax,dummyerr);
+      num_rap_2[ibin] = (strategy<2) ? fitNS(hnum_rap_2[ibin],dummyerr,YS) : countNS(hnum_rap_2[ibin],massmin,massmax,dummyerr);
+      num_tp_rap_2[ibin] = (strategy<2) ? fitNS(hnum_tp_rap_2[ibin],dummyerr,YS) : countNS(hnum_tp_rap_2[ibin],massmin,massmax,dummyerr);
+      den_rap_3[ibin] = countNS(hden_rap_3[ibin],massmin,massmax,dummyerr);
+      num_rap_3[ibin] = (strategy<2) ? fitNS(hnum_rap_3[ibin],dummyerr,YS) : countNS(hnum_rap_3[ibin],massmin,massmax,dummyerr);
+      num_tp_rap_3[ibin] = (strategy<2) ? fitNS(hnum_tp_rap_3[ibin],dummyerr,YS) : countNS(hnum_tp_rap_3[ibin],massmin,massmax,dummyerr);
+      den_rap_4[ibin] = countNS(hden_rap_4[ibin],massmin,massmax,dummyerr);
+      num_rap_4[ibin] = (strategy<2) ? fitNS(hnum_rap_4[ibin],dummyerr,YS) : countNS(hnum_rap_4[ibin],massmin,massmax,dummyerr);
+      num_tp_rap_4[ibin] = (strategy<2) ? fitNS(hnum_tp_rap_4[ibin],dummyerr,YS) : countNS(hnum_tp_rap_4[ibin],massmin,massmax,dummyerr);
+      den_rap_5[ibin] = countNS(hden_rap_5[ibin],massmin,massmax,dummyerr);
+      num_rap_5[ibin] = (strategy<2) ? fitNS(hnum_rap_5[ibin],dummyerr,YS) : countNS(hnum_rap_5[ibin],massmin,massmax,dummyerr);
+      num_tp_rap_5[ibin] = (strategy<2) ? fitNS(hnum_tp_rap_5[ibin],dummyerr,YS) : countNS(hnum_tp_rap_5[ibin],massmin,massmax,dummyerr);
    }
    if (ispbpb)
    {
@@ -341,10 +495,27 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int var_tp)
          den_cent_NS[ibin] = countNS(hden_cent_NS[ibin],massmin,massmax,denerr_cent_NS[ibin]);
          num_cent_NS[ibin] = (strategy<2) ? fitNS(hnum_cent_NS[ibin],numerr_cent_NS[ibin],YS) : countNS(hnum_cent_NS[ibin],massmin,massmax,numerr_cent_NS[ibin]);
          num_tp_cent_NS[ibin] = (strategy<2) ? fitNS(hnum_tp_cent_NS[ibin],numerr_tp_cent_NS[ibin],YS) : countNS(hnum_tp_cent_NS[ibin],massmin,massmax,numerr_tp_cent_NS[ibin]);
+         den_cent_1[ibin] = countNS(hden_cent_1[ibin],massmin,massmax,dummyerr);
+         num_cent_1[ibin] = (strategy<2) ? fitNS(hnum_cent_1[ibin],dummyerr,YS) : countNS(hnum_cent_1[ibin],massmin,massmax,dummyerr);
+         num_tp_cent_1[ibin] = (strategy<2) ? fitNS(hnum_tp_cent_1[ibin],dummyerr,YS) : countNS(hnum_tp_cent_1[ibin],massmin,massmax,dummyerr);
+         den_cent_2[ibin] = countNS(hden_cent_2[ibin],massmin,massmax,dummyerr);
+         num_cent_2[ibin] = (strategy<2) ? fitNS(hnum_cent_2[ibin],dummyerr,YS) : countNS(hnum_cent_2[ibin],massmin,massmax,dummyerr);
+         num_tp_cent_2[ibin] = (strategy<2) ? fitNS(hnum_tp_cent_2[ibin],dummyerr,YS) : countNS(hnum_tp_cent_2[ibin],massmin,massmax,dummyerr);
+         den_cent_3[ibin] = countNS(hden_cent_3[ibin],massmin,massmax,dummyerr);
+         num_cent_3[ibin] = (strategy<2) ? fitNS(hnum_cent_3[ibin],dummyerr,YS) : countNS(hnum_cent_3[ibin],massmin,massmax,dummyerr);
+         num_tp_cent_3[ibin] = (strategy<2) ? fitNS(hnum_tp_cent_3[ibin],dummyerr,YS) : countNS(hnum_tp_cent_3[ibin],massmin,massmax,dummyerr);
+         den_cent_4[ibin] = countNS(hden_cent_4[ibin],massmin,massmax,dummyerr);
+         num_cent_4[ibin] = (strategy<2) ? fitNS(hnum_cent_4[ibin],dummyerr,YS) : countNS(hnum_cent_4[ibin],massmin,massmax,dummyerr);
+         num_tp_cent_4[ibin] = (strategy<2) ? fitNS(hnum_tp_cent_4[ibin],dummyerr,YS) : countNS(hnum_tp_cent_4[ibin],massmin,massmax,dummyerr);
+         den_cent_5[ibin] = countNS(hden_cent_5[ibin],massmin,massmax,dummyerr);
+         num_cent_5[ibin] = (strategy<2) ? fitNS(hnum_cent_5[ibin],dummyerr,YS) : countNS(hnum_cent_5[ibin],massmin,massmax,dummyerr);
+         num_tp_cent_5[ibin] = (strategy<2) ? fitNS(hnum_tp_cent_5[ibin],dummyerr,YS) : countNS(hnum_tp_cent_5[ibin],massmin,massmax,dummyerr);
       }
    }
 
+   ////////////////////////////////////////////////////////////////////////////
    // print results
+   ////////////////////////////////////////////////////////////////////////////
    ofstream textfile("results.txt");
    cout << "===========================" << endl;
    cout << "No tag and probe corrections" << endl;
@@ -355,9 +526,15 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int var_tp)
       double binmin = (ibin==0) ? ptbins_NS[0] : ptbins_NS[ibin-1];
       double binmax = (ibin==0) ? ptbins_NS[NPTNS] : ptbins_NS[ibin];
       double val = num_pt_NS[ibin]/den_pt_NS[ibin];
+      double val1 = num_pt_1[ibin]/den_pt_1[ibin];
+      double val2 = num_pt_2[ibin]/den_pt_2[ibin];
+      double val3 = num_pt_3[ibin]/den_pt_3[ibin];
+      double val4 = num_pt_4[ibin]/den_pt_4[ibin];
+      double val5 = num_pt_5[ibin]/den_pt_5[ibin];
       double err = RError(num_pt_NS[ibin],numerr_pt_NS[ibin],den_pt_NS[ibin],denerr_pt_NS[ibin]);
-      cout << "[" << binmin << "," << binmax << "]: " << val << " +/- " << err << endl;
-      textfile << "pt " << binmin << " " << binmax << " " << val << " " << err << endl;
+      double syst = systerr(val,val1,val2,val3,val4,val5);
+      cout << "[" << binmin << "," << binmax << "]: " << val << " +/- " << err << " +/- " << syst << endl;
+      textfile << "pt " << binmin << " " << binmax << " " << val << " " << err << " " << syst << endl;
       if (ibin>0) 
       {
          heffpt->SetBinContent(ibin,val);
@@ -370,9 +547,15 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int var_tp)
       double binmin = (ibin==0) ? rapbins_NS[0] : rapbins_NS[ibin-1];
       double binmax = (ibin==0) ? rapbins_NS[NRAPNS] : rapbins_NS[ibin];
       double val = num_rap_NS[ibin]/den_rap_NS[ibin];
+      double val1 = num_rap_1[ibin]/den_rap_1[ibin];
+      double val2 = num_rap_2[ibin]/den_rap_2[ibin];
+      double val3 = num_rap_3[ibin]/den_rap_3[ibin];
+      double val4 = num_rap_4[ibin]/den_rap_4[ibin];
+      double val5 = num_rap_5[ibin]/den_rap_5[ibin];
       double err = RError(num_rap_NS[ibin],numerr_rap_NS[ibin],den_rap_NS[ibin],denerr_rap_NS[ibin]);
-      cout << "[" << binmin << "," << binmax << "]: " << val << " +/- " << err << endl;
-      textfile << "rapidity " << binmin << " " << binmax << " " << val << " " << err << endl;
+      double syst = systerr(val,val1,val2,val3,val4,val5);
+      cout << "[" << binmin << "," << binmax << "]: " << val << " +/- " << err << " +/- " << syst << endl;
+      textfile << "rapidity " << binmin << " " << binmax << " " << val << " " << err << " " << syst << endl;
       if (ibin>0) 
       {
          heffrap->SetBinContent(ibin,val);
@@ -387,9 +570,15 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int var_tp)
          double binmin = (ibin==0) ? 2.5*centbins_NS[0] : 2.5*centbins_NS[ibin-1];
          double binmax = (ibin==0) ? 2.5*centbins_NS[NCENTNS] : 2.5*centbins_NS[ibin];
          double val = num_cent_NS[ibin]/den_cent_NS[ibin];
+         double val1 = num_cent_1[ibin]/den_cent_1[ibin];
+         double val2 = num_cent_2[ibin]/den_cent_2[ibin];
+         double val3 = num_cent_3[ibin]/den_cent_3[ibin];
+         double val4 = num_cent_4[ibin]/den_cent_4[ibin];
+         double val5 = num_cent_5[ibin]/den_cent_5[ibin];
          double err = RError(num_cent_NS[ibin],numerr_cent_NS[ibin],den_cent_NS[ibin],denerr_cent_NS[ibin]);
-         cout << "[" << binmin << "," << binmax << "]: " << val << " +/- " << err << endl;
-         textfile << "centrality " << binmin << " " << binmax << " " << val << " " << err << endl;
+         double syst = systerr(val,val1,val2,val3,val4,val5);
+         cout << "[" << binmin << "," << binmax << "]: " << val << " +/- " << err << " +/- " << syst << endl;
+         textfile << "centrality " << binmin << " " << binmax << " " << val << " " << err << " " << syst << endl;
          if (ibin>0) 
          {
             heffcent->SetBinContent(ibin,val);
@@ -407,9 +596,15 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int var_tp)
       double binmin = (ibin==0) ? ptbins_NS[0] : ptbins_NS[ibin-1];
       double binmax = (ibin==0) ? ptbins_NS[NPTNS] : ptbins_NS[ibin];
       double val = num_tp_pt_NS[ibin]/den_pt_NS[ibin];
+      double val1 = num_tp_pt_1[ibin]/den_pt_1[ibin];
+      double val2 = num_tp_pt_2[ibin]/den_pt_2[ibin];
+      double val3 = num_tp_pt_3[ibin]/den_pt_3[ibin];
+      double val4 = num_tp_pt_4[ibin]/den_pt_4[ibin];
+      double val5 = num_tp_pt_5[ibin]/den_pt_5[ibin];
       double err = RError(num_tp_pt_NS[ibin],numerr_tp_pt_NS[ibin],den_pt_NS[ibin],denerr_pt_NS[ibin]);
-      cout << "[" << binmin << "," << binmax << "]: " << val << " +/- " << err << endl;
-      textfile << "pt_TnP " << binmin << " " << binmax << " " << val << " " << err << endl;
+      double syst = systerr(val,val1,val2,val3,val4,val5);
+      cout << "[" << binmin << "," << binmax << "]: " << val << " +/- " << err << " +/- " << syst << endl;
+      textfile << "pt_TnP" << binmin << " " << binmax << " " << val << " " << err << " " << syst << endl;
       if (ibin>0) 
       {
          hefftppt->SetBinContent(ibin,val);
@@ -422,9 +617,15 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int var_tp)
       double binmin = (ibin==0) ? rapbins_NS[0] : rapbins_NS[ibin-1];
       double binmax = (ibin==0) ? rapbins_NS[NRAPNS] : rapbins_NS[ibin];
       double val = num_tp_rap_NS[ibin]/den_rap_NS[ibin];
+      double val1 = num_tp_rap_1[ibin]/den_rap_1[ibin];
+      double val2 = num_tp_rap_2[ibin]/den_rap_2[ibin];
+      double val3 = num_tp_rap_3[ibin]/den_rap_3[ibin];
+      double val4 = num_tp_rap_4[ibin]/den_rap_4[ibin];
+      double val5 = num_tp_rap_5[ibin]/den_rap_5[ibin];
       double err = RError(num_tp_rap_NS[ibin],numerr_tp_rap_NS[ibin],den_rap_NS[ibin],denerr_rap_NS[ibin]);
-      cout << "[" << binmin << "," << binmax << "]: " << val << " +/- " << err << endl;
-      textfile << "rapidity_TnP " << binmin << " " << binmax << " " << val << " " << err << endl;
+      double syst = systerr(val,val1,val2,val3,val4,val5);
+      cout << "[" << binmin << "," << binmax << "]: " << val << " +/- " << err << " +/- " << syst << endl;
+      textfile << "rapidity_TnP" << binmin << " " << binmax << " " << val << " " << err << " " << syst << endl;
       if (ibin>0) 
       {
          hefftprap->SetBinContent(ibin,val);
@@ -439,9 +640,15 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int var_tp)
          double binmin = (ibin==0) ? 2.5*centbins_NS[0] : 2.5*centbins_NS[ibin-1];
          double binmax = (ibin==0) ? 2.5*centbins_NS[NCENTNS] : 2.5*centbins_NS[ibin];
          double val = num_tp_cent_NS[ibin]/den_cent_NS[ibin];
+         double val1 = num_tp_cent_1[ibin]/den_cent_1[ibin];
+         double val2 = num_tp_cent_2[ibin]/den_cent_2[ibin];
+         double val3 = num_tp_cent_3[ibin]/den_cent_3[ibin];
+         double val4 = num_tp_cent_4[ibin]/den_cent_4[ibin];
+         double val5 = num_tp_cent_5[ibin]/den_cent_5[ibin];
          double err = RError(num_tp_cent_NS[ibin],numerr_tp_cent_NS[ibin],den_cent_NS[ibin],denerr_cent_NS[ibin]);
-         cout << "[" << binmin << "," << binmax << "]: " << val << " +/- " << err << endl;
-         textfile << "centrality_TnP " << binmin << " " << binmax << " " << val << " " << err << endl;
+         double syst = systerr(val,val1,val2,val3,val4,val5);
+         cout << "[" << binmin << "," << binmax << "]: " << val << " +/- " << err << " +/- " << syst << endl;
+         textfile << "centrality_TnP" << binmin << " " << binmax << " " << val << " " << err << " " << syst << endl;
          if (ibin>0) 
          {
             hefftpcent->SetBinContent(ibin,val);
@@ -453,6 +660,10 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int var_tp)
    f->Write(); f->Close();
    textfile.close();
 }
+
+////////////////////////////////////////////////////////////////////////////
+// Auxiliary functions
+////////////////////////////////////////////////////////////////////////////
 
 bool dimueff::smuacc_loose(TLorentzVector *tlv1, TLorentzVector *tlv2)
 {
@@ -532,6 +743,7 @@ double dimueff::weightpt(double pt, int YS)
       for (int i=0; i<7; i++) 
          scale[i]=1.;
 
+
    if (pt<3) return scale[0];
    else if (pt<6) return scale[1];
    else if (pt<9) return scale[2];
@@ -539,6 +751,13 @@ double dimueff::weightpt(double pt, int YS)
    else if (pt<15) return scale[4];
    else if (pt<30) return scale[5];
    else return scale[6];
+}
+
+double dimueff::weightrap(double rap, int dosyst)
+{
+   if (dosyst == 3) return 0.8 + 0.167 * fabs(rap);
+   else if (dosyst == 4) return 1.2 - 0.167 * fabs(rap);
+   else return 1.;
 }
 
 double dimueff::weight_tp(double pt, double eta, bool ispbpb, int idx_variation)
@@ -568,7 +787,15 @@ double dimueff::weight_shape(double pt, int YS)
    return shapeweight;
 }
 
-double dimueff::FindCenWeight(int Bin, int NS)
+double dimueff::weightpt_syst(double pt, int dosyst)
+{
+   double weightsyst = 1.;
+   if (dosyst == 1) weightsyst = 0.8 + 0.0133 * pt;
+   if (dosyst == 2) weightsyst = 1.2 - 0.0133 * pt;
+   return weightsyst;
+}
+
+double dimueff::FindCenWeight(int Bin, int NS, bool dosyst)
 {
   float NCollArray[40]=
   {1747.49,1566.92,1393.97,1237.02,1095.03
@@ -601,7 +828,7 @@ double dimueff::FindCenWeight(int Bin, int NS)
       0.198, 0.198, 0.198, 0.198, 0.198, 0.198,
       0.198, 0.198, 0.198, 0.198, 0.198, 0.198,
       0.198, 0.198, 0.198, 0.198, 0.198, 0.198};
-  return(NCollArray[Bin]*(NS==1 ? raa1S[Bin] : raa2S[Bin]));
+  return(NCollArray[Bin]*(dosyst ? 1. : (NS==1 ? raa1S[Bin] : raa2S[Bin])));
 }
 
 double dimueff::countNS(TH1F *hist, double xmin, double xmax, double &err)
@@ -813,4 +1040,12 @@ double dimueff::PError(double A, double eA, double B, double eB){
    double fB=eB/B;
    double eR=  f*sqrt( (fA*fA + fB*fB )) ;
    return eR;
+}
+
+double dimueff::systerr(double e0, double e1, double e2, double e3, double e4, double e5)
+{
+   double E1 = max(fabs(e1-e0),fabs(e2-e0));
+   double E2 = max(fabs(e3-e0),fabs(e4-e0));
+   double E3 = fabs(e5-e0);
+   return sqrt(E1*E1 + E2*E2 + E3*E3);
 }

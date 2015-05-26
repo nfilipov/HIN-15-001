@@ -288,13 +288,16 @@ public :
    bool smuacc_tight(TLorentzVector* tlv1, TLorentzVector *tlv2);
    bool idcuts(int irec);
    static double weightpt(double pt, int YS);
+   static double weightpt_syst(double pt, int dosyst=0);
+   static double weightrap(double rap, int dosyst=0);
    static double weight_tp(double pt, double eta, bool ispbpb, int idx_variation=0);
    static double weight_shape(double pt, int YS);
-   static double FindCenWeight(int Bin, int YS);
+   static double FindCenWeight(int Bin, int YS, bool dosyst=false);
    static double fitNS(TH1F *hist, double &err, int YS);
    static double countNS(TH1F *hist, double xmin, double xmax, double &err);
    static double RError(double A, double eA, double B, double eB);
    static double PError(double A, double eA, double B, double eB);
+   static double systerr(double e0, double e1, double e2, double e3, double e4, double e5);
 };
 
 #endif
