@@ -122,12 +122,13 @@ void plotAllFunctions()
   cout << j << endl;
   cout << endcap << endl;
   f1->SetParameters(alpha_pbpb_midrap[j],mu_data_pbpb_midrap[j],sigma_data_pbpb_midrap[j],j,endcap,pbpb);
-  f1->SetRange(0,20);
+  f1->SetRange(3.4,20);
   if(!doOnlyNumerator){ f1->GetYaxis()->SetRangeUser(0.8,1.5); }
   else if(doOnlyNumerator){   f1->GetYaxis()->SetRangeUser(0.0,1.5); }
   f1->Draw();
-  std::cout << alpha_pbpb_midrap[j] <<"*TMath::Erf((x-"<< mu_data_pbpb_midrap[j] <<")/"<<sigma_data_pbpb_midrap[j]<<") / (1.0000*TMath::Erf((x-1.7960)/2.5160))"<<std::endl;
-  
+  std::cout << "NOMINAL pbpb midrap" << std::endl; 
+  std::cout << alpha_pbpb_midrap[j] <<"*TMath::Erf((x-"<< mu_data_pbpb_midrap[j] <<")/"<<sigma_data_pbpb_midrap[j]<<") / (0.9576*TMath::Erf((x-1.7883)/2.6583))"<<std::endl;
+  std::cout << "variations on the pbpb midrap" << std::endl; 
   for(j=1;j< 101;j++){
     //reminder:
     // p[0] is the normalisation;
@@ -139,7 +140,7 @@ void plotAllFunctions()
     fb = new TF1("myfunc",myFunc,0,20,6);
     if (doOnlyNumerator){ fb= new TF1("myFunk",myNumerator,0,20,6);}
     //  fb->SetRange(0,20);
-    std::cout << j << alpha_pbpb_midrap[j] <<"*TMath::Erf((x-"<< mu_data_pbpb_midrap[j] <<"/"<<sigma_data_pbpb_midrap[j]<<")) / (0.9576*TMath::Erf((x-1.7883)/2.6583))"<<std::endl;
+    std::cout <<alpha_pbpb_midrap[j] <<"*TMath::Erf((x-"<< mu_data_pbpb_midrap[j] <<"/"<<sigma_data_pbpb_midrap[j]<<")) / (0.9576*TMath::Erf((x-1.7883)/2.6583))"<<std::endl;
     fb->SetParameters(alpha_pbpb_midrap[j],mu_data_pbpb_midrap[j],sigma_data_pbpb_midrap[j],j,endcap,pbpb);
     fb->SetLineColor(kAzure+1);
     fb->Draw("same");
@@ -169,12 +170,13 @@ void plotAllFunctions()
   if (doOnlyNumerator){ f2= new TF1("myFunk",myNumerator,0,20,6);}
   j=0; // reset!
   f2->SetParameters(alpha_pbpb_fwdrap[j],mu_data_pbpb_fwdrap[j],sigma_data_pbpb_fwdrap[j],j,endcap,pbpb);
-  f2->SetRange(0,20);
+  f2->SetRange(3.5,20);
   if(!doOnlyNumerator){   f2->GetYaxis()->SetRangeUser(0.8,1.5); }
   else if(doOnlyNumerator){   f2->GetYaxis()->SetRangeUser(0.0,1.5); }
   f2->Draw();
-  // std::cout << alpha_pbpb_fwdrap[j] <<"*TMath::Erf((x-"<< mu_data_pbpb_fwdrap[j] <<"/"<<sigma_data_pbpb_fwdrap[j]<<")) / (1.0000*TMath::Erf((x-1.7960)/2.5160))"<<std::endl;
-  
+  std::cout << "NOMINAL pbpb fwdrap" << std::endl; 
+  std::cout << alpha_pbpb_fwdrap[j] <<"*TMath::Erf((x-"<< mu_data_pbpb_fwdrap[j] <<"/"<<sigma_data_pbpb_fwdrap[j]<<")) /(0.7948*TMath::Erf((x-1.3091)/2.2783))"<<std::endl;
+  std::cout << "variations on the pbpb fwdrap" << std::endl; 
   for(j=1;j< 101;j++){
     //reminder:
     // p[0] is the normalisation;
@@ -186,7 +188,7 @@ void plotAllFunctions()
     fe = new TF1("myfunc",myFunc,0,20,6);
     if (doOnlyNumerator){ fe= new TF1("myFunk",myNumerator,0,20,6);}
     fe->SetRange(0,20);
-    //   std::cout  << alpha_pbpb_fwdrap[j] <<"*TMath::Erf((x-"<< mu_data_pbpb_fwdrap[j] <<"/"<<sigma_data_pbpb_fwdrap[j]<<")) / (0.9576*TMath::Erf((x-1.7883)/2.6583))"<<std::endl;
+    std::cout  << alpha_pbpb_fwdrap[j] <<"*TMath::Erf((x-"<< mu_data_pbpb_fwdrap[j] <<"/"<<sigma_data_pbpb_fwdrap[j]<<")) /(0.7948*TMath::Erf((x-1.3091)/2.2783))"<<std::endl;
     // cout << f << endl;
     fe->SetParameters(alpha_pbpb_fwdrap[j],mu_data_pbpb_fwdrap[j],sigma_data_pbpb_fwdrap[j],j,endcap,pbpb);
     fe->SetLineColor(kAzure+1);
@@ -228,12 +230,13 @@ void plotAllFunctions()
   cout << j << endl;
   cout << endcap << endl;
   g1->SetParameters(alpha_pp_midrap[j],mu_data_pp_midrap[j],sigma_data_pp_midrap[j],j,endcap,pbpb);
-  g1->SetRange(0,20);
+  g1->SetRange(3.4,20);
   if(!doOnlyNumerator){   g1->GetYaxis()->SetRangeUser(0.8,1.5); }
   else if(doOnlyNumerator){   g1->GetYaxis()->SetRangeUser(0.0,1.5); }
   g1->Draw();
-  // std::cout << alpha_pp_midrap[j] <<"*TMath::Erf((x-"<< mu_data_pp_midrap[j] <<"/"<<sigma_data_pp_midrap[j]<<")) / (1.0000*TMath::Erf((x-1.7960)/2.5160))"<<std::endl;
-  
+  std::cout << "NOMINAL pp midrap" << std::endl; 
+  std::cout << alpha_pp_midrap[j] <<"*TMath::Erf((x-"<< mu_data_pp_midrap[j] <<"/"<<sigma_data_pp_midrap[j]<<")) / (0.9604*TMath::Erf((x-2.0586)/2.1567))"<<std::endl;
+  std::cout << "variations on the pp midrap" << std::endl; 
   for(j=1;j< 101;j++){
     //reminder:
     // p[0] is the normalisation;
@@ -245,7 +248,7 @@ void plotAllFunctions()
     gb = new TF1("myfunc",myFunc,0,20,6);
     if (doOnlyNumerator){ gb= new TF1("myFunk",myNumerator,0,20,6);}
     //  gb->SetRange(0,20);
-    std::cout  << alpha_pp_midrap[j] <<"*TMath::Erf((x-"<< mu_data_pp_midrap[j] <<"/"<<sigma_data_pp_midrap[j]<<")) / (0.9576*TMath::Erf((x-1.7883)/2.6583))"<<std::endl;
+    std::cout  << alpha_pp_midrap[j] <<"*TMath::Erf((x-"<< mu_data_pp_midrap[j] <<"/"<<sigma_data_pp_midrap[j]<<")) / (0.9604*TMath::Erf((x-2.0586)/2.1567))"<<std::endl;
     gb->SetParameters(alpha_pp_midrap[j],mu_data_pp_midrap[j],sigma_data_pp_midrap[j],j,endcap,pbpb);
     gb->SetLineColor(kAzure+1);
     gb->Draw("same");
@@ -276,12 +279,13 @@ void plotAllFunctions()
   if (doOnlyNumerator){ g2= new TF1("myFunk",myNumerator,0,20,6);}
   j=0; // reset!
   g2->SetParameters(alpha_pp_fwdrap[j],mu_data_pp_fwdrap[j],sigma_data_pp_fwdrap[j],j,endcap,pbpb);
-  g2->SetRange(0,20);
+  g2->SetRange(3.5,20);
   if(!doOnlyNumerator){   g2->GetYaxis()->SetRangeUser(0.8,1.5); }
   else if(doOnlyNumerator){   g2->GetYaxis()->SetRangeUser(0.0,1.5); }
   g2->Draw();
-    std::cout << alpha_pp_fwdrap[j] <<"*TMath::Erf((x-"<< mu_data_pp_fwdrap[j] <<"/"<<sigma_data_pp_fwdrap[j]<<")) / pp fwd numerator."<<std::endl;
-  
+  std::cout << "NOMINAL pp fwdrap" << std::endl; 
+  std::cout << alpha_pp_fwdrap[j] <<"*TMath::Erf((x-"<< mu_data_pp_fwdrap[j] <<"/"<<sigma_data_pp_fwdrap[j]<<")) / (0.7364*TMath::Erf((x-1.2149)/2.3352)) "<<std::endl;
+  std::cout << "variations on the pp fwdrap" << std::endl; 
   for(j=1;j< 101;j++){
     //reminder:
     // p[0] is the normalisation;
@@ -293,7 +297,7 @@ void plotAllFunctions()
     ge = new TF1("myfunc",myFunc,0,20,6);
     if (doOnlyNumerator){ ge= new TF1("myFunk",myNumerator,0,20,6);}
     ge->SetRange(0,20);
-    std::cout  << alpha_pp_fwdrap[j] <<"*TMath::Erf((x-"<< mu_data_pp_fwdrap[j] <<"/"<<sigma_data_pp_fwdrap[j]<<")) / (0.9576*TMath::Erf((x-1.7883)/2.6583))"<<std::endl;
+    std::cout  << alpha_pp_fwdrap[j] <<"*TMath::Erf((x-"<< mu_data_pp_fwdrap[j] <<"/"<<sigma_data_pp_fwdrap[j]<<")) / (0.7364*TMath::Erf((x-1.2149)/2.3352))"<<std::endl;
     // cout << f << endl;
     ge->SetParameters(alpha_pp_fwdrap[j],mu_data_pp_fwdrap[j],sigma_data_pp_fwdrap[j],j,endcap,pbpb);
     ge->SetLineColor(kAzure+1);
