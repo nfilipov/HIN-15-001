@@ -35,6 +35,8 @@
 #include "RooChi2Var.h"
 #include "RooMinuit.h"
 
+#include "tnp_weight.h"
+
 #define NPT1S 6
 #define NRAP1S 6
 #define NCENT1S 8
@@ -58,7 +60,7 @@ const double rapbins_2S[NRAP2S+1] = {0,1.2,2.4};
 const int centbins_2S[NCENT2S+1] = {0,10./2.5,30./2.5,50./2.5,100./2.5};
 const float fcentbins_2S[NCENT2S+1] = {0,10./2.5,30./2.5,50./2.5,100./2.5};
 
-void dimueff::Loop(int YS, bool ispbpb, int strategy)
+void dimueff::Loop(int YS, bool ispbpb, int strategy, int var_tp)
    // YS = N for NS
    // ispbpb = true for PbPb, false for pp
    // strategy = 0 for fit + reco quantities
@@ -153,8 +155,8 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy)
    const int *centbins_NS = YS==1 ? centbins_1S : centbins_2S;
    const float *fcentbins_NS = YS==1 ? fcentbins_1S : fcentbins_2S;
 
-   const double massmin = YS==1 ? 9.0 : (YS==2 ? 9.5 : 9.8);
-   const double massmax = YS==1 ? 10.0 : (YS==2 ? 10.5 : 10.8);
+   const double massmin = YS==1 ? 8.0 : (YS==2 ? 8.5 : 8.8);
+   const double massmax = YS==1 ? 10.5 : (YS==2 ? 11 : 11.3);
 
    TH1F *hdrmin = new TH1F("hdrmin","hdrmin",100,0,0.5);
    TH2F *hdrmindpt = new TH2F("hdrmindpt","hdrmindpt",100,0,0.5,100,0,1);
@@ -178,6 +180,7 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy)
 
    // don't read useless branches
    fChain->SetBranchStatus("Reco_mu*",0);  
+   fChain->SetBranchStatus("Reco_trk*",0);  
    fChain->SetBranchStatus("Gen_mu*",0);  
 
    Long64_t nbytes = 0, nb = 0;
@@ -250,7 +253,7 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy)
                   && (Reco_QQ_trig[irecmin]&2)==2;
             TLorentzVector *tlvmup = (TLorentzVector*) Reco_QQ_mupl_4mom->At(irecmin);
             TLorentzVector *tlvmum = (TLorentzVector*) Reco_QQ_mumi_4mom->At(irecmin);
-            weighttp=weight_tp(tlvmup->Pt(),tlvmup->Eta(),ispbpb)*weight_tp(tlvmum->Pt(),tlvmum->Eta(),ispbpb);
+            weighttp=weight_tp(tlvmup->Pt(),tlvmup->Eta(),ispbpb,var_tp)*weight_tp(tlvmum->Pt(),tlvmum->Eta(),ispbpb,var_tp);
             recupspt = tlvrecmin->Pt();
             recupsrap = tlvrecmin->Rapidity();
          }
@@ -538,21 +541,21 @@ double dimueff::weightpt(double pt, int YS)
    else return scale[6];
 }
 
-double dimueff::weight_tp(double pt, double eta, bool ispbpb)
+double dimueff::weight_tp(double pt, double eta, bool ispbpb, int idx_variation)
 {
    if (!ispbpb)
    {
       if (fabs(eta)<1.6)
-         return (0.9588*TMath::Erf((pt-2.0009)/1.8998))/(0.9604*TMath::Erf((pt-2.0586)/2.1567));
+         return tnp_weight_pp_midrap(pt, idx_variation);
       else
-         return (0.7897*TMath::Erf((pt-0.7162)/2.6261))/(0.7364*TMath::Erf((pt-1.2149)/2.3352));
+         return tnp_weight_pp_fwdrap(pt, idx_variation);
    }
    else
    {
       if (fabs(eta)<1.6)
-         return (0.9555*TMath::Erf((pt-1.3240)/2.5683))/(0.9576*TMath::Erf((pt-1.7883)/2.6583));
+         return tnp_weight_pbpb_midrap(pt, idx_variation);
       else
-         return (0.8335*TMath::Erf((pt-1.2470)/1.9782))/(0.7948*TMath::Erf((pt-1.3091)/2.2783));
+         return tnp_weight_pbpb_fwdrap(pt, idx_variation);
    }
 }
 
@@ -620,7 +623,7 @@ double dimueff::fitNS(TH1F *hist, double &err, int YS)
 
    // *************************************************** free param in the fit
    int nt = hist->Integral();
-   RooRealVar *nsig1f   = new RooRealVar("N_{#Upsilon(1S)}","nsig1S",0.99,0.5,1.5);
+   RooRealVar *nsig1f   = new RooRealVar("N_{#Upsilon(1S)}","nsig1S",0.99,0.95,1.05);
    RooRealVar  *mean = new RooRealVar("mass1S","#Upsilon mean",M1S,M1S-0.1,M1S+0.1);
    // scale mean and resolution by mass ratio
    RooFormulaVar *mean1S = new RooFormulaVar("mean1S","@0",RooArgList(*mean));
