@@ -1,5 +1,5 @@
 
-void makeWorkspace(RooWorkspace& ws, int ChooseSample,float muonEtaMin, float muonEtaMax, float muonPtMin, float muonPtMax, float upsRapMin, float upsRapMax, float upsPtMin,float upsPtMax, int upsCentralityStart, int upsCentralityEnd){
+void makeWorkspace(RooWorkspace& ws, int ChooseSample,float muonEtaMin, float muonEtaMax, float muonPtMin, float muonPtMax, float upsRapMin, float upsRapMax, float upsPtMin,float upsPtMax, int upsCentralityStart, int upsCentralityEnd ){
   double mass_l =  7.0;
   double mass_h = 14.0;
  
@@ -33,14 +33,18 @@ void makeWorkspace(RooWorkspace& ws, int ChooseSample,float muonEtaMin, float mu
       break;
     case 6://PbPb @ 2.76TeV regit
       gROOT->LoadMacro("bkgTable_PbPb.h");
+      if(muonPtMin<3.7){ gROOT->LoadMacro("bkgTable_PbPb_loose.h");}
+      if(muonPtMin>3.7){ gROOT->LoadMacro("bkgTable_PbPb_tight.h");}
       // finput   = "../dimuonTree_upsiMiniTree_aa276tev_regitreco_glbglb_Runa_trigBit1_allTriggers0_pt4.root"; // cent 0-40 "cm" but doesnt have all the muons!
       // finput = "../dimuonTree_upsiMiniTree_AA2p76tev_ptmu3_july09_Run2011-2011_trigBit1_allTriggers0.root";// cent0-40 "td"
       // finput = "../dimuonTree_upsiMiniTree_AA276tevC0100_regit_ptmu4_Run210498-211631_trigBit1_allTriggers0.root"; // cent0-40 "nf"
-      // finput = "../dimuonTree_upsiMiniTree_AA2p76tev_ptmuSpecial_nov25_2013_trigBit1_allTriggers1_testNoCut.root"; // no cuts , so it has all the muons.
-       finput = "../dimuonTree_upsiMiniTree_AA2p76tev_WithIDCuts_RunHIN-15-001_trigBit1_allTriggers0.root";//bold as can be : my tree!
+       finput = "../dimuonTree_upsiMiniTree_AA2p76tev_ptmuSpecial_nov25_2013_trigBit1_allTriggers1_testNoCut.root"; // no cuts , so it has all the muons.
+       // finput = "../dimuonTree_upsiMiniTree_AA2p76tev_WithIDCuts_RunHIN-15-001_trigBit1_allTriggers0.root";//bold as can be : my tree!
       break;
     case 7://pp @ 2.76TeV
       gROOT->LoadMacro("bkgTable_pp.h");
+      if(muonPtMin<3.7){ gROOT->LoadMacro("bkgTable_pp_loose.h");}
+      if(muonPtMin>3.7){ gROOT->LoadMacro("bkgTable_pp_tight.h");}
       // finput   = "../dimuonTree_upsiMiniTree_pp276tev_5p41_Run211739-211831_trigBit1_allTriggers0_pt4.root"; //trk muons!
       //      finput   = "../dimuonTree_upsiMiniTree_pp276tev_5p41_ptmu2_Run211739-211831_GlbGlb_trigBit1_allTriggers0.root"; // Glb muons, all above 2!
       ///finput = "../upsiMiniTree_ppData_QQtrigbit1_Trig_analysisOK_noSingleMu.root"; // new tree (2014, I did it...and there are nore events !?)
@@ -54,7 +58,6 @@ void makeWorkspace(RooWorkspace& ws, int ChooseSample,float muonEtaMin, float mu
     case 8:
       // finput = "../upsiMiniTree_pythia1S_QQtrigbit1_Trig_analysisOK_20140729_cuts10-006.root";
       finput = "~/Project/ups2013/upsiMiniTree_Pyquen1S_QQtrigbit1_Trig_Unfolding_postCut_deltaRmatched_withCentrality.root";
-      // finput ="../upsiMiniTree_pythia1S_QQtrigbit1_Trig_analysisOK_20140729.root" ;
       mass_l = 8.;
       mass_h = 10.5;
       binw=0.05;

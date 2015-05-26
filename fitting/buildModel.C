@@ -2,21 +2,21 @@ void buildModel(RooWorkspace& w,int chooseFitParams, int chooseSample,int whatBi
 // C r e a t e   m o d e l  
   int nt=100000;
   // cout << "you're building a model for the quarkonium resonance of mass = "<< M1S <<" GeV/c^{2},"endl;
-  RooRealVar *nsig1f   = new RooRealVar("N_{#Upsilon(1S)}","nsig1S",0,nt*10);
+  RooRealVar *nsig1f   = new RooRealVar("N_{ #varUpsilon(1S)}","nsig1S",0,nt*10);
   RooRealVar* mass       = new RooRealVar("invariantMass","#mu#mu mass",mass_l,mass_h,"GeV/c^{2}");
  switch (chooseFitParams)
     {
     case 0://use the YIELDs of 2S and 3S as free parameters
       //minor modif here: 3S forced positive.
-      RooRealVar *nsig2f  = new RooRealVar("N_{#Upsilon(2S)}","nsig2S",   nt*0.25,0,10*nt);
-      RooRealVar *nsig3f  = new RooRealVar("N_{#Upsilon(3S)}","nsig3S",   nt*0.25,0,10*nt);
+      RooRealVar *nsig2f  = new RooRealVar("N_{ #varUpsilon(2S)}","nsig2S",   nt*0.25,-200,10*nt);
+      RooRealVar *nsig3f  = new RooRealVar("N_{ #varUpsilon(3S)}","nsig3S",   nt*0.25,-200,10*nt);
       cout << "you're fitting to extract yields, "<< endl;
       break;
     case 1:  //use the RATIOs of 2S and 3S as free parameters
       RooRealVar *f2Svs1S   = new RooRealVar("R_{#frac{2S}{1S}}","f2Svs1S",0.26,-0.1,1.0);
       RooRealVar *f3Svs1S   = new RooRealVar("R_{#frac{3S}{1S}}","f3Svs1S",0.13,-0.1,1.0);
-      RooFormulaVar *nsig2f = new RooFormulaVar("N_{#Upsilon(2S)}","@0*@1", RooArgList(*nsig1f,*f2Svs1S));
-      RooFormulaVar *nsig3f = new RooFormulaVar("N_{#Upsilon(3S)}","@0*@1", RooArgList(*nsig1f,*f3Svs1S));
+      RooFormulaVar *nsig2f = new RooFormulaVar("N_{ #varUpsilon(2S)}","@0*@1", RooArgList(*nsig1f,*f2Svs1S));
+      RooFormulaVar *nsig3f = new RooFormulaVar("N_{ #varUpsilon(3S)}","@0*@1", RooArgList(*nsig1f,*f3Svs1S));
       f2Svs1S->setConstant(kFALSE);
       f3Svs1S->setConstant(kFALSE);
       cout << "you're fitting to extract RATIOs of 2S and 3S as free parameters, "<< endl;
@@ -24,15 +24,15 @@ void buildModel(RooWorkspace& w,int chooseFitParams, int chooseSample,int whatBi
     case 2:// do (2s+3s)/1s
       RooRealVar *f2Svs1S   = new RooRealVar("R_{#frac{2S}{1S}}","f2Svs1S",0.26,-0.1,1.0);
       RooRealVar *f23vs1S   = new RooRealVar("R_{#frac{2S+3S}{1S}}","f23vs1S",0.45,-0.1,1);
-      RooFormulaVar *nsig2f = new RooFormulaVar("N_{#Upsilon(2S)}","@0*@1", RooArgList(*nsig1f,*f2Svs1S));
-      RooFormulaVar *nsig3f = new RooFormulaVar("N_{#Upsilon(3S)}","@0*@2-@0*@1", 
+      RooFormulaVar *nsig2f = new RooFormulaVar("N_{ #varUpsilon(2S)}","@0*@1", RooArgList(*nsig1f,*f2Svs1S));
+      RooFormulaVar *nsig3f = new RooFormulaVar("N_{ #varUpsilon(3S)}","@0*@2-@0*@1", 
     						RooArgList(*nsig1f,*f2Svs1S,*f23vs1S));
       cout << "you're fitting to extract (2s+3s)/1s,"<< endl;
       break;
     case 3://do 2s/1s, 3s/1s, 3s/2s
       RooRealVar *f2Svs1S   = new RooRealVar("R_{#frac{2S}{1S}}","f2Svs1S",0.26,-0.1,1.0);
       RooRealVar *f3Svs1S   = new RooRealVar("R_{#frac{3S}{1S}}","f3Svs1S",0.13,-0.1,1.0);
-      RooFormulaVar *nsig2f = new RooFormulaVar("N_{#Upsilon(2S)}","@0*@1", RooArgList(*nsig1f,*f2Svs1S));
+      RooFormulaVar *nsig2f = new RooFormulaVar("N_{ #varUpsilon(2S)}","@0*@1", RooArgList(*nsig1f,*f2Svs1S));
       //   RooFormulaVar *nsig3f = new RooFormulaVar("N3S","@0*@1", RooArgList(*nsig1f,*f3Svs1S));
       RooRealVar *f3Svs2S = new RooRealVar("R_{#frac{3S}{2S}}","f3Svs2S",0.5,-1,1);
       RooFormulaVar *nsig3f= new RooFormulaVar("N32S","@0/@1",RooArgList(*f3Svs1S,*f2Svs1S));
@@ -45,7 +45,7 @@ void buildModel(RooWorkspace& w,int chooseFitParams, int chooseSample,int whatBi
       break;
     }  
 
-      RooRealVar  *mean = new RooRealVar("m_{#mu#mu;fit}","#Upsilon mean",M1S,M1S-0.2,M1S+0.2);
+      RooRealVar  *mean = new RooRealVar("m_{ #varUpsilon(1S)}","#Upsilon mean",M1S,M1S-0.2,M1S+0.2);
       RooConstVar *rat2 = new RooConstVar("rat2", "rat2", M2S/M1S);
       RooConstVar *rat3 = new RooConstVar("rat3", "rat3", M3S/M1S);
       // scale mean and resolution by mass ratio
@@ -54,12 +54,12 @@ void buildModel(RooWorkspace& w,int chooseFitParams, int chooseSample,int whatBi
       RooFormulaVar *mean3S = new RooFormulaVar("mean3S","@0*@1", RooArgList(*mean,*rat3));
 
       // //detector resolution ?? where is this coming from?
-      RooRealVar    *sigma1  = new RooRealVar("#sigma_{CB1}","#sigma_{CB1}",0.092,sigma_min[whatBin],sigma_max[whatBin]); // 
+      RooRealVar    *sigma1  = new RooRealVar("#sigma_{CB1}","#sigma_{CB1}",sigma_min[whatBin],sigma_max[whatBin]); // 
       RooFormulaVar *sigma1S = new RooFormulaVar("sigma1S","@0"   ,RooArgList(*sigma1));
       RooFormulaVar *sigma2S = new RooFormulaVar("sigma2S","@0*@1",RooArgList(*sigma1,*rat2));
       RooFormulaVar *sigma3S = new RooFormulaVar("sigma3S","@0*@1",RooArgList(*sigma1,*rat3));
-      RooRealVar *alpha  = new RooRealVar("#alpha_{CB}","tail shift",0.91,alpha_min[whatBin],alpha_max[whatBin]);    // MC 5tev 1S pol2 
-      RooRealVar *npow   = new RooRealVar("n_{CB}","power order",1.775,npow_min[whatBin],npow_max[whatBin]);    // MC 5tev 1S pol2 
+      RooRealVar *alpha  = new RooRealVar("#alpha_{CB}","tail shift",alpha_min[whatBin],alpha_max[whatBin]);    // MC 5tev 1S pol2 
+      RooRealVar *npow   = new RooRealVar("n_{CB}","power order",npow_min[whatBin],npow_max[whatBin]);    // MC 5tev 1S pol2 
       RooRealVar *sigmaFraction = new RooRealVar("sigmaFraction","Sigma Fraction",0.,1.);
       // scale the sigmaGaus with sigma1S*scale=sigmaGaus now.
       RooRealVar    *scaleWidth = new RooRealVar("#sigma_{CB2}/#sigma_{CB1}","scaleWidth",1.,2.5);
@@ -179,19 +179,16 @@ void buildModel(RooWorkspace& w,int chooseFitParams, int chooseSample,int whatBi
       if(doCent)   //MB values, assumed to be the same with all centralities...
      	{
 	  if(muonPtMin <4){
-	    npow->setVal(npow_MB3p5);
-	    alpha->setVal(alpha_MB3p5);
-	    sigma1->setVal(sigma1_MB3p5);
-	    scaleWidth->setVal(scale_MB3p5);
-	    sigmaFraction->setVal(pdFrac_MB3p5);
+	    gROOT->LoadMacro("dataTable_loose.h");
+	  }else if(muonPtMin > 3.5){
+	    gROOT->LoadMacro("dataTable_tight.h");
 	  }
-	  else if(muonPtMin > 3.5){
-	    npow->setVal(npow_MB4);
-	    alpha->setVal(alpha_MB4);
-	    sigma1->setVal(sigma1_MB4);
-	    scaleWidth->setVal(scale_MB4);
-	    sigmaFraction->setVal(pdFrac_MB4);
-	  }
+	  npow->setVal(npow_rapBins[8]);
+	  alpha->setVal(alpha_rapBins[8]);
+	  sigma1->setVal(sigma1_rapBins[8]);
+	  scaleWidth->setVal(scale_rapBins[8]);
+	  sigmaFraction->setVal(pdFrac_rapBins[8]);
+	  cout<< whatBin << endl;
 	}
       if(doRap && !doPt)
 	{
@@ -419,6 +416,7 @@ void buildModel(RooWorkspace& w,int chooseFitParams, int chooseSample,int whatBi
       RooAbsPdf  *pdf             = new RooAddPdf ("pdf","total p.d.f.",
 						   RooArgList(*sig1S,*sig2S,*sig3S,*pdf_combinedbkgd),
 						   RooArgList(*nsig1f,*nsig2f,*nsig3f,*nbkgd));
+      //  nsig3f->setVal(0); nsig3f->setConstant();
       
     }
   w.import(*pdf);

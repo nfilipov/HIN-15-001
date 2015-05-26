@@ -7,20 +7,15 @@ double ptBinsEdgeMax[ptBinsDone]={2.5,5,8,12,20,50,6.5,10,20,50};
 double rapBinEdgeMin[rapBinsDone]={0,0.4,0.8,1.2,1.6,2.0,0.,1.2,0.};
 double rapBinsEdgeMax[rapBinsDone]={0.4,0.8,1.2,1.6,2.0,2.4,1.2,2.4,2.4};
 
-double alpha_data_cent[10] =
-	{ 0.91,
-	  1,1,1,1,1,1,1,1,1
-	};
-double sigma_data_cent[2]={0.085,
-			   0.085};
-
-double npow_data_cent[2]={1.16,
-			  2.3};
+/* double alpha_data_cent[14] = {1.56,1.56,1.56,1.56,1.56,1.56,1.56,1.56,1.56,1.56,1.56,1.56,1.56,1.56}; */
+/* double npow_data_cent[14]={4.65,4.65,4.65,4.65,4.65,4.65,4.65,4.65,4.65,4.65,4.65,4.65,4.65,4.65}; */
+/* double sigma1_data_cent[14]={0.065,0.065,0.065,0.065,0.065,0.065,0.065,0.065,0.065,0.065,0.065,0.065,0.065,0.065}; */
+/* double scale_data_cent[14]={1.84,1.84,1.84,1.84,1.84,1.84,1.84,1.84,1.84,1.84,1.84,1.84,1.84,1.84}; */
+/* double pdFrac_data_cent[14]={0.582,0.582,0.582,0.582,0.582,0.582,0.582,0.582,0.582,0.582,0.582,0.582,0.582,0.582}; */
 
 
 // signal parameters from MC
 
-//  double sigma1_ptBinsErrLo[]={}; //for later!
 //pt bins
 /* double alpha_ptBins[ptBinsDone]={1.32,1.31,1.19,1.41,1.16,1.23,1.28,1.25,1.60,1.65};  */
 /* double sigma1_ptBins[ptBinsDone]={0.065,0.065,0.069,0.067,0.068,0.066,0.066,0.066,0.070,0.067}; */
@@ -54,11 +49,11 @@ double  pdFrac_rapBins[rapBinsDone]={0.742197,0.694313,0.842165,0.457664,0.11248
 /* double scale_MB3p5=1.85; */
 /* double pdFrac_MB3p5=0.60; */
 
-double alpha_MB4=1.55;
-double npow_MB4=4.65;
-double sigma1_MB4=0.065;
-double scale_MB4=1.83;
-double pdFrac_MB4=0.58;
+/* double alpha_MB4=1.55; */
+/* double npow_MB4=4.65; */
+/* double sigma1_MB4=0.065; */
+/* double scale_MB4=1.83; */
+/* double pdFrac_MB4=0.58; */
 
 /* Bin & n$_{CB}$ & $\alpha_{CB}$ & $\sigma_{1}$(MeV) & $x$ (scale) & $f$ (norm) \\   */
 /*       \hline                                                                                                    */

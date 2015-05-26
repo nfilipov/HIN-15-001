@@ -72,11 +72,11 @@ void fitUpsilonYields(int ChooseSample =6,
 		      int bkgModel=3, 
 		      int fsr=1,
 		      int useRef =2,//1: data-driven, 0: none fixed, 2: FSR from MC(standard case in 15-001)
-		      int whatBin =9,
-		      int doRap=1,
+		      int whatBin =0,
+		      int doRap=0,
 		      int doPt=0,
-		      float muonPtMin=3.5,
-		      float muonPtMax = 4,  
+		      float muonPtCut1=3.5,
+		      float muonPtCut2 = 4,  
 		      float muonEtaMin =-2.4,
 		      float muonEtaMax =2.4,
 		      float upsRapStart = 0.0, // it's the absolute value (default) for y bins are symmetric in pp and pbpb.. must be over-ridden in pPb...
@@ -91,7 +91,6 @@ void fitUpsilonYields(int ChooseSample =6,
 		      const char* ChooseSampleCase = "pbpb",
 		      const char* outFilePrefix   = "yields", // yields, ratios
 		      int ChooseFitParams = 0
-		      
 		      ){
   cout << "welcome to FitUpsilonYields!"<<endl;
   gROOT->Macro("~/Project/ups2013/code/cm/logon.C+");
@@ -99,25 +98,24 @@ void fitUpsilonYields(int ChooseSample =6,
   // THIS FEATURE is _CINT_ only, don't try to compile this code.
   RooWorkspace* _ws = new RooWorkspace("_ws",kTRUE);
   int doCent=0; if(ChooseSample==8){fsr=0;}
-  if(doPt==1 && doRap==1) doCent=1; 
+  if(doPt==0 && doRap==0) doCent=1; 
   //make the workspace where the job will be contained.
-  makeWorkspace(*_ws,ChooseSample, muonEtaMin, muonEtaMax, muonPtMin,muonPtMax, upsRapStart, upsRapEnd, upsPtStart, upsPtEnd,upsCentralityStart,upsCentralityEnd);
+  makeWorkspace(*_ws,ChooseSample, muonEtaMin, muonEtaMax, muonPtCut1,muonPtCut2, upsRapStart, upsRapEnd, upsPtStart, upsPtEnd,upsCentralityStart,upsCentralityEnd);
   RooDataSet* data0_fit =(RooDataSet*) _ws::data; // Use the name space prefix operator to access the workspace contents
   // data0_fit->Print(); // to check it worked.
-  buildModel(*_ws,ChooseFitParams,ChooseSample,whatBin,signalModel,bkgModel,doRap,doPt,doCent,useRef,muonPtMin,fsr); // builds the pdf and imports it to the rooworkspace
+  buildModel(*_ws,ChooseFitParams,ChooseSample,whatBin,signalModel,bkgModel,doRap,doPt,doCent,useRef,muonPtCut1,fsr); // builds the pdf and imports it to the rooworkspace
   // _ws->Print(); //still checkin it worked.
   //  RooFitResult* fitObject = _ws::pdf.fitTo(*data0_fit); // Fit gets into action.
   //_ws::pdf.Print("v");
   // write out the fitting params
-  int centMin = upsCentralityStart;
-  int centMax = upsCentralityEnd;
+  int centMin =2.5*upsCentralityStart;
+  int centMax =2.5*upsCentralityEnd;
 
-  TString figName_(Form("%s_%s_cent%d%d_bkgModel%d_muonEta%.2f%.2f_muonPt%.2f-%.2f_dimuPt%.2f%.2f_dimuY%.2f%.2f_%d_ref%d_mass8p511p5",outFilePrefix,ChooseSampleCase,centMin,centMax,bkgModel,muonEtaMin,muonEtaMax,muonPtMin,muonPtMax,upsPtStart,upsPtEnd,upsRapStart,upsRapEnd,fsr,useRef));
+  TString figName_(Form("%s_%s_fsr%d",ChooseSampleCase,outFilePrefix,fsr));
+  //  TString figName_(Form("%s_%s_cent%d%d_bkgModel%d_muonEta%.2f%.2f_muonPt%.2f-%.2f_dimuPt%.2f%.2f_dimuY%.2f%.2f_%d_ref%d_mass8p511p5",outFilePrefix,ChooseSampleCase,centMin,centMax,bkgModel,muonEtaMin,muonEtaMax,muonPtCut1,muonPtCut2,upsPtStart,upsPtEnd,upsRapStart,upsRapEnd,fsr,useRef));
   figName_.ReplaceAll("-","M");
   figName_.ReplaceAll(".","");
-  fitAndDraw(*_ws,figName_,outDatDir,outFigDir,ChooseFitParams);
-  //  // ofstream outfileFitResults_forNote;
-  //  outfileFitResults.open(outParameters.c_str(), ios_base::out);  
+  fitAndDraw(*_ws,ChooseSample,figName_,outDatDir,outFigDir,ChooseFitParams,bkgModel,muonPtCut1,muonPtCut2,centMin,centMax,upsPtStart,upsPtEnd,upsRapStart,upsRapEnd,doRap,doPt,doCent); 
 }
 
 //_______________________________________________________________________

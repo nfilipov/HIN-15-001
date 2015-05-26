@@ -16,7 +16,7 @@ my @sampleIndex  = ("","1","2","3","4","5","6","7","8","9"); #Input data sample.
 my $samstart = 6;
 my $samend   = 6;
 #starting point is here: picking the right dataset.
-my @choseSamples = ("","pp7tev-d0", "pp7tev-d3","pbpbPPrecoTT", "pbpbPPrecoGG","pbpbZhen2011","pbpbRegit_cm","pp2p76tev","aaMC1S","pPb5tev");##pp2p76tev
+my @choseSamples = ("","pp7tev-d0", "pp7tev-d3","pbpbPPrecoTT", "pbpbPPrecoGG","pbpbZhen2011","PbPb","pp2p76tev","aaMC1S","pPb5tev");##pp2p76tev
 # ------------------------------------------------------
 #first, make the /output level (which will exist forever)
 my $txtOutputDir=$workDir."/txtOutput";
@@ -35,14 +35,14 @@ my $outTxtSampleDir;
 my $ChooseFitParams = 0; #what you want 0: (1s, 2s, 3s) 1: (1s, 2s/1s; 3s/1s); 2: (1S, (2s+3s)/1s); 3:(1S, 2S/1S, 3S/1S, 3S/2S)
 if($samstart == 8){$ChooseFitParams=0;}
 my @ChooseWhat2Fit = ("yield_m8_14","ratio1","ratio23","ratio32");
-my $outFilePrefix          = $ChooseWhat2Fit[$ChooseFitParams];
+#my $outFilePrefix          = $ChooseWhat2Fit[$ChooseFitParams]; ### over-riden later down there.
 
 #then, the pt cut (can add vProb or other observables there in the same fashion)
 
 my $ptMuStart1 = 2;#single muon pt > 4GeV/c cut, that no-one wants to change... that makes me sad.
-my $ptMuEnd1 = 2;
-my $ptMuStart2 = 3;
-my $ptMuEnd2 = 3;
+my $ptMuEnd1 = 4;
+my $ptMuStart2 = 2;
+my $ptMuEnd2 = 4;
 my @chooseptMu = ("","3","3.5","4","4.5");
 my @outPdfPrefix_ptMu1 = ("/pt0","/pt_3","/pt_3p5","/pt_4","/pt_4p5");
 my @outPdfPrefix_ptMu2 = ("_noPtCut","_3","_3p5","_4","_4p5");
@@ -105,43 +105,46 @@ my $upsPtCutMax    = 40;
 # for(@binName) {say $_;
 # 	       $_ =~ tr/./p/;
 # 	       say $_;}
-my $rapStart=1;
-my $rapEnd=1;
+my $rapStart=8;
+my $rapEnd=8;
 my @rapBinMin = ("0","0.4" ,"0.8","1.2","1.6","2","0" ,"1.2","0");
 my @rapBinMax = ("0.4","0.8","1.2","1.6","2","2.4","1.2","2.4","2.4");
 my @binNameStartRap ;
 my @binNameEndRap;
 
 for($rapStart..$rapEnd) {
-    $binNameStartRap[$_]="/Rap_".$rapBinMin[$_];
+    $binNameStartRap[$_]="Rap_".$rapBinMin[$_];
     $binNameStartRap[$_] =~ tr/./p/;
     $binNameEndRap[$_]="_".$rapBinMax[$_];
     $binNameEndRap[$_] =~ tr/./p/;
     if($DoRapNow==1) {   say $binNameStartRap[$_].$binNameEndRap[$_];}
 }
-my $ptStart=1;
-my $ptEnd=1;
+my $ptStart=0;
+my $ptEnd=5;
 my @binNameStartPt;
 my @binNameEndPt;
 my @upsPtBinMin = ("0","2.5","5","8" ,"12","20" ,"0"  ,"5","0","0");  
-my @upsPtBinMax = ("2.5","5" , "8","12","20","40","5","12","20","50");
+my @upsPtBinMax = ("2.5","5" , "8","12","20","40","5","12","20","40");
 for($ptStart..$ptEnd) {
-    $binNameStartPt[$_]="/Pt_".$upsPtBinMin[$_];
+    $binNameStartPt[$_]="Pt_".$upsPtBinMin[$_];
     $binNameStartPt[$_] =~ tr/./p/;
     $binNameEndPt[$_]="_".$upsPtBinMax[$_];
     $binNameEndPt[$_] =~ tr/./p/;
     if($DoPtNow==1){    say $binNameStartPt[$_].$binNameEndPt[$_];}
 }
 my $centstart=0;
-my $centend=13;
-my @centrality_min = ("0", "0","2","4", "8","12","16","20","28","20","0","4", "12","0","8"); 
-my @centrality_max = ("40","2","4","8","12","16","20","28","40","40","4","12","20","8","40");
+my $centend=8;
+my @centrality_min;
+my @centrality_max;
+#######################0    1   2   3    4   5    6    7    8    9   10  11   12
+my @centralityMin = ("0", "0","2","4", "8","12","16","20","28","20","0","4", "12","0","8"); 
+my @centralityMax = ("40","2","4","8","12","16","20","28","40","40","4","12","20","8","40");
 my @binNameStartCent;# = ("/Cent_0", "/Cent_0","/Cent_5","/Cent_10","/Cent_20","/Cent_30","/Cent_40","/Cent_50","/Cent_70","/Cent_50","/Cent_0","/Cent_10","/Cent_30","/Cent_0","/Cent_20"); 
 my @binNameEndCent;# = ("_100","_5","_10","_20","_30","_40","_50","_70","_100","_100","_10","_30","_50","_20","_100");
 for($centstart..$centend) {
-    $centrality_min[$_]*=2.5; ## for bin size of centrality percentiles. bins 0-2 become 0%-5%
-    $centrality_max[$_]*=2.5;
-    $binNameStartCent[$_]="/Cent_".$centrality_min[$_];
+    $centrality_min[$_] = $centralityMin[$_]*2.5; ## for bin size of centrality percentiles. bins 0-2 become 0%-5%
+    $centrality_max[$_] = $centralityMax[$_]*2.5;
+    $binNameStartCent[$_]="Cent_".$centrality_min[$_];
     $binNameStartCent[$_] =~ tr/./p/;
     $binNameEndCent[$_]="_".$centrality_max[$_];
     $binNameEndCent[$_] =~ tr/./p/;
@@ -149,7 +152,7 @@ for($centstart..$centend) {
 }
 my @binStart=($centstart,$ptStart,$rapStart);
 my @binEnd=($centend,$ptEnd,$rapEnd);
-my @ObsPrefix = ("/Centrality","/Pt","/Rap");
+my @ObsPrefix = ("/Centrality/","/Pt/","/Rap/");
 #from there, build the 3 directories.
 my $outTxtFitsDir;
 my $outPdfFitsDir;
@@ -267,9 +270,22 @@ for(my $isam=$samstart; $isam <=$samend ; $isam++){
 				$whatBin = $_;
 				$outTxtFitsDir = $outTxtObsDir.$binNameStartCent[$_].$binNameEndCent[$_];
 				$outPdfFitsDir = $outPdfObsDir.$binNameStartCent[$_].$binNameEndCent[$_];
+				my $outFilePrefix          =$binNameStartCent[$whatBin].$binNameEndCent[$whatBin];
 				for($fsr[$fsrstart]..$fsr[$fsrend]){
 				    say $_;
-			}
+				    say $binNameStartCent[$whatBin].$binNameEndCent[$whatBin];
+				    print"Cent: $centrality_min[$whatBin] - $centrality_max[$whatBin] \n BkgModel: $bkgModel \n Muon cut:	$muonEtaMin - $muonEtaMax\n";
+				    print"Save dir is: $outPdfFitsDir\n";
+				    print "fsr:$_ \n reference: $refstart\n";
+				    print " Sample is: $isam\n";
+				    # print  "vProb is: $vProb\n";
+				    print   "single Muon 1 pT > $chooseptMu[$iPtMu1]\n";
+				    print   "single Muon 2 pT > $chooseptMu[$iPtMu2]\n";
+				    print    " $upsPtCutMin < pT_Ups < $upsPtCutMax \n";
+				    print    " $abs_dimuYMin < |y_Ups| < $abs_dimuYMax \n";
+#				    say $chooseptMu[$iPtMu2];
+				    system("root -l -b -q   'fitUpsilonYields.C($isam,$bkgModel,$_,$refstart,$whatBin,$DoRapNow,$DoPtNow,$chooseptMu[$iPtMu1],$chooseptMu[$iPtMu2], $muonEtaMin, $muonEtaMax,$abs_dimuYMin,$abs_dimuYMax,$upsPtCutMin,$upsPtCutMax, $centralityMin[$whatBin], $centralityMax[$whatBin],$sigModel[$sigModelstart],\"$outTxtFitsDir\",\"$outPdfFitsDir\",\"$choseSamples[$isam]\",\"$outFilePrefix\",$ChooseFitParams)' "); 
+				}
 			    }
 			}
 		}
@@ -285,8 +301,9 @@ for(my $isam=$samstart; $isam <=$samend ; $isam++){
 				#	say $_;
 				$outTxtFitsDir = $outTxtObsDir.$binNameStartPt[$_].$binNameEndPt[$_];
 				$outPdfFitsDir = $outPdfObsDir.$binNameStartPt[$_].$binNameEndPt[$_];
+				my $outFilePrefix          =$binNameStartPt[$whatBin].$binNameEndPt[$whatBin];
 				for($fsr[$fsrstart]..$fsr[$fsrend]){
-				    print"Cent: $centrality_min[0] - $centrality_max[0] \n BkgModel: $bkgModel \n Muon cut:	$muonEtaMin - $muonEtaMax\n";
+				    print"Cent: $centralityMin[0] - $centralityMax[0] \n BkgModel: $bkgModel \n Muon cut:	$muonEtaMin - $muonEtaMax\n";
 				    print"Save dir is: $outPdfFitsDir\n";
 				    print "fsr:$_ \n reference: $refstart\n";
 				    print " Sample is: $isam\n";
@@ -296,7 +313,7 @@ for(my $isam=$samstart; $isam <=$samend ; $isam++){
 				    print    " $upsPtBinMin[$whatBin] < pT_Ups < $upsPtBinMax[$whatBin] \n";
 				    print    " $abs_dimuYMin < |y_Ups| < $abs_dimuYMax \n";
 #				    say $chooseptMu[$iPtMu2];
-				    system("root -l -b -q   'fitUpsilonYields.C($isam,$bkgModel,$_,$refstart,$whatBin,$DoRapNow,$DoPtNow,$chooseptMu[$iPtMu1],$chooseptMu[$iPtMu2], $muonEtaMin, $muonEtaMax,$abs_dimuYMin,$abs_dimuYMax,$upsPtBinMin[$whatBin],$upsPtBinMax[$whatBin], $centrality_min[0], $centrality_max[0],$sigModel[$sigModelstart],\"$outTxtFitsDir\",\"$outPdfFitsDir\",\"$choseSamples[$isam]\",\"$outFilePrefix\",$ChooseFitParams)' "); 
+				    system("root -l -b -q   'fitUpsilonYields.C($isam,$bkgModel,$_,$refstart,$whatBin,$DoRapNow,$DoPtNow,$chooseptMu[$iPtMu1],$chooseptMu[$iPtMu2], $muonEtaMin, $muonEtaMax,$abs_dimuYMin,$abs_dimuYMax,$upsPtBinMin[$whatBin],$upsPtBinMax[$whatBin], $centralityMin[0], $centralityMax[0],$sigModel[$sigModelstart],\"$outTxtFitsDir\",\"$outPdfFitsDir\",\"$choseSamples[$isam]\",\"$outFilePrefix\",$ChooseFitParams)' "); 
 				}
 			    }
 			}
@@ -313,6 +330,7 @@ for(my $isam=$samstart; $isam <=$samend ; $isam++){
 			      $whatBin = $_;
 			      $outTxtFitsDir = $outTxtObsDir.$binNameStartRap[$_].$binNameEndRap[$_];
 			      $outPdfFitsDir = $outPdfObsDir.$binNameStartRap[$_].$binNameEndRap[$_];
+			      my $outFilePrefix          =$binNameStartRap[$whatBin].$binNameEndRap[$whatBin];
 			      for($fsr[$fsrstart]..$fsr[$fsrend]){
 				  # say $_;
 				  print"Cent: $centrality_min[0] - $centrality_max[0] \n BkgModel: $bkgModel \n Muon cut:	$muonEtaMin - $muonEtaMax\n";
@@ -324,7 +342,7 @@ for(my $isam=$samstart; $isam <=$samend ; $isam++){
 				  print   "single Muon 2 pT > $chooseptMu[$iPtMu2]\n";
 				  print    " $upsPtCutMin < pT_Ups < $upsPtCutMax \n";
 				  print    " $rapBinMin[$whatBin] < |y_Ups| < $rapBinMax[$whatBin] \n";
-				  system("root -l -b -q   'fitUpsilonYields.C($isam,$bkgModel,$_,$refstart,$whatBin,$DoRapNow,$DoPtNow,$chooseptMu[$iPtMu1],$chooseptMu[$iPtMu2], $muonEtaMin, $muonEtaMax,$rapBinMin[$whatBin],$rapBinMax[$whatBin],$upsPtCutMin,$upsPtCutMax ,$centrality_min[0], $centrality_max[0],$sigModel[$sigModelstart],\"$outTxtFitsDir\",\"$outPdfFitsDir\",\"$choseSamples[$isam]\",\"$outFilePrefix\",$ChooseFitParams)' "); 
+				  system("root -l -b -q   'fitUpsilonYields.C($isam,$bkgModel,$_,$refstart,$whatBin,$DoRapNow,$DoPtNow,$chooseptMu[$iPtMu1],$chooseptMu[$iPtMu2], $muonEtaMin, $muonEtaMax,$rapBinMin[$whatBin],$rapBinMax[$whatBin],$upsPtCutMin,$upsPtCutMax ,$centralityMin[0], $centralityMax[0],$sigModel[$sigModelstart],\"$outTxtFitsDir\",\"$outPdfFitsDir\",\"$choseSamples[$isam]\",\"$outFilePrefix\",$ChooseFitParams)' "); 
 #cautionary
 			      }
 			  }

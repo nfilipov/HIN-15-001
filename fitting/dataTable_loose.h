@@ -1,32 +1,13 @@
 #define ptBinsDone 10
 #define rapBinsDone 9
-
+#define centBinsDone 13
 double ptBinEdgeMin[ptBinsDone]={0,2.5,5,8,12,20,0,6.5,10,0};
-double ptBinsEdgeMax[ptBinsDone]={2.5,5,8,12,20,50,6.5,10,20,50};
+double ptBinsEdgeMax[ptBinsDone]={2.5,5,8,12,20,40,6.5,10,20,40};
 
 double rapBinEdgeMin[rapBinsDone]={0,0.4,0.8,1.2,1.6,2.0,0.,1.2,0.};
 double rapBinsEdgeMax[rapBinsDone]={0.4,0.8,1.2,1.6,2.0,2.4,1.2,2.4,2.4};
 
-double alpha_data_cent[10] =
-	{ 0.91,
-	  1,1,1,1,1,1,1,1,1
-	};
-double sigma_data_cent[2]={0.085,
-			   0.085};
 
-double npow_data_cent[2]={1.16,
-			  2.3};
-
-
-// signal parameters from MC
-
-//  double sigma1_ptBinsErrLo[]={}; //for later!
-//pt bins
-/* double alpha_ptBins[ptBinsDone]={1.32,1.31,1.19,1.41,1.16,1.23,1.28,1.25,1.60,1.65};  */
-/* double sigma1_ptBins[ptBinsDone]={0.065,0.065,0.069,0.067,0.068,0.066,0.066,0.066,0.070,0.067}; */
-/* double scale_ptBins[ptBinsDone]={1.76,1.79,1.74,1.66,1.82,1.85,1.83,1.86,1.58,1.85}; */
-/* double npow_ptBins[ptBinsDone]={11.87,17.39,28.63,21.35,40.29,26.90,28.31,25.04,3.09,2.45}; */
-/* double pdFrac_ptBins[ptBinsDone]={0.55,0.56,0.65,0.54,0.66,0.56,0.62,0.63,0.57,0.60}; */
 //for loose muons ----
 double npow_ptBins[ptBinsDone] = {11.8655,17.3908,28.6303,7.62408,3.49819,3.07908,24.9602,4.56598,2.4522};
 double alpha_ptBins[ptBinsDone]={1.32273,1.31288,1.19791,1.48383,1.34292,1.61413,1.20422,1.5183,1.65063};
@@ -49,11 +30,11 @@ double  sigma1_rapBins[rapBinsDone]={0.0498658,0.0557315,0.0708797,0.083704,0.12
 double  scale_rapBins[rapBinsDone]={1.5148,1.4512,1.52786,1.49211,1,1.15372,1.63933,1.64216,1.8546};
 double  pdFrac_rapBins[rapBinsDone]={0.683874,0.444743,0.493526,0.487452,0.99877,0.775252,0.494356,0.832012,0.603875};
 
-double alpha_MB3p5=1.65;
-double npow_MB3p5=2.45;
-double sigma1_MB3p5=0.067;
-double scale_MB3p5=1.85;
-double pdFrac_MB3p5=0.60;
+/* double alpha_MB3p5=1.65; */
+/* double npow_MB3p5=2.45; */
+/* double sigma1_MB3p5=0.067; */
+/* double scale_MB3p5=1.85; */
+/* double pdFrac_MB3p5=0.60; */
 
 /* double alpha_MB4=1.55; */
 /* double npow_MB4=4.65; */
