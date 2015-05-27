@@ -99,6 +99,8 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int var_tp)
    TDirectory *dir = f->mkdir("allhistos");
    dir->cd();
 
+   // ofstream testing("dump.out");
+
    double dummyerr;
 
    ////////////////////////////////////////////////////////////////////////////
@@ -277,7 +279,8 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int var_tp)
 
          double genupspt = tlvgen->Pt();
          double genupsrap = tlvgen->Rapidity();
-         if (ispbpb) weight = weight_shape(genupspt,YS);
+         // if (ispbpb) weight = weight_shape(genupspt,YS);
+         weight = weight_shape(genupspt,YS);
          if (ispbpb) weight *= weightpt(genupspt,YS)*FindCenWeight(Centrality,YS);
          weight1 = weight*weightpt_syst(genupspt,1);
          weight2 = weight*weightpt_syst(genupspt,2);
@@ -290,11 +293,12 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int var_tp)
          hgenrap->Fill(genupsrap,weight);
          hgenrap2->Fill(genupsrap,weight);
 
+         bool genok=true;
          // if (tlvgen->M()<massmin || tlvgen->M()>massmax) continue;
-         if (YS==1 && !smuacc_loose(tlvgenmup,tlvgenmum)) continue;
-         if (YS!=1 && !smuacc_tight(tlvgenmup,tlvgenmum)) continue;
-         if (genupspt>ptbins_NS[NPTNS]) continue;
-         if (fabs(genupsrap)>rapbins_NS[NRAPNS]) continue;
+         if (YS==1 && !smuacc_loose(tlvgenmup,tlvgenmum)) genok=false;
+         if (YS!=1 && !smuacc_tight(tlvgenmup,tlvgenmum)) genok=false;
+         // if (genupspt>ptbins_NS[NPTNS]) continue;
+         if (fabs(genupsrap)>rapbins_NS[NRAPNS]) genok=false;
 
          // reco-truth matching
          double drmin=9e99,dptmin=9e99;
@@ -305,7 +309,7 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int var_tp)
             if (Reco_QQ_sign[irec]!=0) continue;
             TLorentzVector *tlvrec = (TLorentzVector*) Reco_QQ_4mom->At(irec);
             // if (tlvrec->M()<massmin || tlvrec->M()>massmax) continue;
-            double dr=tlvrec->DeltaR(*tlvgen);
+            double dr=fabs(tlvrec->M()-tlvgen->M());//tlvrec->DeltaR(*tlvgen);
             if (dr<drmin)
             {
                drmin=dr;
@@ -349,6 +353,7 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int var_tp)
             hrecopt2->Fill(recupspt,weight);
             hrecorap2->Fill(recupsrap,weight);
             hrecocent2->Fill(Centrality,weight);
+            // testing << eventNb << " " << runNb << " " << LS << endl;
          }
 
          ////////////////////////////////////////////////////////
@@ -358,6 +363,7 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int var_tp)
          {
             // if (ibin==0 && genupspt>ptbins_NS[NPTNS]) continue;
             if (ibin==0 || (genupspt>=ptbins_NS[ibin-1] && genupspt<ptbins_NS[ibin]))
+               if (genok)
             {
                // den_pt_NS[ibin]+=weight;
                hden_pt_NS[ibin]->Fill(tlvgen->M(),weight);
@@ -385,7 +391,8 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int var_tp)
          for (unsigned int ibin=0; ibin<NRAPNS+1; ibin++)
          {
             // if (ibin==0 && fabs(genupsrap)>rapbins_NS[NRAPNS]) continue;
-            if (ibin==0 || (genupsrap>=rapbins_NS[ibin-1] && genupsrap<rapbins_NS[ibin]))
+            if (ibin==0 || (fabs(genupsrap)>=rapbins_NS[ibin-1] && fabs(genupsrap)<rapbins_NS[ibin]))
+               if (genok)
             {
                // den_rap_NS[ibin]+=weight;
                hden_rap_NS[ibin]->Fill(tlvgen->M(),weight);
@@ -397,7 +404,7 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int var_tp)
             }
 
             double rapnum = (strategy==1 || strategy==3) ? genupsrap : recupsrap;
-            if (ibin==0 || (rapnum>=rapbins_NS[ibin-1] && rapnum<rapbins_NS[ibin]))
+            if (ibin==0 || (fabs(rapnum)>=rapbins_NS[ibin-1] && fabs(rapnum)<rapbins_NS[ibin]))
                if (idok)
                {
                   // num_rap_NS[ibin]+=weight;
@@ -414,6 +421,7 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int var_tp)
             for (unsigned int ibin=0; ibin<NCENTNS+1; ibin++)
             {
                if (ibin!=0 && (Centrality<centbins_NS[ibin-1] || Centrality>=centbins_NS[ibin])) continue;
+               if (genok)
                {
                   // den_cent_NS[ibin]+=weight;
                   hden_cent_NS[ibin]->Fill(tlvgen->M(),weight);
@@ -659,6 +667,7 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int var_tp)
 
    f->Write(); f->Close();
    textfile.close();
+   // testing.close();
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -697,18 +706,18 @@ bool dimueff::idcuts(int irec)
    if (Reco_QQ_mupl_nTrkHits[irec]>10 &&
          Reco_QQ_mupl_nPixWMea[irec]>0 &&
          Reco_QQ_mupl_normChi2_inner[irec]<4.0 &&
-         fabs(Reco_QQ_mupl_dxy[irec])<3 &&
-         fabs(Reco_QQ_mupl_dz[irec])<15 &&
-         Reco_QQ_mupl_normChi2_global[irec]<20.0 &&
+         fabs(Reco_QQ_mupl_dxy[irec])<0.2 &&
+         fabs(Reco_QQ_mupl_dz[irec])<0.5 &&
+         Reco_QQ_mupl_normChi2_global[irec]<10.0 &&
          Reco_QQ_mupl_TrkMuArb[irec]==1)
       PosPass=true;
 
    if (Reco_QQ_mumi_nTrkHits[irec]>10 &&
          Reco_QQ_mumi_nPixWMea[irec]>0 &&
          Reco_QQ_mumi_normChi2_inner[irec]<4.0 &&
-         fabs(Reco_QQ_mumi_dxy[irec])<3 &&
-         fabs(Reco_QQ_mumi_dz[irec])<15 &&
-         Reco_QQ_mumi_normChi2_global[irec]<20.0 &&
+         fabs(Reco_QQ_mumi_dxy[irec])<0.2 &&
+         fabs(Reco_QQ_mumi_dz[irec])<0.5 &&
+         Reco_QQ_mumi_normChi2_global[irec]<10.0 &&
          Reco_QQ_mumi_TrkMuArb[irec]==1)
       NegPass=true;
 
