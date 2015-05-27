@@ -231,8 +231,6 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int var_tp)
    const double massmax = YS==1 ? 10.5 : (YS==2 ? 11 : 11.3);
 
    f->cd();
-   TH1F *hdrmin = new TH1F("hdrmin","hdrmin",100,0,0.5);
-   TH2F *hdrmindpt = new TH2F("hdrmindpt","hdrmindpt",100,0,0.5,100,0,1);
    TH1F *hgenpt2 = new TH1F("hgenpt2","hgenpt2",100,0,50);
    TH1F *hgenrap2 = new TH1F("hgenrap2","hgenrap2",100,-2.5,2.5);
    TH1F *hgenpt = new TH1F("hgenpt","hgenpt",NPTNS,ptbins_NS);
@@ -269,6 +267,11 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int var_tp)
       double weight=1.;
       double weight1=1.; double weight2=1.; double weight3=1.; double weight4=1.; double weight5=1.;
 
+      ////////////////////////////////////////////////////////
+      // GEN loop
+      ////////////////////////////////////////////////////////
+      double genupspt=-999.; double genupsrap=-999.;
+      if (Gen_QQ_size != 1) cout << "Oops! Gen_QQ_size = " << Gen_QQ_size << endl;
       for (int igen=0; igen<Gen_QQ_size; igen++)
       {
          TLorentzVector *tlvgenmup = (TLorentzVector*) Gen_QQ_mupl_4mom->At(igen);
@@ -277,8 +280,8 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int var_tp)
          // // let's consider the dimuon instead of the upsilon, to take into account FSR
          // TLorentzVector *tlvgen = new TLorentzVector(); *tlvgen = (*tlvgenmup) + (*tlvgenmum);
 
-         double genupspt = tlvgen->Pt();
-         double genupsrap = tlvgen->Rapidity();
+         genupspt = tlvgen->Pt();
+         genupsrap = tlvgen->Rapidity();
          // if (ispbpb) weight = weight_shape(genupspt,YS);
          weight = weight_shape(genupspt,YS);
          if (ispbpb) weight *= weightpt(genupspt,YS)*FindCenWeight(Centrality,YS);
@@ -300,92 +303,22 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int var_tp)
          // if (genupspt>ptbins_NS[NPTNS]) continue;
          if (fabs(genupsrap)>rapbins_NS[NRAPNS]) genok=false;
 
-         // reco-truth matching
-         double drmin=9e99,dptmin=9e99;
-         unsigned int irecmin=0;
-         TLorentzVector *tlvrecmin=NULL;
-         for (int irec=0; irec<Reco_QQ_size; irec++)
-         {
-            if (Reco_QQ_sign[irec]!=0) continue;
-            TLorentzVector *tlvrec = (TLorentzVector*) Reco_QQ_4mom->At(irec);
-            // if (tlvrec->M()<massmin || tlvrec->M()>massmax) continue;
-            double dr=fabs(tlvrec->M()-tlvgen->M());//tlvrec->DeltaR(*tlvgen);
-            if (dr<drmin)
-            {
-               drmin=dr;
-               tlvrecmin=tlvrec;
-               irecmin=irec;
-               dptmin=fabs(tlvrec->Pt()-genupspt)/genupspt;
-            }
-         }
-         bool found = (drmin<DRCUT);
-         hdrmin->Fill(drmin);
-         hdrmindpt->Fill(drmin,dptmin);
-
-         // cuts
-         bool idok=false;
-         double weighttp=1.;
-         double recupspt=-1e99;
-         double recupsrap=-1e99;
-         if (found)
-         {
-            idok = idcuts(irecmin);
-            if (ispbpb) idok = idok 
-               // && (HLTriggers&1)==1 
-                  && (Reco_QQ_trig[irecmin]&1)==1;
-            else idok = idok 
-               // && (HLTriggers&2)==2
-                  && (Reco_QQ_trig[irecmin]&2)==2;
-            TLorentzVector *tlvmup = (TLorentzVector*) Reco_QQ_mupl_4mom->At(irecmin);
-            TLorentzVector *tlvmum = (TLorentzVector*) Reco_QQ_mumi_4mom->At(irecmin);
-            if (YS==1) idok = idok && smuacc_loose(tlvmup,tlvmum);
-            if (YS!=1) idok = idok && smuacc_tight(tlvmup,tlvmum);
-            weighttp=weight_tp(tlvmup->Pt(),tlvmup->Eta(),ispbpb,var_tp)*weight_tp(tlvmum->Pt(),tlvmum->Eta(),ispbpb,var_tp);
-            recupspt = tlvrecmin->Pt();
-            recupsrap = tlvrecmin->Rapidity();
-         }
-
-         if (idok)
-         {
-            hrecopt->Fill(recupspt,weight);
-            hrecorap->Fill(recupsrap,weight);
-            hrecocent->Fill(Centrality,weight);
-            hrecopt2->Fill(recupspt,weight);
-            hrecorap2->Fill(recupsrap,weight);
-            hrecocent2->Fill(Centrality,weight);
-            // testing << eventNb << " " << runNb << " " << LS << endl;
-         }
-
          ////////////////////////////////////////////////////////
-         // let's fill the numerator and denominator histograms
+         // let's fill the denominator histograms
          ////////////////////////////////////////////////////////
          for (unsigned int ibin=0; ibin<NPTNS+1; ibin++)
          {
             // if (ibin==0 && genupspt>ptbins_NS[NPTNS]) continue;
             if (ibin==0 || (genupspt>=ptbins_NS[ibin-1] && genupspt<ptbins_NS[ibin]))
                if (genok)
-            {
-               // den_pt_NS[ibin]+=weight;
-               hden_pt_NS[ibin]->Fill(tlvgen->M(),weight);
-               hden_pt_1[ibin]->Fill(tlvgen->M(),weight1);
-               hden_pt_2[ibin]->Fill(tlvgen->M(),weight2);
-               hden_pt_3[ibin]->Fill(tlvgen->M(),weight3);
-               hden_pt_4[ibin]->Fill(tlvgen->M(),weight4);
-               hden_pt_5[ibin]->Fill(tlvgen->M(),weight5);
-            }
-
-            double ptnum = (strategy==1 || strategy==3) ? genupspt : recupspt;
-            if (ibin==0 || (ptnum>=ptbins_NS[ibin-1] && ptnum<ptbins_NS[ibin]))
-               if (idok)
                {
-                  // num_pt_NS[ibin]+=weight;
-                  // num_tp_pt_NS[ibin]+=weight*weighttp;
-                  hnum_pt_NS[ibin]->Fill(tlvrecmin->M(),weight); hnum_tp_pt_NS[ibin]->Fill(tlvrecmin->M(),weight*weighttp);
-                  hnum_pt_1[ibin]->Fill(tlvrecmin->M(),weight1); hnum_tp_pt_1[ibin]->Fill(tlvrecmin->M(),weight1*weighttp);
-                  hnum_pt_2[ibin]->Fill(tlvrecmin->M(),weight2); hnum_tp_pt_2[ibin]->Fill(tlvrecmin->M(),weight2*weighttp);
-                  hnum_pt_3[ibin]->Fill(tlvrecmin->M(),weight3); hnum_tp_pt_3[ibin]->Fill(tlvrecmin->M(),weight3*weighttp);
-                  hnum_pt_4[ibin]->Fill(tlvrecmin->M(),weight4); hnum_tp_pt_4[ibin]->Fill(tlvrecmin->M(),weight4*weighttp);
-                  hnum_pt_5[ibin]->Fill(tlvrecmin->M(),weight5); hnum_tp_pt_5[ibin]->Fill(tlvrecmin->M(),weight5*weighttp);
+                  // den_pt_NS[ibin]+=weight;
+                  hden_pt_NS[ibin]->Fill(tlvgen->M(),weight);
+                  hden_pt_1[ibin]->Fill(tlvgen->M(),weight1);
+                  hden_pt_2[ibin]->Fill(tlvgen->M(),weight2);
+                  hden_pt_3[ibin]->Fill(tlvgen->M(),weight3);
+                  hden_pt_4[ibin]->Fill(tlvgen->M(),weight4);
+                  hden_pt_5[ibin]->Fill(tlvgen->M(),weight5);
                }
          }
          for (unsigned int ibin=0; ibin<NRAPNS+1; ibin++)
@@ -393,28 +326,14 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int var_tp)
             // if (ibin==0 && fabs(genupsrap)>rapbins_NS[NRAPNS]) continue;
             if (ibin==0 || (fabs(genupsrap)>=rapbins_NS[ibin-1] && fabs(genupsrap)<rapbins_NS[ibin]))
                if (genok)
-            {
-               // den_rap_NS[ibin]+=weight;
-               hden_rap_NS[ibin]->Fill(tlvgen->M(),weight);
-               hden_rap_1[ibin]->Fill(tlvgen->M(),weight1);
-               hden_rap_2[ibin]->Fill(tlvgen->M(),weight2);
-               hden_rap_3[ibin]->Fill(tlvgen->M(),weight3);
-               hden_rap_4[ibin]->Fill(tlvgen->M(),weight4);
-               hden_rap_5[ibin]->Fill(tlvgen->M(),weight5);
-            }
-
-            double rapnum = (strategy==1 || strategy==3) ? genupsrap : recupsrap;
-            if (ibin==0 || (fabs(rapnum)>=rapbins_NS[ibin-1] && fabs(rapnum)<rapbins_NS[ibin]))
-               if (idok)
                {
-                  // num_rap_NS[ibin]+=weight;
-                  // num_tp_rap_NS[ibin]+=weight*weighttp;
-                  hnum_rap_NS[ibin]->Fill(tlvrecmin->M(),weight); hnum_tp_rap_NS[ibin]->Fill(tlvrecmin->M(),weight*weighttp);
-                  hnum_rap_1[ibin]->Fill(tlvrecmin->M(),weight1); hnum_tp_rap_1[ibin]->Fill(tlvrecmin->M(),weight1*weighttp);
-                  hnum_rap_2[ibin]->Fill(tlvrecmin->M(),weight2); hnum_tp_rap_2[ibin]->Fill(tlvrecmin->M(),weight2*weighttp);
-                  hnum_rap_3[ibin]->Fill(tlvrecmin->M(),weight3); hnum_tp_rap_3[ibin]->Fill(tlvrecmin->M(),weight3*weighttp);
-                  hnum_rap_4[ibin]->Fill(tlvrecmin->M(),weight4); hnum_tp_rap_4[ibin]->Fill(tlvrecmin->M(),weight4*weighttp);
-                  hnum_rap_5[ibin]->Fill(tlvrecmin->M(),weight5); hnum_tp_rap_5[ibin]->Fill(tlvrecmin->M(),weight5*weighttp);
+                  // den_rap_NS[ibin]+=weight;
+                  hden_rap_NS[ibin]->Fill(tlvgen->M(),weight);
+                  hden_rap_1[ibin]->Fill(tlvgen->M(),weight1);
+                  hden_rap_2[ibin]->Fill(tlvgen->M(),weight2);
+                  hden_rap_3[ibin]->Fill(tlvgen->M(),weight3);
+                  hden_rap_4[ibin]->Fill(tlvgen->M(),weight4);
+                  hden_rap_5[ibin]->Fill(tlvgen->M(),weight5);
                }
          }
          if (ispbpb)
@@ -431,21 +350,92 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int var_tp)
                   hden_cent_4[ibin]->Fill(tlvgen->M(),weight4);
                   hden_cent_5[ibin]->Fill(tlvgen->M(),weight5);
                }
-
-               if (idok)
-               {
-                  // num_cent_NS[ibin]+=weight;
-                  // num_tp_cent_NS[ibin]+=weight*weighttp;
-                  hnum_cent_NS[ibin]->Fill(tlvrecmin->M(),weight); hnum_tp_cent_NS[ibin]->Fill(tlvrecmin->M(),weight*weighttp);
-                  hnum_cent_1[ibin]->Fill(tlvrecmin->M(),weight1); hnum_tp_cent_1[ibin]->Fill(tlvrecmin->M(),weight1*weighttp);
-                  hnum_cent_2[ibin]->Fill(tlvrecmin->M(),weight2); hnum_tp_cent_2[ibin]->Fill(tlvrecmin->M(),weight2*weighttp);
-                  hnum_cent_3[ibin]->Fill(tlvrecmin->M(),weight3); hnum_tp_cent_3[ibin]->Fill(tlvrecmin->M(),weight3*weighttp);
-                  hnum_cent_4[ibin]->Fill(tlvrecmin->M(),weight4); hnum_tp_cent_4[ibin]->Fill(tlvrecmin->M(),weight4*weighttp);
-                  hnum_cent_5[ibin]->Fill(tlvrecmin->M(),weight5); hnum_tp_cent_5[ibin]->Fill(tlvrecmin->M(),weight5*weighttp);
-               }
             }
-
       }
+
+      ////////////////////////////////////////////////////////
+      // RECO loop
+      ////////////////////////////////////////////////////////
+      for (int irec=0; irec<Reco_QQ_size; irec++)
+      {
+         if (Reco_QQ_sign[irec]!=0) continue;
+         TLorentzVector *tlvrec = (TLorentzVector*) Reco_QQ_4mom->At(irec);
+
+         // cuts
+         double weighttp=1.;
+         double recupspt=-1e99;
+         double recupsrap=-1e99;
+         if(!idcuts(irec)) continue;
+         if (ispbpb
+               // && (HLTriggers&1)==1 
+               && (Reco_QQ_trig[irec]&1)!=1) continue;
+         else if (!ispbpb
+               // && (HLTriggers&2)==2
+               && (Reco_QQ_trig[irec]&2)!=2) continue;
+         TLorentzVector *tlvmup = (TLorentzVector*) Reco_QQ_mupl_4mom->At(irec);
+         TLorentzVector *tlvmum = (TLorentzVector*) Reco_QQ_mumi_4mom->At(irec);
+         if (YS==1 && !smuacc_loose(tlvmup,tlvmum)) continue;
+         if (YS!=1 && !smuacc_tight(tlvmup,tlvmum)) continue;
+         weighttp=weight_tp(tlvmup->Pt(),tlvmup->Eta(),ispbpb,var_tp)*weight_tp(tlvmum->Pt(),tlvmum->Eta(),ispbpb,var_tp);
+         recupspt = tlvrec->Pt();
+         recupsrap = tlvrec->Rapidity();
+
+         hrecopt->Fill(recupspt,weight);
+         hrecorap->Fill(recupsrap,weight);
+         hrecocent->Fill(Centrality,weight);
+         hrecopt2->Fill(recupspt,weight);
+         hrecorap2->Fill(recupsrap,weight);
+         hrecocent2->Fill(Centrality,weight);
+         // testing << eventNb << " " << runNb << " " << LS << endl;
+
+         ////////////////////////////////////////////////////////
+         // let's fill the numerator histograms
+         ////////////////////////////////////////////////////////
+         for (unsigned int ibin=0; ibin<NPTNS+1; ibin++)
+         {
+            double ptnum = Gen_QQ_size!=0 && (strategy==1 || strategy==3) ? genupspt : recupspt;
+            if (ibin==0 || (ptnum>=ptbins_NS[ibin-1] && ptnum<ptbins_NS[ibin]))
+            {
+               // num_pt_NS[ibin]+=weight;
+               // num_tp_pt_NS[ibin]+=weight*weighttp;
+               hnum_pt_NS[ibin]->Fill(tlvrec->M(),weight); hnum_tp_pt_NS[ibin]->Fill(tlvrec->M(),weight*weighttp);
+               hnum_pt_1[ibin]->Fill(tlvrec->M(),weight1); hnum_tp_pt_1[ibin]->Fill(tlvrec->M(),weight1*weighttp);
+               hnum_pt_2[ibin]->Fill(tlvrec->M(),weight2); hnum_tp_pt_2[ibin]->Fill(tlvrec->M(),weight2*weighttp);
+               hnum_pt_3[ibin]->Fill(tlvrec->M(),weight3); hnum_tp_pt_3[ibin]->Fill(tlvrec->M(),weight3*weighttp);
+               hnum_pt_4[ibin]->Fill(tlvrec->M(),weight4); hnum_tp_pt_4[ibin]->Fill(tlvrec->M(),weight4*weighttp);
+               hnum_pt_5[ibin]->Fill(tlvrec->M(),weight5); hnum_tp_pt_5[ibin]->Fill(tlvrec->M(),weight5*weighttp);
+            }
+         }
+         for (unsigned int ibin=0; ibin<NRAPNS+1; ibin++)
+         {
+            double rapnum = Gen_QQ_size!=0 && (strategy==1 || strategy==3) ? genupsrap : recupsrap;
+            if (ibin==0 || (fabs(rapnum)>=rapbins_NS[ibin-1] && fabs(rapnum)<rapbins_NS[ibin]))
+            {
+               // num_rap_NS[ibin]+=weight;
+               // num_tp_rap_NS[ibin]+=weight*weighttp;
+               hnum_rap_NS[ibin]->Fill(tlvrec->M(),weight); hnum_tp_rap_NS[ibin]->Fill(tlvrec->M(),weight*weighttp);
+               hnum_rap_1[ibin]->Fill(tlvrec->M(),weight1); hnum_tp_rap_1[ibin]->Fill(tlvrec->M(),weight1*weighttp);
+               hnum_rap_2[ibin]->Fill(tlvrec->M(),weight2); hnum_tp_rap_2[ibin]->Fill(tlvrec->M(),weight2*weighttp);
+               hnum_rap_3[ibin]->Fill(tlvrec->M(),weight3); hnum_tp_rap_3[ibin]->Fill(tlvrec->M(),weight3*weighttp);
+               hnum_rap_4[ibin]->Fill(tlvrec->M(),weight4); hnum_tp_rap_4[ibin]->Fill(tlvrec->M(),weight4*weighttp);
+               hnum_rap_5[ibin]->Fill(tlvrec->M(),weight5); hnum_tp_rap_5[ibin]->Fill(tlvrec->M(),weight5*weighttp);
+            }
+         }
+         if (ispbpb)
+            for (unsigned int ibin=0; ibin<NCENTNS+1; ibin++)
+            {
+               if (ibin!=0 && (Centrality<centbins_NS[ibin-1] || Centrality>=centbins_NS[ibin])) continue;
+               // num_cent_NS[ibin]+=weight;
+               // num_tp_cent_NS[ibin]+=weight*weighttp;
+               hnum_cent_NS[ibin]->Fill(tlvrec->M(),weight); hnum_tp_cent_NS[ibin]->Fill(tlvrec->M(),weight*weighttp);
+               hnum_cent_1[ibin]->Fill(tlvrec->M(),weight1); hnum_tp_cent_1[ibin]->Fill(tlvrec->M(),weight1*weighttp);
+               hnum_cent_2[ibin]->Fill(tlvrec->M(),weight2); hnum_tp_cent_2[ibin]->Fill(tlvrec->M(),weight2*weighttp);
+               hnum_cent_3[ibin]->Fill(tlvrec->M(),weight3); hnum_tp_cent_3[ibin]->Fill(tlvrec->M(),weight3*weighttp);
+               hnum_cent_4[ibin]->Fill(tlvrec->M(),weight4); hnum_tp_cent_4[ibin]->Fill(tlvrec->M(),weight4*weighttp);
+               hnum_cent_5[ibin]->Fill(tlvrec->M(),weight5); hnum_tp_cent_5[ibin]->Fill(tlvrec->M(),weight5*weighttp);
+            }
+      }
+
    }
    ////////////////////////////////////////////////////////////////////////////
    // end of event loop
