@@ -271,7 +271,7 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int var_tp)
       // GEN loop
       ////////////////////////////////////////////////////////
       double genupspt=-999.; double genupsrap=-999.;
-      if (Gen_QQ_size != 1) cout << "Oops! Gen_QQ_size = " << Gen_QQ_size << endl;
+      if (Gen_QQ_size != 1) {cout << "Oops! Gen_QQ_size = " << Gen_QQ_size << endl; continue;}
       for (int igen=0; igen<Gen_QQ_size; igen++)
       {
          TLorentzVector *tlvgenmup = (TLorentzVector*) Gen_QQ_mupl_4mom->At(igen);
@@ -296,12 +296,11 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int var_tp)
          hgenrap->Fill(genupsrap,weight);
          hgenrap2->Fill(genupsrap,weight);
 
-         bool genok=true;
          // if (tlvgen->M()<massmin || tlvgen->M()>massmax) continue;
-         if (YS==1 && !smuacc_loose(tlvgenmup,tlvgenmum)) genok=false;
-         if (YS!=1 && !smuacc_tight(tlvgenmup,tlvgenmum)) genok=false;
+         if (YS==1 && !smuacc_loose(tlvgenmup,tlvgenmum)) continue;
+         if (YS!=1 && !smuacc_tight(tlvgenmup,tlvgenmum)) continue;
          // if (genupspt>ptbins_NS[NPTNS]) continue;
-         if (fabs(genupsrap)>rapbins_NS[NRAPNS]) genok=false;
+         if (fabs(genupsrap)>rapbins_NS[NRAPNS]) continue;
 
          ////////////////////////////////////////////////////////
          // let's fill the denominator histograms
@@ -310,46 +309,37 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int var_tp)
          {
             // if (ibin==0 && genupspt>ptbins_NS[NPTNS]) continue;
             if (ibin==0 || (genupspt>=ptbins_NS[ibin-1] && genupspt<ptbins_NS[ibin]))
-               if (genok)
-               {
-                  // den_pt_NS[ibin]+=weight;
-                  hden_pt_NS[ibin]->Fill(tlvgen->M(),weight);
-                  hden_pt_1[ibin]->Fill(tlvgen->M(),weight1);
-                  hden_pt_2[ibin]->Fill(tlvgen->M(),weight2);
-                  hden_pt_3[ibin]->Fill(tlvgen->M(),weight3);
-                  hden_pt_4[ibin]->Fill(tlvgen->M(),weight4);
-                  hden_pt_5[ibin]->Fill(tlvgen->M(),weight5);
-               }
+               // den_pt_NS[ibin]+=weight;
+               hden_pt_NS[ibin]->Fill(tlvgen->M(),weight);
+            hden_pt_1[ibin]->Fill(tlvgen->M(),weight1);
+            hden_pt_2[ibin]->Fill(tlvgen->M(),weight2);
+            hden_pt_3[ibin]->Fill(tlvgen->M(),weight3);
+            hden_pt_4[ibin]->Fill(tlvgen->M(),weight4);
+            hden_pt_5[ibin]->Fill(tlvgen->M(),weight5);
          }
          for (unsigned int ibin=0; ibin<NRAPNS+1; ibin++)
          {
             // if (ibin==0 && fabs(genupsrap)>rapbins_NS[NRAPNS]) continue;
             if (ibin==0 || (fabs(genupsrap)>=rapbins_NS[ibin-1] && fabs(genupsrap)<rapbins_NS[ibin]))
-               if (genok)
-               {
-                  // den_rap_NS[ibin]+=weight;
-                  hden_rap_NS[ibin]->Fill(tlvgen->M(),weight);
-                  hden_rap_1[ibin]->Fill(tlvgen->M(),weight1);
-                  hden_rap_2[ibin]->Fill(tlvgen->M(),weight2);
-                  hden_rap_3[ibin]->Fill(tlvgen->M(),weight3);
-                  hden_rap_4[ibin]->Fill(tlvgen->M(),weight4);
-                  hden_rap_5[ibin]->Fill(tlvgen->M(),weight5);
-               }
+               // den_rap_NS[ibin]+=weight;
+               hden_rap_NS[ibin]->Fill(tlvgen->M(),weight);
+            hden_rap_1[ibin]->Fill(tlvgen->M(),weight1);
+            hden_rap_2[ibin]->Fill(tlvgen->M(),weight2);
+            hden_rap_3[ibin]->Fill(tlvgen->M(),weight3);
+            hden_rap_4[ibin]->Fill(tlvgen->M(),weight4);
+            hden_rap_5[ibin]->Fill(tlvgen->M(),weight5);
          }
          if (ispbpb)
             for (unsigned int ibin=0; ibin<NCENTNS+1; ibin++)
             {
                if (ibin!=0 && (Centrality<centbins_NS[ibin-1] || Centrality>=centbins_NS[ibin])) continue;
-               if (genok)
-               {
-                  // den_cent_NS[ibin]+=weight;
-                  hden_cent_NS[ibin]->Fill(tlvgen->M(),weight);
-                  hden_cent_1[ibin]->Fill(tlvgen->M(),weight1);
-                  hden_cent_2[ibin]->Fill(tlvgen->M(),weight2);
-                  hden_cent_3[ibin]->Fill(tlvgen->M(),weight3);
-                  hden_cent_4[ibin]->Fill(tlvgen->M(),weight4);
-                  hden_cent_5[ibin]->Fill(tlvgen->M(),weight5);
-               }
+               // den_cent_NS[ibin]+=weight;
+               hden_cent_NS[ibin]->Fill(tlvgen->M(),weight);
+               hden_cent_1[ibin]->Fill(tlvgen->M(),weight1);
+               hden_cent_2[ibin]->Fill(tlvgen->M(),weight2);
+               hden_cent_3[ibin]->Fill(tlvgen->M(),weight3);
+               hden_cent_4[ibin]->Fill(tlvgen->M(),weight4);
+               hden_cent_5[ibin]->Fill(tlvgen->M(),weight5);
             }
       }
 
@@ -379,6 +369,8 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int var_tp)
          weighttp=weight_tp(tlvmup->Pt(),tlvmup->Eta(),ispbpb,var_tp)*weight_tp(tlvmum->Pt(),tlvmum->Eta(),ispbpb,var_tp);
          recupspt = tlvrec->Pt();
          recupsrap = tlvrec->Rapidity();
+         // // testing
+         // weight = weight*weight_shape(recupspt,YS)/weight_shape(genupspt,YS);
 
          hrecopt->Fill(recupspt,weight);
          hrecorap->Fill(recupsrap,weight);
@@ -545,6 +537,7 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int var_tp)
       double binmin = (ibin==0) ? rapbins_NS[0] : rapbins_NS[ibin-1];
       double binmax = (ibin==0) ? rapbins_NS[NRAPNS] : rapbins_NS[ibin];
       double val = num_rap_NS[ibin]/den_rap_NS[ibin];
+      // cout << val <<"=" <<  num_rap_NS[ibin] << "/" << den_rap_NS[ibin] << endl;
       double val1 = num_rap_1[ibin]/den_rap_1[ibin];
       double val2 = num_rap_2[ibin]/den_rap_2[ibin];
       double val3 = num_rap_3[ibin]/den_rap_3[ibin];
@@ -602,7 +595,7 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int var_tp)
       double err = RError(num_tp_pt_NS[ibin],numerr_tp_pt_NS[ibin],den_pt_NS[ibin],denerr_pt_NS[ibin]);
       double syst = systerr(val,val1,val2,val3,val4,val5);
       cout << "[" << binmin << "," << binmax << "]: " << val << " +/- " << err << " +/- " << syst << endl;
-      textfile << "pt_TnP" << binmin << " " << binmax << " " << val << " " << err << " " << syst << endl;
+      textfile << "pt_TnP " << binmin << " " << binmax << " " << val << " " << err << " " << syst << endl;
       if (ibin>0) 
       {
          hefftppt->SetBinContent(ibin,val);
@@ -623,7 +616,7 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int var_tp)
       double err = RError(num_tp_rap_NS[ibin],numerr_tp_rap_NS[ibin],den_rap_NS[ibin],denerr_rap_NS[ibin]);
       double syst = systerr(val,val1,val2,val3,val4,val5);
       cout << "[" << binmin << "," << binmax << "]: " << val << " +/- " << err << " +/- " << syst << endl;
-      textfile << "rapidity_TnP" << binmin << " " << binmax << " " << val << " " << err << " " << syst << endl;
+      textfile << "rapidity_TnP " << binmin << " " << binmax << " " << val << " " << err << " " << syst << endl;
       if (ibin>0) 
       {
          hefftprap->SetBinContent(ibin,val);
@@ -646,7 +639,7 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int var_tp)
          double err = RError(num_tp_cent_NS[ibin],numerr_tp_cent_NS[ibin],den_cent_NS[ibin],denerr_cent_NS[ibin]);
          double syst = systerr(val,val1,val2,val3,val4,val5);
          cout << "[" << binmin << "," << binmax << "]: " << val << " +/- " << err << " +/- " << syst << endl;
-         textfile << "centrality_TnP" << binmin << " " << binmax << " " << val << " " << err << " " << syst << endl;
+         textfile << "centrality_TnP " << binmin << " " << binmax << " " << val << " " << err << " " << syst << endl;
          if (ibin>0) 
          {
             hefftpcent->SetBinContent(ibin,val);
