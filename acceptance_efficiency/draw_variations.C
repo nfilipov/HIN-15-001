@@ -7,7 +7,8 @@ void draw_variations_pbpb_midrap()
    haxes->GetYaxis()->SetRangeUser(0,2);
    haxes->Draw();
 
-   for (int i=100; i>=0; i--)
+   // for (int i=100; i>=0; i--)
+   for (int i=-1; i<1; i++)
    {
       TF1 *func = new TF1(Form("var_%i",i),Form("tnp_weight_pbpb_midrap(x,%i)",i),2,10);
       if (i==0) func->SetLineColor(kRed);
@@ -23,7 +24,8 @@ void draw_variations_pp_midrap()
    haxes->GetYaxis()->SetRangeUser(0,2);
    haxes->Draw();
 
-   for (int i=100; i>=0; i--)
+   // for (int i=100; i>=0; i--)
+   for (int i=-1; i<1; i++)
    {
       TF1 *func = new TF1(Form("var_%i",i),Form("tnp_weight_pp_midrap(x,%i)",i),2,10);
       if (i==0) func->SetLineColor(kRed);
@@ -39,7 +41,8 @@ void draw_variations_pbpb_fwdrap()
    haxes->GetYaxis()->SetRangeUser(0,2);
    haxes->Draw();
 
-   for (int i=100; i>=0; i--)
+   // for (int i=100; i>=0; i--)
+   for (int i=-1; i<1; i++)
    {
       TF1 *func = new TF1(Form("var_%i",i),Form("tnp_weight_pbpb_fwdrap(x,%i)",i),2,10);
       if (i==0) func->SetLineColor(kRed);
@@ -55,7 +58,8 @@ void draw_variations_pp_fwdrap()
    haxes->GetYaxis()->SetRangeUser(0,2);
    haxes->Draw();
 
-   for (int i=100; i>=0; i--)
+   // for (int i=100; i>=0; i--)
+   for (int i=-1; i<1; i++)
    {
       TF1 *func = new TF1(Form("var_%i",i),Form("tnp_weight_pp_fwdrap(x,%i)",i),2,10);
       if (i==0) func->SetLineColor(kRed);

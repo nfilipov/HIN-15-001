@@ -7,6 +7,7 @@ double tnp_weight_pbpb_midrap(double x, int idx)
 {
    // NOMINAL pbpb midrap
    if (idx==0) return 0.9555*TMath::Erf((x-1.324)/2.5683) / (0.9576*TMath::Erf((x-1.7883)/2.6583));
+   if (idx==-1)  return ( 0.9988*TMath::Erf( (x-1.322)/2.688)/TMath::Erf( (x-1.796)/2.516) ); // old, from Prashant
    // variations on the pbpb midrap
    else if (idx==1) return 0.9632*TMath::Erf((x-1.2306)/2.7423) / (0.9576*TMath::Erf((x-1.7883)/2.6583));
    else if (idx==2) return 0.9563*TMath::Erf((x-1.4503)/2.3972) / (0.9576*TMath::Erf((x-1.7883)/2.6583));
@@ -115,6 +116,7 @@ double tnp_weight_pbpb_fwdrap(double x, int idx)
 {
    // NOMINAL pbpb fwdrap
    if (idx==0) return 0.8335*TMath::Erf((x-1.247/1.9782)) /(0.7948*TMath::Erf((x-1.3091)/2.2783));
+   if (idx==-1) return (0.8299*TMath::Erf((x-1.2785)/1.8833))/(0.7810*TMath::Erf((x-1.3609)/2.1231)); // old, from Prashant
    // variations on the pbpb fwdrap
    else if (idx==1   ) return 1.04*TMath::Erf((x-1.3676/1.9868)) /(0.7948*TMath::Erf((x-1.3091)/2.2783));
    else if (idx==2   ) return 0.8874*TMath::Erf((x-1.2919/1.7771)) /(0.7948*TMath::Erf((x-1.3091)/2.2783));
@@ -222,6 +224,7 @@ double tnp_weight_pp_midrap(double x, int idx)
 {
    // NOMINAL pp midrap
    if (idx==0) return 0.9588*TMath::Erf((x-2.0009/1.8998)) / (0.9604*TMath::Erf((x-2.0586)/2.1567));
+   if (idx==-1) return ( 0.998474*TMath::Erf( (x-1.63555)/(0.797933) ) / TMath::Erf( (x-0.222866)/(2.95593) ) ); // old, from Prashant
    // variations on the pp midrap
    else if (idx==1   ) return 0.9615*TMath::Erf((x-1.9636/1.9542)) / (0.9604*TMath::Erf((x-2.0586)/2.1567));
    else if (idx==2   ) return 0.9618*TMath::Erf((x-1.9621/1.9488)) / (0.9604*TMath::Erf((x-2.0586)/2.1567));
@@ -330,6 +333,7 @@ double tnp_weight_pp_fwdrap(double x, int idx)
 {
    // NOMINAL pp fwdrap
    if (idx==0) return 0.7897*TMath::Erf((x-0.7162/2.6261)) / (0.7364*TMath::Erf((x-1.2149)/2.3352)) ;
+   if (idx==-1) return (0.7788*TMath::Erf((x-1.1903)/1.9880))/(0.7364*TMath::Erf((x-1.2538)/2.2530)); // old, from Prashant
       // variations on the pp fwdrap
    else if (idx==1   ) return 0.7942*TMath::Erf((x-0.4544/2.9516)) / (0.7364*TMath::Erf((x-1.2149)/2.3352));
    else if (idx==2   ) return 0.7966*TMath::Erf((x-0.6032/2.7645)) / (0.7364*TMath::Erf((x-1.2149)/2.3352));
