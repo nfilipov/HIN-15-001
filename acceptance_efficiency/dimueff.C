@@ -648,6 +648,76 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int var_tp)
       }
    }
 
+   cout << endl;
+   cout << "=============" << endl;
+   cout << "Scale factors" << endl;
+   cout << "=============" << endl;
+   for (unsigned int ibin=0; ibin<NPTNS+1; ibin++)
+   {
+      double binmin = (ibin==0) ? ptbins_NS[0] : ptbins_NS[ibin-1];
+      double binmax = (ibin==0) ? ptbins_NS[NPTNS] : ptbins_NS[ibin];
+      double val = num_tp_pt_NS[ibin]/num_pt_NS[ibin];
+      double val1 = num_tp_pt_1[ibin]/num_pt_1[ibin];
+      double val2 = num_tp_pt_2[ibin]/num_pt_2[ibin];
+      double val3 = num_tp_pt_3[ibin]/num_pt_3[ibin];
+      double val4 = num_tp_pt_4[ibin]/num_pt_4[ibin];
+      double val5 = num_tp_pt_5[ibin]/num_pt_5[ibin];
+      double err = RError(num_tp_pt_NS[ibin],numerr_tp_pt_NS[ibin],num_pt_NS[ibin],numerr_pt_NS[ibin]);
+      double syst = systerr(val,val1,val2,val3,val4,val5);
+      cout << "[" << binmin << "," << binmax << "]: " << val << " +/- " << err << " +/- " << syst << endl;
+      textfile << "pt_SF " << binmin << " " << binmax << " " << val << " " << err << " " << syst << endl;
+      if (ibin>0) 
+      {
+         hefftppt->SetBinContent(ibin,val);
+         hefftppt->SetBinError(ibin,err);
+      }
+   }
+   cout << endl << "rapidity" << endl;
+   for (unsigned int ibin=0; ibin<NRAPNS+1; ibin++)
+   {
+      double binmin = (ibin==0) ? rapbins_NS[0] : rapbins_NS[ibin-1];
+      double binmax = (ibin==0) ? rapbins_NS[NRAPNS] : rapbins_NS[ibin];
+      double val = num_tp_rap_NS[ibin]/num_rap_NS[ibin];
+      double val1 = num_tp_rap_1[ibin]/num_rap_1[ibin];
+      double val2 = num_tp_rap_2[ibin]/num_rap_2[ibin];
+      double val3 = num_tp_rap_3[ibin]/num_rap_3[ibin];
+      double val4 = num_tp_rap_4[ibin]/num_rap_4[ibin];
+      double val5 = num_tp_rap_5[ibin]/num_rap_5[ibin];
+      double err = RError(num_tp_rap_NS[ibin],numerr_tp_rap_NS[ibin],num_rap_NS[ibin],numerr_rap_NS[ibin]);
+      double syst = systerr(val,val1,val2,val3,val4,val5);
+      cout << "[" << binmin << "," << binmax << "]: " << val << " +/- " << err << " +/- " << syst << endl;
+      textfile << "rapidity_SF " << binmin << " " << binmax << " " << val << " " << err << " " << syst << endl;
+      if (ibin>0) 
+      {
+         hefftprap->SetBinContent(ibin,val);
+         hefftprap->SetBinError(ibin,err);
+      }
+   }
+   if (ispbpb)
+   {
+      cout << endl << "centrality" << endl;
+      for (unsigned int ibin=0; ibin<NCENTNS+1; ibin++)
+      {
+         double binmin = (ibin==0) ? 2.5*centbins_NS[0] : 2.5*centbins_NS[ibin-1];
+         double binmax = (ibin==0) ? 2.5*centbins_NS[NCENTNS] : 2.5*centbins_NS[ibin];
+         double val = num_tp_cent_NS[ibin]/num_cent_NS[ibin];
+         double val1 = num_tp_cent_1[ibin]/num_cent_1[ibin];
+         double val2 = num_tp_cent_2[ibin]/num_cent_2[ibin];
+         double val3 = num_tp_cent_3[ibin]/num_cent_3[ibin];
+         double val4 = num_tp_cent_4[ibin]/num_cent_4[ibin];
+         double val5 = num_tp_cent_5[ibin]/num_cent_5[ibin];
+         double err = RError(num_tp_cent_NS[ibin],numerr_tp_cent_NS[ibin],num_cent_NS[ibin],numerr_cent_NS[ibin]);
+         double syst = systerr(val,val1,val2,val3,val4,val5);
+         cout << "[" << binmin << "," << binmax << "]: " << val << " +/- " << err << " +/- " << syst << endl;
+         textfile << "centrality_SF " << binmin << " " << binmax << " " << val << " " << err << " " << syst << endl;
+         if (ibin>0) 
+         {
+            hefftpcent->SetBinContent(ibin,val);
+            hefftpcent->SetBinError(ibin,err);
+         }
+      }
+   }
+
    f->Write(); f->Close();
    textfile.close();
    // testing.close();
