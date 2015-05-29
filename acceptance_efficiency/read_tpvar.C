@@ -1,4 +1,12 @@
 #include "dimueff.C"
+#include "TTree.h"
+#include "TFile.h"
+#include "TProfile.h"
+#include "TString.h"
+#include <math.h>
+#include <cstring>
+
+double firsteff(TTree *tr, const char* name, double binlow, double binhigh);
 
 void read_tpvar(const char* file, int YS=1)
 {
@@ -17,45 +25,68 @@ void read_tpvar(const char* file, int YS=1)
    TString var("pt_SF");
    tr->Draw("eff:1>>htemp(1,0,2)",Form("name==\"%s\"&&abs(binlow-%f)<.1&&abs(binhigh-%f)<.1",var.Data(),ptbins_NS[0],ptbins_NS[NPTNS]),"PROFs");
    TProfile *htemp = (TProfile*) gDirectory->Get("htemp");
-   cout << var << " " << ptbins_NS[0] << " " << ptbins_NS[NPTNS] << " " << htemp->GetBinContent(1) << " " << htemp->GetBinError(1) << endl;
+   cout << var << " " << ptbins_NS[0] << " " << ptbins_NS[NPTNS] << " " << firsteff(tr,var.Data(),ptbins_NS[0],ptbins_NS[NPTNS]) << " " <<
+      htemp->GetBinError(1) << " " << htemp->GetBinContent(1) << endl;
    delete htemp;
    for (int i=0; i<NPTNS; i++)
    {
       // cout << Form("name==\"%s\"&&binlow==%f&&binhigh==%f",var.Data(),ptbins_NS[i],ptbins_NS[i+1]) << endl;
       tr->Draw("eff:1>>htemp(1,0,2)",Form("name==\"%s\"&&abs(binlow-%f)<.1&&abs(binhigh-%f)<.1",var.Data(),ptbins_NS[i],ptbins_NS[i+1]),"PROFs");
-      TProfile *htemp = (TProfile*) gDirectory->Get("htemp");
-      cout << var << " " << ptbins_NS[i] << " " << ptbins_NS[i+1] << " " << htemp->GetBinContent(1) << " " << htemp->GetBinError(1) << endl;
+      htemp = (TProfile*) gDirectory->Get("htemp");
+      cout << var << " " << ptbins_NS[i] << " " << ptbins_NS[i+1] << " " << firsteff(tr,var.Data(),ptbins_NS[i],ptbins_NS[i+1]) << " " <<
+         htemp->GetBinError(1) << " " << htemp->GetBinContent(1) << endl;
       delete htemp;
    }
 
-   TString var("rapidity_SF");
+   var = TString("rapidity_SF");
    tr->Draw("eff:1>>htemp(1,0,2)",Form("name==\"%s\"&&abs(binlow-%f)<.1&&abs(binhigh-%f)<.1",var.Data(),rapbins_NS[0],rapbins_NS[NRAPNS]),"PROFs");
-   TProfile *htemp = (TProfile*) gDirectory->Get("htemp");
-   cout << var << " " << rapbins_NS[0] << " " << rapbins_NS[NRAPNS] << " " << htemp->GetBinContent(1) << " " << htemp->GetBinError(1) << endl;
+   htemp = (TProfile*) gDirectory->Get("htemp");
+   cout << var << " " << rapbins_NS[0] << " " << rapbins_NS[NRAPNS] << " " << firsteff(tr,var.Data(),rapbins_NS[0],rapbins_NS[NRAPNS]) << " "
+      << htemp->GetBinError(1) << " " << htemp->GetBinContent(1) << endl;
    delete htemp;
    for (int i=0; i<NRAPNS; i++)
    {
       // cout << Form("name==\"%s\"&&binlow==%f&&binhigh==%f",var.Data(),rapbins_NS[i],rapbins_NS[i+1]) << endl;
       tr->Draw("eff:1>>htemp(1,0,2)",Form("name==\"%s\"&&abs(binlow-%f)<.1&&abs(binhigh-%f)<.1",var.Data(),rapbins_NS[i],rapbins_NS[i+1]),"PROFs");
-      TProfile *htemp = (TProfile*) gDirectory->Get("htemp");
-      cout << var << " " << rapbins_NS[i] << " " << rapbins_NS[i+1] << " " << htemp->GetBinContent(1) << " " << htemp->GetBinError(1) << endl;
+      htemp = (TProfile*) gDirectory->Get("htemp");
+      cout << var << " " << rapbins_NS[i] << " " << rapbins_NS[i+1] << " " << firsteff(tr,var.Data(),rapbins_NS[i],rapbins_NS[i+1]) << " "
+         << htemp->GetBinError(1) << " " << htemp->GetBinContent(1) << endl;
       delete htemp;
    }
 
-   TString var("centrality_SF");
+   var = TString("centrality_SF");
    tr->Draw("eff:1>>htemp(1,0,2)",Form("name==\"%s\"&&abs(binlow-%f)<.1&&abs(binhigh-%f)<.1",var.Data(),centbins_NS[0]*2.5,centbins_NS[NCENTNS]*2.5),"PROFs");
-   TProfile *htemp = (TProfile*) gDirectory->Get("htemp");
-   cout << var << " " << centbins_NS[0] << " " << centbins_NS[NCENTNS] << " " << htemp->GetBinContent(1) << " " << htemp->GetBinError(1) << endl;
+   htemp = (TProfile*) gDirectory->Get("htemp");
+   cout << var << " " << centbins_NS[0] << " " << centbins_NS[NCENTNS] << " " << firsteff(tr,var.Data(),centbins_NS[0]*2.5,centbins_NS[NCENTNS]*2.5) << " "
+      << htemp->GetBinError(1) << " " << htemp->GetBinContent(1) << endl;
    delete htemp;
    for (int i=0; i<NCENTNS; i++)
    {
       // cout << Form("name==\"%s\"&&binlow==%f&&binhigh==%f",var.Data(),centbins_NS[i],centbins_NS[i+1]) << endl;
       tr->Draw("eff:1>>htemp(1,0,2)",Form("name==\"%s\"&&abs(binlow-%f)<.1&&abs(binhigh-%f)<.1",var.Data(),centbins_NS[i]*2.5,centbins_NS[i+1]*2.5),"PROFs");
-      TProfile *htemp = (TProfile*) gDirectory->Get("htemp");
-      cout << var << " " << centbins_NS[i] << " " << centbins_NS[i+1] << " " << htemp->GetBinContent(1) << " " << htemp->GetBinError(1) << endl;
+      htemp = (TProfile*) gDirectory->Get("htemp");
+      cout << var << " " << centbins_NS[i] << " " << centbins_NS[i+1] << " " << firsteff(tr,var.Data(),centbins_NS[i]*2.5,centbins_NS[i+1]*2.5) << " "
+         << htemp->GetBinError(1) << " " << htemp->GetBinContent(1) << endl;
       delete htemp;
    }
 
    f->Write();
    f->Close();
+}
+
+double firsteff(TTree *tr, const char* name, double binlow, double binhigh)
+{
+   char namevar[1000];
+   float binlowvar, binhighvar, eff;
+   TTree *tr2 = tr->CloneTree();
+   tr2->SetBranchAddress("name",&namevar);
+   tr2->SetBranchAddress("binlow",&binlowvar);
+   tr2->SetBranchAddress("binhigh",&binhighvar);
+   tr2->SetBranchAddress("eff",&eff);
+
+   for (int i=0; i<tr2->GetEntries(); i++)
+   {
+      tr2->GetEntry(i);
+      if (!strcmp(name,namevar) && fabs(binlow-binlowvar)<.1&&fabs(binhigh-binhighvar)<.1) {delete tr2; return eff;}
+   }
 }
