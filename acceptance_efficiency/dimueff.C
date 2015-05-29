@@ -55,18 +55,20 @@ const double rapbins_1S[NRAP1S+1] = {0,0.4,0.8,1.2,1.6,2,2.4};
 const int centbins_1S[NCENT1S+1] = {0,5./2.5,10./2.5,20./2.5,30./2.5,40./2.5,50./2.5,70./2.5,100./2.5};
 const float fcentbins_1S[NCENT1S+1] = {0,5./2.5,10./2.5,20./2.5,30./2.5,40./2.5,50./2.5,70./2.5,100./2.5};
 
-const double ptbins_2S[NPT2S+1] = {0,7,14,40};
+const double ptbins_2S[NPT2S+1] = {0,5,12,40};
 const double rapbins_2S[NRAP2S+1] = {0,1.2,2.4};
 const int centbins_2S[NCENT2S+1] = {0,10./2.5,30./2.5,50./2.5,100./2.5};
 const float fcentbins_2S[NCENT2S+1] = {0,10./2.5,30./2.5,50./2.5,100./2.5};
 
-void dimueff::Loop(int YS, bool ispbpb, int strategy, int var_tp)
+void dimueff::Loop(int YS, bool ispbpb, int strategy, int binningYS, int var_tp)
    // YS = N for NS
    // ispbpb = true for PbPb, false for pp
    // strategy = 0 for fit + reco quantities
    //            1 for fit + truth quantities
    //            2 for count + reco quantities
    //            3 for count + reco quantities
+   // binningYS = 1 for fine binning (1S in PbPb style), 2 for coarse binning (2S in PbPb style)
+   // var_tp = 0 for nominal tag and probe corrections, 1..100 for the variations
 {
 //   In a ROOT session, you can do:
 //      Root > .L dimueff.C
@@ -218,14 +220,14 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int var_tp)
       hnum_tp_cent_5[ibin] = new TH1F(Form("hnum_tp_cent_5_%i",ibin),Form("hnum_tp_cent_5_%i",ibin),250,7,12);
    }
 
-   const unsigned int NPTNS = !ispbpb || YS==1 ? NPT1S : NPT2S;
-   const unsigned int NRAPNS = !ispbpb || YS==1 ? NRAP1S : NRAP2S;
-   const unsigned int NCENTNS = YS==1 ? NCENT1S : NCENT2S;
+   const unsigned int NPTNS = binningYS==1 ? NPT1S : NPT2S;
+   const unsigned int NRAPNS = binningYS==1 ? NRAP1S : NRAP2S;
+   const unsigned int NCENTNS = binningYS==1 ? NCENT1S : NCENT2S;
 
-   const double *ptbins_NS = !ispbpb || YS==1 ? ptbins_1S : ptbins_2S;
-   const double *rapbins_NS = !ispbpb || YS==1 ? rapbins_1S : rapbins_2S;
-   const int *centbins_NS = YS==1 ? centbins_1S : centbins_2S;
-   const float *fcentbins_NS = YS==1 ? fcentbins_1S : fcentbins_2S;
+   const double *ptbins_NS = binningYS==1 ? ptbins_1S : ptbins_2S;
+   const double *rapbins_NS = binningYS==1 ? rapbins_1S : rapbins_2S;
+   const int *centbins_NS = binningYS==1 ? centbins_1S : centbins_2S;
+   const float *fcentbins_NS = binningYS==1 ? fcentbins_1S : fcentbins_2S;
 
    const double massmin = YS==1 ? 8.0 : (YS==2 ? 8.5 : 8.8);
    const double massmax = YS==1 ? 10.5 : (YS==2 ? 11 : 11.3);

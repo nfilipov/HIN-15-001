@@ -280,7 +280,7 @@ public :
    virtual Int_t    GetEntry(Long64_t entry);
    virtual Long64_t LoadTree(Long64_t entry);
    virtual void     Init(TTree *tree);
-   virtual void     Loop(int YS=1, bool ispbpb=true, int strategy=0, int var_tp=0);
+   virtual void     Loop(int YS=1, bool ispbpb=true, int strategy=0, int binningYS=1, int var_tp=0);
    virtual Bool_t   Notify();
    virtual void     Show(Long64_t entry = -1);
 
