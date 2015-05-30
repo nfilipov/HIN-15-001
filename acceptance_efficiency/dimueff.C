@@ -739,7 +739,6 @@ bool dimueff::smuacc_loose(TLorentzVector *tlv1, TLorentzVector *tlv2)
    if (tlv2->Pt()>3.5 && tlv1->Pt()>4) return true;
    return false;
 }
-
 bool dimueff::smuacc_tight(TLorentzVector *tlv1, TLorentzVector *tlv2)
 {
    if (fabs(tlv1->Eta())>2.4 || fabs(tlv2->Eta())>2.4) return false;

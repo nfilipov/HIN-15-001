@@ -50,11 +50,11 @@ void read_tpvar(const char* file, int YS,
    double binmin, binmax, eff0, efferr, effmean;
 
    TString var("pt_SF");
-   // tr->Draw("eff:1>>htemp(1,0,2)",Form("name==\"%s\"&&abs(binlow-%f)<.1&&abs(binhigh-%f)<.1",var.Data(),ptbins_NS[0],ptbins_NS[NPTNS]),"PROFs");
-   tr->Draw("eff:1>>htemp(1,0,2)",Form("name==\"%s\"&&abs(binlow-%f)<.1&&abs(binhigh-%f)<.1",var.Data(),ptbins_NS[0],40.),"PROFs"); // ugly fix
+   tr->Draw("eff:1>>htemp(1,0,2)",Form("name==\"%s\"&&abs(binlow-%f)<.1&&abs(binhigh-%f)<.1",var.Data(),ptbins_NS[0],ptbins_NS[NPTNS]),"PROFs");
+   // tr->Draw("eff:1>>htemp(1,0,2)",Form("name==\"%s\"&&abs(binlow-%f)<.1&&abs(binhigh-%f)<.1",var.Data(),ptbins_NS[0],40.),"PROFs"); // ugly fix
    TProfile *htemp = (TProfile*) gDirectory->Get("htemp");
    binmin=ptbins_NS[0];
-   binmax=40.;//ptbins_NS[NPTNS]; //(ugly fix)
+   binmax=ptbins_NS[NPTNS]; //(ugly fix)
    eff0=firsteff(tr,var.Data(),binmin,binmax);
    efferr=htemp->GetBinError(1);
    effmean=htemp->GetBinContent(1);
@@ -199,7 +199,7 @@ void read_tpvar(const char* file, int YS,
       for (unsigned int i=0; i<NCENTNS; i++)
       {
          // cout << setprecision(3)<<fixed << Form("name==\"%s\"&&binlow==%f&&binhigh==%f",var.Data(),centbins_NS[i],centbins_NS[i+1]) << endl;
-         tr->Draw("eff:1>>htemp(1,0,2)",Form("name==\"%s\"&&abs(binlow-%f)<.1&&abs(binhigh-%f)<.1",var.Data(),centbins_NS[i],centbins_NS[i+1]),"PROFs");
+         tr->Draw("eff:1>>htemp(1,0,2)",Form("name==\"%s\"&&abs(binlow-%f)<.1&&abs(binhigh-%f)<.1",var.Data(),centbins_NS[i]*2.5,centbins_NS[i+1]*2.5),"PROFs");
          htemp = (TProfile*) gDirectory->Get("htemp");
          binmin=centbins_NS[i]*2.5;
          binmax=centbins_NS[i+1]*2.5;
