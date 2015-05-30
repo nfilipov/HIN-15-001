@@ -37,7 +37,8 @@
 
 #include "tnp_weight.h"
 
-#define NPT1S 6
+// #define NPT1S 6
+#define NPT1S 5
 #define NRAP1S 6
 #define NCENT1S 8
 
@@ -50,12 +51,14 @@
 using namespace std;
 using namespace RooFit;
 
-const double ptbins_1S[NPT1S+1] = {0,2.5,5,8,12,20,40};
+// const double ptbins_1S[NPT1S+1] = {0,2.5,5,8,12,20,40};
+const double ptbins_1S[NPT1S+1] = {0,2.5,5,8,12,20};
 const double rapbins_1S[NRAP1S+1] = {0,0.4,0.8,1.2,1.6,2,2.4};
 const int centbins_1S[NCENT1S+1] = {0,5./2.5,10./2.5,20./2.5,30./2.5,40./2.5,50./2.5,70./2.5,100./2.5};
 const float fcentbins_1S[NCENT1S+1] = {0,5./2.5,10./2.5,20./2.5,30./2.5,40./2.5,50./2.5,70./2.5,100./2.5};
 
-const double ptbins_2S[NPT2S+1] = {0,5,12,40};
+// const double ptbins_2S[NPT2S+1] = {0,5,12,40};
+const double ptbins_2S[NPT2S+1] = {0,5,12,20};
 const double rapbins_2S[NRAP2S+1] = {0,1.2,2.4};
 const int centbins_2S[NCENT2S+1] = {0,10./2.5,30./2.5,50./2.5,100./2.5};
 const float fcentbins_2S[NCENT2S+1] = {0,10./2.5,30./2.5,50./2.5,100./2.5};
