@@ -56,59 +56,59 @@ public :
    Float_t         NfRpSin[1];   //[nNfEP]
    Float_t         NfRpCos[1];   //[nNfEP]
    Int_t           Reco_QQ_size;
-   Int_t           Reco_QQ_type[28];   //[Reco_QQ_size]
-   Int_t           Reco_QQ_sign[28];   //[Reco_QQ_size]
+   Int_t           Reco_QQ_type[78];   //[Reco_QQ_size]
+   Int_t           Reco_QQ_sign[78];   //[Reco_QQ_size]
    TClonesArray    *Reco_QQ_4mom;
    TClonesArray    *Reco_QQ_mupl_4mom;
    TClonesArray    *Reco_QQ_mumi_4mom;
-   Int_t           Reco_QQ_trig[28];   //[Reco_QQ_size]
-   Float_t         Reco_QQ_ctau[28];   //[Reco_QQ_size]
-   Float_t         Reco_QQ_ctauErr[28];   //[Reco_QQ_size]
-   Float_t         Reco_QQ_ctauTrue[28];   //[Reco_QQ_size]
-   Float_t         Reco_QQ_VtxProb[28];   //[Reco_QQ_size]
-   Float_t         Reco_QQ_dca[28];   //[Reco_QQ_size]
-   Float_t         Reco_QQ_MassErr[28];   //[Reco_QQ_size]
+   Int_t           Reco_QQ_trig[78];   //[Reco_QQ_size]
+   Float_t         Reco_QQ_ctau[78];   //[Reco_QQ_size]
+   Float_t         Reco_QQ_ctauErr[78];   //[Reco_QQ_size]
+   Float_t         Reco_QQ_ctauTrue[78];   //[Reco_QQ_size]
+   Float_t         Reco_QQ_VtxProb[78];   //[Reco_QQ_size]
+   Float_t         Reco_QQ_dca[78];   //[Reco_QQ_size]
+   Float_t         Reco_QQ_MassErr[78];   //[Reco_QQ_size]
    TClonesArray    *Reco_QQ_vtx;
-   Int_t           Reco_QQ_NtrkPt02[28];   //[Reco_QQ_size]
-   Int_t           Reco_QQ_NtrkPt03[28];   //[Reco_QQ_size]
-   Int_t           Reco_QQ_NtrkPt04[28];   //[Reco_QQ_size]
-   Int_t           Reco_QQ_NtrkDeltaR03[28];   //[Reco_QQ_size]
-   Int_t           Reco_QQ_NtrkDeltaR04[28];   //[Reco_QQ_size]
-   Int_t           Reco_QQ_NtrkDeltaR05[28];   //[Reco_QQ_size]
-   Bool_t          Reco_QQ_mupl_TrkMuArb[28];   //[Reco_QQ_size]
-   Bool_t          Reco_QQ_mumi_TrkMuArb[28];   //[Reco_QQ_size]
-   Bool_t          Reco_QQ_mupl_TMOneStaTight[28];   //[Reco_QQ_size]
-   Bool_t          Reco_QQ_mumi_TMOneStaTight[28];   //[Reco_QQ_size]
-   Int_t           Reco_QQ_mupl_nMuValHits[28];   //[Reco_QQ_size]
-   Int_t           Reco_QQ_mumi_nMuValHits[28];   //[Reco_QQ_size]
-   Int_t           Reco_QQ_mupl_nTrkHits[28];   //[Reco_QQ_size]
-   Int_t           Reco_QQ_mumi_nTrkHits[28];   //[Reco_QQ_size]
-   Float_t         Reco_QQ_mupl_normChi2_inner[28];   //[Reco_QQ_size]
-   Float_t         Reco_QQ_mumi_normChi2_inner[28];   //[Reco_QQ_size]
-   Float_t         Reco_QQ_mupl_normChi2_global[28];   //[Reco_QQ_size]
-   Float_t         Reco_QQ_mumi_normChi2_global[28];   //[Reco_QQ_size]
-   Int_t           Reco_QQ_mupl_nPixWMea[28];   //[Reco_QQ_size]
-   Int_t           Reco_QQ_mumi_nPixWMea[28];   //[Reco_QQ_size]
-   Int_t           Reco_QQ_mupl_nTrkWMea[28];   //[Reco_QQ_size]
-   Int_t           Reco_QQ_mumi_nTrkWMea[28];   //[Reco_QQ_size]
-   Int_t           Reco_QQ_mupl_StationsMatched[28];   //[Reco_QQ_size]
-   Int_t           Reco_QQ_mumi_StationsMatched[28];   //[Reco_QQ_size]
-   Float_t         Reco_QQ_mupl_dxy[28];   //[Reco_QQ_size]
-   Float_t         Reco_QQ_mumi_dxy[28];   //[Reco_QQ_size]
-   Float_t         Reco_QQ_mupl_dxyErr[28];   //[Reco_QQ_size]
-   Float_t         Reco_QQ_mumi_dxyErr[28];   //[Reco_QQ_size]
-   Float_t         Reco_QQ_mupl_dz[28];   //[Reco_QQ_size]
-   Float_t         Reco_QQ_mumi_dz[28];   //[Reco_QQ_size]
-   Float_t         Reco_QQ_mupl_dzErr[28];   //[Reco_QQ_size]
-   Float_t         Reco_QQ_mumi_dzErr[28];   //[Reco_QQ_size]
-   Float_t         Reco_QQ_mupl_pt_inner[28];   //[Reco_QQ_size]
-   Float_t         Reco_QQ_mumi_pt_inner[28];   //[Reco_QQ_size]
-   Float_t         Reco_QQ_mupl_pt_global[28];   //[Reco_QQ_size]
-   Float_t         Reco_QQ_mumi_pt_global[28];   //[Reco_QQ_size]
-   Float_t         Reco_QQ_mupl_ptErr_inner[28];   //[Reco_QQ_size]
-   Float_t         Reco_QQ_mumi_ptErr_inner[28];   //[Reco_QQ_size]
-   Float_t         Reco_QQ_mupl_ptErr_global[28];   //[Reco_QQ_size]
-   Float_t         Reco_QQ_mumi_ptErr_global[28];   //[Reco_QQ_size]
+   Int_t           Reco_QQ_NtrkPt02[78];   //[Reco_QQ_size]
+   Int_t           Reco_QQ_NtrkPt03[78];   //[Reco_QQ_size]
+   Int_t           Reco_QQ_NtrkPt04[78];   //[Reco_QQ_size]
+   Int_t           Reco_QQ_NtrkDeltaR03[78];   //[Reco_QQ_size]
+   Int_t           Reco_QQ_NtrkDeltaR04[78];   //[Reco_QQ_size]
+   Int_t           Reco_QQ_NtrkDeltaR05[78];   //[Reco_QQ_size]
+   Bool_t          Reco_QQ_mupl_TrkMuArb[78];   //[Reco_QQ_size]
+   Bool_t          Reco_QQ_mumi_TrkMuArb[78];   //[Reco_QQ_size]
+   Bool_t          Reco_QQ_mupl_TMOneStaTight[78];   //[Reco_QQ_size]
+   Bool_t          Reco_QQ_mumi_TMOneStaTight[78];   //[Reco_QQ_size]
+   Int_t           Reco_QQ_mupl_nMuValHits[78];   //[Reco_QQ_size]
+   Int_t           Reco_QQ_mumi_nMuValHits[78];   //[Reco_QQ_size]
+   Int_t           Reco_QQ_mupl_nTrkHits[78];   //[Reco_QQ_size]
+   Int_t           Reco_QQ_mumi_nTrkHits[78];   //[Reco_QQ_size]
+   Float_t         Reco_QQ_mupl_normChi2_inner[78];   //[Reco_QQ_size]
+   Float_t         Reco_QQ_mumi_normChi2_inner[78];   //[Reco_QQ_size]
+   Float_t         Reco_QQ_mupl_normChi2_global[78];   //[Reco_QQ_size]
+   Float_t         Reco_QQ_mumi_normChi2_global[78];   //[Reco_QQ_size]
+   Int_t           Reco_QQ_mupl_nPixWMea[78];   //[Reco_QQ_size]
+   Int_t           Reco_QQ_mumi_nPixWMea[78];   //[Reco_QQ_size]
+   Int_t           Reco_QQ_mupl_nTrkWMea[78];   //[Reco_QQ_size]
+   Int_t           Reco_QQ_mumi_nTrkWMea[78];   //[Reco_QQ_size]
+   Int_t           Reco_QQ_mupl_StationsMatched[78];   //[Reco_QQ_size]
+   Int_t           Reco_QQ_mumi_StationsMatched[78];   //[Reco_QQ_size]
+   Float_t         Reco_QQ_mupl_dxy[78];   //[Reco_QQ_size]
+   Float_t         Reco_QQ_mumi_dxy[78];   //[Reco_QQ_size]
+   Float_t         Reco_QQ_mupl_dxyErr[78];   //[Reco_QQ_size]
+   Float_t         Reco_QQ_mumi_dxyErr[78];   //[Reco_QQ_size]
+   Float_t         Reco_QQ_mupl_dz[78];   //[Reco_QQ_size]
+   Float_t         Reco_QQ_mumi_dz[78];   //[Reco_QQ_size]
+   Float_t         Reco_QQ_mupl_dzErr[78];   //[Reco_QQ_size]
+   Float_t         Reco_QQ_mumi_dzErr[78];   //[Reco_QQ_size]
+   Float_t         Reco_QQ_mupl_pt_inner[78];   //[Reco_QQ_size]
+   Float_t         Reco_QQ_mumi_pt_inner[78];   //[Reco_QQ_size]
+   Float_t         Reco_QQ_mupl_pt_global[78];   //[Reco_QQ_size]
+   Float_t         Reco_QQ_mumi_pt_global[78];   //[Reco_QQ_size]
+   Float_t         Reco_QQ_mupl_ptErr_inner[78];   //[Reco_QQ_size]
+   Float_t         Reco_QQ_mumi_ptErr_inner[78];   //[Reco_QQ_size]
+   Float_t         Reco_QQ_mupl_ptErr_global[78];   //[Reco_QQ_size]
+   Float_t         Reco_QQ_mumi_ptErr_global[78];   //[Reco_QQ_size]
    Int_t           Reco_mu_size;
    Int_t           Reco_mu_type[322];   //[Reco_mu_size]
    Int_t           Reco_mu_charge[322];   //[Reco_mu_size]
@@ -280,7 +280,7 @@ public :
    virtual Int_t    GetEntry(Long64_t entry);
    virtual Long64_t LoadTree(Long64_t entry);
    virtual void     Init(TTree *tree);
-   virtual void     Loop(int YS=1, bool ispbpb=true, int strategy=0, int var_tp=0);
+   virtual void     Loop(int YS=1, bool ispbpb=true, int strategy=0, int binningYS=1, int var_tp=0);
    virtual Bool_t   Notify();
    virtual void     Show(Long64_t entry = -1);
 
@@ -288,13 +288,16 @@ public :
    bool smuacc_tight(TLorentzVector* tlv1, TLorentzVector *tlv2);
    bool idcuts(int irec);
    static double weightpt(double pt, int YS);
+   static double weightpt_syst(double pt, int dosyst=0);
+   static double weightrap(double rap, int dosyst=0);
    static double weight_tp(double pt, double eta, bool ispbpb, int idx_variation=0);
    static double weight_shape(double pt, int YS);
-   static double FindCenWeight(int Bin, int YS);
+   static double FindCenWeight(int Bin, int YS, bool dosyst=false);
    static double fitNS(TH1F *hist, double &err, int YS);
    static double countNS(TH1F *hist, double xmin, double xmax, double &err);
    static double RError(double A, double eA, double B, double eB);
    static double PError(double A, double eA, double B, double eB);
+   static double systerr(double e0, double e1, double e2, double e3, double e4, double e5);
 };
 
 #endif
