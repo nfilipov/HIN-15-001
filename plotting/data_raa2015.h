@@ -100,7 +100,7 @@ float mb_percentage2S[nCentBins2S] = {0.5,0.2,0.2,0.1};
 /*          1S,2S,3S loose TOTAL YIELDS        */
 /* ------------------------------------------- */
 float N1S_pp_tot3p5 = 5014;
-float N1S_pp_tot3p5e = 87;
+float N1S_pp_tot3p5e = 86;
 // from fitting.
 float N1S_pp_tot3p5s=0.0135;
 float N2S_pp_tot3p5 = 1580;
@@ -384,23 +384,48 @@ float N3B_pp_rap4Larges_2p4[nbkgdvars] = {209.785,227.897};
 /* ------------------------------------------- */
 /* 1S,2S,3S loose TOTAL YIELDS*/
 /* ------------------------------------------- */
-float N1S_aa_tot3p5 = 2534;
-float N1S_aa_tot3p5e = 80;
-float N2S_aa_tot3p5 = 155;
-float N2S_aa_tot3p5e = 55;
-float N3S_aa_tot3p5 = -35;
-float N3S_aa_tot3p5e = 51;
+float N1S_aa_tot3p5 = 2540;
+float N1S_aa_tot3p5e = 79;
+float N2S_aa_tot3p5 = 158;
+float N2S_aa_tot3p5e = 54;
+float N3S_aa_tot3p5 = 0;
+float N3S_aa_tot3p5e = 35;
 /* 1s2s3s tight TOTAL YIELDS */
 float N1S_aa_tot4 = 1793;
 float N1S_aa_tot4e = 61;
 float N2S_aa_tot4 = 173;
 float N2S_aa_tot4e = 41;
 float N3S_aa_tot4 = 7;
-float N3S_aa_tot4e =38;
+float N3S_aa_tot4e =9;
 ///more
 float N2S_aa_tot4s=0.0712;
 float N1S_aa_tot3p5s=0.0291;
 float N1S_aa_tot4s=0.0281;
+
+/* float N1S_pp_tot3p5s[nfitvars] = {5013.93,5132.63,5069.73,5185.89,5187.98,5158.67}; */
+/* float N1S_pp_tot4s[nfitvars] = {3511.4,3683.83,3621.77,3694.21,3722.78,3659.11}; */
+/* float N1S_aa_tot3p5s[nfitvars] = {2533.78,2858.08,3020.9,2626.89,2656.25,2627.41}; */
+/* float N1S_aa_tot4s[nfitvars] = {1792.67,2141.8,2133.84,1963.26,1984.24,1921.01}; */
+/* float N2S_pp_tot3p5s[nfitvars] = {1580.16,1630.17,1603.36,1657.93,1645.53,1645.52}; */
+/* float N2S_pp_tot4s[nfitvars] = {1208.15,1297.9,1263.07,1292.82,1287.31,1278.4}; */
+/* float N2S_aa_tot3p5s[nfitvars] = {155.425,215.334,231.992,170.413,171.442,174.193}; */
+/* float N2S_aa_tot4s[nfitvars] = {172.85,267.091,244.92,211.387,207.03,201.746}; */
+/* float N3S_pp_tot3p5s[nfitvars] = {769.791,806.327,784.602,816.081,802.08,807.586}; */
+/* float N3S_pp_tot4s[nfitvars] = {618.65,688.795,656.044,669.956,657.858,660.307}; */
+/* float N3S_aa_tot3p5s[nfitvars] = {-34.5042,-5.64183,-3.96734,-28.359,-26.7918,-24.7919}; */
+/* float N3S_aa_tot4s[nfitvars] = {6.5409,50.1639,37.9764,12.7675,15.0923,8.01297}; */
+/* float N1B_pp_tot3p5s[nbkgdvars] = {5013.89,4927.13}; */
+/* float N1B_pp_tot4s[nbkgdvars] = {3380.34,3362.59}; */
+/* float N1B_aa_tot3p5s[nbkgdvars] = {2527.41,2819.72}; */
+/* float N1B_aa_tot4s[nbkgdvars] = {1822.57,1694.81}; */
+/* float N2B_pp_tot3p5s[nbkgdvars] = {1580.29,1519.38}; */
+/* float N2B_pp_tot4s[nbkgdvars] = {1098.98,1094.82}; */
+/* float N2B_aa_tot3p5s[nbkgdvars] = {135.759,241.787}; */
+/* float N2B_aa_tot4s[nbkgdvars] = {174.694,129.872}; */
+/* float N3B_pp_tot3p5s[nbkgdvars] = {769.787,735.609}; */
+/* float N3B_pp_tot4s[nbkgdvars] = {548.971,555.266}; */
+/* float N3B_aa_tot3p5s[nbkgdvars] = {-3.30886,0.822784}; */
+/* float N3B_aa_tot4s[nbkgdvars] = {-5.73496,-7.69648}; */
 /* ------------------------------------------- */
 /*                      pT                     */
 /* ------------------------------------------- */
@@ -521,12 +546,12 @@ float N1S_aa_rap3p5s_1p2[nfitvars] = {559.22,654.359,584.116,567.594,606.676,563
 float N1S_aa_rap3p5s_1p6[nfitvars] = {533.105,506.185,509.8,565.431,528.332,579.452};
 float N1S_aa_rap3p5s_2p0[nfitvars] = {372.687,452.721,411.854,378.649,375.727,392.568};
 float N1S_aa_rap3p5s_2p4[nfitvars] = {113.75,163.273,128.931,130.198,126.061,128.281};
-float N1B_aa_rap3p5s_0p4[nfitvars] = {501.877,497.065};
-float N1B_aa_rap3p5s_0p8[nfitvars] = {496.354,514.912};
-float N1B_aa_rap3p5s_1p2[nfitvars] = {590.888,643.96};
-float N1B_aa_rap3p5s_1p6[nfitvars] = {557.894,493.28};
-float N1B_aa_rap3p5s_2p0[nfitvars] = {372.641,441.865};
-float N1B_aa_rap3p5s_2p4[nfitvars] = {132.615,131.687};
+float N1B_aa_rap3p5s_0p4[nbkgdvars] = {501.877,497.065};
+float N1B_aa_rap3p5s_0p8[nbkgdvars] = {496.354,514.912};
+float N1B_aa_rap3p5s_1p2[nbkgdvars] = {590.888,643.96};
+float N1B_aa_rap3p5s_1p6[nbkgdvars] = {557.894,493.28};
+float N1B_aa_rap3p5s_2p0[nbkgdvars] = {372.641,441.865};
+float N1B_aa_rap3p5s_2p4[nbkgdvars] = {132.615,131.687};
 /* ------------------------------------------- */
 /*                     rap4                    */
 /* ------------------------------------------- */
@@ -831,7 +856,7 @@ float Aet_2S_pythia_pt2013Larges[nPtBins2S]={0.005,0.006,0.010};
 //eff., Acc., Acc*eff, 
 float e_2S_pythia_rap2014[nRapBins_2014]= {0.791,0.795,0.781,0.726,0.643,0.519};
 float e_2S_pythia_rap2014e[nRapBins_2014]={0.004,0.004,0.004,0.004,0.004,0.005};
-float A_2S_pythia_rap2014[nRapBins_2014]= {0.310,0.310,0.037,0.308,0.271,0.117};
+float A_2S_pythia_rap2014[nRapBins_2014]= {0.310,0.310,0.307,0.308,0.271,0.117};
 float A_2S_pythia_rap2014e[nRapBins_2014]={0.002,0.002,0.002,0.002,0.002,0.001};
 float Ae_2S_pythia_rap2014[nRapBins_2014]={0.245,0.247,0.240,0.223,0.174,0.060};//bug was here.
 float Ae_2S_pythia_rap2014e[nRapBins_2014]={0.002,0.002,0.002,0.002,0.002,0.001};
