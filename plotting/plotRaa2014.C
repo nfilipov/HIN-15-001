@@ -14,6 +14,8 @@
 
 #include "data_raa2015.h"
 #include "systematics.C"
+#include "CMS_lumi.C"
+#include "tdrstyle.C"
 // miscellaneous  
 #include <fstream>
 #include <iostream>
@@ -36,6 +38,8 @@ const string outSyst = "syst_outputfile.txt";
  
 const  ofstream ofSyst;
 
+const float gTextSize = 0.04;
+
 float computeRatio(float x, float y) ;
 float computeRatioError(float x, float y, float xerr, float yerr);
 void plot2010();
@@ -44,8 +48,11 @@ void plotRAA_uncorr();
 void plotDoubleRatios();
 void plotRaa2014()
 {
-  gROOT->Macro("../code/cm/logon.C+");//it all looks much nicer with this.
+  // gROOT->Macro("../code/cm/logon.C+");//it all looks much nicer with this.
   //  gROOT->Macro("data_raa.h");
+
+  // set the style
+  setTDRStyle();
 
   double RapBinWidth = 4.8;
   double PtBinWidth = 20;
@@ -1904,20 +1911,23 @@ lyL->DrawLatex(2,0.000000002,"Fiducial");
  if(plotRAA){
  TCanvas *cRaapt = new TCanvas("cRaapt","cRaapt"); 
  cRaapt->cd();
- TPad *ppt2 = new TPad("ppt2","ppt2",0.0,0.0,0.98,0.92);
- ppt2->SetBottomMargin(0.12);
- ppt2->SetTopMargin(0.03);
- ppt2->SetRightMargin(0.03);
- ppt2->SetLeftMargin(0.12);
- ppt2->Draw();
- ppt2->cd();
+ // TPad *ppt2 = new TPad("ppt2","ppt2",0.0,0.0,0.98,0.92);
+ // ppt2->SetBottomMargin(0.12);
+ // ppt2->SetTopMargin(0.03);
+ // ppt2->SetRightMargin(0.03);
+ // ppt2->SetLeftMargin(0.12);
+ // ppt2->Draw();
+ // ppt2->cd();
  //one pad to draw RaaPt!
  TF1 *f4RaaPt = new TF1("f4RaaPt","1",0,20);
  f4RaaPt->SetLineWidth(0);
+ f4RaaPt->SetLineColor(kBlack);
  f4RaaPt->GetXaxis()->SetTitle("p_{T}^{#varUpsilon} (GeV/c)");
  f4RaaPt->GetYaxis()->SetTitle("R_{AA}");
- f4RaaPt->GetYaxis()->SetTitleOffset(1.05);
- f4RaaPt->GetYaxis()->SetTitleSize(0.05);
+ // f4RaaPt->GetYaxis()->SetTitleOffset(1.05);
+ // f4RaaPt->GetYaxis()->SetTitleSize(0.05);
+ f4RaaPt->GetXaxis()->SetTitleOffset(f4RaaPt->GetXaxis()->GetTitleOffset()*1.3);
+ f4RaaPt->GetXaxis()->SetTitleSize(0.045);
  f4RaaPt->GetYaxis()->SetRangeUser(0.,1.4);
  f4RaaPt->GetXaxis()->CenterTitle(kTRUE);
  f4RaaPt->Draw();
@@ -1997,32 +2007,33 @@ lyL->DrawLatex(2,0.000000002,"Fiducial");
  }
  TBox *box = new TBox(19,1-syst1S_raa_global,20,1+syst1S_raa_global);
  
- box->SetFillColor(kOrange+1);
+ box->SetFillColor(kGray);//kOrange+1);
  box->Draw();
  if(!plotTight){
- TBox *box2S = new TBox(18,1-syst2S_raa_global,19,1+syst2S_raa_global);
- 
- box2S->SetFillColor(kOrange+4);
- box2S->Draw();
+ // TBox *box2S = new TBox(18,1-syst2S_raa_global,19,1+syst2S_raa_global);
+ // 
+ // box2S->SetFillColor(kOrange+4);
+ // box2S->Draw();
  }
  if(plotTight){
    TBox *box1S4 = new TBox(18,1-syst1S_pp_glob,19,1+syst1S_pp_glob);
    box1S4->SetFillColor(kGreen+1);
    box1S4->Draw();
  }
- TLatex *l1CMSpt = new TLatex(16,1.27, "CMS");
- l1CMSpt->SetTextFont(62);
- l1CMSpt->SetTextSize(0.06);
- l1CMSpt->Draw();
+ // TLatex *l1CMSpt = new TLatex(16,1.27, "CMS");
+ // l1CMSpt->SetTextFont(62);
+ // l1CMSpt->SetTextSize(gTextSize);
+ // l1CMSpt->Draw();
  // TLatex *lyLPT= new TLatex(2,1.3,"2011 L_{int}^{PbPb} = 166 #mub^{-1}; 2013 L_{int}^{pp} = 5.4 pb^{-1};");
  // lyLPT->SetTextFont(42);
  // lyLPT->SetTextSize(0.027);
  // lyLPT->Draw();
- if(plot2010){ lyLPT->DrawLatex(2,1.2,"2010 L_{int}^{PbPb} = 7.28 #mub^{-1}; L_{int}^{pp} = 225 nb^{-1};");}
- ppt2->Update();
+ // if(plot2010){ lyLPT->DrawLatex(2,1.2,"2010 L_{int}^{PbPb} = 7.28 #mub^{-1}; L_{int}^{pp} = 225 nb^{-1};");}
+ // ppt2->Update();
  //2010stuff
- TLegend *legend = new TLegend(0.24,0.75,0.4,0.88);
- legend->SetTextSize(0.035);
+ // TLegend *legend = new TLegend(0.24,0.75,0.4,0.88);
+ TLegend *legend = new TLegend(0.23,0.50,0.39,0.65);
+ legend->SetTextSize(gTextSize);
  legend->SetFillStyle(0);
  legend->SetFillColor(0);
  legend->SetBorderSize(0);
@@ -2046,19 +2057,20 @@ lyL->DrawLatex(2,0.000000002,"Fiducial");
    f4RaaPt->Draw("same");
    gPad->RedrawAxis();
 
-   legend->AddEntry(gpt2010,"#varUpsilon(1S) JHEP 05 (2012) 063","lp");
+   legend->AddEntry(gpt2010,"#varUpsilon(1S) JHEP 05 (2012) 063","pe");
  }
- if(!plotTNP){ legend->AddEntry(gRaaPt1,"#varUpsilon(1S)","lp");}
+ if(!plotTNP){ legend->AddEntry(gRaaPt1,"#varUpsilon(1S)","pe");}
   if(plotTNP)
     {
-      legend->AddEntry(gRaaPt1TNP,"#varUpsilon(1S)","lp");
+      legend->AddEntry(gRaaPt1TNP,"#varUpsilon(1S)","pe");
       if(plotTight){
-	legend->AddEntry(gRaaPt1TNP4,"#varUpsilon(1S) ","lp");
+	legend->AddEntry(gRaaPt1TNP4,"#varUpsilon(1S) ","pe");
       }else{
-	legend->AddEntry(gRaaPt2TNP,"#varUpsilon(2S)","lp");}
+	legend->AddEntry(gRaaPt2TNP,"#varUpsilon(2S)","pe");}
      }
   legend->Draw();
-  TLegend *leg2= new TLegend(0.44,0.75,0.6,0.88);
+  // TLegend *leg2= new TLegend(0.44,0.75,0.6,0.88);
+  TLegend *leg2= new TLegend(0.57,0.54,0.73,0.62);
   leg2->SetBorderSize(0);
   leg2->SetTextSize(0.036);
   leg2->SetTextFont(42);
@@ -2072,29 +2084,23 @@ lyL->DrawLatex(2,0.000000002,"Fiducial");
     leg2->AddEntry(box,"#varUpsilon(1S) syst. unc. ,p_{T} > 3.5, 4","f");
     leg2->AddEntry(box1S4,"#varUpsilon(1S) syst. unc. , p_{T} > 4","f"); }
   else if(!plotTight){
-    leg2->AddEntry(box,"#varUpsilon(1S) syst. unc.","f");
-    leg2->AddEntry(box2S,"#varUpsilon(2S) syst. unc.","f");}
+    leg2->AddEntry(box,"global syst.","f");
+    // leg2->AddEntry(box2S,"#varUpsilon(2S) syst. unc.","f");
+    }
   leg2->Draw();
   gPad->RedrawAxis();
   cRaapt->cd();
-  TPad *p2 = new TPad("p2","p2",0.12,0.90,1.0,1.0);
-  p2->SetBottomMargin(0.12);
-  p2->SetTopMargin(0.03);
-  p2->SetRightMargin(0.0);
-  p2->SetLeftMargin(0.01);
-  p2->SetTickx(0);
-  // p2->SetTicky(0);
-  p2->Draw();
-  p2->cd();
-  TLatex *prelim =new TLatex(0.0,0.1,"Preliminary");
-  prelim->SetTextFont(52);
-  prelim->SetTextSize(0.5);
-  prelim->Draw();
-  TLatex *pbpb_pp = new TLatex (0.47,0.05,"PbPb 166 #mub^{-1}, pp 5.4 pb^{-1} (2.76 TeV)"); 
-  pbpb_pp->SetTextFont(42); //#sqrt{s} = 2.76 TeV
-  pbpb_pp->SetTextSize(0.3);
-  pbpb_pp->SetTextColor(kBlack);
-  pbpb_pp->Draw(); 
+
+    // Cent. 0-100 %
+    TLatex latexrap;
+    latexrap.SetTextSize(gTextSize);
+    latexrap.SetTextFont(42);
+    latexrap.DrawLatex(1.5,1.2,"Cent. 0-100%, |y|<2.4");
+
+    CMS_lumi(cRaapt,103,33);
+    cRaapt->Update();
+    cRaapt->RedrawAxis();
+    cRaapt->GetFrame()->Draw();
  
   if(plotTight){
     cRaapt->SaveAs("~/Documents/PR/forTWiki/CSandRAA/RAA_Pt4.pdf");
@@ -2105,77 +2111,6 @@ lyL->DrawLatex(2,0.000000002,"Fiducial");
   }
  }
 
- // if(plot2010){
- //   TCanvas *cRaapt = new TCanvas("cRaapt","cRaapt"); 
- //   cRaapt->cd();
- //   TPad *ppt2 = new TPad("ppt2","ppt2",0.0,0.0,1.0,1.0);
- //   ppt2->SetBottomMargin(0.12);
- //   ppt2->SetTopMargin(0.03);
- //   ppt2->SetRightMargin(0.03);
- //   ppt2->SetLeftMargin(0.16);
- //   ppt2->Draw();
- //   ppt2->cd();
- //   //one pad to draw RaaPt!
- //   TF1 *f4RaaPt = new TF1("f4RaaPt","1",0,20.5);
- //   f4RaaPt->SetLineWidth(0);
- //   f4RaaPt->GetXaxis()->SetTitle("p_{T}^{#varUpsilon} (GeV/c)");
- //   f4RaaPt->GetYaxis()->SetTitle("R_{AA}");
- //   f4RaaPt->GetYaxis()->SetTitleOffset(1.8);
- //   f4RaaPt->GetYaxis()->SetTitleSize(0.028);
- //   f4RaaPt->GetYaxis()->SetRangeUser(0.,2);
- //   f4RaaPt->GetXaxis()->CenterTitle(kTRUE);
- //   f4RaaPt->Draw();
- //   TLatex *l1CMSpt = new TLatex(12,0.2, "");
- //   l1CMSpt->SetTextFont(42);
- //   l1CMSpt->SetTextSize(0.04);
- //   l1CMSpt->Draw();
- //   TLatex *lyLPT= new TLatex(2,1.8,"2011 L_{int}^{PbPb} = 166 #mub^{-1}; 2013 L_{int}^{pp} = 5.4 pb^{-1};");
- //   lyLPT->SetTextFont(42);
- //   lyLPT->SetTextSize(0.027);
- //   lyLPT->Draw();
- //   lyLPT->DrawLatex(2,1.6,"2010 L_{int}^{PbPb} = 7.28 #mub^{-1}; L_{int}^{pp} = 225 nb^{-1};");
- //   ppt2->Update();
- //   //2010stuff
- //   TGraphErrors *gpt2010 = new TGraphErrors(nPtBins_2010,pt_2010,raaPt2010,pte_2010,raaPt2010e);
- //   gpt2010->SetMarkerColor(kTeal+3);
- //   gpt2010->SetMarkerStyle(33);
- //   gpt2010->SetMarkerSize(2);
- //   TGraphErrors *gpt2010s = new TGraphErrors(nPtBins_2010,pt_2010,raaPt2010,centnoErr,raaPt2010s);
- //   gpt2010s->SetLineColor(8);
- //   gpt2010s->SetLineWidth(18);
- //   gpt2010s->SetMarkerSize(0);
- //   gpt2010s->Draw("e");
- //   gpt2010->Draw("pe");
- //   TGraphErrors *gpt2010circle = new TGraphErrors(nPtBins_2010,pt_2010,raaPt2010,pte_2010,raaPt2010e);
- //   gpt2010circle->SetMarkerStyle(27);
- //   gpt2010circle->SetMarkerSize(2);
- //   gpt2010circle->SetLineColor(kBlack);
- //   gpt2010circle->Draw("p");
- //   f4RaaPt->Draw("same");
-
- //   TGraphErrors *gRaaPtLarge1 = new TGraphErrors(nPtBins_2010,pt_2010,RAA_1S_ptLarge,pte_2010,RAA_1S_pteLarge);
- //   gRaaPtLarge1->SetMarkerColor(kAzure+1-4);
- //   gRaaPtLarge1->SetMarkerStyle(33);
- //   gRaaPtLarge1->SetMarkerSize(2);
- //   TGraphErrors *gRaaPtLarge1circle = new TGraphErrors(nPtBins_2010,pt_2010,RAA_1S_ptLarge,pte_2010,RAA_1S_pteLarge);
- //   gRaaPtLarge1circle->SetMarkerStyle(27);
- //   gRaaPtLarge1circle->SetMarkerSize(2);
- //   gRaaPtLarge1circle->SetLineColor(kBlack);
- //   gRaaPtLarge1->Draw("pe");
- //   gRaaPtLarge1circle->Draw("p");
- //   f4RaaPt->Draw("same");
- //   gPad->RedrawAxis();
- //   TLegend *legend = new TLegend(0.2,0.65,0.4,0.75);
- //   legend->SetTextSize(0.029);
- //   legend->SetFillStyle(0);
- //   legend->SetFillColor(0);
- //   legend->SetBorderSize(0);
- //   legend->SetTextFont(42);
- //   legend->AddEntry(gpt2010,"#varUpsilon(1S) JHEP 05 (2012) 063","lp");
- //   legend->AddEntry(gRaaPtLarge1,"#varUpsilon(1S)","lp");
- //   legend->Draw();
- //   gPad->RedrawAxis();
-//}
 
  ////////////////////////////////////////////////////////////////
  /// drawing Rap-binned Data
@@ -2319,23 +2254,26 @@ legendB->SetTextFont(42);
  crap->SaveAs("~/Desktop/test.pdf");
 
  TCanvas *crapaa = new TCanvas("crapaa","crapaa"); 
+ crapaa->SetLogy();
  crapaa->cd();
- TPad *prap1 = new TPad("prap1","prap1",0.0,0.0,1.0,0.9);
- prap1->SetBottomMargin(0.12);
- prap1->SetTopMargin(0.03);
- prap1->SetRightMargin(0.03);
- prap1->SetLeftMargin(0.16);
- prap1->SetLogy();
- prap1->Draw();
- prap1->cd();
- TF1 *f4Rapaa = new TF1("f4Rapaa","10",0,2.45);
+ // TPad *prap1 = new TPad("prap1","prap1",0.0,0.0,1.0,0.9);
+ // prap1->SetBottomMargin(0.12);
+ // prap1->SetTopMargin(0.03);
+ // prap1->SetRightMargin(0.03);
+ // prap1->SetLeftMargin(0.16);
+ // prap1->SetLogy();
+ // prap1->Draw();
+ // prap1->cd();
+ TF1 *f4Rapaa = new TF1("f4Rapaa","10",0,2.4);
  f4Rapaa->SetLineWidth(0);
- f4Rapaa->GetYaxis()->SetTitleOffset(1.5);
- f4Rapaa->GetYaxis()->SetTitleSize(0.035);
+ // f4Rapaa->GetYaxis()->SetTitleOffset(1.5);
+ // f4Rapaa->GetYaxis()->SetTitleSize(0.035);
  f4Rapaa->GetYaxis()->SetRangeUser(0.01,1.);
  f4Rapaa->GetXaxis()->SetTitle("|y|");
- f4Rapaa->GetYaxis()->SetTitle("#frac{1}{T_{AA}N_{MB}} #frac{dN}{A#varepsilon dy} [nb]");
+ f4Rapaa->GetYaxis()->SetTitle("#frac{1}{T_{AA}} #frac{dN}{dy} [nb]");
  f4Rapaa->GetXaxis()->CenterTitle(kTRUE);
+ f4Rapaa->GetXaxis()->SetNdivisions(6,8,0,kFALSE);
+ f4Rapaa->GetYaxis()->SetTitleOffset(f4Rapaa->GetYaxis()->GetTitleOffset()*0.85);
  f4Rapaa->Draw();
  gRap1syst->Draw("2");
  grap1TNP->Draw("pe");
@@ -2357,7 +2295,7 @@ legendB->SetTextFont(42);
  grap2TNP->Draw("pe");
  grap2TNPcircle->Draw("p");
  gPad->RedrawAxis();
- TLegend *legendB = new TLegend(0.65,0.56,0.88,0.68);
+ TLegend *legendB = new TLegend(0.23,0.44,0.46,0.56);
  legendB->SetTextSize(0.035);
  legendB->SetFillStyle(0);
  legendB->SetFillColor(0);
@@ -2370,61 +2308,42 @@ legendB->SetTextFont(42);
    legendB->AddEntry(grap2TNP,"#varUpsilon(2S) ","lp");
  }
  legendB->Draw();
- TLatex *l1CMSrap = new TLatex(2,0.6,"CMS");
- l1CMSrap->SetTextFont(62);
- l1CMSrap->SetTextSize(0.06);
- l1CMSrap->Draw();
  crapaa->cd();
- TPad *p2 = new TPad("p2","p2",0.12,0.89,1.0,1.0);
- // p2->SetBottomMargin(0.12);
- p2->SetTopMargin(0.03);
- p2->SetRightMargin(0.0);
- p2->SetLeftMargin(0.01);
- p2->SetTickx(0);
- // p2->SetTicky(0);
- p2->Draw();
- p2->cd();
- TLatex *prelim =new TLatex(0.05,0.07,"Preliminary");
- prelim->SetTextFont(52);
- prelim->SetTextSize(0.5);
- prelim->Draw();
- TLatex *pbpb_pp = new TLatex (0.53,0.07,"PbPb 166 #mub^{-1} #sqrt{s_{NN}} = 2.76 TeV"); 
- pbpb_pp->SetTextFont(42); //#sqrt{s} = 2.76 TeV
- pbpb_pp->SetTextSize(0.3);
- pbpb_pp->SetTextColor(kBlack);
- pbpb_pp->Draw(); 
- // TLatex *l1CMSpt = new TLatex(0.15,5, "CMS Internal PbPb #sqrt{s_{NN}} = 2.76 TeV");
- // l1CMSpt->SetTextFont(42);
- // l1CMSpt->SetTextSize(0.038);
- // l1CMSpt->Draw();
 
- 
- // TLatex *lyL= new TLatex(0.15,3,"L_{PbPb} = 166 #mub^{-1}; |y| < 2.4");
- 
- // lyL->SetTextSize(0.029);
- // lyL->Draw();
- // gPad->RedrawAxis();
+    CMS_lumi(gPad,101,33);
+    gPad->Update();
+    gPad->RedrawAxis();
+    gPad->GetFrame()->Draw();
+
+    TLatex latexrapaa;
+    latexrapaa.SetTextSize(gTextSize);
+    latexrapaa.SetTextFont(42);
+    latexrapaa.DrawLatex(1.6,0.1,"Cent. 0-100%");
+
  crapaa->SaveAs("~/Documents/PR/forTWiki/CSandRAA/CS_AA_Rap.pdf");
  crapaa->SaveAs("~/Desktop/Xsection_AA_1S2S_Rap.png");
  //////////////////////////////////////////////
  TCanvas *crappp = new TCanvas("crappp","crappp"); 
+ crappp->SetLogy();
  crappp->cd();
- TPad *prap1 = new TPad("prap1","prap1",0.0,0.0,1.0,0.91);
- prap1->SetBottomMargin(0.12);
- prap1->SetTopMargin(0.03);
- prap1->SetRightMargin(0.03);
- prap1->SetLeftMargin(0.16);
- prap1->SetLogy();
- prap1->Draw();
- prap1->cd();
- TF1 *f4Rap = new TF1("f4Rap","10",0,2.45);
+ // TPad *prap1 = new TPad("prap1","prap1",0.0,0.0,1.0,0.91);
+ // prap1->SetBottomMargin(0.12);
+ // prap1->SetTopMargin(0.03);
+ // prap1->SetRightMargin(0.03);
+ // prap1->SetLeftMargin(0.16);
+ // prap1->SetLogy();
+ // prap1->Draw();
+ // prap1->cd();
+ TF1 *f4Rap = new TF1("f4Rap","10",0,2.4);
  f4Rap->SetLineWidth(0);
- f4Rap->GetYaxis()->SetTitleOffset(1.5);
- f4Rap->GetYaxis()->SetTitleSize(0.035);
+ // f4Rap->GetYaxis()->SetTitleOffset(1.5);
+ // f4Rap->GetYaxis()->SetTitleSize(0.035);
  f4Rap->GetYaxis()->SetRangeUser(0.01,5);
- f4Rap->GetXaxis()->SetTitle("|y| ");
+ f4Rap->GetXaxis()->SetTitle("|y|");
  f4Rap->GetYaxis()->SetTitle("#frac{d#sigma}{dy}   [nb]");
  f4Rap->GetXaxis()->CenterTitle(kTRUE);
+ f4Rap->GetXaxis()->SetNdivisions(6,8,0,kFALSE);
+ f4Rap->GetYaxis()->SetTitleOffset(f4Rap->GetYaxis()->GetTitleOffset()*0.9);
  f4Rap->Draw();
  if(!plotTNP){
    //pp data
@@ -2529,46 +2448,30 @@ legendB->SetTextFont(42);
  // lyL->DrawLatex(0.15,2,"L_{pp} = 5.4 pb^{-1}; |y| < 2.4");
  // lyL->Draw();
 
- TLegend *legendB = new TLegend(0.7,0.84,0.88,0.73);
- legendB->SetTextSize(0.029);
+ TLegend *legendB = new TLegend(0.22,0.18,0.40,0.37);
+ legendB->SetTextSize(gTextSize);
  legendB->SetFillStyle(0);
  legendB->SetFillColor(0);
  legendB->SetBorderSize(0);
  legendB->SetTextFont(42);
  if(!plotTNP){
-   legendB->AddEntry(grap1pp,"#varUpsilon(1S) ","lp");
-   legendB->AddEntry(grap2pp,"#varUpsilon(2S) ","lp");
-   legendB->AddEntry(grap3pp,"#varUpsilon(3S) ","lp");
+   legendB->AddEntry(grap1pp,"#varUpsilon(1S) ","pe");
+   legendB->AddEntry(grap2pp,"#varUpsilon(2S) ","pe");
+   legendB->AddEntry(grap3pp,"#varUpsilon(3S) ","pe");
  }else{
-   legendB->AddEntry(grap1TNPpp,"#varUpsilon(1S) ","lp");
-   legendB->AddEntry(grap2ppTNP,"#varUpsilon(2S) ","lp");
-   legendB->AddEntry(grap3ppTNP,"#varUpsilon(3S) ","lp");
+   legendB->AddEntry(grap1TNPpp,"#varUpsilon(1S) ","pe");
+   legendB->AddEntry(grap2ppTNP,"#varUpsilon(2S) ","pe");
+   legendB->AddEntry(grap3ppTNP,"#varUpsilon(3S) ","pe");
  } legendB->Draw();
 
  gPad->RedrawAxis();
- TLatex *l1CMSrap = new TLatex(1.95,2,"CMS");
- l1CMSrap->SetTextFont(62);
- l1CMSrap->SetTextSize(0.06);
- l1CMSrap->Draw();
- crappp->cd();
- TPad *p2 = new TPad("p2","p2",0.12,0.9,1.0,1.0);
- // p2->SetBottomMargin(0.12);
- p2->SetTopMargin(0.03);
- p2->SetRightMargin(0.0);
- p2->SetLeftMargin(0.01);
- p2->SetTickx(0);
- // p2->SetTicky(0);
- p2->Draw();
- p2->cd();
- TLatex *prelim =new TLatex(0.05,0.07,"Preliminary");
- prelim->SetTextFont(52);
- prelim->SetTextSize(0.5);
- prelim->Draw();
- TLatex *pbpb_pp = new TLatex (0.53,0.07,"PbPb 166 #mub^{-1} #sqrt{s_{NN}} = 2.76 TeV"); 
- pbpb_pp->SetTextFont(42); //#sqrt{s} = 2.76 TeV
- pbpb_pp->SetTextSize(0.3);
- pbpb_pp->SetTextColor(kBlack);
- pbpb_pp->Draw(); 
+
+
+    CMS_lumi(gPad,102,33);
+    gPad->Update();
+    gPad->RedrawAxis();
+    gPad->GetFrame()->Draw();
+
  crappp->SaveAs("~/Documents/PR/forTWiki/CSandRAA/CS1S_ppRap.pdf"); 
  crappp->SaveAs("~/Desktop/Xsection_pp_1S_Rap.png");
  //////////////////////////////////////////////////////////////////
@@ -2577,27 +2480,25 @@ legendB->SetTextFont(42);
 if(plotRAA){
   TCanvas *cRaarap = new TCanvas("cRaarap","cRaarap"); 
   cRaarap->cd();
-  TPad *prap2 = new TPad("prap2","prap2",0.0,0.0,0.98,0.92);
-  prap2->SetBottomMargin(0.12);
-  prap2->SetTopMargin(0.03);
-  prap2->SetRightMargin(0.03);
-  prap2->SetLeftMargin(0.12);
-  prap2->Draw();
-  prap2->cd();
+  // TPad *prap2 = new TPad("prap2","prap2",0.0,0.0,0.98,0.92);
+  // // prap2->SetBottomMargin(0.12);
+  // // prap2->SetTopMargin(0.03);
+  // // prap2->SetRightMargin(0.03);
+  // // prap2->SetLeftMargin(0.12);
+  // // prap2->Draw();
+  // prap2->cd();
   //one pad to draw RaaRap!
   TF1 *f4RaaRap = new TF1("f4RaaRap","1",0.0,2.4);
   f4RaaRap->SetLineWidth(0);
+  f4RaaRap->SetLineColor(kBlack);
   f4RaaRap->GetXaxis()->SetTitle("|y|");
   f4RaaRap->GetYaxis()->SetTitle("R_{AA}");
-  f4RaaRap->GetYaxis()->SetTitleOffset(1.1);
-  f4RaaRap->GetYaxis()->SetTitleSize(0.05);
+  // f4RaaRap->GetYaxis()->SetTitleOffset(1.1);
+  // f4RaaRap->GetYaxis()->SetTitleSize(0.05);
   f4RaaRap->GetYaxis()->SetRangeUser(0.,1.4);
   f4RaaRap->GetXaxis()->CenterTitle(kTRUE);
+  f4RaaRap->GetXaxis()->SetNdivisions(6,8,0,kFALSE);
   f4RaaRap->Draw();
-  TLatex *l1CMSrap = new TLatex(1.95,1.27,"CMS");
-  l1CMSrap->SetTextFont(62);
-  l1CMSrap->SetTextSize(0.06);
-  l1CMSrap->Draw();
   TGraphErrors *gRaaRap1 = new TGraphErrors(nRapBins_2014,rap2014,RAA_1S_rap,rap2014e,RAA_1S_rape);
   gRaaRap1->SetMarkerColor(8);
   gRaaRap1->SetMarkerStyle(21);
@@ -2672,7 +2573,7 @@ if(plotRAA){
       }
     }
   TBox *box = new TBox(2.27,1-syst1S_raa_global,2.4,1+syst1S_raa_global);
-  box->SetFillColor(kOrange+1);
+  box->SetFillColor(kGray);//kOrange+1);
   box->Draw();
   // TBox *box2 = new TBox(2.27,1-syst2S_raa_global,2.4,1+syst2S_raa_global);
   // box2->SetFillColor(kOrange+4);
@@ -2690,10 +2591,10 @@ if(plotRAA){
   // lyLRAP->SetTextFont(42);
   // lyLRAP->SetTextSize(0.027);
   // lyLRAP->Draw();
-  if(plot2010) {lyLRAP->DrawLatex(0.2,1.35,"2010 L_{int}^{PbPb} = 7.28 #mub^{-1}; L_{int}^{pp} = 231 nb^{-1};");}
+  // if(plot2010) {lyLRAP->DrawLatex(0.2,1.35,"2010 L_{int}^{PbPb} = 7.28 #mub^{-1}; L_{int}^{pp} = 231 nb^{-1};");}
   prap2->Update();
-  TLegend *legend = new TLegend(0.24,0.75,0.4,0.9);
-  legend->SetTextSize(0.036);
+  TLegend *legend = new TLegend(0.23,0.50,0.39,0.65);
+  legend->SetTextSize(gTextSize);
   legend->SetFillStyle(0);
   legend->SetFillColor(0);
   legend->SetBorderSize(0);
@@ -2721,19 +2622,25 @@ if(plotRAA){
     f4RaaRap->Draw("same");
   }
   gPad->RedrawAxis(); 
-    TLegend *leg2= new TLegend(0.44,0.8,0.6,0.88);
+    TLegend *leg2= new TLegend(0.57,0.54,0.73,0.62);
     leg2->SetBorderSize(0);
-    leg2->SetTextSize(0.036);
+    leg2->SetTextSize(gTextSize);
     leg2->SetTextFont(42);
     leg2->SetLineColor(0);
     leg2->SetLineStyle(1);
     leg2->SetLineWidth(0.4);
     leg2->SetFillColor(0);
     leg2->SetFillStyle(0);
-    leg2->AddEntry(box,"#varUpsilon(1S) global syst.","f");
+    leg2->AddEntry(box,"global syst.","f");
     //  leg2->AddEntry(box2,"#varUpsilon(2S) global syst.","f");
     leg2->Draw();
  
+    // Cent. 0-100 %
+    TLatex latexrap;
+    latexrap.SetTextSize(gTextSize);
+    latexrap.SetTextFont(42);
+    latexrap.DrawLatex(0.15,1.2,"Cent. 0-100%");
+   
   if(!plotTNP) {legend->AddEntry(gRaaRap1,"#varUpsilon(1S)","pe");
     legend->AddEntry(gRaaRap2TNP,"#varUpsilon(2S)","pe");}
   if(plotTNP) {
@@ -2748,24 +2655,12 @@ if(plotRAA){
 
   gPad->RedrawAxis();
     cRaarap->cd();
-    TPad *p2 = new TPad("p2","p2",0.12,0.90,1.0,1.0);
-    p2->SetBottomMargin(0.12);
-    p2->SetTopMargin(0.03);
-    p2->SetRightMargin(0.0);
-    p2->SetLeftMargin(0.01);
-    p2->SetTickx(0);
-    // p2->SetTicky(0);
-    p2->Draw();
-    p2->cd();
-    TLatex *prelim =new TLatex(0.0,0.1,"Preliminary");
-    prelim->SetTextFont(52);
-    prelim->SetTextSize(0.5);
-    prelim->Draw();
-    TLatex *pbpb_pp = new TLatex (0.47,0.05,"PbPb 166 #mub^{-1}, pp 5.4 pb^{-1} (2.76 TeV)"); 
-    pbpb_pp->SetTextFont(42); //#sqrt{s} = 2.76 TeV
-    pbpb_pp->SetTextSize(0.3);
-    pbpb_pp->SetTextColor(kBlack);
-    pbpb_pp->Draw(); 
+
+    CMS_lumi(cRaarap,103,33);
+    cRaarap->Update();
+    cRaarap->RedrawAxis();
+    cRaarap->GetFrame()->Draw();
+
   if(plotTight){
     cRaarap->SaveAs("~/Documents/PR/forTWiki/CSandRAA/RAA_Rap4.pdf");
     cRaarap->SaveAs("~/Desktop/RAA_Rap4.png");
@@ -3141,7 +3036,7 @@ if(plotRAA){
   f4CompPt->Draw("same");
   gPad->RedrawAxis();
   TLegend *legend = new TLegend(0.482,0.84,0.88,0.7);
-  legend->SetTextSize(0.029);
+  legend->SetTextSize(gTextSize);
   legend->SetFillStyle(0);
   legend->SetFillColor(0);
   legend->SetBorderSize(0);
@@ -3449,32 +3344,6 @@ float plot2010()
     RAA_1S_cent4sT[centi]=RAA_1S_cent4[centi]*syst1S_raa_cent4[centi];
   }
 
-  // for (int i=0;i<nRapBins_2010;i++)
-  //   {
-  //     CS1S_pp_rapLarge[i]=computeRatio(N1S_pp_rap3p5_2010[i],Aet_1S_pythia_rapLarge[i])/(L_pp_invNb*2.4);
-  //     CS1S_pp_rapLargee[i]=computeRatioError(N1S_pp_rap3p5_2010[i],Aet_1S_pythia_rapLarge[i],N1S_pp_rap3p5_2010e[i],Aet_1S_pythia_rapLargee[i])/(L_pp_invNb*2.4);
-  //   }
-
-  // for (int i=0;i<nPtBins_2010;i++)
-  //   {
-  //     CS1S_pp_ptLarge[i]=computeRatio(N1S_pp_pt3p5_2010[i],Aet_1S_pythia_ptLarge[i])/(L_pp_invNb*RapBinWidth*deltaPt_2010[i]);
-  //     CS1S_pp_ptLargee[i]=computeRatioError(N1S_pp_pt3p5_2010[i],Aet_1S_pythia_ptLarge[i],N1S_pp_pt3p5_2010e[i],Aet_1S_pythia_ptLargee[i])/(L_pp_invNb*RapBinWidth*deltaPt_2010[i]);
-  //   }
-  // cout << "  --- 1S Cross section in pp vs large y bins ---" << endl;
-  // for(int j =0 ; j<nRapBins_2010 ; j++)
-  //   {
-  //     cout <<"j="<< j << "' ,sigma(1S)_pp = "<< CS1S_pp_rapLarge[j] <<" \\pm "<<CS1S_pp_rapLarge[j] <<" \\" << endl;
-  //   }
-
-
-  //// pt
-
-  // cout << "  --- 1S Cross section in pp vs large pt bins ---" << endl;
-  // for(int j =0 ; j<nPtBins_2010 ; j++)
-  //   {
-  //     cout <<"j="<< j << "' ,sigma(1S)_pp = "<< CS1S_pp_ptLarge[j] <<" \\pm "<<CS1S_pp_ptLarge[j] <<" \\" << endl;
-  //   }
-
   CS1S_aa_tot = computeRatio(N1S_aa_tot3p5,Aet_1S_pyquen_tot);
   CS1S_aa_tote = computeRatioError(N1S_aa_tot3p5,Aet_1S_pyquen_tot,N1S_aa_tot3p5e,Aet_1S_pyquen_tote);
   CS1S_aa_tot = CS1S_aa_tot/(N_MB_corr*T_AA_b);
@@ -3566,46 +3435,30 @@ float plot2010()
 
   if(plotRAA){
     TCanvas *c1 = new TCanvas("c1", "c1",423,55,600,600);
-    gStyle->SetOptStat(0);
-    gStyle->SetOptTitle(0);
-    //   c1->Range(-58.8957,-0.2117647,431.9018);
-    c1->SetFillColor(0);
-    c1->SetBorderMode(0);
-    c1->SetBorderSize(0);
-    c1->SetTickx(1);
-    c1->SetTicky(1);
-    // c1->SetLeftMargin(0.12);
-    // c1->SetRightMargin(0.065);
-    // c1->SetTopMargin(0.03);
-    // c1->SetBottomMargin(0.12);
-    c1->SetFrameBorderMode(0);
-    c1->SetFrameBorderMode(0);
+    // gStyle->SetOptStat(0);
+    // gStyle->SetOptTitle(0);
+    // c1->SetFillColor(0);
+    // c1->SetBorderMode(0);
+    // c1->SetBorderSize(0);
+    // c1->SetTickx(1);
+    // c1->SetTicky(1);
+    // c1->SetFrameBorderMode(0);
+    // c1->SetFrameBorderMode(0);
     c1->cd();
-    TPad *p1 = new TPad("p1","p1",0.0,0.0,1.,0.92);
-    // p1->SetBottomMargin(0.12);
-    // p1->SetTopMargin(0.03);
-    // p1->SetRightMargin(0.1);
-    // p1->SetLeftMargin(0.01);
-    p1->SetTickx(0);
-    p1->SetTicky(0);
-    p1->Draw();
-    p1->cd();
+
     TF1 *f4 = new TF1("f4","1",0,400);
-    // f4->SetFillColor(19);
-    // f4->SetFillStyle(0);
-    // f4->SetMarkerStyle(20);
-    // f4->SetMarkerSize(0.8);
     f4->SetLineWidth(1);
     f4->GetYaxis()->SetRangeUser(0.0,1.4);
     f4->GetXaxis()->SetTitle("N_{Part}");
     f4->GetXaxis()->CenterTitle(true);
-    f4->GetXaxis()->SetLabelFont(42);
-    f4->GetXaxis()->SetTitleSize(0.048);
-    f4->GetXaxis()->SetTitleOffset(1.1);
-    f4->GetYaxis()->SetTitleOffset(1.1);
-    f4->GetYaxis()->SetTitleFont(42);
+    // f4->GetXaxis()->SetLabelFont(42);
+    // f4->GetXaxis()->SetTitleSize(0.05);
+    // f4->GetXaxis()->SetTitleOffset(1.1);
+    // f4->GetYaxis()->SetTitleOffset(1.1);
+    // f4->GetYaxis()->SetTitleFont(42);
     f4->GetYaxis()->SetTitle("R_{AA}");
-    f4->GetYaxis()->SetTitleSize(0.05);
+    // f4->GetYaxis()->SetTitleSize(0.05);
+    f4->SetLineColor(kBlack);
     f4->Draw();
     TGraphErrors *gcent2syst = new TGraphErrors(4,cent,RAA_2S_cent,centErr2014,RAA_2S_cents);
     gcent2syst->SetLineColor(kOrange+4);
@@ -3613,19 +3466,6 @@ float plot2010()
     gcent2syst->SetLineWidth(2);
     gcent2syst->SetMarkerSize(0);
     gcent2syst->Draw("2");
-    // TGraphErrors *gcent2 = new TGraphErrors(4,cent,RAA_2S_cent,centnoErr,RAA_2S_cente);
-    // gcent2->SetMarkerColor(kOrange+4);
-    // gcent2->SetMarkerStyle(20);
-    // gcent2->SetMarkerSize(1.2);
-    // TGraphErrors *gcent2circle = new TGraphErrors(4,cent,RAA_2S_cent,centnoErr,RAA_2S_cente);
-    // gcent2circle->SetMarkerStyle(24);
-    // gcent2circle->SetMarkerSize(1.2);
-    // gcent2circle->SetLineColor(kBlack);
-    // gcent2->Draw("pe");
-    // gcent2circle->Draw("p");
-    // f4->Draw("same");
-    // gPad->RedrawAxis();
-    //TGraphErrors RAA_1S 2014 (pt_3p5)
     if(!plotTight){
 
       TGraphErrors *gcent1syst = new TGraphErrors(nCentBins_2014,nPart2014,RAA_1S_cent,centErr2014,RAA_1S_cents); //for fun
@@ -3751,31 +3591,12 @@ float plot2010()
 	f4->Draw("same");
 	gPad->RedrawAxis();
       }
-      // //TGraphErrors RAA_1S_2011 (pt4)
-      // TGraphErrors *gcent2011syst = new TGraphErrors(bin1,cent,RAA_1S_2011,centErr2014,RAA_1S_2011s);
-      // gcent2011syst->SetLineColor(kGreen+4);
-      // gcent2011syst->SetFillStyle(0);
-      // gcent2011syst->SetLineWidth(2);
-      // gcent2011syst->SetMarkerSize(0);
-      // gcent2011syst->Draw("2");
-      // TGraphErrors *gcent2011 = new TGraphErrors(bin1,cent,RAA_1S_2011,centnoErr,RAA_1S_2011e);
-      // gcent2011->SetMarkerColor(kGreen+4);
-      // gcent2011->SetMarkerStyle(20);
-      // gcent2011->SetMarkerSize(1.2);
-      // TGraphErrors *gcent2011circle = new TGraphErrors(bin1,cent,RAA_1S_2011,centnoErr,RAA_1S_2011e);
-      // gcent2011circle->SetMarkerStyle(24);
-      // gcent2011circle->SetMarkerSize(1.2);
-      // gcent2011circle->SetLineColor(kBlack);
-      // gcent2011->Draw("pe");
-      // gcent2011circle->Draw("p");
-      // f4->Draw("same");
-      // gPad->RedrawAxis();
     }
     //legends
     // L^{pp}_{int}=5.4 /nb
-    TLegend *leg = new TLegend(0.18,0.75,0.6,0.9);
+    TLegend *leg = new TLegend(0.30,0.53,0.71,0.68);
     leg->SetBorderSize(0);
-    leg->SetTextSize(0.036);
+    leg->SetTextSize(gTextSize);
     leg->SetLineColor(1);
     leg->SetLineStyle(1);
     leg->SetLineWidth(0.4);
@@ -3783,10 +3604,6 @@ float plot2010()
     leg->SetFillStyle(0);
     leg->AddEntry(gcent1,"#varUpsilon(1S)","pe");
     if(!plotTight)  leg->AddEntry(gcent2,"#varUpsilon(2S) ","pe");
-    TLatex *l1CMSpt = new TLatex(330,1.3,"CMS");
-    l1CMSpt->SetTextFont(62);
-    l1CMSpt->SetTextSize(0.06);
-    l1CMSpt->Draw();
     // Internal #sqrt{s_{NN}} = 2.76 TeV
     //  if(!plotTight){ TLegendEntry *}
       // TLegendEntry *entry=leg->AddEntry(gcent1syst,"#varUpsilon(1S)","pe");}
@@ -3794,16 +3611,15 @@ float plot2010()
       // entry=leg->AddEntry(gcent2011,"#varUpsilon(1S) 2011","p");    
     }
 
-    // if(!plotTight)
-    //   {
-    // 	//	entry=leg->AddEntry(gcent2011,"#varUpsilon(1S) 2011","p");
-    //   }
-    // entry->SetLineColor(1);
-    // entry->SetLineStyle(1);
-    // entry->SetLineWidth(3);
 
     leg->SetTextFont(42);
     leg->Draw();
+
+    // |y|<2.4
+    TLatex latexrap;
+    latexrap.SetTextSize(gTextSize);
+    latexrap.SetTextFont(42);
+    latexrap.DrawLatex(30,1.2,"|y|<2.4");
    
     if(!plotTight){TBox *box1S = new TBox(370,1-syst1S_pp_centGlob,385,1+syst1S_pp_centGlob);
       box1S->SetFillColor(kOrange+1);
@@ -3823,17 +3639,17 @@ float plot2010()
       // box1S2011->SetFillColor(kBlack);
       // box1S2011->Draw();
     }
-    TLegend *leg2= new TLegend(0.44,0.75,0.6,0.9);
+    TLegend *leg2= new TLegend(0.58,0.53,0.74,0.68);
     leg2->SetBorderSize(0);
-    leg2->SetTextSize(0.036);
+    leg2->SetTextSize(gTextSize);
     leg2->SetTextFont(42);
     leg2->SetLineColor(0);
     leg2->SetLineStyle(1);
     leg2->SetLineWidth(0.4);
     leg2->SetFillColor(0);
     leg2->SetFillStyle(0);
-    if(!plotTight){    leg2->AddEntry(box1S,"#varUpsilon(1S) syst. unc.","f");
-      leg2->AddEntry(box2S,"#varUpsilon(2S) syst. unc.","f");}
+    if(!plotTight){    leg2->AddEntry(box1S,"#varUpsilon(1S) global syst.","f");
+      leg2->AddEntry(box2S,"#varUpsilon(2S) global syst.","f");}
     if(plotTight){ leg2->AddEntry(box1S,"#varUpsilon(1S) syst. unc. p_{T} > 3.5 + 4","f");
       //      leg2->AddEntry(box1S2011,"#varUpsilon(1S) 2011 global syst. 2011","f");}
       leg2->AddEntry(box1S4,"#varUpsilon(1S) syst. unc. p_{T} > 4","f");}
@@ -3845,86 +3661,10 @@ float plot2010()
     // box->Draw();
     //MB stuff
     c1->cd();
-    TPad *p2 = new TPad("p2","p2",0.12,0.90,1.0,1.0);
-    p2->SetBottomMargin(0.12);
-    p2->SetTopMargin(0.03);
-    p2->SetRightMargin(0.0);
-    p2->SetLeftMargin(0.01);
-    p2->SetTickx(0);
-    // p2->SetTicky(0);
-    p2->Draw();
-    p2->cd();
-    TLatex *prelim =new TLatex(0.0,0.1,"Preliminary");
-    prelim->SetTextFont(52);
-    prelim->SetTextSize(0.5);
-    prelim->Draw();
-    TLatex *pbpb_pp = new TLatex (0.47,0.05,"PbPb 166 #mub^{-1}, pp 5.4 pb^{-1} (2.76 TeV)"); 
-    pbpb_pp->SetTextFont(42); //#sqrt{s} = 2.76 TeV
-    pbpb_pp->SetTextSize(0.3);
-    pbpb_pp->SetTextColor(kBlack);
-    pbpb_pp->Draw(); 
-  //   TF1 *f5 = new TF1("f4","1",0,1);
-    //   f5->GetXaxis()->SetNdivisions(2);
-    //   f5->SetLineWidth(1);
-    //   f5->GetXaxis()->SetTitle("");
-    //   f5->GetXaxis()->SetLabelColor(kWhite);
-    //   f5->GetXaxis()->SetRangeUser(0,1);
-    //   f5->GetYaxis()->SetTitle("R_{AA}");
-    //   f5->GetYaxis()->SetTitleOffset(1.0);
-    //   f5->GetYaxis()->SetRangeUser(0,1.6);
-    //   f5->GetXaxis()->CenterTitle(kTRUE);
-    //   f5->Draw();
-
-    //  float RAA_1S_tot =0.48;
-    //  float RAA_1S_tote =0.02;
-    // // float RAA_1S_tots[1]=0.02;
-
-    // // TGraphErrors *g1SMB = new TGraphErrors(1,centMB,RAA_1S_tot,centnoErr,RAA_1S_tots);
-    // // TGraphErrors *g1SMBtot = new TGraphErrors(1,centMB,RAA_1S_tot,centnoErr,RAA_1S_tote);
-    //  TGraphErrors *g1SMBcircle = new TGraphErrors(1,centMB,RAA_1S_tot,centnoErr,RAA_1S_tote);
-
-    // float raaMB1So[1]={0.564};
-    // float raaMB1SstatErro[1]={0.077};
-    // float raaMB1SsystErro[1]={0.071};
-
-    // TGraphErrors *g1SMBtot = new TGraphErrors(1,centMB,raaMB1So,centErr,raaMB1SsystErro);
-    // TGraphErrors *g1SMBtoto = new TGraphErrors(1,centMB,raaMB1So,centnoErr,raaMB1SstatErro);
-    // TGraphErrors *g1SMBcircleo = new TGraphErrors(1,centMB,raaMB1So,centnoErr,raaMB1SstatErro);
-
-    // g1SMBtot->SetMarkerStyle(21);
-    // g1SMBtot->SetMarkerColor(kOrange+1);
-    // g1SMBtot->SetMarkerSize(1.2);
-
-    // g1SMBcircle->SetMarkerStyle(25);
-    // g1SMBcircle->SetMarkerColor(kBlack);
-    // g1SMBcircle->SetMarkerSize(1.2);
- 
-    // g1SMB->SetLineColor(kOrange+1);
-    // g1SMB->SetLineWidth(1.2);
-    // g1SMB->SetFillStyle(0);
-    // g1SMB->SetMarkerSize(0);
-    // g1SMB->Draw("2");
-    // g1SMBtot->Draw("pe");
-    // g1SMBcircle->Draw("p");
-
-    // float centMBErr[1]={0.15};
-
-    // TGraphErrors *g2SMB = new TGraphErrors(1,centMB,raaMB2S,centErr,raaMB2SsystErr);
-    // TGraphErrors *g2SMBtot = new TGraphErrors(1,centMB,raaMB2S,centnoErr,raaMB2SstatErr);
-    // TGraphErrors *g2SMBcircle = new TGraphErrors(1,centMB,raaMB2S,centnoErr,raaMB2SstatErr);
-    // g2SMBtot->SetMarkerStyle(20);
-    // g2SMBtot->SetMarkerColor(kOrange+4);
-    // g2SMBtot->SetMarkerSize(1.2);
-    // g2SMBcircle->SetMarkerStyle(24);
-    // g2SMBcircle->SetMarkerColor(kBlack);
-    // g2SMBcircle->SetMarkerSize(1.2);
-    // g2SMB->SetLineColor(kOrange+4);
-    // g2SMB->SetFillStyle(0);
-    // g2SMB->SetLineWidth(1.5);
-    // g2SMB->SetMarkerSize(0);
-    // g2SMB->Draw("2");
-    // g2SMBtot->Draw("pe");
-    // g2SMBcircle->Draw("p");
+    CMS_lumi(c1,103,33);
+    c1->Update();
+    c1->RedrawAxis();
+    c1->GetFrame()->Draw();
     if(plotTight){
       c1->SaveAs("~/Documents/PR/forTWiki/CSandRAA/RAA_nPart_Tight.pdf");
       c1->SaveAs("~/Desktop/RAA_nPart_Tight.png");
@@ -4371,16 +4111,17 @@ void plotRAA_uncorr(){
     if(plotRAA && plotUncorrected){
       TCanvas *cRaaptu = new TCanvas("cRaaptu","cRaaptu"); 
       cRaaptu->cd();
-      TPad *ppt2 = new TPad("ppt2","ppt2",0.0,0.0,1.0,1.0);
-      ppt2->SetBottomMargin(0.12);
-      ppt2->SetTopMargin(0.03);
-      ppt2->SetRightMargin(0.03);
-      ppt2->SetLeftMargin(0.16);
-      ppt2->Draw();
-      ppt2->cd();
+      // TPad *ppt2 = new TPad("ppt2","ppt2",0.0,0.0,1.0,1.0);
+      // ppt2->SetBottomMargin(0.12);
+      // ppt2->SetTopMargin(0.03);
+      // ppt2->SetRightMargin(0.03);
+      // ppt2->SetLeftMargin(0.16);
+      // ppt2->Draw();
+      // ppt2->cd();
       //one pad to draw RaaPt!
       TF1 *f4RaaPt = new TF1("f4RaaPt","1",0,21);
       f4RaaPt->SetLineWidth(0);
+      f4RaaPt->SetLineColor(kBlack);
       f4RaaPt->GetXaxis()->SetTitle("p_{T}^{#varUpsilon} ");
       f4RaaPt->GetYaxis()->SetTitle("uncorrected R_{AA}");
       f4RaaPt->GetYaxis()->SetTitleOffset(1.8);
@@ -4408,20 +4149,21 @@ void plotRAA_uncorr(){
       lyLPT->Draw();
       lyLPT->SetTextSize(0.04);
       lyLPT->DrawLatex(7,0.15,"Uncorrected");
-      ppt2->Update();
+      // ppt2->Update();
       gPad->RedrawAxis();
 
       TCanvas *cRaaptUnfold = new TCanvas("cRaaptUnfold","cRaaptUnfold"); 
       cRaaptUnfold->cd();
-      TPad *ppt2 = new TPad("ppt2","ppt2",0.0,0.0,1.0,1.0);
-      ppt2->SetBottomMargin(0.12);
-      ppt2->SetTopMargin(0.03);
-      ppt2->SetRightMargin(0.03);
-      ppt2->SetLeftMargin(0.16);
-      ppt2->Draw();
-      ppt2->cd();
+      // TPad *ppt2 = new TPad("ppt2","ppt2",0.0,0.0,1.0,1.0);
+      // ppt2->SetBottomMargin(0.12);
+      // ppt2->SetTopMargin(0.03);
+      // ppt2->SetRightMargin(0.03);
+      // ppt2->SetLeftMargin(0.16);
+      // ppt2->Draw();
+      // ppt2->cd();
       TF1 *f4RaaPt = new TF1("f4RaaPt","1",0,21);
       f4RaaPt->SetLineWidth(0);
+      f4RaaPt->SetLineColor(kBlack);
       f4RaaPt->GetXaxis()->SetTitle("p_{T}^{#varUpsilon} ");
       f4RaaPt->GetYaxis()->SetTitle("uncorrected, but unfolded R_{AA}");
       f4RaaPt->GetYaxis()->SetTitleOffset(1.8);
@@ -4460,7 +4202,7 @@ void plotRAA_uncorr(){
       lyLPT->Draw();
       lyLPT->SetTextSize(0.04);
       lyLPT->DrawLatex(7,0.15,"Uncorrected");
-      ppt2->Update();
+      // ppt2->Update();
       TLegend *legend = new TLegend(0.2,0.65,0.4,0.75);
       legend->SetTextSize(0.029);
       legend->SetFillStyle(0);
@@ -4608,138 +4350,6 @@ void plotRAA_uncorr(){
 
 
 
-  ////////
-  /*2010plots
-
-
-    TH1F *Graph_Graph4 = new TH1F("Graph_Graph4","Graph_Graph4",100,35.10496,384.4663);
-    Graph_Graph4->SetMinimum(0.3153);
-    Graph_Graph4->SetMaximum(1.0317);
-    Graph_Graph4->SetDirectory(0);
-    Graph_Graph4->SetStats(0);
-    Graph_Graph4->SetMarkerStyle(20);
-    Graph_Graph4->SetMarkerSize(0.8);
-    Graph_Graph4->GetXaxis()->SetLabelFont(42);
-    Graph_Graph4->GetXaxis()->SetTitleSize(0.048);
-    Graph_Graph4->GetXaxis()->SetTitleOffset(1.15);
-    Graph_Graph4->GetXaxis()->SetTitleFont(42);
-    Graph_Graph4->GetYaxis()->SetLabelFont(42);
-    Graph_Graph4->GetYaxis()->SetTitleSize(0.048);
-    Graph_Graph4->GetYaxis()->SetTitleOffset(1.2);
-    Graph_Graph4->GetYaxis()->SetTitleFont(42);
-    Graph_Graph4->GetZaxis()->SetLabelFont(42);
-    Graph_Graph4->GetZaxis()->SetTitleSize(0.048);
-    Graph_Graph4->GetZaxis()->SetTitleFont(42);
-    gre->SetHistogram(Graph_Graph4);
-   
-    gre->Draw("e");
-   
-    gre = new TGraphErrors(3);
-    gre->SetName("Graph_Graph4");
-    gre->SetTitle("Graph_Graph4");
-    gre->SetFillColor(1);
-
-    ci = TColor::GetColor("#cc00cc");
-    gre->SetMarkerColor(ci);
-    gre->SetMarkerStyle(20);
-    gre->SetMarkerSize(1.2);
-    gre->SetPoint(0,64.2184,0.677);
-    gre->SetPointError(0,0,0.154);
-    gre->SetPoint(1,261.4178,0.842);
-    gre->SetPointError(1,0,0.212);
-    gre->SetPoint(2,355.3528,0.454);
-    gre->SetPointError(2,0,0.136);
-
-    ci = TColor::GetColor("#009900");
-    entry->SetMarkerColor(ci);
-    entry->SetMarkerStyle(33);
-    entry->SetMarkerSize(20);
-    entry=leg->AddEntry("Graph_Graph4","#varUpsilon(1S) 2010","p");
-    entry->SetLineColor(1);
-    entry->SetLineStyle(1);
-    entry->SetLineWidth(1);
-
-    TH1F *Graph_Graph5 = new TH1F("Graph_Graph5","Graph_Graph5",100,35.10496,384.4663);
-    // Graph_Graph5->SetMinimum(0.2444);
-    // Graph_Graph5->SetMaximum(1.1276);
-    Graph_Graph5->SetDirectory(0);
-    Graph_Graph5->SetStats(0);
-    Graph_Graph5->SetMarkerStyle(20);
-    Graph_Graph5->SetMarkerSize(0.8);
-    Graph_Graph5->GetXaxis()->SetLabelFont(42);
-    Graph_Graph5->GetXaxis()->SetTitleSize(0.048);
-    Graph_Graph5->GetXaxis()->SetTitleOffset(1.15);
-    Graph_Graph5->GetXaxis()->SetTitleFont(42);
-    Graph_Graph5->GetYaxis()->SetLabelFont(42);
-    Graph_Graph5->GetYaxis()->SetTitleSize(0.048);
-    Graph_Graph5->GetYaxis()->SetTitleOffset(1.2);
-    Graph_Graph5->GetYaxis()->SetTitleFont(42);
-    Graph_Graph5->GetZaxis()->SetLabelFont(42);
-    Graph_Graph5->GetZaxis()->SetTitleSize(0.048);
-    Graph_Graph5->GetZaxis()->SetTitleFont(42);
-    gre->SetHistogram(Graph_Graph5);
-   
-    gre->Draw("pe");
-   
-    gre = new TGraphErrors(3);
-    gre->SetName("Graph_Graph5");
-    gre->SetTitle("Graph_Graph5");
-    gre->SetFillColor(1);
-    gre->SetMarkerStyle(24);
-    gre->SetMarkerSize(1.2);
-    gre->SetPoint(0,64.2184,0.677);
-    gre->SetPointError(0,0,0.154);
-    gre->SetPoint(1,261.4178,0.842);
-    gre->SetPointError(1,0,0.212);
-    gre->SetPoint(2,355.3528,0.454);
-    gre->SetPointError(2,0,0.136);
-   
-
-    // TH1F *Graph_Graph6 = new TH1F("Graph_Graph6","Graph_Graph6",100,35.10496,384.4663);
-    // // Graph_Graph6->SetMinimum(0.2444);
-    // // Graph_Graph6->SetMaximum(1.1276);
-    // Graph_Graph6->SetDirectory(0);
-    // Graph_Graph6->SetStats(0);
-    // Graph_Graph6->SetMarkerStyle(20);
-    // Graph_Graph6->SetMarkerSize(0.8);
-    // Graph_Graph6->GetXaxis()->SetLabelFont(42);
-    // Graph_Graph6->GetXaxis()->SetTitleSize(0.048);
-    // Graph_Graph6->GetXaxis()->SetTitleOffset(1.15);
-    // Graph_Graph6->GetXaxis()->SetTitleFont(42);
-    // Graph_Graph6->GetYaxis()->SetLabelFont(42);
-   // Graph_Graph6->GetYaxis()->SetTitleSize(0.048);
-   // Graph_Graph6->GetYaxis()->SetTitleOffset(1.2);
-   // Graph_Graph6->GetYaxis()->SetTitleFont(42);
-   // Graph_Graph6->GetZaxis()->SetLabelFont(42);
-   // Graph_Graph6->GetZaxis()->SetTitleSize(0.048);
-   // Graph_Graph6->GetZaxis()->SetTitleFont(42);
-   // gre->SetHistogram(Graph_Graph6);
-   
-   // gre->Draw("p");
-
-   // box = new TBox(370,0.94,385,1.06);
-
-   // ci = TColor::GetColor("#ff99ff");
-   // box->SetFillColor(ci);
-   // box->Draw();
-     tex = new TLatex(240,1.1,"|y| < 2.4");
-   tex->SetTextSize(0.04);
-   tex->SetLineWidth(2);
-   tex->Draw();
-      tex = new TLatex(340,0.62,"0-10%");
-   tex->SetTextSize(0.03);
-   tex->SetLineWidth(2);
-   tex->Draw();
-      tex = new TLatex(240,0.58,"10-20%");
-   tex->SetTextSize(0.03);
-   tex->SetLineWidth(2);
-   tex->Draw();
-      tex = new TLatex(40,0.85,"20-100%");
-   tex->SetTextSize(0.03);
-   tex->SetLineWidth(2);
-   tex->Draw();
-   
-*/
 void plotDoubleRatios()
 {
   float pt2014 [nPtBins_2014] = {1.25, 3.75, 6.5, 10., 16.,30};
@@ -4778,13 +4388,13 @@ void plotDoubleRatios()
   }
   TCanvas *cDRpt = new TCanvas("cDRpt","cDRpt"); 
   cDRpt->cd();
-  TPad *ppt2 = new TPad("ppt2","ppt2",0.0,0.0,1.0,1.0);
-  ppt2->SetBottomMargin(0.12);
-  ppt2->SetTopMargin(0.03);
-  ppt2->SetRightMargin(0.03);
-  ppt2->SetLeftMargin(0.16);
-  ppt2->Draw();
-  ppt2->cd();
+  // TPad *ppt2 = new TPad("ppt2","ppt2",0.0,0.0,1.0,1.0);
+  // ppt2->SetBottomMargin(0.12);
+  // ppt2->SetTopMargin(0.03);
+  // ppt2->SetRightMargin(0.03);
+  // ppt2->SetLeftMargin(0.16);
+  // ppt2->Draw();
+  // ppt2->cd();
   //one pad to draw RaaPt!
   TF1 *f4DRPt = new TF1("f4DRPt","1",0,40.5);
   f4DRPt->SetLineWidth(0);
@@ -4845,13 +4455,13 @@ void plotDoubleRatios()
  
  TCanvas *cSRpt = new TCanvas("cSRpt","cSRpt"); 
  cSRpt->cd();
- TPad *ppt2 = new TPad("ppt2","ppt2",0.0,0.0,1.0,1.0);
- ppt2->SetBottomMargin(0.12);
- ppt2->SetTopMargin(0.03);
- ppt2->SetRightMargin(0.03);
- ppt2->SetLeftMargin(0.16);
- ppt2->Draw();
- ppt2->cd();
+ // TPad *ppt2 = new TPad("ppt2","ppt2",0.0,0.0,1.0,1.0);
+ // ppt2->SetBottomMargin(0.12);
+ // ppt2->SetTopMargin(0.03);
+ // ppt2->SetRightMargin(0.03);
+ // ppt2->SetLeftMargin(0.16);
+ // ppt2->Draw();
+ // ppt2->cd();
 
   //one pad to draw RaaPt!
   TF1 *f4SRPt = new TF1("f4SRPt","1",0,40.5);
@@ -4947,235 +4557,3 @@ void combine_blue(double val1, double err1, double val2, double err2)
 
 
 
-///dumpster
-
-
-    
- // //DOUBLE DIFFERENTIAL COMPUTATIONS
- // for(int i=0;i<nCentBins_2010;i++){
- //   taaDD[i]=taaDD[i]*1000;
- //   CS1S_aa_y120[i]=computeRatio(N1S_aa_y120[i],Aet_1S_pyquen_y120[i])/(mb_percentageDD[i]*N_MB_corr * taaDD[i]*2.4);
- //   CS1S_aa_y120e[i]=computeRatioError(N1S_aa_y120[i],Aet_1S_pyquen_y120[i],N1S_aa_y120e[i],Aet_1S_pyquen_y120e[i])/(mb_percentageDD[i]*N_MB_corr * taaDD[i]*2.4); 
- //   CS1S_aa_y240[i]=computeRatio(N1S_aa_y240[i],Aet_1S_pyquen_y240[i])/(mb_percentageDD[i]*N_MB_corr * taaDD[i]*2.4); 
- //   CS1S_aa_y240e[i]=computeRatioError(N1S_aa_y240[i],Aet_1S_pyquen_y240[i],N1S_aa_y240e[i],Aet_1S_pyquen_y240e[i])/(mb_percentageDD[i]*N_MB_corr * taaDD[i]*2.4) ; 
- //   CS1S_aa_pt5[i]=computeRatio(N1S_aa_pt5[i],Aet_1S_pyquen_pt5[i])/(mb_percentageDD[i]*N_MB_corr * taaDD[i]*RapBinWidth*deltaPt_2010[0]) ;
- //   CS1S_aa_pt5e[i]=computeRatioError(N1S_aa_pt5[i],Aet_1S_pyquen_pt5[i],N1S_aa_pt5e[i],Aet_1S_pyquen_pt5e[i])/(mb_percentageDD[i]*N_MB_corr * taaDD[i]*RapBinWidth*deltaPt_2010[0]);
- //   CS1S_aa_pt12[i]=computeRatio(N1S_aa_pt12[i],Aet_1S_pyquen_pt12[i])/(mb_percentageDD[i]*N_MB_corr * taaDD[i]*RapBinWidth*deltaPt_2010[1]);
- //   CS1S_aa_pt12e[i]=computeRatioError(N1S_aa_pt12[i],Aet_1S_pyquen_pt12[i],N1S_aa_pt12e[i],Aet_1S_pyquen_pt12e[i])/(mb_percentageDD[i]*N_MB_corr * taaDD[i]*RapBinWidth*deltaPt_2010[1]); 
- //   CS1S_aa_pt20[i]=computeRatio(N1S_aa_pt20[i],Aet_1S_pyquen_pt20[i])/(mb_percentageDD[i]*N_MB_corr*taaDD[i]*RapBinWidth*deltaPt_2010[2]);
- //   CS1S_aa_pt20e[i]=computeRatioError(N1S_aa_pt20[i],Aet_1S_pyquen_pt20[i],N1S_aa_pt20e[i],Aet_1S_pyquen_pt20e[i])/(mb_percentageDD[i]*N_MB_corr * taaDD[i]*RapBinWidth*deltaPt_2010[2]); 
- //   RAA_1S_y120[i]=computeRatio(CS1S_aa_y120[i],CS1S_pp_rapLarge[0]);
- //   RAA_1S_y120e[i]=computeRatioError(CS1S_aa_y120[i],CS1S_pp_rapLarge[0],CS1S_aa_y120e[i],CS1S_pp_rapLargee[0]);
- //   RAA_1S_y240[i]=computeRatio(CS1S_aa_y240[i],CS1S_pp_rapLarge[1]);
- //   RAA_1S_y240e[i]=computeRatioError(CS1S_aa_y240[i],CS1S_pp_rapLarge[1],CS1S_aa_y240e[i],CS1S_pp_rapLargee[1]);
-
- //   RAA_1S_pt5[i]=computeRatio(CS1S_aa_pt5[i],CS1S_pp_ptLarge[0]);
- //   RAA_1S_pt5e[i]=computeRatioError(CS1S_aa_pt5[i],CS1S_pp_ptLarge[0],CS1S_aa_pt5e[i],CS1S_pp_ptLargee[0]);
- //   RAA_1S_pt12[i]=computeRatio(CS1S_aa_pt12[i],CS1S_pp_ptLarge[1]);
- //   RAA_1S_pt12e[i]=computeRatioError(CS1S_aa_pt12[i],CS1S_pp_ptLarge[1],CS1S_aa_pt12e[i],CS1S_pp_ptLargee[1]);
- //   RAA_1S_pt20[i]=computeRatio(CS1S_aa_pt20[i],CS1S_pp_ptLarge[2]);
- //   RAA_1S_pt20e[i]=computeRatioError(CS1S_aa_pt20[i],CS1S_pp_ptLarge[2],CS1S_aa_pt20e[i],CS1S_pp_ptLargee[2]);
- // }
-
-
-//  cout << "  --- 1S Cross section in PbPb vs. cent (low-y) ---" << endl;
-//  for(int j =0 ; j<nCentBins_2010 ; j++)
-//    {
-//      cout <<"j="<< j << "' ,sigma(1S)_PbPb_centralRapidity = "<< CS1S_aa_y120[j] <<" \\pm "<<CS1S_aa_y120e[j] <<" \\" << endl;
-//    }
-
-//  cout << "  --- 1S Cross section in PbPb vs. cent (fwd-y) ---" << endl;
-//  for(int j =0 ; j<nCentBins_2010 ; j++)
-//    {
-//   cout <<"j="<< j << "' ,sigma(1S)_PbPb_fwdRapidity = "<< CS1S_aa_y240[j] <<" \\pm "<<CS1S_aa_y240e[j] <<" \\" << endl;
-// }
- 
-//  cout << "  --- 1S RAA  vs. cent (low-y) ---" << endl;
-//  for(int j =0 ; j<nCentBins_2010 ; j++)
-//    {
-//      cout <<"j="<< j << "' , Raa = "<< RAA_1S_y120[j] <<" \\pm "<<RAA_1S_y120e[j]<< endl;
-//    }
-//  cout << "  --- 1S RAA  vs. cent (fwd-y) ---" << endl;
-//  for(int j =0 ; j<nCentBins_2010 ; j++)
-//    {
-//      cout <<"j="<< j << "' , Raa = "<< RAA_1S_y240[j] <<" \\pm "<<RAA_1S_y240e[j]<< endl;
-//    }
-
-
-
- // cout << "  --- 1S Cross section in PbPb vs. cent pt<5 ---" << endl;
- // for(int j =0 ; j<nCentBins_2010 ; j++)
- //   {
- //     cout <<"j="<< j << "' ,sigma(1S)_PbPb_pt5 = "<< CS1S_aa_pt5[j] <<" \\pm "<<CS1S_aa_pt5e[j]<< " \\" << endl;
- //   }
- // cout << "  --- 1S Cross section in PbPb vs. cent 5<pt<12 ---" << endl;
- // for(int j =0 ; j<nCentBins_2010 ; j++)
- //   {
- //     cout <<"j="<< j << "' ,sigma(1S)_PbPb_pt12 = "<< CS1S_aa_pt12[j] <<" \\pm "<<CS1S_aa_pt12e[j]<< " \\" << endl;
- //   }
- // cout << "  --- 1S Cross section in PbPb vs. cent 12<pt<20 ---" << endl;
- // for(int j =0 ; j<nCentBins_2010 ; j++)
- //   {
- //     cout <<"j="<< j << "' ,sigma(1S)_PbPb_pt20 = "<< CS1S_aa_pt20[j] <<" \\pm "<<CS1S_aa_pt20e[j]<< " \\" << endl;
- //   }
- // cout << "  --- 1S RAA  vs. cent (pt<5) ---" << endl;
- // for(int j =0 ; j<nCentBins_2010 ; j++)
- //   {
- //     cout <<"j="<< j << "' , Raa = "<< RAA_1S_pt5[j] <<" \\pm "<<RAA_1S_pt5e[j]<<  endl;
- //   }
-
- // cout << "  --- 1S RAA  vs. cent (5<pt<12) ---" << endl;
- // for(int j =0 ; j<nCentBins_2010 ; j++)
- //   {
- //     cout <<"j="<< j << "' , Raa = "<< RAA_1S_pt12[j] <<" \\pm "<<RAA_1S_pt12e[j]<<  endl;
- //   }
-
- // cout << "  --- 1S RAA  vs. cent (12<pt<20) ---" << endl;
- // for(int j =0 ; j<nCentBins_2010 ; j++)
- //   {
- //     cout <<"j="<< j << "' , Raa = "<< RAA_1S_pt20[j] <<" \\pm "<<RAA_1S_pt20e[j]<<  endl;
- //   }
-
-
-
-
-
-//   if(plotDD){
-//     TCanvas *cRaarapcent = new TCanvas("cRaarapcent","cRaarapcent"); 
-//     cRaarapcent->cd();
-//     TPad *prapcent = new TPad("prapcent","prapcent",0.0,0.0,1.0,1.0);
-//     prapcent->SetBottomMargin(0.12);
-//     prapcent->SetTopMargin(0.03);
-//     prapcent->SetRightMargin(0.03);
-//     prapcent->SetLeftMargin(0.16);
-//     prapcent->Draw();
-//     prapcent->cd();
-//     //one pad to draw RaaPt!
-//     TF1 *f4RaaPt = new TF1("f4RaaPt","1",0,420);
-//     f4RaaPt->SetLineWidth(0);
-//     f4RaaPt->GetXaxis()->SetTitle("N_{Part}");
-//     f4RaaPt->GetYaxis()->SetTitle("R_{AA}");
-//     f4RaaPt->GetYaxis()->SetTitleOffset(1.8);
-//     f4RaaPt->GetYaxis()->SetTitleSize(0.028);
-//     f4RaaPt->GetYaxis()->SetRangeUser(0.,1.4);
-//     f4RaaPt->GetXaxis()->CenterTitle(kTRUE);
-//     f4RaaPt->Draw();
-//     TLegend *legend = new TLegend(0.5,0.60,0.8,0.75);
-//     legend->SetTextSize(0.029);
-//     legend->SetFillStyle(0);
-//     legend->SetFillColor(0);
-//     legend->SetBorderSize(0);
-//     legend->SetTextFont(42);
-//     TGraphErrors *grapcent120 = new TGraphErrors(nCentBins_2010,nPartDD,RAA_1S_y120,0,RAA_1S_y120e);
-//     grapcent120->SetMarkerColor(kRed+2);
-//     grapcent120->SetMarkerStyle(33);
-//     grapcent120->SetMarkerSize(2);
-//     grapcent120->Draw("pe");
-//     TGraphErrors *grapcent120circle = new TGraphErrors(nCentBins_2010,nPartDD,RAA_1S_y120,0,RAA_1S_y120e);
-//     grapcent120circle->SetMarkerStyle(27);
-//     grapcent120circle->SetMarkerSize(2);
-//     grapcent120circle->SetLineColor(kBlack);
-//     grapcent120circle->Draw("p");
-//     legend->AddEntry(grapcent120,"#varUpsilon(1S) |y| < 1.2","lp");
-
-//     TGraphErrors *grapcent240 = new TGraphErrors(nCentBins_2010,nPartDD,RAA_1S_y240,0,RAA_1S_y240e);
-//     grapcent240->SetMarkerColor(kRed+2);
-//     grapcent240->SetMarkerStyle(20);
-//     grapcent240->SetMarkerSize(1.4);
-//     grapcent240->Draw("pe");
-//     TGraphErrors *grapcent240circle = new TGraphErrors(nCentBins_2010,nPartDD,RAA_1S_y240,0,RAA_1S_y240e);
-//     grapcent240circle->SetMarkerStyle(24);
-//     grapcent240circle->SetMarkerSize(1.4);
-//     grapcent240circle->SetLineColor(kBlack);
-//     grapcent240circle->Draw("p");
-//     legend->AddEntry(grapcent240,"#varUpsilon(1S) 1.2 < |y| 2.4 ","lp");
-//     legend->Draw();
-//     f4RaaPt->Draw("same");
-
-//     //    legend->AddEntry(gcent1,"#varUpsilon(1S) integrated","p");
-//     tex = new TLatex(290,0.3,"0-20%");
-//     tex->SetTextSize(0.03);
-//     tex->SetLineWidth(2);
-//     tex->Draw();
-//     tex = new TLatex(40,0.3,"20-100%");
-//     tex->SetTextSize(0.03);
-//     tex->SetLineWidth(2);
-//     tex->Draw();
-//     gPad->RedrawAxis(); 
-
-
-//     TCanvas *cRaaptcent = new TCanvas("cRaaptcent","cRaaptcent"); 
-//     cRaaptcent->cd();
-//     TPad *pptcent = new TPad("pptcent","pptcent",0.0,0.0,1.0,1.0);
-//     pptcent->SetBottomMargin(0.12);
-//     pptcent->SetTopMargin(0.03);
-//     pptcent->SetRightMargin(0.03);
-//     pptcent->SetLeftMargin(0.16);
-//     pptcent->Draw();
-//     pptcent->cd();
-//     //one pad to draw RaaPt!
-//     TF1 *f4RaaPt = new TF1("f4RaaPt","1",0,420);
-//     f4RaaPt->SetLineWidth(0);
-//     f4RaaPt->GetXaxis()->SetTitle("N_{Part}");
-//     f4RaaPt->GetYaxis()->SetTitle("R_{AA}");
-//     f4RaaPt->GetYaxis()->SetTitleOffset(1.8);
-//     f4RaaPt->GetYaxis()->SetTitleSize(0.028);
-//     f4RaaPt->GetYaxis()->SetRangeUser(0.,1.3);
-//     f4RaaPt->GetXaxis()->CenterTitle(kTRUE);
-//     f4RaaPt->Draw();
-//     TLegend *legend = new TLegend(0.5,0.60,0.8,0.75);
-//     legend->SetTextSize(0.029);
-//     legend->SetFillStyle(0);
-//     legend->SetFillColor(0);
-//     legend->SetBorderSize(0);
-//     legend->SetTextFont(42);
-//     TGraphErrors *gptcent5 = new TGraphErrors(nCentBins_2010,nPartDD,RAA_1S_pt5,0,RAA_1S_pt5e);
-//     gptcent5->SetMarkerColor(kRed+2);
-//     gptcent5->SetMarkerStyle(33);
-//     gptcent5->SetMarkerSize(2);
-//     gptcent5->Draw("pe");
-//     TGraphErrors *gptcent5circle = new TGraphErrors(nCentBins_2010,nPartDD,RAA_1S_pt5,0,RAA_1S_pt5e);
-//     gptcent5circle->SetMarkerStyle(27);
-//     gptcent5circle->SetMarkerSize(2);
-//     gptcent5circle->SetLineColor(kBlack);
-//     gptcent5circle->Draw("p");
-//     legend->AddEntry(gptcent5,"#varUpsilon(1S) p_{T} < 5 GeV","lp");
-//     TGraphErrors *gptcent12 = new TGraphErrors(nCentBins_2010,nPartDD,RAA_1S_pt12,0,RAA_1S_pt12e);
-//     gptcent12->SetMarkerColor(kRed+2);
-//     gptcent12->SetMarkerStyle(20);
-//     gptcent12->SetMarkerSize(1.2);
-//     gptcent12->Draw("pe");
-//     TGraphErrors *gptcent12circle = new TGraphErrors(nCentBins_2010,nPartDD,RAA_1S_pt12,0,RAA_1S_pt12e);
-//     gptcent12circle->SetMarkerStyle(24);
-//     gptcent12circle->SetMarkerSize(1.2);
-//     gptcent12circle->SetLineColor(kBlack);
-//     gptcent12circle->Draw("p");
-//     legend->AddEntry(gptcent12,"#varUpsilon(1S) 5 < p_{T} < 12","lp");
-//     TGraphErrors *gptcent20 = new TGraphErrors(nCentBins_2010,nPartDD,RAA_1S_pt20,0,RAA_1S_pt20e);
-//     gptcent20->SetMarkerColor(kRed+2);
-//     gptcent20->SetMarkerStyle(22);
-//     gptcent20->SetMarkerSize(1.2);
-//     gptcent20->Draw("pe");
-//     TGraphErrors *gptcent20circle = new TGraphErrors(nCentBins_2010,nPartDD,RAA_1S_pt20,0,RAA_1S_pt20e);
-//     gptcent20circle->SetMarkerStyle(26);
-//     gptcent20circle->SetMarkerSize(1.2);
-//     gptcent20circle->SetLineColor(kBlack);
-//     gptcent20circle->Draw("p");
-//     //  gcent1circle->Draw("p");
-//     //    gcent1->Draw("pe");  
-// legend->AddEntry(gptcent20,"#varUpsilon(1S) 12 < p_{T} < 20","lp");
-// //    legend->AddEntry(gcent1,"#varUpsilon(1S) integrated","p");
-//     tex = new TLatex(290,0.32,"0-20%");
-//     tex->SetTextSize(0.03);
-//     tex->SetLineWidth(2);
-//     tex->Draw();
-//     tex = new TLatex(40,0.32,"20-100%");
-//     tex->SetTextSize(0.03);
-//     tex->SetLineWidth(2);
-//     tex->Draw();
-//     legend->Draw();
-//     gPad->RedrawAxis(); 
-//     cRaarapcent->SaveAs("~/Desktop/RAA_DD_RapCent.png"); 
-//     cRaaptcent->SaveAs("~/Desktop/RAA_DD_PtCent.png");
-
-//   }
