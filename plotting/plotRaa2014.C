@@ -1504,7 +1504,7 @@ cout << "  --- 3S Cross section in pp vs. y short bins---" << endl;
  TCanvas *cptaa = new TCanvas("cptaa","cptaa"); 
  cptaa->SetLogy();
  cptaa->cd();
- TF1 *f4Ptaa = new TF1("f4Ptaa","0.4",0,21);
+ TF1 *f4Ptaa = new TF1("f4Ptaa","0.4",0,20);
  f4Ptaa->SetLineWidth(0);
  f4Ptaa->GetXaxis()->SetTitle("p_{T}^{#varUpsilon} (GeV/c)");		
  f4Ptaa->GetYaxis()->SetTitle(" #frac{1}{T_{AA}} #frac{dN}{#Deltay dp_{T}}  [nb/(GeV/c)]");
@@ -1555,7 +1555,7 @@ cout << "  --- 3S Cross section in pp vs. y short bins---" << endl;
     TLatex latexpt;
     latexpt.SetTextSize(gTextSize);
     latexpt.SetTextFont(42);
-    latexpt.DrawLatex(10.5,0.015,"Cent. 0-100%, |y| < 2.4");
+    latexpt.DrawLatex(9.8,0.015,"Cent. 0-100%, |y| < 2.4");
 
     CMS_lumi(cptaa,101,33);
     cptaa->Update();
