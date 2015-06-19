@@ -1162,10 +1162,10 @@ cout << "  --- 3S Cross section in pp vs. y short bins---" << endl;
    legend->SetFillColor(0);
    legend->SetBorderSize(0);
    legend->SetTextFont(42);
-   legend->AddEntry(g1pp_noCorr,"#varUpsilon(1S) pp Reco, MC truth","lp");
-   legend->AddEntry(g1pp,"#varUpsilon(1S) pp Reco, T&P corrected ","lp");
-   legend->AddEntry(g1AA_noCorr,"#varUpsilon(1S) HI Reco, MC truth","lp");
-   legend->AddEntry(g1AA,"#varUpsilon(1S) HI Reco, T&P corrected ","lp");
+   legend->AddEntry(g1pp_noCorr,"#varUpsilon(1S) pp Reco, MC truth","pe");
+   legend->AddEntry(g1pp,"#varUpsilon(1S) pp Reco, T&P corrected ","pe");
+   legend->AddEntry(g1AA_noCorr,"#varUpsilon(1S) HI Reco, MC truth","pe");
+   legend->AddEntry(g1AA,"#varUpsilon(1S) HI Reco, T&P corrected ","pe");
 
  
    legend->Draw();
@@ -1230,10 +1230,10 @@ cout << "  --- 3S Cross section in pp vs. y short bins---" << endl;
    legend->SetFillColor(0);
    legend->SetBorderSize(0);
    legend->SetTextFont(42);
-   legend->AddEntry(g1pp_noCorr,"#varUpsilon(1S) pp Reco, MC truth","lp");
-   legend->AddEntry(g1pp,"#varUpsilon(1S) pp Reco, T&P corrected ","lp");			     
-   legend->AddEntry(g1AA_noCorr,"#varUpsilon(1S) HI Reco, MC truth","lp");
-   legend->AddEntry(g1AA,"#varUpsilon(1S) HI Reco, T&P corrected ","lp");
+   legend->AddEntry(g1pp_noCorr,"#varUpsilon(1S) pp Reco, MC truth","pe");
+   legend->AddEntry(g1pp,"#varUpsilon(1S) pp Reco, T&P corrected ","pe");			     
+   legend->AddEntry(g1AA_noCorr,"#varUpsilon(1S) HI Reco, MC truth","pe");
+   legend->AddEntry(g1AA,"#varUpsilon(1S) HI Reco, T&P corrected ","pe");
 
    legend->Draw();
    cTNP2->SaveAs("~/Desktop/TnPCorrection_Rap.png");
@@ -1292,10 +1292,10 @@ cout << "  --- 3S Cross section in pp vs. y short bins---" << endl;
      legend->SetFillColor(0);
      legend->SetBorderSize(0);
      legend->SetTextFont(42);
-     legend->AddEntry(g1,"1S pp vs pT, loose","lp");
-     legend->AddEntry(g3,"1S pp vs pT, tight","lp");
-     legend->AddEntry(g2,"1S PbPb vs pT, loose","lp");
-     legend->AddEntry(g4,"1S PbPb vs pT, tight","lp");
+     legend->AddEntry(g1,"1S pp vs pT, loose","pe");
+     legend->AddEntry(g3,"1S pp vs pT, tight","pe");
+     legend->AddEntry(g2,"1S PbPb vs pT, loose","pe");
+     legend->AddEntry(g4,"1S PbPb vs pT, tight","pe");
      legend->Draw();
      cSignificance->SaveAs("~/Desktop/cSignificance_Pt.png");
      cSignificance->SaveAs("~/Documents/PR/forTWiki/CSandRAA/cSignificance_Pt.pdf");
@@ -1349,10 +1349,10 @@ cout << "  --- 3S Cross section in pp vs. y short bins---" << endl;
      legend->SetFillColor(0);
      legend->SetBorderSize(0);
      legend->SetTextFont(42);
-     legend->AddEntry(g5,"1S pp vs y, loose","lp");
-     legend->AddEntry(g7,"1S pp vs y, tight","lp");
-     legend->AddEntry(g6,"1S PbPb vs y, loose","lp");
-     legend->AddEntry(g8,"1S PbPb vs y, tight","lp");
+     legend->AddEntry(g5,"1S pp vs y, loose","pe");
+     legend->AddEntry(g7,"1S pp vs y, tight","pe");
+     legend->AddEntry(g6,"1S PbPb vs y, loose","pe");
+     legend->AddEntry(g8,"1S PbPb vs y, tight","pe");
      legend->Draw();
      cSignificance2->SaveAs("~/Desktop/cSignificance_Rap.png");
      cSignificance2->SaveAs("~/Documents/PR/forTWiki/CSandRAA/cSignificance_Rap.pdf");
@@ -1455,11 +1455,11 @@ cout << "  --- 3S Cross section in pp vs. y short bins---" << endl;
  legend->SetFillColor(0);
  legend->SetBorderSize(0);
  legend->SetTextFont(42);
- if(!plotTNP){ legend->AddEntry(gpt1pp,"#varUpsilon(1S), pp ","lp");
-   legend->AddEntry(gpt1,"#varUpsilon(1S), PbPb ","lp");}
+ if(!plotTNP){ legend->AddEntry(gpt1pp,"#varUpsilon(1S), pp ","pe");
+   legend->AddEntry(gpt1,"#varUpsilon(1S), PbPb ","pe");}
  if(plotTNP){
-   legend->AddEntry(gpt1TNPpp,"#varUpsilon(1S) pp","lp");
-   legend->AddEntry(gpt1TNP,"#varUpsilon(1S) PbPb","lp");
+   legend->AddEntry(gpt1TNPpp,"#varUpsilon(1S) pp","pe");
+   legend->AddEntry(gpt1TNP,"#varUpsilon(1S) PbPb","pe");
 
 
    cout << mean_pp << " is the mean of 1S AA spectrum"<< endl;
@@ -1502,24 +1502,19 @@ cout << "  --- 3S Cross section in pp vs. y short bins---" << endl;
  // gPad->RedrawAxis();
 
  TCanvas *cptaa = new TCanvas("cptaa","cptaa"); 
+ cptaa->SetLogy();
  cptaa->cd();
- TPad *ppt1 = new TPad("ppt1","ppt1",0.0,0.0,1.0,0.9);
- ppt1->SetBottomMargin(0.12);
- // ppt1->SetTopMargin(0.03);
- ppt1->SetRightMargin(0.03);
- ppt1->SetLeftMargin(0.16);
- ppt1->SetLogy();
- ppt1->Draw();
- ppt1->cd();
  TF1 *f4Ptaa = new TF1("f4Ptaa","0.4",0,21);
  f4Ptaa->SetLineWidth(0);
- f4Ptaa->GetYaxis()->SetTitleOffset(1.5);
  f4Ptaa->GetXaxis()->SetTitle("p_{T}^{#varUpsilon} (GeV/c)");		
- f4Ptaa->GetYaxis()->SetTitle(" #frac{1}{T_{AA}N_{MB}}#frac{d^{2}N}{A#varepsilon dy dp_{T}}  [nb/(GeV/c)]");
+ f4Ptaa->GetYaxis()->SetTitle(" #frac{1}{T_{AA}} #frac{dN}{#Deltay dp_{T}}  [nb/(GeV/c)]");
  // f4Ptaa->GetYaxis()->SetTitle("#sigma(#varUpsilon #rightarrow #mu^{+}#mu^{-1}) (b)");
- f4Ptaa->GetYaxis()->SetTitleSize(0.038);
  f4Ptaa->GetYaxis()->SetRangeUser(1e-4,0.1);
  f4Ptaa->GetXaxis()->CenterTitle(kTRUE);
+ f4Ptaa->GetXaxis()->SetTitleSize(0.045);
+ f4Ptaa->GetXaxis()->SetTitleOffset(f4Ptaa->GetXaxis()->GetTitleOffset()*1.3);
+ f4Ptaa->GetYaxis()->SetTitleSize(0.04);
+ f4Ptaa->GetYaxis()->SetTitleOffset(1.8);
  f4Ptaa->Draw();
  gPt1syst->Draw("2");
  gpt1TNP->Draw("pe");
@@ -1545,69 +1540,45 @@ cout << "  --- 3S Cross section in pp vs. y short bins---" << endl;
  gpt2TNP->Draw("pe");
  gpt2TNPcircle->Draw("p");
  f4Ptaa->Draw("same");
- TLatex *l1CMSpt = new TLatex(16,0.05, "CMS");
- l1CMSpt->SetTextFont(62);
- l1CMSpt->SetTextSize(0.06);
- l1CMSpt->Draw();
- TLegend *legend = new TLegend(0.7,0.6,0.85,0.75);
- legend->SetTextSize(0.035);
+ TLegend *legend = new TLegend(0.20,0.17,0.35,0.32);
+ legend->SetTextSize(gTextSize);
  legend->SetFillStyle(0);
  legend->SetFillColor(0);
  legend->SetBorderSize(0);
  legend->SetTextFont(42);
- legend->AddEntry(gpt1TNP,"#varUpsilon(1S)","lp");
- legend->AddEntry(gpt2TNP,"#varUpsilon(2S)","lp");
+ legend->AddEntry(gpt1TNP,"#varUpsilon(1S)","pe");
+ legend->AddEntry(gpt2TNP,"#varUpsilon(2S)","pe");
  legend->Draw();
  cptaa->cd();
- TPad *p2 = new TPad("p2","p2",0.14,0.9,1.0,1.0);
- // p2->SetBottomMargin(0.12);
- p2->SetTopMargin(0.03);
- p2->SetRightMargin(0.0);
- p2->SetLeftMargin(0.01);
- p2->SetTickx(0);
- // p2->SetTicky(0);
- p2->Draw();
- p2->cd();
- TLatex *prelim =new TLatex(0.04,0.06,"Preliminary");
- prelim->SetTextFont(52);
- prelim->SetTextSize(0.5);
- prelim->Draw();
- TLatex *pbpb_pp = new TLatex (0.47,0.06,"PbPb 166 #mub^{-1}  #sqrt{s_{NN}} = 2.76 TeV"); 
- pbpb_pp->SetTextFont(42); //#sqrt{s} = 2.76 TeV
- pbpb_pp->SetTextSize(0.3);
- pbpb_pp->SetTextColor(kBlack);
- pbpb_pp->Draw(); 
- // TLatex *l1CMSpt = new TLatex(8,0.2, "CMS Internal #sqrt{s_{NN}} = 2.76 TeV");
- // // TLatex *l1CMSpt = new TLatex(12,2e-10, "CMS internal");
- // l1CMSpt->SetTextFont(42);
- // l1CMSpt->SetTextSize(0.038);
- // l1CMSpt->Draw();
- // TLatex *lyL= new TLatex(8,0.1,"L_{PbPb} = 166 #mub^{-1}, |y| < 2.4");
- // lyL->SetTextFont(42);
- // lyL->SetTextSize(0.03);
- // lyL->Draw();
+ 
+    // Cent. 0-100%, |y| < 2.4
+    TLatex latexpt;
+    latexpt.SetTextSize(gTextSize);
+    latexpt.SetTextFont(42);
+    latexpt.DrawLatex(10.5,0.015,"Cent. 0-100%, |y| < 2.4");
+
+    CMS_lumi(cptaa,101,33);
+    cptaa->Update();
+    cptaa->RedrawAxis();
+    cptaa->GetFrame()->Draw();
  
  cptaa->SaveAs("~/Documents/PR/forTWiki/CSandRAA/CS_AAPt.pdf");
  cptaa->SaveAs("~/Desktop/Xsection_AA_1S_pt.png");
  //////////
  // pp
  TCanvas *cptpp = new TCanvas("cptpp","cptpp"); 
+ cptpp->SetLogy();
  cptpp->cd();
- TPad *ppt1pp = new TPad("ppt1pp","ppt1pp",0.0,0.0,1.0,0.9);
- ppt1pp->SetBottomMargin(0.12);
- ppt1pp->SetTopMargin(0.03);
- ppt1pp->SetRightMargin(0.03);
- ppt1pp->SetLeftMargin(0.16);
- ppt1pp->SetLogy();
- ppt1pp->Draw();
- ppt1pp->cd();
  TF1 *f4Pt = new TF1("f4Pt","10",0,20);
  f4Pt->SetLineWidth(0);
- f4Pt->GetYaxis()->SetTitleOffset(1.5);
+ // f4Pt->GetYaxis()->SetTitleOffset(1.5);
  f4Pt->GetXaxis()->SetTitle("p_{T}^{#varUpsilon} (GeV/c)");		
  f4Pt->GetYaxis()->SetTitle("#frac{1}{#Deltay} #frac{d#sigma}{dp_{T}}  [nb/ GeV/c]");
 
- f4Pt->GetYaxis()->SetTitleSize(0.035);
+ f4Pt->GetXaxis()->SetTitleSize(0.045);
+ f4Pt->GetXaxis()->SetTitleOffset(f4Pt->GetXaxis()->GetTitleOffset()*1.3);
+ f4Pt->GetYaxis()->SetTitleSize(0.045);
+ f4Pt->GetYaxis()->SetTitleOffset(1.64);
  f4Pt->GetYaxis()->SetRangeUser(0.0005,0.2);
  //f4Pt->GetYaxis()->SetRangeUser(0.01,.09);
  f4Pt->GetXaxis()->CenterTitle(kTRUE);
@@ -1705,48 +1676,28 @@ cout << "  --- 3S Cross section in pp vs. y short bins---" << endl;
  gPad->RedrawAxis();
  //f4Pt->Draw("same");
  gPad->RedrawAxis();
- TLegend *legend = new TLegend(0.7,0.55,0.95,0.7);
- legend->SetTextSize(0.029);
+ TLegend *legend = new TLegend(0.24,0.19,0.49,0.40);
+ legend->SetTextSize(gTextSize);
  legend->SetFillStyle(0);
  legend->SetFillColor(0);
  legend->SetBorderSize(0);
  legend->SetTextFont(42);
- legend->AddEntry(gpt1pp,"#varUpsilon(1S) ","lp"); 
- legend->AddEntry(gpt2TNPpp,"#varUpsilon(2S) ","lp");
- legend->AddEntry(gpt3TNPpp,"#varUpsilon(3S) ","lp");
+ legend->AddEntry(gpt1pp,"#varUpsilon(1S) ","pe"); 
+ legend->AddEntry(gpt2TNPpp,"#varUpsilon(2S) ","pe");
+ legend->AddEntry(gpt3TNPpp,"#varUpsilon(3S) ","pe");
  legend->Draw();
- TLatex *l1CMSpt = new TLatex(16,0.11, "CMS");
- l1CMSpt->SetTextFont(62);
- l1CMSpt->SetTextSize(0.06);
- l1CMSpt->Draw();
- cptpp->cd();
- TPad *p2 = new TPad("p2","p2",0.1,0.88,1.0,1.0);
- p2->SetBottomMargin(0.12);
- p2->SetTopMargin(0.03);
- p2->SetRightMargin(0.0);
- p2->SetLeftMargin(0.01);
- p2->SetTickx(0);
- // p2->SetTicky(0);
- p2->Draw();
- p2->cd();
- TLatex *prelim =new TLatex(0.08,0.06,"Preliminary");
- prelim->SetTextFont(52);
- prelim->SetTextSize(0.5);
- prelim->Draw();
- TLatex *pbpb_pp = new TLatex (0.57,0.06,"pp 5.4 pb^{-1}  #sqrt{s} = 2.76 TeV"); 
- pbpb_pp->SetTextFont(42); //#sqrt{s} = 2.76 TeV
- pbpb_pp->SetTextSize(0.3);
- pbpb_pp->SetTextColor(kBlack);
- pbpb_pp->Draw(); 
- // TLatex *l1CMSpt = new TLatex(8.1,0.2, "CMS Internal #sqrt{s} = 2.76 TeV");
- // l1CMSpt->SetTextFont(42);
- // l1CMSpt->SetTextSize(0.04);
- // l1CMSpt->Draw();
+
+    // |y| < 2.4
+    TLatex latexpt;
+    latexpt.SetTextSize(gTextSize);
+    latexpt.SetTextFont(42);
+    latexpt.DrawLatex(15.7,0.025,"|y| < 2.4");
+
+    CMS_lumi(cptpp,102,33);
+    cptpp->Update();
+    cptpp->RedrawAxis();
+    cptpp->GetFrame()->Draw();
  
- // TLatex *lyL= new TLatex(8.1,0.08,"L_{pp} = 5.4 pb^{-1}; |y| < 2.4");
- // lyL->SetTextSize(0.03);
- // lyL->SetTextFont(42);
- // lyL->Draw();
  cptpp->SaveAs("~/Documents/PR/forTWiki/CSandRAA/CS1S_ppPt.pdf");
  cptpp->SaveAs("~/Desktop/Xsection_pp1S_Pt.png");
  }
@@ -1816,8 +1767,8 @@ TGraphErrors *gpt1ppF = new TGraphErrors(nPtBins_2013,pt,CS1S_pp_ptFiducial,pte,
  legend->SetFillColor(0);
  legend->SetBorderSize(0);
  legend->SetTextFont(42);
- legend->AddEntry(gpt1ppF,"#varUpsilon(1S), pp ","lp");
- legend->AddEntry(g2ptFiducial,"#varUpsilon(2S), pp ","lp");
+ legend->AddEntry(gpt1ppF,"#varUpsilon(1S), pp ","pe");
+ legend->AddEntry(g2ptFiducial,"#varUpsilon(2S), pp ","pe");
  legend->Draw();
  TLatex *l1CMSpt = new TLatex(2,0.0000000008, "CMS Internal #sqrt{s} = 2.76 TeV");
  l1CMSpt->SetTextFont(42);
@@ -1892,8 +1843,8 @@ TGraphErrors *gpt1ppF = new TGraphErrors(nPtBins_2013,pt,CS1S_pp_ptFiducial,pte,
  legend->SetFillColor(0);
  legend->SetBorderSize(0);
  legend->SetTextFont(42);
- legend->AddEntry(gpt1ppF,"#varUpsilon(1S), pp ","lp");
- legend->AddEntry(gpt1F,"#varUpsilon(1S), PbPb ","lp");
+ legend->AddEntry(gpt1ppF,"#varUpsilon(1S), pp ","pe");
+ legend->AddEntry(gpt1F,"#varUpsilon(1S), PbPb ","pe");
  legend->Draw();
  TLatex *l1CMSpt = new TLatex(2,0.0000000008, "CMS Internal #sqrt{s} = 2.76 TeV");
  l1CMSpt->SetTextFont(42);
@@ -2219,11 +2170,11 @@ legendB->SetFillStyle(0);
 legendB->SetFillColor(0);
 legendB->SetBorderSize(0);
 legendB->SetTextFont(42);
- if(!plotTNP){legendB->AddEntry(grap1,"#varUpsilon(1S) PbPb ","lp");
-   legendB->AddEntry(grap1pp,"#varUpsilon(1S) pp ","lp");}
+ if(!plotTNP){legendB->AddEntry(grap1,"#varUpsilon(1S) PbPb ","pe");
+   legendB->AddEntry(grap1pp,"#varUpsilon(1S) pp ","pe");}
  if(plotTNP){
-   legendB->AddEntry(grap1TNP,"#varUpsilon(1S) PbPb","lp");
-   legendB->AddEntry(grap1TNPpp,"#varUpsilon(1S) pp","lp");
+   legendB->AddEntry(grap1TNP,"#varUpsilon(1S) PbPb","pe");
+   legendB->AddEntry(grap1TNPpp,"#varUpsilon(1S) pp","pe");
  }
  legendB->Draw();
 
@@ -2301,11 +2252,11 @@ legendB->SetTextFont(42);
  legendB->SetFillColor(0);
  legendB->SetBorderSize(0);
  legendB->SetTextFont(42);
- if(!plotTNP){legendB->AddEntry(grap1,"#varUpsilon(1S) PbPb ","lp");
-   legendB->AddEntry(grap2TNP,"#varUpsilon(2S) PbPb ","lp");}
+ if(!plotTNP){legendB->AddEntry(grap1,"#varUpsilon(1S) PbPb ","pe");
+   legendB->AddEntry(grap2TNP,"#varUpsilon(2S) PbPb ","pe");}
  if(plotTNP){
-   legendB->AddEntry(grap1TNP,"#varUpsilon(1S) ","lp");
-   legendB->AddEntry(grap2TNP,"#varUpsilon(2S) ","lp");
+   legendB->AddEntry(grap1TNP,"#varUpsilon(1S) ","pe");
+   legendB->AddEntry(grap2TNP,"#varUpsilon(2S) ","pe");
  }
  legendB->Draw();
  crapaa->cd();
@@ -2618,7 +2569,7 @@ if(plotRAA){
     grap2010circle->SetMarkerSize(2);
     grap2010circle->SetLineColor(kBlack);
     grap2010circle->Draw("p");
-    legend->AddEntry(grap2010,"#varUpsilon(1S) JHEP 05 (2012) 063","lp");
+    legend->AddEntry(grap2010,"#varUpsilon(1S) JHEP 05 (2012) 063","pe");
     f4RaaRap->Draw("same");
   }
   gPad->RedrawAxis(); 
@@ -2646,7 +2597,7 @@ if(plotRAA){
   if(plotTNP) {
     legend->AddEntry(gRaaRap1TNP,"#varUpsilon(1S)","pe");
     if(plotTight){
-      legend->AddEntry(gRaaRap1TNP4,"#varUpsilon(1S) 'tight'","lp");
+      legend->AddEntry(gRaaRap1TNP4,"#varUpsilon(1S) 'tight'","pe");
     }else{
       legend->AddEntry(gRaaRap2TNP,"#varUpsilon(2S)","pe");
     }
@@ -2710,7 +2661,7 @@ if(plotRAA){
   legend->SetFillColor(0);
   legend->SetBorderSize(0);
   legend->SetTextFont(42);
-  legend->AddEntry(gCompRap1,"#varUpsilon(1S) A_{pp}/A_{PbPb} ","lp");
+  legend->AddEntry(gCompRap1,"#varUpsilon(1S) A_{pp}/A_{PbPb} ","pe");
   legend->Draw();
 
 
@@ -2750,7 +2701,7 @@ if(plotRAA){
   legend->SetFillColor(0);
   legend->SetBorderSize(0);
   legend->SetTextFont(42);
-  legend->AddEntry(gCompPt1,"#varUpsilon(1S) A_{pp}/A_{PbPb} ","lp");
+  legend->AddEntry(gCompPt1,"#varUpsilon(1S) A_{pp}/A_{PbPb} ","pe");
   legend->Draw();
 
   TCanvas *cAccEffComp1 = new TCanvas("cAccEffComp1","cAccEffComp1"); 
@@ -2884,7 +2835,7 @@ if(plotRAA){
   legend->SetFillColor(0);
   legend->SetBorderSize(0);
   legend->SetTextFont(42);
-  legend->AddEntry(gCompRap1,"#varUpsilon(1S) #epsilon_{pp}/#epsilon_{PbPb} ","lp");
+  legend->AddEntry(gCompRap1,"#varUpsilon(1S) #epsilon_{pp}/#epsilon_{PbPb} ","pe");
   legend->Draw();
   // now vs pt
   
@@ -2943,8 +2894,8 @@ if(plotRAA){
   legend->SetFillColor(0);
   legend->SetBorderSize(0);
   legend->SetTextFont(42);
-  legend->AddEntry(gCompPt1,"#varUpsilon(1S) #epsilon_{pp} vs. p_{T}^{#mu#mu}","lp");
-  legend->AddEntry(gCompPt_pbpb,"#varUpsilon(1S) #epsilon_{PbPb} vs. p_{T}^{#mu#mu}","lp"); 
+  legend->AddEntry(gCompPt1,"#varUpsilon(1S) #epsilon_{pp} vs. p_{T}^{#mu#mu}","pe");
+  legend->AddEntry(gCompPt_pbpb,"#varUpsilon(1S) #epsilon_{PbPb} vs. p_{T}^{#mu#mu}","pe"); 
   legend->Draw();
   cEffCompPt->SaveAs("~/Desktop/effcomp.pdf");
   //tnp
@@ -2999,8 +2950,8 @@ if(plotRAA){
   legend->SetFillColor(0);
   legend->SetBorderSize(0);
   legend->SetTextFont(42);
-  legend->AddEntry(gtnpPt1,"#varUpsilon(1S) SF_{pp} vs. p_{T}^{#mu#mu}","lp");
-  legend->AddEntry(gtnpPt_pbpb,"#varUpsilon(1S) SF_{PbPb} vs. p_{T}^{#mu#mu}","lp"); 
+  legend->AddEntry(gtnpPt1,"#varUpsilon(1S) SF_{pp} vs. p_{T}^{#mu#mu}","pe");
+  legend->AddEntry(gtnpPt_pbpb,"#varUpsilon(1S) SF_{PbPb} vs. p_{T}^{#mu#mu}","pe"); 
   legend->Draw();
   cTnpCompPt->SaveAs("~/Desktop/Tnp_SFcomp.pdf");
   //now 2S
@@ -3041,7 +2992,7 @@ if(plotRAA){
   legend->SetFillColor(0);
   legend->SetBorderSize(0);
   legend->SetTextFont(42);
-  legend->AddEntry(gCompPt1,"#varUpsilon(1S) #epsilon_{pp}/#epsilon_{PbPb} ","lp");
+  legend->AddEntry(gCompPt1,"#varUpsilon(1S) #epsilon_{pp}/#epsilon_{PbPb} ","pe");
   legend->Draw();
  }
 
@@ -3607,7 +3558,7 @@ float plot2010()
     // Internal #sqrt{s_{NN}} = 2.76 TeV
     //  if(!plotTight){ TLegendEntry *}
       // TLegendEntry *entry=leg->AddEntry(gcent1syst,"#varUpsilon(1S)","pe");}
-    if(plotTight){ TLegendEntry *entry=leg->AddEntry(gcent14,"#varUpsilon(1S) tight","lp");
+    if(plotTight){ TLegendEntry *entry=leg->AddEntry(gcent14,"#varUpsilon(1S) tight","pe");
       // entry=leg->AddEntry(gcent2011,"#varUpsilon(1S) 2011","p");    
     }
 
@@ -4089,8 +4040,8 @@ void plotRAA_uncorr(){
       legend->SetFillColor(0);
       legend->SetBorderSize(0);
       legend->SetTextFont(42);
-      legend->AddEntry(gpt1pp,"#varUpsilon(1S), pp ","lp");
-      legend->AddEntry(gpt1,"#varUpsilon(1S), PbPb ","lp");
+      legend->AddEntry(gpt1pp,"#varUpsilon(1S), pp ","pe");
+      legend->AddEntry(gpt1,"#varUpsilon(1S), PbPb ","pe");
 
       legend->Draw();
       TLatex *l1CMSpt = new TLatex(8,0.0000000008, "CMS Internal #sqrt{s_{NN}} = 2.76 TeV");
@@ -4209,8 +4160,8 @@ void plotRAA_uncorr(){
       legend->SetFillColor(0);
       legend->SetBorderSize(0);
       legend->SetTextFont(42);
-      legend->AddEntry(gRaaPt1U,"#varUpsilon(1S) unfolded","lp");
-      legend->AddEntry(gRaaPt1,"#varUpsilon(1S) raw","lp");
+      legend->AddEntry(gRaaPt1U,"#varUpsilon(1S) unfolded","pe");
+      legend->AddEntry(gRaaPt1,"#varUpsilon(1S) raw","pe");
       legend->Draw();
       gPad->RedrawAxis();
   
@@ -4276,8 +4227,8 @@ void plotRAA_uncorr(){
       legend->SetFillColor(0);
       legend->SetBorderSize(0);
       legend->SetTextFont(42);
-      legend->AddEntry(grap1pp,"#varUpsilon(1S), pp ","lp");
-      legend->AddEntry(grap1,"#varUpsilon(1S), PbPb ","lp");
+      legend->AddEntry(grap1pp,"#varUpsilon(1S), pp ","pe");
+      legend->AddEntry(grap1,"#varUpsilon(1S), PbPb ","pe");
 
       legend->Draw();
       TLatex *l1CMSrap = new TLatex(0.8,0.0000000008, "CMS Internal #sqrt{s_{NN}} = 2.76 TeV");
@@ -4445,8 +4396,8 @@ void plotDoubleRatios()
   legend->SetFillColor(0);
   legend->SetBorderSize(0);
   legend->SetTextFont(42);
-  legend->AddEntry(gDRPt2,"#varUpsilon(2S)/#varUpsilon(1S) pPb/pp","lp");
-  legend->AddEntry(gDRPt3,"#varUpsilon(3S)/#varUpsilon(1S) pPb/pp","lp");
+  legend->AddEntry(gDRPt2,"#varUpsilon(2S)/#varUpsilon(1S) pPb/pp","pe");
+  legend->AddEntry(gDRPt3,"#varUpsilon(3S)/#varUpsilon(1S) pPb/pp","pe");
   legend->Draw();
 
  gPad->RedrawAxis();
@@ -4537,10 +4488,10 @@ void plotDoubleRatios()
   legend->SetFillColor(0);
   legend->SetBorderSize(0);
   legend->SetTextFont(42);
-  legend->AddEntry(gSRPt2pp,"#varUpsilon(2S)/#varUpsilon(1S) pp","lp");
-  legend->AddEntry(gSRPt2pa,"#varUpsilon(2S)/#varUpsilon(1S) pPb ","lp");
-  legend->AddEntry(gSRPt3pp,"#varUpsilon(3S)/#varUpsilon(1S) pp","lp");
-  legend->AddEntry(gSRPt3pa,"#varUpsilon(3S)/#varUpsilon(1S) pPb","lp");
+  legend->AddEntry(gSRPt2pp,"#varUpsilon(2S)/#varUpsilon(1S) pp","pe");
+  legend->AddEntry(gSRPt2pa,"#varUpsilon(2S)/#varUpsilon(1S) pPb ","pe");
+  legend->AddEntry(gSRPt3pp,"#varUpsilon(3S)/#varUpsilon(1S) pp","pe");
+  legend->AddEntry(gSRPt3pa,"#varUpsilon(3S)/#varUpsilon(1S) pPb","pe");
   legend->Draw();
 
  gPad->RedrawAxis();
