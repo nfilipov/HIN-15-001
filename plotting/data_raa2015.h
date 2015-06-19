@@ -116,6 +116,7 @@ float N3S_pp_tot4 = 619;
 float N3S_pp_tot4e =41;
 ///more
 float N2S_pp_tot4s=0.0209;
+float N3S_pp_tot4s=0.03;
 /* ------------------------------------------- */
 /*                      pT                     */
 /* ------------------------------------------- */
@@ -724,11 +725,11 @@ float e_1S_pythia_tot= 0.679;//new
 float e_1S_pythia_tote=0.001;///stat. unc
 float e_1S_pythia_tots=0.007;///stat. unc
 //sf from tag and probe = eff_corr/eff_noCorr
-float t_1S_pythia_tot3p5 = 1.076;
+float t_1S_pythia_tot3p5 = 1.095;
 float t_1S_pythia_tot3p5e = 0.006;
 //total
 float Aet_1S_pythia_tot=0.257;// 
-float Aet_1S_pythia_tote = Aet_1S_pythia_tot*sqrt(t_1S_pythia_tot3p5e*t_1S_pythia_tot3p5e+Ae_1S_pythia_tote*Ae_1S_pythia_tote);
+float Aet_1S_pythia_tote = Aet_1S_pythia_tot*sqrt(pow(t_1S_pythia_tot3p5e/t_1S_pythia_tot3p5,2)+Ae_1S_pythia_tote*Ae_1S_pythia_tote);
 /* ------------------------------------------- */
 /*                     1S pT                   */
 /* ------------------------------------------- */
@@ -740,12 +741,12 @@ float A_1S_pythia_pt3p5e[nPtBins2015]={0.0002,0.0001,0.0001,0.002,0.005,0.01};
 float Ae_1S_pythia_pt[nPtBins2015] = {0.301,0.193,0.190,0.267,0.388,0.5};//wrong
 float Ae_1S_pythia_pte[nPtBins2015] = {0.001,0.001,0.001,0.002,0.004,0.008};//fake
 //tnp. + uncertainty
-float t_1S_pythia_pt3p5[nPtBins2015]= {1.11817,   1.10721,   1.08432,   1.06287,  1.04233,  1.02923};
-float t_1S_pythia_pt3p5e[nPtBins2015]={0.00731647,0.00697201,0.00648512,0.00649662,0.00683238,0.00698397};
+float t_1S_pythia_pt3p5[nPtBins2015]= {1.119,   1.112,   1.087,   1.06287,  1.040,  1.02923};
+float t_1S_pythia_pt3p5e[nPtBins2015]={0.01,0.01,0.009,0.009,0.009,0.00698397};
 //A*e*t
-float Aet_1S_pythia_pt[nPtBins_2014]={0.333,0.211,0.204,0.281,0.402,0.41};
+float Aet_1S_pythia_pt[nPtBins_2014]={0.339,0.214,0.207,0.284,0.404,0.41};
 float Aet_1S_pythia_pte[nPtBins_2014]={0.001,0.001,0.001,0.002,0.004,0.007};
-float Aet_1S_pythia_pts[nPtBins_2014]={0.007,0.004,0.006,0.008,0.011,0.013};
+float Aet_1S_pythia_pts[nPtBins_2014]={0.008,0.004,0.006,0.008,0.011,0.012};
 /* ------------------------------------------- */
 /*                   1S rap                    */
 /* ------------------------------------------- */
@@ -755,10 +756,10 @@ float A_1S_pythia_rap3p5[nRapBins2015]={0.393,0.392,0.393,0.389,0.338,0.145};
 float A_1S_pythia_rap3p5e[nRapBins2015]={0.002,0.002,0.002,0.002,0.002,0.001};
 float Ae_1S_pythia_rap2014[nRapBins2015]={0.279,0.278,0.280,0.262,0.208,0.073};
 float Ae_1S_pythia_rap2014e[nRapBins2015]={0.002,0.002,0.002,0.002,0.001,0.001};
-float t_1S_pythia_rap3p5[nRapBins2015]={1.0728,1.07288,1.07859,1.09982,1.14049,1.16253};
-float t_1S_pythia_rap3p5e[nRapBins2015]={0.00397197, 0.00399541, 0.00468608, 0.00767014, 0.0136158,0.017743};
+float t_1S_pythia_rap3p5[nRapBins2015]={1.076,1.077,1.083,1.104,1.142,1.163};
+float t_1S_pythia_rap3p5e[nRapBins2015]={0.006, 0.006, 0.006, 0.010, 0.019,0.025};
 //A*e*t
-float Aet_1S_pythia_rap2014[nRapBins_2014]={0.287,0.287,0.292,0.279,0.232,0.082};
+float Aet_1S_pythia_rap2014[nRapBins_2014]={0.300,0.299,0.303,0.289,0.238,0.085};
 float Aet_1S_pythia_rap2014e[nRapBins_2014]={0.002,0.002,0.002,0.002,0.002,0.001};
 float Aet_1S_pythia_rap2014s[nRapBins_2014]={0.003,0.003,0.002,0.003,0.003,0.002};
 /* ------------------------------------------- */
@@ -768,10 +769,10 @@ float Ae_1S_pythia_tot4= 0.166;//new
 float Ae_1S_pythia_tot4e=0.001;///shape vars
 float e_1S_pythia_tot4= 0.733;//new
 float e_1S_pythia_tot4e=0.002;///shape vars
-float t_1S_pythia_tot4 = 1.076;
-float t_1S_pythia_tot4e = 0.006;
+float t_1S_pythia_tot4 = 1.095;
+float t_1S_pythia_tot4e = 0.009;
 float Aet_1S_pythia_tot4=t_1S_pythia_tot4*Ae_1S_pythia_tot;// 
-float Aet_1S_pythia_tot4e = Aet_1S_pythia_tot4*sqrt(t_1S_pythia_tot4e*t_1S_pythia_tot4e+Ae_1S_pythia_tot4e*Ae_1S_pythia_tot4e);
+float Aet_1S_pythia_tot4e = Aet_1S_pythia_tot4*sqrt(pow(t_1S_pythia_tot4e/t_1S_pythia_tot4,2)+Ae_1S_pythia_tot4e*Ae_1S_pythia_tot4e);
 //dont care
 //eff., Acc., Acc*eff, 
 float e_1S_pythia_pt4[nPtBins2015]={0.705,0.716,0.738,0.753,0.779,0.8}; //last bin fake
@@ -781,10 +782,10 @@ float A_1S_pythia_pt4e[nPtBins2015]={0.001,0.001,0.001,0.002,0.004,0.01};
 float Ae_1S_pythia_pt4[nPtBins2015] = {0.189,0.113,0.138,0.221,0.356,0.48};//wrong
 float Ae_1S_pythia_pt4e[nPtBins2015] = {0.001,0.001,0.001,0.002,0.004,0.01};//fake
 //tnp. + uncertainty
-float t_1S_pythia_pt4[nPtBins2015]= {1.108,1.093,1.071,1.053,1.037,1.029};
+float t_1S_pythia_pt4[nPtBins2015]= {1.125,1.112,1.087,1.063,1.040,1.03};
 float t_1S_pythia_pt4e[nPtBins2015]={0.007,0.007,0.006,0.007,0.007,0.007};
 //A*e*t
-float Aet_1S_pythia_pt4[nPtBins_2014]={0.209,0.123,0.148,0.233,0.369};
+float Aet_1S_pythia_pt4[nPtBins_2014]={0.213,0.126,0.150,0.235,0.370};
 float Aet_1S_pythia_pt4e[nPtBins_2014]={0.001,0.001,0.001,0.002,0.004};
 float Aet_1S_pythia_pt4s[nPtBins_2014]={0.001,0.001,0.001,0.001,0.002};
 /* ------------------------------------------- */
@@ -797,10 +798,10 @@ float A_1S_pythia_rap4e[nRapBins2015]={0.001,0.001,0.001,0.001,0.001,0.001};
 float Ae_1S_pythia_rap4[nRapBins2015] ={0.195,0.197,0.193,0.177,0.142,0.052};
 float Ae_1S_pythia_rap4e[nRapBins2015]={0.001,0.001,0.001,0.001,0.001,0.001};
 //tnp. + uncertainty
-float t_1S_pythia_rap4[nRapBins2015]= {1.057,1.057,1.062,1.085,1.13,1.156};
-float t_1S_pythia_rap4e[nRapBins2015]={0.004,0.004,0.004,0.008,0.014,0.018};
+float t_1S_pythia_rap4[nRapBins2015]= {1.076,1.077,1.083,1.104,1.142,1.163};
+float t_1S_pythia_rap4e[nRapBins2015]={0.006,0.006,0.006,0.010,0.019,0.025};
 //A*e*t
-float Aet_1S_pythia_rap4[nRapBins_2014] ={0.206,0.208,0.205,0.192,0.160,0.060};
+float Aet_1S_pythia_rap4[nRapBins_2014] ={0.210,0.212,0.209,0.195,0.192,0.060};
 float Aet_1S_pythia_rap4e[nRapBins_2014]={0.001,0.001,0.001,0.001,0.001,0.001};
 float Aet_1S_pythia_rap4s[nRapBins_2014]={0.001,0.001,0.001,0.001,0.002,0.001};
 /* ------------------------------------------- */
@@ -970,10 +971,10 @@ float Ae_1S_pyquen_tot=0.223;
 float Ae_1S_pyquen_tote=0.005;
 float e_1S_pyquen_tot=0.633;
 float e_1S_pyquen_tote=0.005;
-float t_1S_pyquen_tot3p5= 1.12672;
-float t_1S_pyquen_tot3p5e=0.042282;
+float t_1S_pyquen_tot3p5= 1.128;
+float t_1S_pyquen_tot3p5e=0.065;
 float Aet_1S_pyquen_tot=Ae_1S_pyquen_tot*t_1S_pyquen_tot3p5;
-float Aet_1S_pyquen_tote=Aet_1S_pyquen_tot*sqrt(Ae_1S_pyquen_tote*Ae_1S_pyquen_tote+t_1S_pyquen_tot3p5e*t_1S_pyquen_tot3p5e);
+float Aet_1S_pyquen_tote=Aet_1S_pyquen_tot*sqrt(Ae_1S_pyquen_tote*Ae_1S_pyquen_tote+pow(t_1S_pyquen_tot3p5e/t_1S_pyquen_tot3p5,2));
 float t_1S_pyquen_tot4=1.070; //bof
 /* ------------------------------------------- */
 /*                    1S pT                    */
@@ -985,12 +986,12 @@ float A_1S_pyquen_pte[nPtBins2015]={0.0009,0.0001,0.0006,0.0012,0.0027,0.03};//f
 float Ae_1S_pyquen_pt[nPtBins2015] ={0.269,0.175,0.181,0.266,0.387,0.51};
 float Ae_1S_pyquen_pte[nPtBins2015]={0.0026,0.0017,0.0020,0.0023,0.0032,0.04}; // wrong
 //
-float t_1S_pyquen_pt3p5[nPtBins2015]= {1.16979,  1.15223,  1.11629, 1.08097, 1.04762, 1.02826};
-float t_1S_pyquen_pt3p5e[nPtBins2015]={0.0465888,0.045652,0.0418998,0.037923, 0.0355243, 0.0330998};
+float t_1S_pyquen_pt3p5[nPtBins2015]= {1.172,  1.154,  1.118, 1.082, 1.048, 1.02826};
+float t_1S_pyquen_pt3p5e[nPtBins2015]={0.082,0.074,0.063,0.052, 0.045, 0.0330998};
 //
-float Aet_1S_pyquen_pt[nPtBins_2013+1]= {0.315,0.202,0.202,0.288,0.405,0.524};//bof
+float Aet_1S_pyquen_pt[nPtBins_2013+1]= {0.315,0.202,0.202,0.288,0.406,0.524};//bof
 float Aet_1S_pyquen_pte[nPtBins_2013+1]={0.002,0.002,0.002,0.003,0.004,0.01};
-float Aet_1S_pyquen_pts[nPtBins_2013+1]={0.013,0.009,0.009,0.013,0.016,0.02};
+float Aet_1S_pyquen_pts[nPtBins_2013+1]={0.022,0.013,0.012,0.016,0.020,0.02};
 /* ------------------------------------------- */
 /*                    1S rap                   */
 /* ------------------------------------------- */
@@ -1001,12 +1002,12 @@ float A_1S_pyquen_rap2014e[nRapBins_2014]={0.002,0.002,0.002,0.002,0.002,0.001};
 float Ae_1S_pyquen_rap2014[nRapBins_2014]={0.240,0.250,0.265,0.255,0.206,0.076};
 float Ae_1S_pyquen_rap2014e[nRapBins_2014]={0.0025,0.0026,0.0028,0.0029,0.0027,0.0018};//,0.003386};
 
-float t_1S_pyquen_rap3p5[nRapBins2015]={1.11922 , 1.11911 , 1.12266, 1.1296 , 1.14686 , 1.1473 };
+float t_1S_pyquen_rap3p5[nRapBins2015]={1.120 , 1.120 , 1.124, 1.132 , 1.149 , 1.150 };
 float t_1S_pyquen_rap3p5e[nRapBins2015]={0.011549,0.011864,0.020660,0.059434,0.124098,0.171624};
 
-float Aet_1S_pyquen_rap2014[nRapBins_2014]={0.269,0.280,0.298,0.288,0.236,0.087};
+float Aet_1S_pyquen_rap2014[nRapBins_2014]={0.269,0.280,0.298,0.289,0.237,0.087};
 float Aet_1S_pyquen_rap2014e[nRapBins_2014]={0.002,0.002,0.003,0.003,0.003,0.002};
-float Aet_1S_pyquen_rap2014s[nRapBins_2014]={0.005,0.005,0.006,0.015,0.026,0.013};
+float Aet_1S_pyquen_rap2014s[nRapBins_2014]={0.012,0.012,0.014,0.019,0.023,0.011};
 /* ------------------------------------------- */
 /*                    1S cent                  */
 /* ------------------------------------------- */
@@ -1018,9 +1019,9 @@ float Ae_1S_pyquen_cent2014[nCentBins_2014]={0.231,0.232,0.230,0.229,0.228,0.224
 //starting with peripheral bin!//
 float Ae_1S_pyquen_cent2014e[nCentBins_2014]={0.0015,0.0016,0.0021,0.0021,0.0021,0.020,0.0029,0.0024}; // starting with the peripheral value!!!
 float t_1S_pyquen_cent3p5[nCentBins_2014]={1.12765,1.12702,1.12665,1.12712, 1.12616,1.12724,1.12681,1.12632}; //,1.12672
-float t_1S_pyquen_cent3p5e[nCentBins_2014]={0.0439684 ,0.0441217   ,0.0428742 ,0.0430943 ,0.043343  ,0.0421857 ,0.0425031 ,0.0408849 };
+float t_1S_pyquen_cent3p5e[nCentBins_2014]={0.064 ,0.065   ,0.065 ,0.066 ,0.066  ,0.066 ,0.066 ,0.066 };
 
-float Aet_1S_pyquen_cent2014[nCentBins_2014]={0.260,0.261,0.259,0.258,0.257,0.253,0.249,0.241};
+float Aet_1S_pyquen_cent2014[nCentBins_2014]={0.261,0.262,0.259,0.258,0.257,0.253,0.249,0.241};
 float Aet_1S_pyquen_cent2014e[nCentBins_2014]={0.002,0.002,0.002,0.002,0.002,0.002,0.003,0.002};
 float Aet_1S_pyquen_cent2014s[nCentBins_2014]={0.011,0.011,0.011,0.011,0.011,0.011,0.011,0.010};
 /* ------------------------------------------- */
