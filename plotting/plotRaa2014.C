@@ -35,6 +35,9 @@ const bool plotDD=false;
 const bool plotTight=false;
 const bool FourBins=true;
 const string outSyst = "syst_outputfile.txt";
+
+const TString basedir1 = "/tmp"; //"~/Desktop"
+const TString basedir2 = "/tmp"; //"~/Documents/PR/forTWiki/CSandRAA"
  
 const  ofstream ofSyst;
 
@@ -1169,8 +1172,8 @@ cout << "  --- 3S Cross section in pp vs. y short bins---" << endl;
 
  
    legend->Draw();
-   cTNP->SaveAs("~/Desktop/TnPCorrection_Pt.png");
-   cTNP->SaveAs("~/Documents/PR/forTWiki/CSandRAA/TnPCorrection_Pt.pdf");
+   cTNP->SaveAs(basedir1 + TString("/TnPCorrection_Pt.png"));
+   cTNP->SaveAs(basedir2 + TString("/TnPCorrection_Pt.pdf"));
 
    float et_1S_pyquen_rap2014[nRapBins_2014]={};
    float et_1S_pythia_rap2014[nRapBins_2014]={};
@@ -1236,8 +1239,8 @@ cout << "  --- 3S Cross section in pp vs. y short bins---" << endl;
    legend->AddEntry(g1AA,"#varUpsilon(1S) HI Reco, T&P corrected ","pe");
 
    legend->Draw();
-   cTNP2->SaveAs("~/Desktop/TnPCorrection_Rap.png");
-   cTNP2->SaveAs("~/Documents/PR/forTWiki/CSandRAA/TnPCorrection_Rap.pdf");
+   cTNP2->SaveAs(basedir1 + TString("/TnPCorrection_Rap.png"));
+   cTNP2->SaveAs(basedir2 + TString("/TnPCorrection_Rap.pdf"));
  }
  if(plotSignificance)
    {
@@ -1297,8 +1300,8 @@ cout << "  --- 3S Cross section in pp vs. y short bins---" << endl;
      legend->AddEntry(g2,"1S PbPb vs pT, loose","pe");
      legend->AddEntry(g4,"1S PbPb vs pT, tight","pe");
      legend->Draw();
-     cSignificance->SaveAs("~/Desktop/cSignificance_Pt.png");
-     cSignificance->SaveAs("~/Documents/PR/forTWiki/CSandRAA/cSignificance_Pt.pdf");
+     cSignificance->SaveAs(basedir1 + TString("/cSignificance_Pt.png"));
+     cSignificance->SaveAs(basedir2 + TString("/cSignificance_Pt.pdf"));
    
      TCanvas *cSignificance2 = new TCanvas("cSignficance2","cSignificance2"); 
      cSignificance2->cd();
@@ -1354,8 +1357,8 @@ cout << "  --- 3S Cross section in pp vs. y short bins---" << endl;
      legend->AddEntry(g6,"1S PbPb vs y, loose","pe");
      legend->AddEntry(g8,"1S PbPb vs y, tight","pe");
      legend->Draw();
-     cSignificance2->SaveAs("~/Desktop/cSignificance_Rap.png");
-     cSignificance2->SaveAs("~/Documents/PR/forTWiki/CSandRAA/cSignificance_Rap.pdf");
+     cSignificance2->SaveAs(basedir1 + TString("/cSignificance_Rap.png"));
+     cSignificance2->SaveAs(basedir2 + TString("/cSignificance_Rap.pdf"));
    }
  if(plotCS){
  ////////////////////////////////////////////////////////////////
@@ -1480,8 +1483,8 @@ cout << "  --- 3S Cross section in pp vs. y short bins---" << endl;
  lyL->DrawLatex(3,0.001,"|y| < 2.4");
  lyL->Draw();
 
- cpt->SaveAs("~/Documents/PR/forTWiki/CSandRAA/CS1S_ppAAPt.pdf");
- cpt->SaveAs("~/Desktop/Xsection_ppAA_1S_pt.png");
+ cpt->SaveAs(basedir2 + TString("/CS1S_ppAAPt.pdf"));
+ cpt->SaveAs(basedir1 + TString("/Xsection_ppAA_1S_pt.png"));
  //Unfolding unfolding!
  // TCanvas *cUnfold = new TCanvas("cUnfold","cUnfold"); 
  // cUnfold->cd();
@@ -1562,8 +1565,8 @@ cout << "  --- 3S Cross section in pp vs. y short bins---" << endl;
     cptaa->RedrawAxis();
     cptaa->GetFrame()->Draw();
  
- cptaa->SaveAs("~/Documents/PR/forTWiki/CSandRAA/CS_AAPt.pdf");
- cptaa->SaveAs("~/Desktop/Xsection_AA_1S_pt.png");
+ cptaa->SaveAs(basedir2 + TString("/CS_AAPt.pdf"));
+ cptaa->SaveAs(basedir1 + TString("/Xsection_AA_1S_pt.png"));
  //////////
  // pp
  TCanvas *cptpp = new TCanvas("cptpp","cptpp"); 
@@ -1698,8 +1701,8 @@ cout << "  --- 3S Cross section in pp vs. y short bins---" << endl;
     cptpp->RedrawAxis();
     cptpp->GetFrame()->Draw();
  
- cptpp->SaveAs("~/Documents/PR/forTWiki/CSandRAA/CS1S_ppPt.pdf");
- cptpp->SaveAs("~/Desktop/Xsection_pp1S_Pt.png");
+ cptpp->SaveAs(basedir2 + TString("/CS1S_ppPt.pdf"));
+ cptpp->SaveAs(basedir1 + TString("/Xsection_pp1S_Pt.png"));
  }
 
 
@@ -2054,11 +2057,11 @@ lyL->DrawLatex(2,0.000000002,"Fiducial");
     cRaapt->GetFrame()->Draw();
  
   if(plotTight){
-    cRaapt->SaveAs("~/Documents/PR/forTWiki/CSandRAA/RAA_Pt4.pdf");
-    cRaapt->SaveAs("~/Desktop/RAA_Pt4.png");
+    cRaapt->SaveAs(basedir2 + TString("/RAA_Pt4.pdf"));
+    cRaapt->SaveAs(basedir1 + TString("/RAA_Pt4.png"));
   }else{
-    cRaapt->SaveAs("~/Documents/PR/forTWiki/CSandRAA/RAA_Pt.pdf");
-    cRaapt->SaveAs("~/Desktop/RAA_Pt.png");
+    cRaapt->SaveAs(basedir2 + TString("/RAA_Pt.pdf"));
+    cRaapt->SaveAs(basedir1 + TString("/RAA_Pt.png"));
   }
  }
 
@@ -2179,8 +2182,8 @@ legendB->SetTextFont(42);
  legendB->Draw();
 
  // gPad->RedrawAxis();
- crap->SaveAs("~/Documents/PR/forTWiki/CSandRAA/CS1S_ppAA_Rap.pdf");
- crap->SaveAs("~/Desktop/Xsection_ppAA_1S_Rap.png");
+ crap->SaveAs(basedir2 + TString("/CS1S_ppAA_Rap.pdf"));
+ crap->SaveAs(basedir1 + TString("/Xsection_ppAA_1S_Rap.png"));
  prap1->Close();
  TPad *prap2 = new TPad("prap2","prap2",0.0,0.0,1.0,0.9);
  prap2->SetBottomMargin(0.12);
@@ -2202,7 +2205,7 @@ legendB->SetTextFont(42);
  lyL->SetTextSize(0.029);
  lyL->DrawLatex(0.15,2,"L_{pp} = 5.4 pb^{-1}; |y| < 2.4");
  lyL->Draw();
- crap->SaveAs("~/Desktop/test.pdf");
+ crap->SaveAs(basedir1 + TString("/test.pdf"));
 
  TCanvas *crapaa = new TCanvas("crapaa","crapaa"); 
  crapaa->SetLogy();
@@ -2271,8 +2274,8 @@ legendB->SetTextFont(42);
     latexrapaa.SetTextFont(42);
     latexrapaa.DrawLatex(1.6,0.1,"Cent. 0-100%");
 
- crapaa->SaveAs("~/Documents/PR/forTWiki/CSandRAA/CS_AA_Rap.pdf");
- crapaa->SaveAs("~/Desktop/Xsection_AA_1S2S_Rap.png");
+ crapaa->SaveAs(basedir2 + TString("/CS_AA_Rap.pdf"));
+ crapaa->SaveAs(basedir1 + TString("/Xsection_AA_1S2S_Rap.png"));
  //////////////////////////////////////////////
  TCanvas *crappp = new TCanvas("crappp","crappp"); 
  crappp->SetLogy();
@@ -2423,8 +2426,8 @@ legendB->SetTextFont(42);
     gPad->RedrawAxis();
     gPad->GetFrame()->Draw();
 
- crappp->SaveAs("~/Documents/PR/forTWiki/CSandRAA/CS1S_ppRap.pdf"); 
- crappp->SaveAs("~/Desktop/Xsection_pp_1S_Rap.png");
+ crappp->SaveAs(basedir2 + TString("/CS1S_ppRap.pdf")); 
+ crappp->SaveAs(basedir1 + TString("/Xsection_pp_1S_Rap.png"));
  //////////////////////////////////////////////////////////////////
  }
 
@@ -2613,11 +2616,11 @@ if(plotRAA){
     cRaarap->GetFrame()->Draw();
 
   if(plotTight){
-    cRaarap->SaveAs("~/Documents/PR/forTWiki/CSandRAA/RAA_Rap4.pdf");
-    cRaarap->SaveAs("~/Desktop/RAA_Rap4.png");
+    cRaarap->SaveAs(basedir2 + TString("/RAA_Rap4.pdf"));
+    cRaarap->SaveAs(basedir1 + TString("/RAA_Rap4.png"));
   }else{
-    cRaarap->SaveAs("~/Documents/PR/forTWiki/CSandRAA/RAA_Rap.pdf");
-    cRaarap->SaveAs("~/Desktop/RAA_Rap.png");
+    cRaarap->SaveAs(basedir2 + TString("/RAA_Rap.pdf"));
+    cRaarap->SaveAs(basedir1 + TString("/RAA_Rap.png"));
   }
  }
 
@@ -2897,7 +2900,7 @@ if(plotRAA){
   legend->AddEntry(gCompPt1,"#varUpsilon(1S) #epsilon_{pp} vs. p_{T}^{#mu#mu}","pe");
   legend->AddEntry(gCompPt_pbpb,"#varUpsilon(1S) #epsilon_{PbPb} vs. p_{T}^{#mu#mu}","pe"); 
   legend->Draw();
-  cEffCompPt->SaveAs("~/Desktop/effcomp.pdf");
+  cEffCompPt->SaveAs(basedir1 + TString("/effcomp.pdf"));
   //tnp
   TCanvas *cTnpCompPt = new TCanvas("cTnpCompPt","cTnpCompPt"); 
   cTnpCompPt->cd();
@@ -2953,7 +2956,7 @@ if(plotRAA){
   legend->AddEntry(gtnpPt1,"#varUpsilon(1S) SF_{pp} vs. p_{T}^{#mu#mu}","pe");
   legend->AddEntry(gtnpPt_pbpb,"#varUpsilon(1S) SF_{PbPb} vs. p_{T}^{#mu#mu}","pe"); 
   legend->Draw();
-  cTnpCompPt->SaveAs("~/Desktop/Tnp_SFcomp.pdf");
+  cTnpCompPt->SaveAs(basedir1 + TString("/Tnp_SFcomp.pdf"));
   //now 2S
 
   TCanvas *cEffComp2 = new TCanvas("cEffComp2","cEffComp2"); 
@@ -3617,19 +3620,19 @@ float plot2010()
     c1->RedrawAxis();
     c1->GetFrame()->Draw();
     if(plotTight){
-      c1->SaveAs("~/Documents/PR/forTWiki/CSandRAA/RAA_nPart_Tight.pdf");
-      c1->SaveAs("~/Desktop/RAA_nPart_Tight.png");
+      c1->SaveAs(basedir2 + TString("/RAA_nPart_Tight.pdf"));
+      c1->SaveAs(basedir1 + TString("/RAA_nPart_Tight.png"));
       cout << "CHANGE FILE NAME !?!?!?!?! "<<endl;
     }else if(!FourBins)
       {
-	c1->SaveAs("~/Documents/PR/forTWiki/CSandRAA/RAA_nPart.pdf");
-	c1->SaveAs("~/Desktop/RAA_nPart.png");
+	c1->SaveAs(basedir2 + TString("/RAA_nPart.pdf"));
+	c1->SaveAs(basedir1 + TString("/RAA_nPart.png"));
 	cout << "CHANGE FILE NAME!!!!!" << endl;
       }						
     else if (FourBins)
       {
-	c1->SaveAs("~/Documents/PR/forTWiki/CSandRAA/RAA_nPart_4bins.pdf");
-	c1->SaveAs("~/Desktop/RAA_nPart_4bins.png");
+	c1->SaveAs(basedir2 + TString("/RAA_nPart_4bins.pdf"));
+	c1->SaveAs(basedir1 + TString("/RAA_nPart_4bins.png"));
       }
   }
   //=========Macro generated from canvas: c1/c1
