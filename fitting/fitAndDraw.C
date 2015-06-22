@@ -7,13 +7,13 @@
 
 using namespace RooFit;
 
-void fitAndDraw_PAS(const char* filename, bool ispbpb, const char* outdir, const char* figname="fig.pdf")
+void fitAndDraw_PAS(const char* filename, bool ispbpb, const char* outdir, const char* figname="fig")
 {
    TFile *f = new TFile(filename);
    RooWorkspace *_ws = (RooWorkspace*) f->Get("_ws");
    int ChooseSample= ispbpb ? 6 : 7;
    int ChooseFitParams=-1;
-   int bkgModel=0;
+   int bkgModel=3;
    float muonPtCut1=3.5;
    float muonPtCut2=4.;
    int centMin=0;
@@ -22,9 +22,9 @@ void fitAndDraw_PAS(const char* filename, bool ispbpb, const char* outdir, const
    float upsPtEnd=20.;
    float upsRapStart=0.;
    float upsRapEnd=2.4;
-   int doRap=0;
+   int doRap=1;
    int doPt=0;
-   int doCent=0; 
+   int doCent=ispbpb; 
 
    // set the style
    setTDRStyle();
