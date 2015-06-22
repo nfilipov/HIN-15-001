@@ -5,10 +5,13 @@ void fitAndDraw(RooWorkspace& w, int chooseSample , TString figname_, TString ou
   RooRealVar* mass =(RooRealVar*) w.var("invariantMass"); //
   RooDataSet* data0_fit =(RooDataSet*) w.data("data");
   RooAbsPdf* pdf = (RooAbsPdf*) w.pdf("pdf");
-  RooFitResult* fitObject = pdf->fitTo(*data0_fit,Save()); // Fit gets 
+  RooFitResult* fitObject = pdf->fitTo(*data0_fit,Save(),Hesse(kTRUE),Extended(kTRUE)); // Fit
   pdf->Print();
   Double_t baseNll = fitObject->minNll();
   // RooMinuit m(*nll);
+  RooRealVar *nsig1f   =(RooRealVar*) w.var("N_{ #varUpsilon(1S)}");
+  ////////// PLOTTING
+  TString bkgSuffix;
   // m.migrad();
   // m.hesse();
   //  m.minos(w.var("nsig3f"));
@@ -20,52 +23,67 @@ void fitAndDraw(RooWorkspace& w, int chooseSample , TString figname_, TString ou
   data0_fit->plotOn(frame);// data drawn first for pdf object to pick the proper normalisation
   pdf->plotOn(frame,Name("thePdf"));
   switch(bkgdModel){
-    case 1:
-      pdf->plotOn(frame,Components("ChebPdf"),Name("theBkg"),VisualizeError(*fitObject,1),FillColor(kBlue));
-      pdf->plotOn(frame,Components("ErrPdf"),Name("theBkg"),VisualizeError(*fitObject,1),FillColor(kOrange));// ErrFunction bkg
-      pdf->plotOn(frame,Components("bkgPdf"),Name("theBkg"),LineStyle(kDashed));
-      RooArgSet * pars = ErrPdf->getParameters(likesignData);
-      break;
-    case 2:
-      pdf->plotOn(frame,Components("ChebPdf"),Name("theBkg"),VisualizeError(*fitObject,1),FillColor(kBlue));
-      pdf->plotOn(frame,Components("KeysPdf"),Name("theBkg"),VisualizeError(*fitObject,1),FillColor(kOrange));// ErrFunction bk
-      RooArgSet * pars = KeysPdf->getParameters(likesignData);
-      pdf->plotOn(frame,Components("bkgPdf"),Name("theBkg"),LineStyle(kDashed));
-      break;
-    case 3:
-      pdf->plotOn(frame,Components("bkgPdf"),Name("theBkg"),VisualizeError(*fitObject,1),LineStyle(kDashed));
-      pdf->plotOn(frame,Components("bkgPdf"),Name("theBkg"),LineStyle(kDashed));
-      break;
-    case 4:
-      pdf->plotOn(frame,Components("bkgPdf"),Name("theBkg"),VisualizeError(*fitObject,1));
-      pdf->plotOn(frame,Components("bkgPdf"),Name("theBkg"),LineStyle(kDashed));
-      break;
-    case 5:
-      pdf->plotOn(frame,Components("ChebPdf"),Name("theBkg"),VisualizeError(*fitObject,1),FillColor(kBlue));
-      pdf->plotOn(frame,Components("ErrPdf"),Name("theBkg"),VisualizeError(*fitObject,1),FillColor(kOrange));// ErrFunction bk
-      pdf->plotOn(frame,Components("bkgPdf"),Name("theBkg"),LineStyle(kDashed));
-      break;
-    case 6:
-      pdf->plotOn(frame,Components("bkgPdf"),Name("theBkg"),VisualizeError(*fitObject,1));
-      break;
-    default:
-      break;
-    }
+  case 1:
+    pdf->plotOn(frame,Components("ChebPdf"),Name("theBkg"),VisualizeError(*fitObject,1),FillColor(kBlue));
+    pdf->plotOn(frame,Components("ErrPdf"),Name("theBkg"),VisualizeError(*fitObject,1),FillColor(kOrange));// ErrFunction bkg
+    pdf->plotOn(frame,Components("bkgPdf"),Name("theBkg"),LineStyle(kDashed));
+    RooArgSet * pars = ErrPdf->getParameters(likesignData);
+    break;
+  case 2:
+    pdf->plotOn(frame,Components("ChebPdf"),Name("theBkg"),VisualizeError(*fitObject,1),FillColor(kBlue));
+    pdf->plotOn(frame,Components("KeysPdf"),Name("theBkg"),VisualizeError(*fitObject,1),FillColor(kOrange));// ErrFunction bk
+    RooArgSet * pars = KeysPdf->getParameters(likesignData);
+    pdf->plotOn(frame,Components("bkgPdf"),Name("theBkg"),LineStyle(kDashed));
+    break;
+  case 3:
+    pdf->plotOn(frame,Components("bkgPdf"),Name("theBkg"),VisualizeError(*fitObject,1),LineStyle(kDashed));
+    pdf->plotOn(frame,Components("bkgPdf"),Name("theBkg"),LineStyle(kDashed));
+    break;
+  case 4:
+    bkgSuffix="_bkg1";
+    pdf->plotOn(frame,Components("ChebPdf"),Name("theBkg"),VisualizeError(*fitObject,1),FillColor(kOrange));
+    pdf->plotOn(frame,Components("bkgPdf"),Name("theBkg"),VisualizeError(*fitObject,1));
+    pdf->plotOn(frame,Components("bkgPdf"),Name("theBkg"),LineStyle(kDashed));
+    break;
+  case 5:
+    bkgSuffix="_bkg2";
+    pdf->plotOn(frame,Components("ChebPdf"),Name("theBkg"),VisualizeError(*fitObject,1),FillColor(kOrange));
+    pdf->plotOn(frame,Components("bkgPdf"),Name("theBkg"),VisualizeError(*fitObject,1));
+    //    pdf->plotOn(frame,Components("ErrPdf"),Name("theBkg"),VisualizeError(*fitObject,1),FillColor(kBlue));// ErrFunction bk
+    pdf->plotOn(frame,Components("bkgPdf"),Name("theBkg"),LineStyle(kDashed));
+    break;
+  case 6:
+    pdf->plotOn(frame,Components("bkgPdf"),Name("theBkg"),VisualizeError(*fitObject,1));
+    break;
+  default:
+    break;
+  }
   data0_fit->plotOn(frame) ;// drawing data pts over pdf line (looks best).
   pdf->plotOn(frame,Name("thePdf")); // signal + bkg pdf
   frame->SetTitle("");
   frame->GetXaxis()->SetTitle("m_{#mu^{+}#mu^{-}} (GeV/c^{2})");
   frame->GetXaxis()->CenterTitle(kTRUE);
+  //  frame->GetYaxis()->SetRangeUser(0,(nsig1f->getVal()/1.33));
   frame->GetYaxis()->SetTitleOffset(1.4);
   frame->GetYaxis()->SetTitleSize(0.04);
   //Draw stuff!
   TCanvas cm("cm","cm");
   cm.cd();
   TPad *pPad1 = new TPad("pPad1","pPad1",xcms,ycms-1.9*deltay,0.98,0.92);
+  
   //  pPad1->SetBottomMargin(0.03);
   pPad1->Draw();
   pPad1->cd();
   pdf->paramOn(frame,Layout(0.6,0.935,0.97),Format("NEAU",AutoPrecision(1)));
+  TLatex *cms = new TLatex (xcms*3,ycms/3,"CMS");
+  cms->SetTextFont(62);
+  cms->SetTextSize(0.7);
+  cms->Draw();
+  TLatex *prelim =new TLatex(xcms*6.5,ycms/3,"Preliminary");
+  prelim->SetTextFont(52);
+  prelim->SetTextSize(0.4);
+  prelim->Draw();
+  
   pPad1->Update();
   frame->Draw();
   TLatex latex1;
@@ -96,7 +114,10 @@ void fitAndDraw(RooWorkspace& w, int chooseSample , TString figname_, TString ou
     latex1.DrawLatex(xcms*4,1.-0.05*3.2,"p_{T} > 0");
     latex1.DrawLatex(xcms*4,1.-0.05*4.4,"|y| < 2.4");
   }
+  
+
   cm.cd();
+ 
   TPad *pPad2 = new TPad("pPad2","pPad2",xcms,0,0.98,ycms+deltay/1.3);
   pPad2->SetTopMargin(0.0);
   pPad2->SetBottomMargin(0.4);
@@ -155,7 +176,9 @@ void fitAndDraw(RooWorkspace& w, int chooseSample , TString figname_, TString ou
   //Drawing the title
   cm.cd();
   TPad phead("phead","phead",xcms,0.91,1.,1.,0,0,0); 
+  
   phead.Draw(); phead.cd();  
+
   TLatex *cms = new TLatex (xcms*3,ycms/3,"CMS");
   cms->SetTextFont(62);
   cms->SetTextSize(0.7);
@@ -164,33 +187,36 @@ void fitAndDraw(RooWorkspace& w, int chooseSample , TString figname_, TString ou
   prelim->SetTextFont(52);
   prelim->SetTextSize(0.4);
   prelim->Draw();
+    
   if(chooseSample==6){  
     TLatex *sqrtS = new TLatex (xcms*14,ycms/3,"PbPb 166 #mub^{-1} (2.76 TeV)"); 
   }else if(chooseSample==7){
     TLatex *sqrtS = new TLatex (xcms*15,ycms/3,"pp 5.4 pb^{-1} (2.76 TeV)"); 
-  }else{    
-  }
-  sqrtS->SetTextFont(42); //#sqrt{s} = 2.76 TeV
+  }else{    }
+  sqrtS->SetTextFont(62); //#sqrt{s} = 2.76 TeV
   sqrtS->SetTextSize(0.4);
   sqrtS->SetTextColor(kBlack);
   sqrtS->Draw(); 
   cm.cd();
   TPad pfoot("pfoot","pfoot",0,0,1,ycms/3,0,0,0); 
   pfoot.Draw(); pfoot.cd();  
+    
   TLatex *mmumu = new TLatex (xcms*10,ycms*1.2,"m_{#mu#mu} [GeV/c^{2}]");
   mmumu->SetTextFont(42);
   mmumu->SetTextSize(0.5);
   mmumu->Draw();
-    // output file names 
-  string outPdf = outFigDir+"/"+figname_+".pdf";
+  // output file names 
+  if (bkgdModel!=3){  string outPdf = outFigDir+"/"+figname_+"_"+bkgSuffix+".pdf";}
+  else{  string outPdf = outFigDir+"/"+figname_+".pdf";}
   cm.SaveAs(outPdf.c_str());
-  string outParameters = outDatDir+"/"+figname_+".txt";
+  if (bkgdModel!=3){   string outParameters = outDatDir+"/"+figname_+"_"+bkgSuffix+".txt";}
+  else  { string outParameters = outDatDir+"/"+figname_+".txt";}
   //string outParameters_forNote = outDatsDir+"/"+figname_+"forNote.txt";
   cout<<"Output file: " << outParameters<<endl;
   ofstream outfileFitResults;
   outfileFitResults.open(outParameters.c_str(), ios_base::out);  
   // redefinition of variables //
-  RooRealVar *nsig1f   =(RooRealVar*) w.var("N_{ #varUpsilon(1S)}");
+ 
   RooRealVar *nsig2f   =(RooRealVar*) w.var("N_{ #varUpsilon(2S)}");
   RooRealVar *nsig3f   =(RooRealVar*) w.var("N_{ #varUpsilon(3S)}");
   RooRealVar *mean   =(RooRealVar*) w.var("m_{ #varUpsilon(1S)}");
@@ -201,10 +227,89 @@ void fitAndDraw(RooWorkspace& w, int chooseSample , TString figname_, TString ou
   RooRealVar *scaleWidth    = (RooRealVar*) w.var("#sigma_{CB2}/#sigma_{CB1}");
   RooRealVar *f2Svs1S       = (RooRealVar*) w.var("R_{#frac{2S}{1S}}");
   RooRealVar *f3Svs1S       = (RooRealVar*) w.var("R_{#frac{3S}{1S}}");
+  RooRealVar width = (RooRealVar) w.var("width");
+  RooRealVar turnOn =(RooRealVar) w.var("turnOn");
+  RooRealVar decay =(RooRealVar) w.var("decay");
+  // RooRealVar *rat2 = (RooRealVar*) w.var("m_{(2S)/(1S)}");
+  // RooRealVar *rat3 = (RooRealVar*) w.var("m_{(3S)/(1S)}");
+  
+  //////////// LL SCAN
+
+  if(scanLL){ // doing the log-likelihood scan to check the convergence in fits.
+    RooAbsReal* nll = pdf->createNLL(*data0_fit,NumCPU(4)) ;
+    RooMinuit(*nll).migrad();
+    TCanvas cParamScan("cParamScan","parameterScan",1500,1000);
+    cParamScan.Divide(3,3);
+    cParamScan.cd(1);
+    if(chooseSample!=8){
+      RooPlot* frame_width = width.frame(Bins(100),Range(width.getVal()-width.getError(),width.getVal()+width.getError())) ;
+      nll->plotOn(frame_width,ShiftToZero()) ;
+      frame_width->SetMinimum(0);
+      frame_width->SetMaximum(4);
+      // RooAbsReal* pll_width = nll->createProfile(width) ;
+      // pll_width->plotOn(frame_width,LineColor(kRed)) ;
+      frame_width->Draw();
+      cParamScan.cd(2);
+      RooPlot* frame_decay = decay.frame(Bins(100),Range(decay.getVal()-decay.getError(),decay.getVal()+decay.getError())) ;
+      nll->plotOn(frame_decay,ShiftToZero()) ;
+      frame_decay->SetMinimum(0);
+      frame_decay->SetMaximum(4);
+      frame_decay->Draw();
+      cParamScan.cd(3);
+      RooPlot* frame_turnOn = turnOn.frame(Bins(100),Range(turnOn.getVal()-turnOn.getError(),turnOn.getVal()+turnOn.getError())) ;
+      nll->plotOn(frame_turnOn,ShiftToZero());
+      frame_turnOn->SetMinimum(0);
+      frame_turnOn->SetMaximum(4);
+      frame_turnOn->Draw();
+      cParamScan.cd(4);
+      RooPlot* frame_mean = mean->frame(Bins(100),Range(mean->getVal()-2*(mean->getError()),mean->getVal()+2*(mean->getError()))) ;
+      nll->plotOn(frame_mean,ShiftToZero());
+      frame_mean->SetMinimum(0);
+      frame_mean->SetMaximum(4);
+      frame_mean->Draw();
+      cParamScan.cd(5);
+      RooPlot* frame_fraction = sigmaFraction->frame(Bins(100),Range(sigmaFraction->getVal()-2*(sigmaFraction->getError()),sigmaFraction->getVal()+2*(sigmaFraction->getError()))) ;
+      nll->plotOn(frame_fraction,ShiftToZero()) ;
+      frame_fraction->SetMinimum(0);
+      frame_fraction->SetMaximum(4);
+      frame_fraction->Draw();
+      cParamScan.cd(6);
+      RooPlot* frame_ScaleGaus = scaleWidth->frame(Bins(100),Range(scaleWidth->getVal()-2*(scaleWidth->getError()),scaleWidth->getVal()+2*(scaleWidth->getError()))) ;
+      nll->plotOn(frame_ScaleGaus,ShiftToZero()) ;
+      frame_ScaleGaus->SetMinimum(0);
+      frame_ScaleGaus->SetMaximum(4);
+      // RooAbsReal* pll_Scale = nll->createProfile(Scale) ;
+      // pll_Scale->plotOn(frame_Scale,LineColor(kRed)) ;
+      frame_ScaleGaus->Draw();
+      cParamScan.cd(7);
+      RooPlot* frame_npow = npow->frame(Bins(100),Range(npow->getVal()-2*(npow->getError()),npow->getVal()+2*(npow->getError()))) ;
+      nll->plotOn(frame_npow,ShiftToZero()) ;
+      frame_npow->SetMinimum(0);
+      frame_npow->SetMaximum(4);
+      frame_npow->Draw();
+      cParamScan.cd(8);
+      RooPlot* frame_alpha = alpha->frame(Bins(100),Range(alpha->getVal()-2*(alpha->getError()),alpha->getVal()+2*(alpha->getError()))) ;
+      nll->plotOn(frame_alpha,ShiftToZero()) ;
+      frame_alpha->SetMinimum(0);
+      frame_alpha->SetMaximum(4);
+      frame_alpha->Draw();
+      cParamScan.cd(9);
+      RooPlot* frame_sigma1 = sigma1->frame(Bins(100),Range(sigma1->getVal()-2*sigma1->getError(),sigma1->getVal()+2*sigma1->getError()));
+      nll->plotOn(frame_sigma1,ShiftToZero()) ;
+      frame_sigma1->SetMinimum(0);
+      frame_sigma1->SetMaximum(4);
+      frame_sigma1->Draw();
+      if(bkgdModel!=3){     cParamScan.SaveAs(outFigDir+"/"+figname_+"_"+bkgSuffix+"_Scan.pdf");}
+      else{     cParamScan.SaveAs(outFigDir+"/"+figname_+"_Scan.pdf");}
+    }
+  }
+
   switch(chooseFitParams) {
   case 0:
+    cout <<"special case!"<<endl;
     outfileFitResults<<figname_<<" "<<nsig1f->getVal()<<" "<<nsig1f->getError()<<" "<<nsig2f->getVal()<<" "<<nsig2f->getError()<<" "<<nsig3f->getVal()<<" "<<nsig3f->getError()<<" "<<npow->getVal()<<" "<<npow->getError()<<" "<<alpha->getVal()<<" "<<alpha->getError()<<" "<<sigma1->getVal()<<" "<<sigma1->getError()<<" "<<scaleWidth->getVal()<<" "<<scaleWidth->getError()<<" "<<sigmaFraction->getVal()<<" "<< sigmaFraction->getError()<<" "<<(mean->getVal())-M1S<<" "<<mean->getError()<<" ,signif= "<<nsig1f->getVal()/nsig1f->getError()<<" "<<baseNll<< endl;
     // <<2*nFitParam+2*baseNll<<" "<<fit_2nd->edm()<<" "<<UnNormChi2<<" "<<UnNormChi2/Dof<<" "<<TMath::Prob(UnNormChi2,Dof)<<" "<<Dof<<" "<<nFitParam<<" "
+    // <<rat2->getVal()<<" "<<rat2->getError()<<" "<<rat3->getVal()<<" "<<rat3->getError()<<" "
     break;
   case 1 :
     cout << "option needs fixing." << endl;
@@ -224,5 +329,7 @@ void fitAndDraw(RooWorkspace& w, int chooseSample , TString figname_, TString ou
   default : break;
   }
   outfileFitResults.close();
+  if(bkgdModel!=3){ w.SaveAs(outDatDir+"/ws_"+figname_+"_"+bkgSuffix+".root");}
+  else {  w.SaveAs(outDatDir+"/ws_"+figname_+".root");}
 }
 
