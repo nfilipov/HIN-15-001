@@ -2058,7 +2058,7 @@ lyL->DrawLatex(2,0.000000002,"Fiducial");
     leg2->AddEntry(box,"global syst.","f");
     // leg2->AddEntry(box2S,"#varUpsilon(2S) syst. unc.","f");
     }
-  leg2->Draw();
+  // leg2->Draw();
   gPad->RedrawAxis();
   cRaapt->cd();
 
@@ -2604,7 +2604,7 @@ if(plotRAA){
     leg2->SetFillStyle(0);
     leg2->AddEntry(box,"global syst.","f");
     //  leg2->AddEntry(box2,"#varUpsilon(2S) global syst.","f");
-    leg2->Draw();
+    // leg2->Draw();
  
     // Cent. 0-100 %
     TLatex latexrap;
@@ -3624,7 +3624,7 @@ float plot2010()
     if(plotTight){ leg2->AddEntry(box1S,"#varUpsilon(1S) syst. unc. p_{T} > 3.5 + 4","f");
       //      leg2->AddEntry(box1S2011,"#varUpsilon(1S) 2011 global syst. 2011","f");}
       leg2->AddEntry(box1S4,"#varUpsilon(1S) syst. unc. p_{T} > 4","f");}
-    leg2->Draw();
+    // leg2->Draw();
     // TBox *box = new TBox(385,0.864,400,1.136);
 
     // ci = TColor::GetColor("#99ff99");
