@@ -79,22 +79,22 @@ CMS_lumi( TPad* pad, int iPeriod, int iPosX )
   else if (iPeriod==101)
     {
       lumiText += lumi_PbPb2011;
-//       lumiText += " #sqrt{s_{NN}} = 2.76 TeV";
-      lumiText += " (2.76 TeV)";
+      lumiText2 += " #sqrt{s_{NN}} = 2.76 TeV";
+      // lumiText += " (2.76 TeV)";
     }
   else if (iPeriod==102)
     {
       lumiText += lumi_pp2013;
-//       lumiText += " #sqrt{s} = 2.76 TeV";
-      lumiText += " (2.76 TeV)";
+      lumiText2 += " #sqrt{s} = 2.76 TeV";
+      // lumiText += " (2.76 TeV)";
     }
     else if (iPeriod==103)
     {
       lumiText += lumi_PbPb2011;
       lumiText += ", ";
       lumiText += lumi_pp2013;
-//       lumiText += " #sqrt{s} = 2.76 TeV";
-      lumiText += " (2.76 TeV)";
+      lumiText2 += " #sqrt{s} = 2.76 TeV";
+      // lumiText += " (2.76 TeV)";
     }
    
   cout << lumiText << endl;
@@ -109,10 +109,10 @@ CMS_lumi( TPad* pad, int iPeriod, int iPosX )
   latex.SetTextFont(42);
   latex.SetTextAlign(31); 
   latex.SetTextSize(lumiTextSize*t);    
-  // latex.DrawLatex(1-r,1-t+lumiTextOffset*t,lumiText2);
-  latex.DrawLatex(1-r,1-t+lumiTextOffset*t,lumiText);
-  // latex.SetTextAlign(11); 
-  // latex.DrawLatex(l,1-t+lumiTextOffset*t,lumiText);
+  latex.DrawLatex(1-r,1-t+lumiTextOffset*t,lumiText2);
+  // latex.DrawLatex(1-r,1-t+lumiTextOffset*t,lumiText);
+  latex.SetTextAlign(11); 
+  latex.DrawLatex(l,1-t+lumiTextOffset*t,lumiText);
 
   if( outOfFrame )
     {
