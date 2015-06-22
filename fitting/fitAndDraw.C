@@ -1,4 +1,56 @@
-void fitAndDraw(RooWorkspace& w, int chooseSample , TString figname_, TString outDatDir ,  TString outFigDir, int chooseFitParams,int bkgdModel,float muonPt1, float muonPt2,int centMin, int centMax, float upsPtStart, float upsPtEnd, float upsRapStart, float upsRapEnd, int doRap, int doPt,int doCent ){
+#ifndef fitAndDraw_C
+#define fitAndDraw_C
+
+#include "../plotting/CMS_lumi.C"
+#include "../plotting/tdrstyle.C"
+#include "allFunctions.h"
+
+using namespace RooFit;
+
+void fitAndDraw_PAS(const char* filename, bool ispbpb, const char* outdir, const char* figname="fig.pdf")
+{
+   TFile *f = new TFile(filename);
+   RooWorkspace *_ws = (RooWorkspace*) f->Get("_ws");
+   int ChooseSample= ispbpb ? 6 : 7;
+   int ChooseFitParams=-1;
+   int bkgModel=0;
+   float muonPtCut1=3.5;
+   float muonPtCut2=4.;
+   int centMin=0;
+   int centMax=100;
+   float upsPtStart=0.;
+   float upsPtEnd=20.;
+   float upsRapStart=0.;
+   float upsRapEnd=2.4;
+   int doRap=0;
+   int doPt=0;
+   int doCent=0; 
+
+   // set the style
+   setTDRStyle();
+
+   fitAndDraw(*_ws,ChooseSample,figname,outdir,outdir,ChooseFitParams,bkgModel,muonPtCut1,muonPtCut2,centMin,centMax,upsPtStart,upsPtEnd,upsRapStart,upsRapEnd,doRap,doPt,doCent,true); 
+}
+
+void fitAndDraw(RooWorkspace& w, 
+      int chooseSample , 
+      TString figname_, 
+      TString outDatDir ,  
+      TString outFigDir, 
+      int chooseFitParams,
+      int bkgdModel,
+      float muonPt1, 
+      float muonPt2,
+      int centMin, 
+      int centMax, 
+      float upsPtStart, 
+      float upsPtEnd, 
+      float upsRapStart, 
+      float upsRapEnd, 
+      int doRap, 
+      int doPt,
+      int doCent, 
+      bool PASstyle=false){
   double ycms = 0.28;// for header cms legend, and pull sometimes
   double xcms = 0.04;
   double deltay = 0.03;
@@ -59,14 +111,17 @@ void fitAndDraw(RooWorkspace& w, int chooseSample , TString figname_, TString ou
   frame->GetYaxis()->SetTitleOffset(1.4);
   frame->GetYaxis()->SetTitleSize(0.04);
   //Draw stuff!
-  TCanvas cm("cm","cm");
-  cm.cd();
+  TCanvas* cm = !PASstyle ? new TCanvas("cm","cm") : new TCanvas("cm", "cm",423,55,600,600);
+  cm->cd();
   TPad *pPad1 = new TPad("pPad1","pPad1",xcms,ycms-1.9*deltay,0.98,0.92);
   //  pPad1->SetBottomMargin(0.03);
-  pPad1->Draw();
-  pPad1->cd();
-  pdf->paramOn(frame,Layout(0.6,0.935,0.97),Format("NEAU",AutoPrecision(1)));
-  pPad1->Update();
+  if (!PASstyle)
+  {
+     pPad1->Draw();
+     pPad1->cd();
+  }
+  if (!PASstyle) pdf->paramOn(frame,Layout(0.6,0.935,0.97),Format("NEAU",AutoPrecision(1)));
+  gPad->Update();
   frame->Draw();
   TLatex latex1;
   latex1.SetNDC();
@@ -96,94 +151,110 @@ void fitAndDraw(RooWorkspace& w, int chooseSample , TString figname_, TString ou
     latex1.DrawLatex(xcms*4,1.-0.05*3.2,"p_{T} > 0");
     latex1.DrawLatex(xcms*4,1.-0.05*4.4,"|y| < 2.4");
   }
-  cm.cd();
+  cm->cd();
   TPad *pPad2 = new TPad("pPad2","pPad2",xcms,0,0.98,ycms+deltay/1.3);
   pPad2->SetTopMargin(0.0);
   pPad2->SetBottomMargin(0.4);
-  pPad2->Draw();
-  pPad2->cd();
-  // **************** create pulls; change the chi2 calculation also
-  double chi2FromRoo = frame->chiSquare(fitObject->floatParsFinal().getSize());
-  cout<<"!!!!!!!! chi2 from simple pull= "<<frame->chiSquare()<<"\t chi2 from RooFit= "<<chi2FromRoo <<endl;
-  RooHist *phPullm = frame->pullHist(0,0,true); // this calcualtes the pulls taking the integral of the fit in each bin, instead of the value in the middle of the bid
-  phPullm->SetName("phPullm");
-  double *ypull     = phPullm->GetY();
-  
-  TH1 *phData      = data0_fit->createHistogram("invariantMass",nbins);
-  double Chi2       = 0;
-  int nFullBinsPull = 0;
-  for (int i=0; i < nbins; i++) 
-    {
-      if (phData->GetBinContent(i) == 0) continue;
-      nFullBinsPull++;
-      Chi2 = Chi2 + pow(ypull[i],2);
-    }
-  
-  // for writing on canvas
-  int nFitParam     = fitObject->floatParsFinal().getSize();
-  int Dof           = nFullBinsPull - nFitParam;
-  double UnNormChi2 = Chi2;
-  Chi2             /= (nFullBinsPull - nFitParam);
-  
-  cout<<"!!!!! nFullBinsPull="<<nFullBinsPull<<"\tnFitParam="<<nFitParam<<endl;
-  // draw pulls
-  pPad2->cd();
-  double mFrameMax = 0;
-  RooPlot* prpFramePull = mass->frame(Title("Pull"),Bins(nbins),Range(mass_l,mass_h));
-  prpFramePull->GetYaxis()->CenterTitle(kTRUE);
-  prpFramePull->GetYaxis()->SetTitleOffset(0.4);
-  prpFramePull->GetYaxis()->SetTitleSize(0.1);
-  prpFramePull->GetYaxis()->SetLabelSize(0.1);
-  prpFramePull->GetYaxis()->SetTitle("Pull");
-  prpFramePull->GetXaxis()->CenterTitle(kTRUE);
-  prpFramePull->GetXaxis()->SetTitleOffset(1);
-  prpFramePull->GetXaxis()->SetTitleSize(0.12);
-  prpFramePull->GetXaxis()->SetLabelSize(0.1);
-  prpFramePull->GetXaxis()->SetTitle("m_{#mu^{+}#mu^{-}} (GeV/c^{2})");
-  prpFramePull->addPlotable(phPullm,"PX");
- 
-  // if (prpFramePull->GetMinimum()*-1 > prpFramePull->GetMaximum()) mFrameMax = prpFramePull->GetMinimum()*-1;
-  // else mFrameMax = prpFramePull->GetMaximum();
-  // prpFramePull->SetMaximum(mFrameMax); 
-  // prpFramePull->SetMinimum(-1*mFrameMax); 
-  prpFramePull->Draw();
-  //plot parameters
+  if (!PASstyle)
+  {
+     pPad2->Draw();
+     pPad2->cd();
+     // **************** create pulls; change the chi2 calculation also
+     double chi2FromRoo = frame->chiSquare(fitObject->floatParsFinal().getSize());
+     cout<<"!!!!!!!! chi2 from simple pull= "<<frame->chiSquare()<<"\t chi2 from RooFit= "<<chi2FromRoo <<endl;
+     RooHist *phPullm = frame->pullHist(0,0,true); // this calcualtes the pulls taking the integral of the fit in each bin, instead of the value in the middle of the bid
+     phPullm->SetName("phPullm");
+     double *ypull     = phPullm->GetY();
 
-  latex1.SetTextSize(0.085);
-  double myChi2 = chi2FromRoo*Dof;
-  latex1.DrawLatex(0.7,1.-ycms/3,Form("#chi^{2}/ndf = %2.1f/%d",myChi2,Dof));
-  //Drawing the title
-  cm.cd();
-  TPad phead("phead","phead",xcms,0.91,1.,1.,0,0,0); 
-  phead.Draw(); phead.cd();  
-  TLatex *cms = new TLatex (xcms*3,ycms/3,"CMS");
-  cms->SetTextFont(62);
-  cms->SetTextSize(0.7);
-  cms->Draw();
-  TLatex *prelim =new TLatex(xcms*6.5,ycms/3,"Preliminary");
-  prelim->SetTextFont(52);
-  prelim->SetTextSize(0.4);
-  prelim->Draw();
-  if(chooseSample==6){  
-    TLatex *sqrtS = new TLatex (xcms*14,ycms/3,"PbPb 166 #mub^{-1} (2.76 TeV)"); 
-  }else if(chooseSample==7){
-    TLatex *sqrtS = new TLatex (xcms*15,ycms/3,"pp 5.4 pb^{-1} (2.76 TeV)"); 
-  }else{    
+     TH1 *phData      = data0_fit->createHistogram("invariantMass",nbins);
+     double Chi2       = 0;
+     int nFullBinsPull = 0;
+     for (int i=0; i < nbins; i++) 
+     {
+        if (phData->GetBinContent(i) == 0) continue;
+        nFullBinsPull++;
+        Chi2 = Chi2 + pow(ypull[i],2);
+     }
+
+     // for writing on canvas
+     int nFitParam     = fitObject->floatParsFinal().getSize();
+     int Dof           = nFullBinsPull - nFitParam;
+     double UnNormChi2 = Chi2;
+     Chi2             /= (nFullBinsPull - nFitParam);
+
+     cout<<"!!!!! nFullBinsPull="<<nFullBinsPull<<"\tnFitParam="<<nFitParam<<endl;
+     // draw pulls
+     pPad2->cd();
+     double mFrameMax = 0;
+     RooPlot* prpFramePull = mass->frame(Title("Pull"),Bins(nbins),Range(mass_l,mass_h));
+     prpFramePull->GetYaxis()->CenterTitle(kTRUE);
+     prpFramePull->GetYaxis()->SetTitleOffset(0.4);
+     prpFramePull->GetYaxis()->SetTitleSize(0.1);
+     prpFramePull->GetYaxis()->SetLabelSize(0.1);
+     prpFramePull->GetYaxis()->SetTitle("Pull");
+     prpFramePull->GetXaxis()->CenterTitle(kTRUE);
+     prpFramePull->GetXaxis()->SetTitleOffset(1);
+     prpFramePull->GetXaxis()->SetTitleSize(0.12);
+     prpFramePull->GetXaxis()->SetLabelSize(0.1);
+     prpFramePull->GetXaxis()->SetTitle("m_{#mu^{+}#mu^{-}} (GeV/c^{2})");
+     prpFramePull->addPlotable(phPullm,"PX");
+
+     // if (prpFramePull->GetMinimum()*-1 > prpFramePull->GetMaximum()) mFrameMax = prpFramePull->GetMinimum()*-1;
+     // else mFrameMax = prpFramePull->GetMaximum();
+     // prpFramePull->SetMaximum(mFrameMax); 
+     // prpFramePull->SetMinimum(-1*mFrameMax); 
+     prpFramePull->Draw();
+     //plot parameters
+
+     latex1.SetTextSize(0.085);
+     double myChi2 = chi2FromRoo*Dof;
+     latex1.DrawLatex(0.7,1.-ycms/3,Form("#chi^{2}/ndf = %2.1f/%d",myChi2,Dof));
   }
-  sqrtS->SetTextFont(42); //#sqrt{s} = 2.76 TeV
-  sqrtS->SetTextSize(0.4);
-  sqrtS->SetTextColor(kBlack);
-  sqrtS->Draw(); 
-  cm.cd();
-  TPad pfoot("pfoot","pfoot",0,0,1,ycms/3,0,0,0); 
-  pfoot.Draw(); pfoot.cd();  
-  TLatex *mmumu = new TLatex (xcms*10,ycms*1.2,"m_{#mu#mu} [GeV/c^{2}]");
-  mmumu->SetTextFont(42);
-  mmumu->SetTextSize(0.5);
-  mmumu->Draw();
+
+  //Drawing the title
+  cm->cd();
+  if (!PASstyle)
+  {
+     TPad phead("phead","phead",xcms,0.91,1.,1.,0,0,0); 
+     phead.Draw(); phead.cd();  
+     TLatex *cms = new TLatex (xcms*3,ycms/3,"CMS");
+     cms->SetTextFont(62);
+     cms->SetTextSize(0.7);
+     cms->Draw();
+     TLatex *prelim =new TLatex(xcms*6.5,ycms/3,"Preliminary");
+     prelim->SetTextFont(52);
+     prelim->SetTextSize(0.4);
+     prelim->Draw();
+     if(chooseSample==6){  
+        TLatex *sqrtS = new TLatex (xcms*14,ycms/3,"PbPb 166 #mub^{-1} (2.76 TeV)"); 
+     }else if(chooseSample==7){
+        TLatex *sqrtS = new TLatex (xcms*15,ycms/3,"pp 5.4 pb^{-1} (2.76 TeV)"); 
+     }else{    
+     }
+     sqrtS->SetTextFont(42); //#sqrt{s} = 2.76 TeV
+     sqrtS->SetTextSize(0.4);
+     sqrtS->SetTextColor(kBlack);
+     sqrtS->Draw(); 
+     cm->cd();
+     TPad pfoot("pfoot","pfoot",0,0,1,ycms/3,0,0,0); 
+     pfoot.Draw(); pfoot.cd();  
+     TLatex *mmumu = new TLatex (xcms*10,ycms*1.2,"m_{#mu#mu} [GeV/c^{2}]");
+     mmumu->SetTextFont(42);
+     mmumu->SetTextSize(0.5);
+     mmumu->Draw();
+  }
+  else
+  {
+    CMS_lumi(cm,chooseSample==6 ? 101 : 102,33);
+    cm->Update();
+    cm->RedrawAxis();
+    cm->GetFrame()->Draw();
+  }
+
+
     // output file names 
   string outPdf = outFigDir+"/"+figname_+".pdf";
-  cm.SaveAs(outPdf.c_str());
+  cm->SaveAs(outPdf.c_str());
   string outParameters = outDatDir+"/"+figname_+".txt";
   //string outParameters_forNote = outDatsDir+"/"+figname_+"forNote.txt";
   cout<<"Output file: " << outParameters<<endl;
@@ -226,3 +297,4 @@ void fitAndDraw(RooWorkspace& w, int chooseSample , TString figname_, TString ou
   outfileFitResults.close();
 }
 
+#endif // #ifndef fitAndDraw_C
