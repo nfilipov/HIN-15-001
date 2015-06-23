@@ -446,7 +446,7 @@ float N1S_aaSignif_pt3p5[nPtBins_2014] = {17.5235,16.3479,14.8494,13.4713,10.790
 //systematics.
 float N1S_aa_pt3p5s_2p5[nfitvars] = {760.933,876.441,794.776,806.189,837.578,796.411};
 float N1S_aa_pt3p5s_5[nfitvars] = {678.866,722.796,684.599,729.472,721.26,725.775};
-float N1S_aa_pt3p5s_8[nfitvars] = {521.862,611.873,638.101,493.397,570.754,504.789};
+float N1S_aa_pt3p5s_8[nfitvars] = {530.796,576.185,563.111,493.397,570.754,504.789};
 float N1S_aa_pt3p5s_12[nfitvars] = {361.6,342.497,355.803,380.584,368.237,381.336};
 float N1S_aa_pt3p5s_20[nfitvars] = {177.961,179.252,176.682,177.875,179.029,178.8};
 float N1S_aa_pt3p5s_40[nfitvars] = {46.192,46.3489,45.9434,46.0589,45.2119,45.8102};
@@ -456,7 +456,6 @@ float N1B_aa_pt3p5s_8[nbkgdvars] = {525.072,534.274};
 float N1B_aa_pt3p5s_12[nbkgdvars] = {362.858,362.077};
 float N1B_aa_pt3p5s_20[nbkgdvars] = {184.693,181.525};
 float N1B_aa_pt3p5s_40[nbkgdvars] = {18.5629,48.3119};
-
 // more.
 float N1S_aa_pt3p5Large[nPtBins_2010] = {1842,466,311}; // ,53
 float N1S_aa_pt3p5eLarge[nPtBins_2010] = {110,67,24}; //,8.9   // wowowowow 2nd bin was 107, tricked it :) for unimportant reasons.
@@ -528,12 +527,12 @@ float N3B_aa_pt4Larges_20[nbkgdvars] = {16.4182,16.0991};
 /*                     rap                     */
 /* ------------------------------------------- */
 //yields
-float N1S_aa_rap3p5_2014[nRapBins_2014] = {501.933,505.123,559.22,533.105,372.687,113.75};
-float N1S_aa_rap3p5_2014e[nRapBins_2014] = {31.9277,34.5103,38.0134,39.2303,31.583,17.2147};
-float N2S_aa_rap3p5[nRapBins_2014] = {25.7154,47.4027,25.3167,-1.02024,39.0638,4.00955};
-float N2S_aa_rap3p5e[nRapBins_2014] = {21.3964,24.5469,27.1056,28.3258,20.74,11.1802};
-float N3S_aa_rap3p5_2014[nRapBins_2014] = {-2.4566,-4.59331,-1.04105,-3.33196,-35.1304,-12.2435};
-float N3S_aa_rap3p5_2014e[nRapBins_2014] = {20.2548,23.2876,25.5479,27.2737,17.2032,9.24833};
+float N1S_aa_rap3p5_2014[nRapBins_2014] = {501.933,505.446,559.22,533.105,364.85,113.75};
+float N1S_aa_rap3p5_2014e[nRapBins_2014] = {31.9277,34.4893,38.0134,39.2303,29.0945,17.2147};
+float N2S_aa_rap3p5[nRapBins_2014] = {25.7154,47.789,25.3167,-1.02024,33.9907,4.00955};
+float N2S_aa_rap3p5e[nRapBins_2014] = {21.3964,24.589,27.1056,28.3258,19.3551,11.1802};
+float N3S_aa_rap3p5_2014[nRapBins_2014] = {-2.4566,6.87048e-05,-1.04105,-3.33196,-39.127,-12.2435};
+float N3S_aa_rap3p5_2014e[nRapBins_2014] = {20.2548,2.72889,25.5479,27.2737,16.0976,9.24833};
 //misc.
 float Sigma1SFixed_aa_rap3p5[nRapBins_2014] = {0.0527233,0.0599054,0.0773693,0.104566,0.125792,0.133793};
 float Sigma1SFree_aa_rap3p5[nRapBins_2014] = {0.0535277,0.0606161,0.079676,0.116666,0.129474,0.169339};
@@ -542,17 +541,17 @@ float MassErr1S_aa_rap3p5[nRapBins_2014] = {0.00447293,0.00592714,0.00752893,0.0
 float N1S_aaSignif_rap3p5[nRapBins_2014] = {15.7209,14.6369,14.7111,13.5891,11.8003,6.60771};
 //systematics
 float N1S_aa_rap3p5s_0p4[nfitvars] = {501.933,557.704,523.917,505.072,500.089,506.965};
-float N1S_aa_rap3p5s_0p8[nfitvars] = {505.123,624.635,530.166,507.642,502.857,508.79};
-float N1S_aa_rap3p5s_1p2[nfitvars] = {559.22,654.359,584.116,567.594,606.676,563.445};
+float N1S_aa_rap3p5s_0p8[nfitvars] = {505.446,469.686,530.623,508.514,581.509,509.544};
+float N1S_aa_rap3p5s_1p2[nfitvars] = {559.22,588.658,584.116,567.594,606.676,563.445};
 float N1S_aa_rap3p5s_1p6[nfitvars] = {533.105,506.185,509.8,565.431,528.332,579.452};
-float N1S_aa_rap3p5s_2p0[nfitvars] = {372.687,452.721,411.854,378.649,375.727,392.568};
-float N1S_aa_rap3p5s_2p4[nfitvars] = {113.75,163.273,128.931,130.198,126.061,128.281};
-float N1B_aa_rap3p5s_0p4[nbkgdvars] = {501.877,497.065};
-float N1B_aa_rap3p5s_0p8[nbkgdvars] = {496.354,514.912};
-float N1B_aa_rap3p5s_1p2[nbkgdvars] = {590.888,643.96};
-float N1B_aa_rap3p5s_1p6[nbkgdvars] = {557.894,493.28};
-float N1B_aa_rap3p5s_2p0[nbkgdvars] = {372.641,441.865};
-float N1B_aa_rap3p5s_2p4[nbkgdvars] = {132.615,131.687};
+float N1S_aa_rap3p5s_2p0[nfitvars] = {364.85,414.25,395.939,365.404,367.594,373.51};
+float N1S_aa_rap3p5s_2p4[nfitvars] = {113.75,127.982,128.931,130.198,126.061,128.281};
+float N1B_aa_rap3p5s_0p4[nfitvars] = {501.877,497.065};
+float N1B_aa_rap3p5s_0p8[nfitvars] = {496.218,504.323};
+float N1B_aa_rap3p5s_1p2[nfitvars] = {590.888,569.043};
+float N1B_aa_rap3p5s_1p6[nfitvars] = {557.894,493.28};
+float N1B_aa_rap3p5s_2p0[nfitvars] = {347.845,354.127};
+float N1B_aa_rap3p5s_2p4[nfitvars] = {109.87,115.382};
 /* ------------------------------------------- */
 /*                     rap4                    */
 /* ------------------------------------------- */
