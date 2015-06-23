@@ -7,6 +7,9 @@
 
 using namespace RooFit;
 
+bool scanLL = false;
+const float gTextSize = 0.04;
+
 void fitAndDraw_PAS(const char* filename, bool ispbpb, const char* outdir, const char* figname="fig")
 {
    TFile *f = new TFile(filename);
@@ -22,7 +25,7 @@ void fitAndDraw_PAS(const char* filename, bool ispbpb, const char* outdir, const
    float upsPtEnd=20.;
    float upsRapStart=0.;
    float upsRapEnd=2.4;
-   int doRap=1;
+   int doRap=!ispbpb;
    int doPt=0;
    int doCent=ispbpb; 
 
@@ -52,7 +55,8 @@ void fitAndDraw(RooWorkspace& w,
       int doCent, 
       bool PASstyle=false){
    double ycms = 0.28;// for header cms legend, and pull sometimes
-   double xcms = 0.04;
+   double xcms = PASstyle ? 0.17 : 0.04;
+   double yblabla = PASstyle ? 0.8 : 1.;
    double deltay = 0.03;
    RooRealVar* mass =(RooRealVar*) w.var("invariantMass"); //
    RooDataSet* data0_fit =(RooDataSet*) w.data("data");
@@ -115,9 +119,18 @@ void fitAndDraw(RooWorkspace& w,
    frame->SetTitle("");
    frame->GetXaxis()->SetTitle("m_{#mu^{+}#mu^{-}} (GeV/c^{2})");
    frame->GetXaxis()->CenterTitle(kTRUE);
-   //  frame->GetYaxis()->SetRangeUser(0,(nsig1f->getVal()/1.33));
-   frame->GetYaxis()->SetTitleOffset(1.4);
-   frame->GetYaxis()->SetTitleSize(0.04);
+   if (PASstyle && chooseSample==6) frame->GetYaxis()->SetRangeUser(0,(nsig1f->getVal()/1.3));
+   if (PASstyle && chooseSample==7) frame->GetYaxis()->SetRangeUser(0,(nsig1f->getVal()/1.75));
+   if (!PASstyle)
+   {
+      frame->GetYaxis()->SetTitleOffset(1.4);
+      frame->GetYaxis()->SetTitleSize(0.04);
+   }
+   else
+   {
+      frame->GetYaxis()->SetTitleOffset(frame->GetYaxis()->GetTitleOffset()*1.5);
+      frame->GetYaxis()->SetTitleSize(0.045);
+   }
    //Draw stuff!
    TCanvas* cm = !PASstyle ? new TCanvas("cm","cm") : new TCanvas("cm", "cm",423,55,600,600);
    cm->cd();
@@ -142,31 +155,32 @@ void fitAndDraw(RooWorkspace& w,
    frame->Draw();
    TLatex latex1;
    latex1.SetNDC();
-   latex1.SetTextSize(0.035);
-   latex1.DrawLatex(xcms*4,1.-0.05*5.6,Form("p_{T}^{#mu_{1}} > %.1f GeV/c",muonPt1));
-   latex1.DrawLatex(xcms*4,1.-0.05*6.8,Form("p_{T}^{#mu_{2}} > %.1f GeV/c",muonPt2));
+   latex1.SetTextSize(gTextSize);
+   if (PASstyle) latex1.SetTextFont(42);
+   latex1.DrawLatex(xcms*4,yblabla-0.05*5.6,Form("p_{T}^{#mu_{1}} > %.1f GeV/c",muonPt1));
+   latex1.DrawLatex(xcms*4,yblabla-0.05*6.9,Form("p_{T}^{#mu_{2}} > %.1f GeV/c",muonPt2));
    if(doPt){
       if(upsPtEnd<3){
-         latex1.DrawLatex(xcms*4,1.-0.05*2,Form("p_{T} < %.1f",upsPtEnd));
+         latex1.DrawLatex(xcms*4,yblabla-0.05*2,Form("p_{T} < %.1f",upsPtEnd));
       }else{
-         latex1.DrawLatex(xcms*4,1.-0.05*2,Form("%.1f < p_{T} < %.1f",upsPtStart,upsPtEnd));
+         latex1.DrawLatex(xcms*4,yblabla-0.05*2,Form("%.1f < p_{T} < %.1f",upsPtStart,upsPtEnd));
       }
-      latex1.DrawLatex(xcms*4,1.-0.05*3.2,"|y| < 2.4");
+      latex1.DrawLatex(xcms*4,yblabla-0.05*3.2,"|y| < 2.4");
    }
    if(doRap){
       if(upsRapStart<0.1){
          if(((upsRapEnd>1.1&&upsRapEnd<1.3)||upsRapEnd>2.3) || upsRapEnd<0.5)
          {
-            latex1.DrawLatex(xcms*4,1.-0.05*2,Form("|y| < %.1f",upsRapEnd));
+            latex1.DrawLatex(xcms*4,yblabla-0.05*2,Form("|y| < %.1f",upsRapEnd));
          }
-         else{    latex1.DrawLatex(xcms*4,1.-0.05*2,Form("%.1f < |y| < %.1f",upsRapStart,upsRapEnd));}
+         else{    latex1.DrawLatex(xcms*4,yblabla-0.05*2,Form("%.1f < |y| < %.1f",upsRapStart,upsRapEnd));}
       }else{
-         latex1.DrawLatex(xcms*4,1.-0.05*2,Form("%.1f < |y| < %.1f",upsRapStart,upsRapEnd));}
+         latex1.DrawLatex(xcms*4,yblabla-0.05*2,Form("%.1f < |y| < %.1f",upsRapStart,upsRapEnd));}
    }
    if(doCent){
-      latex1.DrawLatex(xcms*4,1.-0.05*2,Form("Cent. %d-%d%%",centMin,centMax));
-      latex1.DrawLatex(xcms*4,1.-0.05*3.2,"p_{T} > 0");
-      latex1.DrawLatex(xcms*4,1.-0.05*4.4,"|y| < 2.4");
+      latex1.DrawLatex(xcms*4,yblabla-0.05*2,Form("Cent. %d-%d%%",centMin,centMax));
+      latex1.DrawLatex(xcms*4,yblabla-0.05*3.2,"p_{T} > 0");
+      latex1.DrawLatex(xcms*4,yblabla-0.05*4.4,"|y| < 2.4");
    }
 
 
@@ -278,7 +292,7 @@ void fitAndDraw(RooWorkspace& w,
    // output file names 
    if (bkgdModel!=3){  string outPdf = outFigDir+"/"+figname_+"_"+bkgSuffix+".pdf";}
    else{  string outPdf = outFigDir+"/"+figname_+".pdf";}
-   cm.SaveAs(outPdf.c_str());
+   cm->SaveAs(outPdf.c_str());
    if (bkgdModel!=3){   string outParameters = outDatDir+"/"+figname_+"_"+bkgSuffix+".txt";}
    else  { string outParameters = outDatDir+"/"+figname_+".txt";}
    //string outParameters_forNote = outDatsDir+"/"+figname_+"forNote.txt";
