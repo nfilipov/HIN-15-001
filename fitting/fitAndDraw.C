@@ -171,16 +171,24 @@ void fitAndDraw(RooWorkspace& w,
       if(upsRapStart<0.1){
          if(((upsRapEnd>1.1&&upsRapEnd<1.3)||upsRapEnd>2.3) || upsRapEnd<0.5)
          {
-            latex1.DrawLatex(xcms*4,yblabla-0.05*2,Form("|y| < %.1f",upsRapEnd));
+            latex1.DrawLatex(xcms*4,yblabla-0.05*(PASstyle ? 4.4 : 2),Form("|y| < %.1f",upsRapEnd));
          }
          else{    latex1.DrawLatex(xcms*4,yblabla-0.05*2,Form("%.1f < |y| < %.1f",upsRapStart,upsRapEnd));}
       }else{
          latex1.DrawLatex(xcms*4,yblabla-0.05*2,Form("%.1f < |y| < %.1f",upsRapStart,upsRapEnd));}
    }
    if(doCent){
-      latex1.DrawLatex(xcms*4,yblabla-0.05*2,Form("Cent. %d-%d%%",centMin,centMax));
-      latex1.DrawLatex(xcms*4,yblabla-0.05*3.2,"p_{T} > 0");
-      latex1.DrawLatex(xcms*4,yblabla-0.05*4.4,"|y| < 2.4");
+      if (!PASstyle) 
+      {
+         latex1.DrawLatex(xcms*4,yblabla-0.05*2,Form("Cent. %d-%d%%",centMin,centMax));
+         latex1.DrawLatex(xcms*4,yblabla-0.05*3.2,"p_{T} > 0");
+         latex1.DrawLatex(xcms*4,yblabla-0.05*4.4,"|y| < 2.4");
+      }
+      else
+      {
+         latex1.DrawLatex(xcms*4,yblabla-0.05*3.2,Form("Cent. %d-%d%%",centMin,centMax));
+         latex1.DrawLatex(xcms*4,yblabla-0.05*4.4,"|y| < 2.4");
+      }
    }
 
 

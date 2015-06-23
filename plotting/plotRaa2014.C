@@ -2066,7 +2066,7 @@ lyL->DrawLatex(2,0.000000002,"Fiducial");
     TLatex latexrap;
     latexrap.SetTextSize(gTextSize);
     latexrap.SetTextFont(42);
-    latexrap.DrawLatex(1.5,1.2,"Cent. 0-100%, |y|<2.4");
+    latexrap.DrawLatex(1.5,1.2,"Cent. 0-100%, |y| < 2.4");
 
     CMS_lumi(cRaapt,103,33);
     cRaapt->Update();
@@ -3586,11 +3586,11 @@ float plot2010()
     leg->SetTextFont(42);
     leg->Draw();
 
-    // |y|<2.4
+    // |y| < 2.4
     TLatex latexrap;
     latexrap.SetTextSize(gTextSize);
     latexrap.SetTextFont(42);
-    latexrap.DrawLatex(30,1.2,"|y|<2.4");
+    latexrap.DrawLatex(30,1.2,"|y| < 2.4");
    
     if(!plotTight){TBox *box1S = new TBox(370,1-syst1S_pp_centGlob,385,1+syst1S_pp_centGlob);
       box1S->SetFillColor(kOrange+1);
