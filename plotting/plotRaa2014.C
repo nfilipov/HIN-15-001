@@ -1516,6 +1516,7 @@ cout << "  --- 3S Cross section in pp vs. y short bins---" << endl;
  f4Ptaa->GetXaxis()->CenterTitle(kTRUE);
  f4Ptaa->GetXaxis()->SetTitleSize(0.045);
  f4Ptaa->GetXaxis()->SetTitleOffset(f4Ptaa->GetXaxis()->GetTitleOffset()*1.3);
+ f4Ptaa->GetYaxis()->SetLabelSize(0.9*f4Ptaa->GetYaxis()->GetLabelSize()); // cheating a little bit because the Y axis title is fat
  f4Ptaa->GetYaxis()->SetTitleSize(0.04);
  f4Ptaa->GetYaxis()->SetTitleOffset(1.8);
  f4Ptaa->Draw();
@@ -1558,7 +1559,8 @@ cout << "  --- 3S Cross section in pp vs. y short bins---" << endl;
     TLatex latexpt;
     latexpt.SetTextSize(gTextSize);
     latexpt.SetTextFont(42);
-    latexpt.DrawLatex(9.8,0.015,"Cent. 0-100%, |y| < 2.4");
+    latexpt.DrawLatex(15.5,0.015,"|y| < 2.4");
+    latexpt.DrawLatex(13.3,0.009,"Cent. 0-100%");
 
     CMS_lumi(cptaa,101,33);
     cptaa->Update();
@@ -1581,6 +1583,7 @@ cout << "  --- 3S Cross section in pp vs. y short bins---" << endl;
  f4Pt->GetXaxis()->SetTitleSize(0.045);
  f4Pt->GetXaxis()->SetTitleOffset(f4Pt->GetXaxis()->GetTitleOffset()*1.3);
  f4Pt->GetYaxis()->SetTitleSize(0.045);
+ f4Pt->GetYaxis()->SetLabelSize(0.9*f4Pt->GetYaxis()->GetLabelSize()); // cheating a little bit because the Y axis title is fat
  f4Pt->GetYaxis()->SetTitleOffset(1.64);
  f4Pt->GetYaxis()->SetRangeUser(0.0005,0.2);
  //f4Pt->GetYaxis()->SetRangeUser(0.01,.09);
