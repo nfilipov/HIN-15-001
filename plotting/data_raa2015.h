@@ -4,10 +4,13 @@
 //#define N_MB_corr   1.138033648
 #define T_AA_b 5662
 #define T_AA_mb 5.662     
-#define RapBinWidth 4.8
-#define L_pp_e 0.027
-#define N_MB_e 0.034
+#define T_AA_e 0.06
+#define L_pp_e 0.037
+#define N_MB_e 0.03
+#define tracking_pp 0.034 
+#define tracking_aa 0.10 
 
+#define RapBinWidth 4.8
 #define nPtBins_2013  5
 #define nPtBins_2014 6
 #define nPtBins_2010  3
@@ -403,30 +406,6 @@ float N2S_aa_tot4s=0.0712;
 float N1S_aa_tot3p5s=0.0470;
 float N1S_aa_tot4s=0.0281;
 
-/* float N1S_pp_tot3p5s[nfitvars] = {5013.93,5132.63,5069.73,5185.89,5187.98,5158.67}; */
-/* float N1S_pp_tot4s[nfitvars] = {3511.4,3683.83,3621.77,3694.21,3722.78,3659.11}; */
-/* float N1S_aa_tot3p5s[nfitvars] = {2533.78,2858.08,3020.9,2626.89,2656.25,2627.41}; */
-/* float N1S_aa_tot4s[nfitvars] = {1792.67,2141.8,2133.84,1963.26,1984.24,1921.01}; */
-/* float N2S_pp_tot3p5s[nfitvars] = {1580.16,1630.17,1603.36,1657.93,1645.53,1645.52}; */
-/* float N2S_pp_tot4s[nfitvars] = {1208.15,1297.9,1263.07,1292.82,1287.31,1278.4}; */
-/* float N2S_aa_tot3p5s[nfitvars] = {155.425,215.334,231.992,170.413,171.442,174.193}; */
-/* float N2S_aa_tot4s[nfitvars] = {172.85,267.091,244.92,211.387,207.03,201.746}; */
-/* float N3S_pp_tot3p5s[nfitvars] = {769.791,806.327,784.602,816.081,802.08,807.586}; */
-/* float N3S_pp_tot4s[nfitvars] = {618.65,688.795,656.044,669.956,657.858,660.307}; */
-/* float N3S_aa_tot3p5s[nfitvars] = {-34.5042,-5.64183,-3.96734,-28.359,-26.7918,-24.7919}; */
-/* float N3S_aa_tot4s[nfitvars] = {6.5409,50.1639,37.9764,12.7675,15.0923,8.01297}; */
-/* float N1B_pp_tot3p5s[nbkgdvars] = {5013.89,4927.13}; */
-/* float N1B_pp_tot4s[nbkgdvars] = {3380.34,3362.59}; */
-/* float N1B_aa_tot3p5s[nbkgdvars] = {2527.41,2819.72}; */
-/* float N1B_aa_tot4s[nbkgdvars] = {1822.57,1694.81}; */
-/* float N2B_pp_tot3p5s[nbkgdvars] = {1580.29,1519.38}; */
-/* float N2B_pp_tot4s[nbkgdvars] = {1098.98,1094.82}; */
-/* float N2B_aa_tot3p5s[nbkgdvars] = {135.759,241.787}; */
-/* float N2B_aa_tot4s[nbkgdvars] = {174.694,129.872}; */
-/* float N3B_pp_tot3p5s[nbkgdvars] = {769.787,735.609}; */
-/* float N3B_pp_tot4s[nbkgdvars] = {548.971,555.266}; */
-/* float N3B_aa_tot3p5s[nbkgdvars] = {-3.30886,0.822784}; */
-/* float N3B_aa_tot4s[nbkgdvars] = {-5.73496,-7.69648}; */
 /* ------------------------------------------- */
 /*                      pT                     */
 /* ------------------------------------------- */
