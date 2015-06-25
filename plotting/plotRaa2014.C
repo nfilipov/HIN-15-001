@@ -1595,7 +1595,7 @@ cout << "  --- 3S Cross section in pp vs. y short bins---" << endl;
  f4Pt->GetXaxis()->SetTitleOffset(f4Pt->GetXaxis()->GetTitleOffset()*1.3);
  f4Pt->GetYaxis()->SetTitleSize(0.045);
  f4Pt->GetYaxis()->SetLabelSize(0.9*f4Pt->GetYaxis()->GetLabelSize()); // cheating a little bit because the Y axis title is fat
- f4Pt->GetYaxis()->SetTitleOffset(1.64);
+ f4Pt->GetYaxis()->SetTitleOffset(1.55);
  f4Pt->GetYaxis()->SetRangeUser(0.0005,0.2);
  //f4Pt->GetYaxis()->SetRangeUser(0.01,.09);
  f4Pt->GetXaxis()->CenterTitle(kTRUE);
