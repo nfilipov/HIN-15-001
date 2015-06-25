@@ -38,6 +38,17 @@ const string outSyst = "syst_outputfile.txt";
 
 const TString basedir1 = "/tmp"; //"~/Desktop"
 const TString basedir2 = "/tmp"; //"~/Documents/PR/forTWiki/CSandRAA"
+
+// colors
+Color_t color1Spp = kCyan+1;
+Color_t color2Spp = kCyan+2;
+Color_t color3Spp = kCyan+3;
+Color_t color1Saa = kGreen+1;
+Color_t color2Saa = kGreen+3;
+Color_t color3Saa = kGreen+4;
+Color_t color1Sraa = kOrange+1;
+Color_t color2Sraa = kOrange+4;
+Color_t color3Sraa = kOrange+3;
  
 const  ofstream ofSyst;
 
@@ -1272,7 +1283,7 @@ cout << "  --- 3S Cross section in pp vs. y short bins---" << endl;
      g1->Draw("pe");
 
      TGraph *g2 = new TGraph(nPtBins_2013,fiveBins,SigOverErr_aaPt1S3p5);
-     g2->SetMarkerColor(kOrange+1);
+     g2->SetMarkerColor(color1Sraa);
      g2->SetMarkerStyle(21);
      g2->SetMarkerSize(2);
      g2->Draw("pe");
@@ -1284,7 +1295,7 @@ cout << "  --- 3S Cross section in pp vs. y short bins---" << endl;
      g3->Draw("pe");
 
      TGraph *g4 = new TGraph(nPtBins_2013,fiveBins,SigOverErr_aaPt1S4);
-     g4->SetMarkerColor(kOrange+1);
+     g4->SetMarkerColor(color1Sraa);
      g4->SetMarkerStyle(29);
      g4->SetMarkerSize(2);
      g4->Draw("pe");
@@ -1329,7 +1340,7 @@ cout << "  --- 3S Cross section in pp vs. y short bins---" << endl;
      g5->Draw("pe");
 
      TGraph *g6 = new TGraph(nRapBins_2014,sixBins,SigOverErr_aaRap1S3p5);
-     g6->SetMarkerColor(kOrange+1);
+     g6->SetMarkerColor(color1Sraa);
      g6->SetMarkerStyle(21);
      g6->SetMarkerSize(2);
      g6->Draw("pe");
@@ -1341,7 +1352,7 @@ cout << "  --- 3S Cross section in pp vs. y short bins---" << endl;
      g7->Draw("pe");
 
      TGraph *g8 = new TGraph(nRapBins_2014,sixBins,SigOverErr_aaRap1S4);
-     g8->SetMarkerColor(kOrange+1);
+     g8->SetMarkerColor(color1Sraa);
      g8->SetMarkerStyle(29);
      g8->SetMarkerSize(2);
      g8->Draw("pe");
@@ -1387,7 +1398,7 @@ cout << "  --- 3S Cross section in pp vs. y short bins---" << endl;
  f4Pt->Draw();
  /// one pad to draw PbPb yields,
  TGraphErrors *gpt1 = new TGraphErrors(nPtBins_2013,pt,CS1S_aa_pt,0,CS1S_aa_pte);
- gpt1->SetMarkerColor(8);
+ gpt1->SetMarkerColor(color1Saa);
  gpt1->SetMarkerStyle(33);
  gpt1->SetMarkerSize(2);
  TGraphErrors *gpt1circle = new TGraphErrors(nPtBins_2013,pt,CS1S_aa_pt,0,CS1S_aa_pte);
@@ -1399,7 +1410,7 @@ cout << "  --- 3S Cross section in pp vs. y short bins---" << endl;
  // f4Pt->Draw("same");
  gPad->RedrawAxis();
  TGraphErrors *gpt1pp = new TGraphErrors(nPtBins_2013,pt,CS1S_pp_pt,0,CS1S_pp_pte);
- gpt1pp->SetMarkerColor(1);
+ gpt1pp->SetMarkerColor(color1Spp);
  gpt1pp->SetMarkerStyle(21);
  gpt1pp->SetMarkerSize(1.2);
  TGraphErrors *gpt1circlepp = new TGraphErrors(nPtBins_2013,pt,CS1S_pp_pt,0,CS1S_pp_pte);
@@ -1414,19 +1425,19 @@ cout << "  --- 3S Cross section in pp vs. y short bins---" << endl;
  ///tnp comparison
  if(plotTNP){
    TGraphErrors *gPt1syst = new TGraphErrors(nPtBins_2013,pt,CS1S_aa_tnp_pt,pte,CS1S_aa_tnp_pts);
-   gPt1syst->SetLineColor(kOrange+1);
+   gPt1syst->SetLineColor(color1Saa);
    gPt1syst->SetFillStyle(0);
    gPt1syst->SetLineWidth(2);
    gPt1syst->SetMarkerSize(0);
    gPt1syst->Draw("2");
    TGraphErrors *gPt1ppsyst = new TGraphErrors(nPtBins_2013,pt,CS1S_pp_tnp_pt,pte,CS1S_pp_tnp_pts);
-   gPt1ppsyst->SetLineColor(kAzure+1);
+   gPt1ppsyst->SetLineColor(color1Spp);
    gPt1ppsyst->SetFillStyle(0);
    gPt1ppsyst->SetLineWidth(2);
    gPt1ppsyst->SetMarkerSize(0);
    gPt1ppsyst->Draw("2");
    TGraphErrors *gpt1TNP = new TGraphErrors(nPtBins_2013,pt,CS1S_aa_tnp_pt,0,CS1S_aa_tnp_pte);
-   gpt1TNP->SetMarkerColor(kOrange+1);
+   gpt1TNP->SetMarkerColor(color1Saa);
    gpt1TNP->SetMarkerStyle(21);
    gpt1TNP->SetMarkerSize(1.2);
    TGraphErrors *gpt1TNPcircle = new TGraphErrors(nPtBins_2013,pt,CS1S_aa_tnp_pt,0,CS1S_aa_tnp_pte);
@@ -1439,7 +1450,7 @@ cout << "  --- 3S Cross section in pp vs. y short bins---" << endl;
    // f4Pt->Draw("same");
    gPad->RedrawAxis();
    TGraphErrors *gpt1TNPpp = new TGraphErrors(nPtBins_2013,pt,CS1S_pp_tnp_pt,0,CS1S_pp_tnp_pte);
-   gpt1TNPpp->SetMarkerColor(kAzure+1);
+   gpt1TNPpp->SetMarkerColor(color1Spp);
    gpt1TNPpp->SetMarkerStyle(21);
    gpt1TNPpp->SetMarkerSize(1.2);
    TGraphErrors *gpt1TNPcirclepp = new TGraphErrors(nPtBins_2013,pt,CS1S_pp_tnp_pt,0,CS1S_pp_tnp_pte);
@@ -1525,13 +1536,13 @@ cout << "  --- 3S Cross section in pp vs. y short bins---" << endl;
  double mean_aa1=gpt1TNP->GetMean(1);
  gpt1TNPcircle->Draw("p");
  TGraphErrors *gPt2syst = new TGraphErrors(nPtBins_2010,pt2010,CS2S_aa_pt,pt2010e,CS2S_aa_pts);
- gPt2syst->SetLineColor(kOrange+4);
+ gPt2syst->SetLineColor(color2Saa);
  gPt2syst->SetFillStyle(0);
  gPt2syst->SetLineWidth(2);
  gPt2syst->SetMarkerSize(0);
  gPt2syst->Draw("2");
  TGraphErrors *gpt2TNP = new TGraphErrors(nPtBins_2010,pt2010,CS2S_aa_pt,0,CS2S_aa_pte);
- gpt2TNP->SetMarkerColor(kOrange+4);
+ gpt2TNP->SetMarkerColor(color2Saa);
  gpt2TNP->SetMarkerStyle(20);
  gpt2TNP->SetMarkerSize(1.2);
  double mean_aa2 = gpt2TNP->GetMean(1);
@@ -1593,19 +1604,19 @@ cout << "  --- 3S Cross section in pp vs. y short bins---" << endl;
    TGraphErrors *g2circle = new TGraphErrors(nPtBins_2013,pt,CS2S_pp_pt2013,0,CS2S_pp_pt2013e);
    g2circle->SetMarkerStyle(20);
    g2circle->SetMarkerSize(1.2);
-   g2circle->SetLineColor(kBlack);
+   g2circle->SetLineColor(color2Spp);
    g2pt->Draw("pe");
    g2circle->Draw("p");
 
    TGraphErrors *g3circle = new TGraphErrors(nPtBins_2013,pt,CS3S_pp_pt2013,0,CS3S_pp_pt2013e);
    g3circle->SetMarkerStyle(22);
    g3circle->SetMarkerSize(1.2);
-   g3circle->SetLineColor(kBlack);
+   g3circle->SetLineColor(color3Spp);
    g3pt->Draw("pe");
    g3circle->Draw("p");
 
    TGraphErrors *gpt1pp = new TGraphErrors(nPtBins_2013,pt,CS1S_pp_pt,0,CS1S_pp_pte);
-   gpt1pp->SetMarkerColor(1);
+   gpt1pp->SetMarkerColor(color1Spp);
    gpt1pp->SetMarkerStyle(21);
    gpt1pp->SetMarkerSize(1.2);
    TGraphErrors *gpt1circlepp = new TGraphErrors(nPtBins_2013,pt,CS1S_pp_pt,0,CS1S_pp_pte);
@@ -1615,12 +1626,12 @@ cout << "  --- 3S Cross section in pp vs. y short bins---" << endl;
    gpt1pp->Draw("pe");
    gpt1circlepp->Draw("p");
    TGraphErrors *g2pt = new TGraphErrors(nPtBins_2013,pt,CS2S_pp_pt2013,pte,CS2S_pp_pt2013e);
-   g2pt->SetMarkerColor(kAzure+1);
+   g2pt->SetMarkerColor(color2Spp);
    g2pt->SetMarkerStyle(21);
    g2pt->SetMarkerSize(1.2);
 
    TGraphErrors *g3pt = new TGraphErrors(nPtBins_2013,pt,CS3S_pp_pt2013,pte,CS3S_pp_pt2013e);
-   g3pt->SetMarkerColor(kAzure+1);
+   g3pt->SetMarkerColor(color3Spp);
    g3pt->SetMarkerStyle(21);
    g3pt->SetMarkerSize(1.2);
  }
@@ -1628,13 +1639,13 @@ cout << "  --- 3S Cross section in pp vs. y short bins---" << endl;
  
  if(plotTNP){
    TGraphErrors *gPt2ppsyst = new TGraphErrors(nPtBins_2013,pt,CS2S_pp_tnp_pt2013,pte,CS2S_pp_tnp_pts);
-   gPt2ppsyst->SetLineColor(kAzure+1);
+   gPt2ppsyst->SetLineColor(color2Spp);
    gPt2ppsyst->SetFillStyle(0);
    gPt2ppsyst->SetLineWidth(2);
    gPt2ppsyst->SetMarkerSize(0);
    gPt2ppsyst->Draw("2");
    TGraphErrors *gpt2TNPpp = new TGraphErrors(nPtBins_2013,pt,CS2S_pp_tnp_pt2013,0,CS2S_pp_tnp_pt2013e);
-   gpt2TNPpp->SetMarkerColor(1);
+   gpt2TNPpp->SetMarkerColor(color2Spp);
    gpt2TNPpp->SetMarkerStyle(20);
    gpt2TNPpp->SetMarkerSize(1.2);
    TGraphErrors *gpt2TNPcirclepp = new TGraphErrors(nPtBins_2013,pt,CS2S_pp_tnp_pt2013,0,CS2S_pp_tnp_pt2013e);
@@ -1647,13 +1658,13 @@ cout << "  --- 3S Cross section in pp vs. y short bins---" << endl;
    //f4Pt->Draw("same");
    gPad->RedrawAxis(); 
    TGraphErrors *gPt3ppsyst = new TGraphErrors(nPtBins_2013,pt,CS3S_pp_tnp_pt2013,pte,CS3S_pp_tnp_pts);
-   gPt3ppsyst->SetLineColor(kAzure+1);
+   gPt3ppsyst->SetLineColor(color3Spp);
    gPt3ppsyst->SetFillStyle(0);
    gPt3ppsyst->SetLineWidth(2);
    gPt3ppsyst->SetMarkerSize(0);
     gPt3ppsyst->Draw("2");
    TGraphErrors *gpt3TNPpp = new TGraphErrors(nPtBins_2013,pt,CS3S_pp_tnp_pt2013,0,CS3S_pp_tnp_pt2013e);
-   gpt3TNPpp->SetMarkerColor(1);
+   gpt3TNPpp->SetMarkerColor(color3Spp);
    gpt3TNPpp->SetMarkerStyle(22);
    gpt3TNPpp->SetMarkerSize(1.2);
    TGraphErrors *gpt3TNPcirclepp = new TGraphErrors(nPtBins_2013,pt,CS3S_pp_tnp_pt2013,0,CS3S_pp_tnp_pt2013e);
@@ -1667,7 +1678,7 @@ cout << "  --- 3S Cross section in pp vs. y short bins---" << endl;
    gpt3TNPcirclepp->Draw("p");
    
    TGraphErrors *gpt1TNPpp = new TGraphErrors(nPtBins_2013,pt,CS1S_pp_tnp_pt,0,CS1S_pp_tnp_pte);
-   gpt1TNPpp->SetMarkerColor(1);
+   gpt1TNPpp->SetMarkerColor(color1Spp);
    gpt1TNPpp->SetMarkerStyle(21);
    gpt1TNPpp->SetMarkerSize(1.2);
    TGraphErrors *gpt1circlepp = new TGraphErrors(nPtBins_2013,pt,CS1S_pp_tnp_pt,0,CS1S_pp_tnp_pte);
@@ -1675,7 +1686,7 @@ cout << "  --- 3S Cross section in pp vs. y short bins---" << endl;
    gpt1circlepp->SetMarkerSize(1.2);
    gpt1circlepp->SetLineColor(kBlack);
    TGraphErrors *gPt1ppsyst = new TGraphErrors(nPtBins_2013,pt,CS1S_pp_tnp_pt,pte,CS1S_pp_tnp_pts);
-   gPt1ppsyst->SetLineColor(kAzure+1);
+   gPt1ppsyst->SetLineColor(color1Spp);
    gPt1ppsyst->SetFillStyle(0);
    gPt1ppsyst->SetLineWidth(2);
    gPt1ppsyst->SetMarkerSize(0);
@@ -1750,7 +1761,7 @@ cout << "  --- 3S Cross section in pp vs. y short bins---" << endl;
  f4Pt->GetXaxis()->CenterTitle(kTRUE);
  f4Pt->Draw();
  TGraphErrors *g2ptFiducial = new TGraphErrors(nPtBins_2013,pt,CS2S_pp_pt2013Fiducial,pte,CS2S_pp_pt2013Fiduciale);
- g2ptFiducial->SetMarkerColor(kAzure+1);
+ g2ptFiducial->SetMarkerColor(color2Spp);
  g2ptFiducial->SetMarkerStyle(21);
  g2ptFiducial->SetMarkerSize(1.2);
 
@@ -1771,7 +1782,7 @@ cout << "  --- 3S Cross section in pp vs. y short bins---" << endl;
  g2circleF->Draw("p");
 
 TGraphErrors *gpt1ppF = new TGraphErrors(nPtBins_2013,pt,CS1S_pp_ptFiducial,pte,CS1S_pp_ptFiduciale);
- gpt1ppF->SetMarkerColor(kAzure+1);
+ gpt1ppF->SetMarkerColor(color1Spp);
  gpt1ppF->SetMarkerStyle(21);
  gpt1ppF->SetMarkerSize(1.2);
  TGraphErrors *gpt1circleFpp = new TGraphErrors(nPtBins_2013,pt,CS1S_pp_ptFiducial,pte,CS1S_pp_ptFiduciale);
@@ -1830,7 +1841,7 @@ TCanvas *cptFiducial = new TCanvas("cptFiducial","cptFiducial");
  f4Pt->Draw();
 
 TGraphErrors *gpt1F = new TGraphErrors(nPtBins_2013,pt,CS1S_aa_ptFiducial,pte,CS1S_aa_ptFiduciale);
- gpt1F->SetMarkerColor(8);
+ gpt1F->SetMarkerColor(color1Saa);
  gpt1F->SetMarkerStyle(33);
  gpt1F->SetMarkerSize(2);
 
@@ -1847,7 +1858,7 @@ TGraphErrors *gpt1F = new TGraphErrors(nPtBins_2013,pt,CS1S_aa_ptFiducial,pte,CS
     
 
 TGraphErrors *gpt1ppF = new TGraphErrors(nPtBins_2013,pt,CS1S_pp_ptFiducial,pte,CS1S_pp_ptFiduciale);
- gpt1ppF->SetMarkerColor(kAzure+1);
+ gpt1ppF->SetMarkerColor(color1Spp);
  gpt1ppF->SetMarkerStyle(21);
  gpt1ppF->SetMarkerSize(1.2);
  TGraphErrors *gpt1circleFpp = new TGraphErrors(nPtBins_2013,pt,CS1S_pp_ptFiducial,pte,CS1S_pp_ptFiduciale);
@@ -1906,7 +1917,7 @@ lyL->DrawLatex(2,0.000000002,"Fiducial");
  f4RaaPt->GetXaxis()->CenterTitle(kTRUE);
  f4RaaPt->Draw();
  TGraphErrors *gRaaPt1 = new TGraphErrors(nPtBins_2013,pt,RAA_1S_pt,pte,RAA_1S_pte);
- gRaaPt1->SetMarkerColor(kAzure+1);
+ gRaaPt1->SetMarkerColor(color1Spp);
  gRaaPt1->SetMarkerStyle(21);
  gRaaPt1->SetMarkerSize(1.2);
  TGraphErrors *gRaaPt1circle = new TGraphErrors(nPtBins_2013,pt,RAA_1S_pt,pte,RAA_1S_pte);
@@ -1920,7 +1931,7 @@ lyL->DrawLatex(2,0.000000002,"Fiducial");
  }
  if(plotTNP){
    TGraphErrors *gRaaPt1TNP = new TGraphErrors(nPtBins_2013,pt,RAA_1S_tnp_pt,0,RAA_1S_tnp_pte);
-   gRaaPt1TNP->SetMarkerColor(kOrange+1);
+   gRaaPt1TNP->SetMarkerColor(color1Sraa);
    gRaaPt1TNP->SetMarkerStyle(21);
    gRaaPt1TNP->SetMarkerSize(1.2);
    TGraphErrors *gRaaPt1TNPcircle = new TGraphErrors(nPtBins_2013,pt,RAA_1S_tnp_pt,0,RAA_1S_tnp_pte);
@@ -1932,7 +1943,7 @@ lyL->DrawLatex(2,0.000000002,"Fiducial");
    f4RaaPt->Draw("same");
 
    TGraphErrors *gRaaPt1syst = new TGraphErrors(nPtBins_2013,pt,RAA_1S_tnp_pt,pte,RAA_1S_tnp_pts);
-   gRaaPt1syst->SetLineColor(kOrange+1);
+   gRaaPt1syst->SetLineColor(color1Sraa);
    gRaaPt1syst->SetFillStyle(0);
    gRaaPt1syst->SetLineWidth(2);
    gRaaPt1syst->SetMarkerSize(0);
@@ -1940,7 +1951,7 @@ lyL->DrawLatex(2,0.000000002,"Fiducial");
 
    if(plotTight){
      TGraphErrors *gRaaPt1TNP4 = new TGraphErrors(nPtBins_2013,ptShift,RAA_1S_tnp_pt4,0,RAA_1S_tnp_pt4e);
-     gRaaPt1TNP4->SetMarkerColor(kGreen+1);
+     gRaaPt1TNP4->SetMarkerColor(color1Sraa);
      gRaaPt1TNP4->SetMarkerStyle(21);
      gRaaPt1TNP4->SetMarkerSize(1.2);
      TGraphErrors *gRaaPt1TNPcircle4 = new TGraphErrors(nPtBins_2013,ptShift,RAA_1S_tnp_pt4,0,RAA_1S_tnp_pt4e);
@@ -1952,7 +1963,7 @@ lyL->DrawLatex(2,0.000000002,"Fiducial");
      f4RaaPt->Draw("same");
 
      TGraphErrors *gRaaPt1syst4 = new TGraphErrors(nPtBins_2013,pt,RAA_1S_tnp_pt4,pte,RAA_1S_tnp_pt4s);
-     gRaaPt1syst4->SetLineColor(kGreen+1);
+     gRaaPt1syst4->SetLineColor(color1Sraa);
      gRaaPt1syst4->SetFillStyle(0);
      gRaaPt1syst4->SetLineWidth(2);
      gRaaPt1syst4->SetMarkerSize(0);
@@ -1960,7 +1971,7 @@ lyL->DrawLatex(2,0.000000002,"Fiducial");
 
    }else{
    TGraphErrors *gRaaPt2TNP = new TGraphErrors(nPtBins_2010,pt2010,RAA_2S_tnp_pt,0,RAA_2S_tnp_pte);
-   gRaaPt2TNP->SetMarkerColor(kOrange+4);
+   gRaaPt2TNP->SetMarkerColor(color2Sraa);
    gRaaPt2TNP->SetMarkerStyle(20);
    gRaaPt2TNP->SetMarkerSize(1.2);
    TGraphErrors *gRaaPt2TNPcircle = new TGraphErrors(nPtBins_2010,pt2010,RAA_2S_tnp_pt,0,RAA_2S_tnp_pte);
@@ -1971,7 +1982,7 @@ lyL->DrawLatex(2,0.000000002,"Fiducial");
    gRaaPt2TNPcircle->Draw("p");
    f4RaaPt->Draw("same");
    TGraphErrors *gRaaPt2syst = new TGraphErrors(nPtBins_2010,pt2010,RAA_2S_tnp_pt,pt2010e,RAA_2S_tnp_pts);
-   gRaaPt2syst->SetLineColor(kOrange+4);
+   gRaaPt2syst->SetLineColor(color2Sraa);
    gRaaPt2syst->SetFillStyle(0);
    gRaaPt2syst->SetLineWidth(2);
    gRaaPt2syst->SetMarkerSize(0);
@@ -1981,17 +1992,17 @@ lyL->DrawLatex(2,0.000000002,"Fiducial");
  }
  TBox *box = new TBox(19,1-syst1S_raa_global,20,1+syst1S_raa_global);
  
- box->SetFillColor(kGray);//kOrange+1);
+ box->SetFillColor(kGray);//color1Sraa);
  box->Draw();
  if(!plotTight){
  // TBox *box2S = new TBox(18,1-syst2S_raa_global,19,1+syst2S_raa_global);
  // 
- // box2S->SetFillColor(kOrange+4);
+ // box2S->SetFillColor(color2Sraa);
  // box2S->Draw();
  }
  if(plotTight){
    TBox *box1S4 = new TBox(18,1-syst1S_pp_glob,19,1+syst1S_pp_glob);
-   box1S4->SetFillColor(kGreen+1);
+   box1S4->SetFillColor(color1Sraa);
    box1S4->Draw();
  }
  // TLatex *l1CMSpt = new TLatex(16,1.27, "CMS");
@@ -2125,7 +2136,7 @@ lyL->DrawLatex(2,0.000000002,"Fiducial");
  }
  gPad->RedrawAxis();
  TGraphErrors *grap1pp = new TGraphErrors(nRapBins_2014,rap2014,CS1S_pp_rap2014,rap2014e,CS1S_pp_rap2014e);
- grap1pp->SetMarkerColor(kAzure+1);
+ grap1pp->SetMarkerColor(color1Spp);
  grap1pp->SetMarkerStyle(21);
  grap1pp->SetMarkerSize(1.2);
  TGraphErrors *grap1circlepp = new TGraphErrors(nRapBins_2014,rap2014,CS1S_pp_rap2014,rap2014e,CS1S_pp_rap2014e);
@@ -2140,13 +2151,13 @@ lyL->DrawLatex(2,0.000000002,"Fiducial");
 
  if(plotTNP){
    TGraphErrors *gRap1syst = new TGraphErrors(nRapBins_2014,rap2014,CS1S_aa_tnp_rap2014,rap2014e,CS1S_aa_tnp_rap2014s);
-   gRap1syst->SetLineColor(kOrange+1);
+   gRap1syst->SetLineColor(color1Saa);
    gRap1syst->SetFillStyle(0);
    gRap1syst->SetLineWidth(2);
    gRap1syst->SetMarkerSize(0);
    gRap1syst->Draw("2");
    TGraphErrors *grap1TNP = new TGraphErrors(nRapBins_2014,rap2014,CS1S_aa_tnp_rap2014,0,CS1S_aa_tnp_rap2014e);
-   grap1TNP->SetMarkerColor(kOrange+1);
+   grap1TNP->SetMarkerColor(color1Saa);
    grap1TNP->SetMarkerStyle(21);
    grap1TNP->SetMarkerSize(1.2);
    TGraphErrors *grap1TNPcircle = new TGraphErrors(nRapBins_2014,rap2014,CS1S_aa_tnp_rap2014,0,CS1S_aa_tnp_rap2014e);
@@ -2158,7 +2169,7 @@ lyL->DrawLatex(2,0.000000002,"Fiducial");
    f4Rap->Draw("same");
    gPad->RedrawAxis();
    TGraphErrors *gRap1ppsyst = new TGraphErrors(nRapBins_2014,rap2014,CS1S_pp_tnp_rap2014,rap2014e,CS1S_pp_tnp_rap2014s);
-   gRap1ppsyst->SetLineColor(kAzure+1);
+   gRap1ppsyst->SetLineColor(color1Spp);
    gRap1ppsyst->SetFillStyle(0);
    gRap1ppsyst->SetLineWidth(2);
    gRap1ppsyst->SetMarkerSize(0);
@@ -2253,13 +2264,13 @@ legendB->SetTextFont(42);
  grap1TNP->Draw("pe");
  grap1TNPcircle->Draw("p");
  TGraphErrors *gRap2syst = new TGraphErrors(nRapBins_2010,rap2010,CS2S_aa_tnp_rap,rap2010e,CS2S_aa_tnp_raps);
- gRap2syst->SetLineColor(kOrange+4);
+ gRap2syst->SetLineColor(color2Saa);
  gRap2syst->SetFillStyle(0);
  gRap2syst->SetLineWidth(2);
  gRap2syst->SetMarkerSize(0);
  gRap2syst->Draw("2");
  TGraphErrors *grap2TNP = new TGraphErrors(nRapBins_2010,rap2010,CS2S_aa_tnp_rap,0,CS2S_aa_tnp_rape);
- grap2TNP->SetMarkerColor(kOrange+4);
+ grap2TNP->SetMarkerColor(color2Saa);
  grap2TNP->SetMarkerStyle(20);
  grap2TNP->SetMarkerSize(1.2);
  TGraphErrors *grap2TNPcircle = new TGraphErrors(nRapBins_2010,rap2010,CS2S_aa_tnp_rap,0,CS2S_aa_tnp_rape);
@@ -2322,11 +2333,11 @@ legendB->SetTextFont(42);
  if(!plotTNP){
    //pp data
    TGraphErrors *grap2pp = new TGraphErrors(nRapBins_2014,rap2014,CS2S_pp_rap2014,0,CS2S_pp_rap2014e);
-   grap2pp->SetMarkerColor(1);
+   grap2pp->SetMarkerColor(color2Spp);
    grap2pp->SetMarkerStyle(20);
    grap2pp->SetMarkerSize(1.2);
    TGraphErrors *grap3pp = new TGraphErrors(nRapBins_2014,rap2014,CS3S_pp_rap2014,0,CS3S_pp_rap2014e);
-   grap3pp->SetMarkerColor(1);
+   grap3pp->SetMarkerColor(color3Spp);
    grap3pp->SetMarkerStyle(22);
    grap3pp->SetMarkerSize(1.2);
    grap2pp->Draw("pe");
@@ -2338,7 +2349,7 @@ legendB->SetTextFont(42);
    grap3pp->Draw("pe");
    g3rapcircle->Draw("p");
    TGraphErrors *grap1pp = new TGraphErrors(nRapBins_2014,rap2014,CS1S_pp_rap2014,0,CS1S_pp_rap2014e);
-   grap1pp->SetMarkerColor(1);
+   grap1pp->SetMarkerColor(color1Spp);
    grap1pp->SetMarkerStyle(21);
    grap1pp->SetMarkerSize(1.2);
    TGraphErrors *grap1circlepp = new TGraphErrors(nRapBins_2014,rap2014,CS1S_pp_rap2014,0,CS1S_pp_rap2014e);
@@ -2349,13 +2360,13 @@ legendB->SetTextFont(42);
    grap1circlepp->Draw("p");
  }else{
    TGraphErrors *gRap1ppsyst = new TGraphErrors(nRapBins_2014,rap2014,CS1S_pp_tnp_rap2014,rap2014e,CS1S_pp_tnp_rap2014s);
-   gRap1ppsyst->SetLineColor(kAzure+1);
+   gRap1ppsyst->SetLineColor(color1Spp);
    gRap1ppsyst->SetFillStyle(0);
    gRap1ppsyst->SetLineWidth(2);
    gRap1ppsyst->SetMarkerSize(0);
    gRap1ppsyst->Draw("2");
    TGraphErrors *grap1TNPpp = new TGraphErrors(nRapBins_2014,rap2014,CS1S_pp_tnp_rap2014,0,CS1S_pp_tnp_rap2014e);
-   grap1TNPpp->SetMarkerColor(1);
+   grap1TNPpp->SetMarkerColor(color1Spp);
    grap1TNPpp->SetMarkerStyle(21);
    grap1TNPpp->SetMarkerSize(1.2);
    TGraphErrors *grap1TNPcirclepp = new TGraphErrors(nRapBins_2014,rap2014,CS1S_pp_tnp_rap2014,0,CS1S_pp_tnp_rap2014e);
@@ -2366,11 +2377,11 @@ legendB->SetTextFont(42);
    grap1TNPcirclepp->Draw("p");
    f4Rap->Draw("same");
    TGraphErrors *grap2ppTNP = new TGraphErrors(nRapBins_2014,rap2014,CS2S_pp_tnp_rap2014,0,CS2S_pp_tnp_rap2014e);
-   grap2ppTNP->SetMarkerColor(1);
+   grap2ppTNP->SetMarkerColor(color2Spp);
    grap2ppTNP->SetMarkerStyle(20);
    grap2ppTNP->SetMarkerSize(1.2);
    TGraphErrors *grap3ppTNP = new TGraphErrors(nRapBins_2014,rap2014,CS3S_pp_tnp_rap2014,0,CS3S_pp_tnp_rap2014e);
-   grap3ppTNP->SetMarkerColor(1);
+   grap3ppTNP->SetMarkerColor(color3Spp);
    grap3ppTNP->SetMarkerStyle(22);
    grap3ppTNP->SetMarkerSize(1.2);
    TGraphErrors *g2rapcircleTNP = new TGraphErrors(nRapBins_2014,rap2014,CS2S_pp_tnp_rap2014,0,CS2S_pp_tnp_rap2014e);
@@ -2382,7 +2393,7 @@ legendB->SetTextFont(42);
    g3rapcircleTNP->SetMarkerSize(1.2);
    g3rapcircleTNP->SetLineColor(kBlack);
    TGraphErrors *gRap2ppsyst = new TGraphErrors(nRapBins_2014,rap2014,CS2S_pp_tnp_rap2014,rap2014e,CS2S_pp_tnp_rap2014s);
-   gRap2ppsyst->SetLineColor(kAzure+1);
+   gRap2ppsyst->SetLineColor(color2Spp);
    gRap2ppsyst->SetFillStyle(0);
    gRap2ppsyst->SetLineWidth(2);
    gRap2ppsyst->SetMarkerSize(0);
@@ -2390,7 +2401,7 @@ legendB->SetTextFont(42);
    grap2ppTNP->Draw("pe");
    g2rapcircleTNP->Draw("p");
    TGraphErrors *gRap3ppsyst = new TGraphErrors(nRapBins_2014,rap2014,CS3S_pp_tnp_rap2014,rap2014e,CS3S_pp_tnp_rap2014s);
-   gRap3ppsyst->SetLineColor(kAzure+1);
+   gRap3ppsyst->SetLineColor(color3Spp);
    gRap3ppsyst->SetFillStyle(0);
    gRap3ppsyst->SetLineWidth(2);
    gRap3ppsyst->SetMarkerSize(0);
@@ -2398,7 +2409,7 @@ legendB->SetTextFont(42);
    grap3ppTNP->Draw("pe");
    g3rapcircleTNP->Draw("p");
    TGraphErrors *gRap1ppsyst = new TGraphErrors(nRapBins_2014,rap2014,CS1S_pp_tnp_rap2014,rap2014e,CS1S_pp_tnp_rap2014s);
-   gRap1ppsyst->SetLineColor(kAzure+1);
+   gRap1ppsyst->SetLineColor(color1Spp);
    gRap1ppsyst->SetFillStyle(0);
    gRap1ppsyst->SetLineWidth(2);
    gRap1ppsyst->SetMarkerSize(0);
@@ -2488,13 +2499,13 @@ if(plotRAA){
   if(plotTNP)
     {
       TGraphErrors *gRaaRap1syst = new TGraphErrors(nRapBins_2014,rap2014,RAA_1S_tnp_rap,rap2014e,RAA_1S_tnp_raps);
-      gRaaRap1syst->SetLineColor(kOrange+1);
+      gRaaRap1syst->SetLineColor(color1Sraa);
       gRaaRap1syst->SetFillStyle(0);
       gRaaRap1syst->SetLineWidth(2);
       gRaaRap1syst->SetMarkerSize(0);
       gRaaRap1syst->Draw("2");
       TGraphErrors *gRaaRap1TNP = new TGraphErrors(nRapBins_2014,rap2014,RAA_1S_tnp_rap,0,RAA_1S_tnp_rape);
-      gRaaRap1TNP->SetMarkerColor(kOrange+1);
+      gRaaRap1TNP->SetMarkerColor(color1Sraa);
       gRaaRap1TNP->SetMarkerStyle(21);
       gRaaRap1TNP->SetMarkerSize(1.2);
       TGraphErrors *gRaaRap1TNPcircle = new TGraphErrors(nRapBins_2014,rap2014,RAA_1S_tnp_rap,0,RAA_1S_tnp_rape);
@@ -2507,13 +2518,13 @@ if(plotRAA){
       gPad->RedrawAxis();
       if(plotTight){
 	TGraphErrors *gRaaRap1syst4 = new TGraphErrors(nRapBins_2014,rap2014,RAA_1S_tnp_rap4,rap2014e,RAA_1S_tnp_rap4s);
-	gRaaRap1syst4->SetLineColor(kGreen+1);
+	gRaaRap1syst4->SetLineColor(color1Sraa);
 	gRaaRap1syst4->SetFillStyle(0);
 	gRaaRap1syst4->SetLineWidth(2);
 	gRaaRap1syst4->SetMarkerSize(0);
 	gRaaRap1syst4->Draw("2");
 	TGraphErrors *gRaaRap1TNP4 = new TGraphErrors(nRapBins_2014,rap2014Shift,RAA_1S_tnp_rap4,0,RAA_1S_tnp_rap4e);
-	gRaaRap1TNP4->SetMarkerColor(kGreen+1);
+	gRaaRap1TNP4->SetMarkerColor(color1Sraa);
 	gRaaRap1TNP4->SetMarkerStyle(21);
 	gRaaRap1TNP4->SetMarkerSize(1.2);
 	TGraphErrors *gRaaRap1TNPcircle4 = new TGraphErrors(nRapBins_2014,rap2014Shift,RAA_1S_tnp_rap4,0,RAA_1S_tnp_rap4e);
@@ -2527,7 +2538,7 @@ if(plotRAA){
       }
       else{
 	TGraphErrors *gRaaRap2TNP = new TGraphErrors(nRapBins_2010,rap2010,RAA_2S_tnp_rap,0,RAA_2S_tnp_rape);
-	gRaaRap2TNP->SetMarkerColor(kOrange+4);
+	gRaaRap2TNP->SetMarkerColor(color2Sraa);
 	gRaaRap2TNP->SetMarkerStyle(20);
 	gRaaRap2TNP->SetMarkerSize(1.2);
 	TGraphErrors *gRaaRap2TNPcircle = new TGraphErrors(nRapBins_2010,rap2010,RAA_2S_tnp_rap,0,RAA_2S_tnp_rape);
@@ -2535,7 +2546,7 @@ if(plotRAA){
 	gRaaRap2TNPcircle->SetMarkerSize(1.2);
 	gRaaRap2TNPcircle->SetLineColor(kBlack);
 	TGraphErrors *gRaaRap2syst = new TGraphErrors(nRapBins_2010,rap2010,RAA_2S_tnp_rap,rap2010e,RAA_2S_tnp_raps);
-	gRaaRap2syst->SetLineColor(kOrange+4);
+	gRaaRap2syst->SetLineColor(color2Sraa);
 	gRaaRap2syst->SetFillStyle(0);
 	gRaaRap2syst->SetLineWidth(2);
 	gRaaRap2syst->SetMarkerSize(0);
@@ -2547,14 +2558,14 @@ if(plotRAA){
       }
     }
   TBox *box = new TBox(2.27,1-syst1S_raa_global,2.4,1+syst1S_raa_global);
-  box->SetFillColor(kGray);//kOrange+1);
+  box->SetFillColor(kGray);//color1Sraa);
   box->Draw();
   // TBox *box2 = new TBox(2.27,1-syst2S_raa_global,2.4,1+syst2S_raa_global);
-  // box2->SetFillColor(kOrange+4);
+  // box2->SetFillColor(color2Sraa);
   // box2->Draw();
   if(plotTight){
     TBox *box1S4 = new TBox(2.14,1-syst1S_pp_glob,2.27,1+syst1S_pp_glob);
-    box1S4->SetFillColor(kGreen+1);
+    box1S4->SetFillColor(color2Sraa);
     box1S4->Draw();
   }
   // TLatex *l1CMSrap = new TLatex(0.2,1.45, "CMS Internal #sqrt{s_{NN}} = 2.76 TeV");
@@ -3435,7 +3446,7 @@ float plot2010()
     f4->SetLineColor(kBlack);
     f4->Draw();
     TGraphErrors *gcent2syst = new TGraphErrors(4,cent,RAA_2S_cent,centErr2014,RAA_2S_cents);
-    gcent2syst->SetLineColor(kOrange+4);
+    gcent2syst->SetLineColor(color2Sraa);
     gcent2syst->SetFillStyle(0);
     gcent2syst->SetLineWidth(2);
     gcent2syst->SetMarkerSize(0);
@@ -3443,14 +3454,14 @@ float plot2010()
     if(!plotTight){
 
       TGraphErrors *gcent1syst = new TGraphErrors(nCentBins_2014,nPart2014,RAA_1S_cent,centErr2014,RAA_1S_cents); //for fun
-      gcent1syst->SetLineColor(kOrange+1);
+      gcent1syst->SetLineColor(color1Sraa);
       gcent1syst->SetFillStyle(0);
       gcent1syst->SetLineWidth(2);
       gcent1syst->SetMarkerSize(0);
       gcent1syst->Draw("2");
       TGraphErrors *gcent1 = new TGraphErrors(nCentBins_2014,nPart2014,RAA_1S_cent,centnoErr,RAA_1S_cente); //for fun
 
-      gcent1->SetMarkerColor(kOrange+1);
+      gcent1->SetMarkerColor(color1Sraa);
       gcent1->SetMarkerStyle(21);
       gcent1->SetMarkerSize(1.2);
 
@@ -3465,14 +3476,14 @@ float plot2010()
     }
     if(plotTight){
  TGraphErrors *gcent1syst = new TGraphErrors(nCentBins_2014,nPart2014,RAA_1S_cent,centErr2014,RAA_1S_cents); //for fun
-      gcent1syst->SetLineColor(kOrange+1);
+      gcent1syst->SetLineColor(color1Sraa);
       gcent1syst->SetFillStyle(0);
       gcent1syst->SetLineWidth(2);
       gcent1syst->SetMarkerSize(0);
       gcent1syst->Draw("2");
       TGraphErrors *gcent1 = new TGraphErrors(nCentBins_2014,nPart2014,RAA_1S_cent,centnoErr,RAA_1S_cente); //for fun
 
-      gcent1->SetMarkerColor(kOrange+1);
+      gcent1->SetMarkerColor(color1Sraa);
       gcent1->SetMarkerStyle(21);
       gcent1->SetMarkerSize(1.2);
 
@@ -3527,13 +3538,13 @@ float plot2010()
       if(!FourBins){
 	//TGraphErrors RAA_2S 2014  
 	TGraphErrors *gcent2syst = new TGraphErrors(4,cent,RAA_2S_cent,centErr2014,RAA_2S_cents);
-	gcent2syst->SetLineColor(kOrange+4);
+	gcent2syst->SetLineColor(color2Sraa);
 	gcent2syst->SetFillStyle(0);
 	gcent2syst->SetLineWidth(2);
 	gcent2syst->SetMarkerSize(0);
 	gcent2syst->Draw("2");
 	TGraphErrors *gcent2 = new TGraphErrors(4,cent,RAA_2S_cent,centnoErr,RAA_2S_cente);
-	gcent2->SetMarkerColor(kOrange+4);
+	gcent2->SetMarkerColor(color2Sraa);
 	gcent2->SetMarkerStyle(20);
 	gcent2->SetMarkerSize(1.2);
 	TGraphErrors *gcent2circle = new TGraphErrors(4,cent,RAA_2S_cent,centnoErr,RAA_2S_cente);
@@ -3547,11 +3558,11 @@ float plot2010()
       }
       else {
 	TGraphErrors *gcent2 = new TGraphErrors(4,nPart2,RAA_2S_4bin,centnoErr,RAA_2S_4bine);
-	gcent2->SetMarkerColor(kOrange+4);
+	gcent2->SetMarkerColor(color2Sraa);
 	gcent2->SetMarkerStyle(20);
 	gcent2->SetMarkerSize(1.2);
 	TGraphErrors *gcent2syst = new TGraphErrors(4,nPart2,RAA_2S_4bin,centErr2014,RAA_2S_cents);
-	gcent2syst->SetLineColor(kOrange+4);
+	gcent2syst->SetLineColor(color2Sraa);
 	gcent2syst->SetFillStyle(0);
 	gcent2syst->SetLineWidth(2);
 	gcent2syst->SetMarkerSize(0);
@@ -3596,10 +3607,10 @@ float plot2010()
     latexrap.DrawLatex(30,1.2,"|y| < 2.4");
    
     if(!plotTight){TBox *box1S = new TBox(370,1-syst1S_pp_centGlob,385,1+syst1S_pp_centGlob);
-      box1S->SetFillColor(kOrange+1);
+      box1S->SetFillColor(color1Sraa);
       box1S->Draw();
       TBox *box2S = new TBox(385,1-syst2S_pp_centGlob4,400,1+syst2S_pp_centGlob4);
-      box2S->SetFillColor(kOrange+4);
+      box2S->SetFillColor(color2Sraa);
       box2S->Draw();
     }
     if(plotTight){
@@ -3607,7 +3618,7 @@ float plot2010()
       box1S4->SetFillColor(kGreen+1);
       box1S4->Draw();
       TBox *box1S = new TBox(370,1-syst1S_pp_centGlob,385,1+syst1S_pp_centGlob);
-      box1S->SetFillColor(kOrange+1);
+      box1S->SetFillColor(color1Sraa);
       box1S->Draw();
       // TBox *box1S2011 = new TBox(385,1-RAA_1S_2011sg,400,1+RAA_1S_2011sg);
       // box1S2011->SetFillColor(kBlack);
@@ -4483,7 +4494,7 @@ void plotDoubleRatios()
   gSRPt2ppcircle->Draw("p");
   f4SRPt->Draw("same");
   TGraphErrors *gSRPt3pp = new TGraphErrors(nPtBins_2014,pt2014,ppSingleRatio3S1S,pt2014e,ppSingleRatio3S1Se);
-  gSRPt3pp->SetMarkerColor(kOrange+1);
+  gSRPt3pp->SetMarkerColor(color1Sraa);
   gSRPt3pp->SetMarkerStyle(21);
   gSRPt3pp->SetMarkerSize(1.2);
   TGraphErrors *gSRPt3ppcircle = new TGraphErrors(nPtBins_2014,pt2014,ppSingleRatio3S1S,pt2014e,ppSingleRatio3S1Se);
