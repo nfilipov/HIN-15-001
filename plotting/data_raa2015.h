@@ -102,7 +102,7 @@ float mb_percentage2S[nCentBins2S] = {0.5,0.2,0.2,0.1};
 float N1S_pp_tot3p5 = 5014;
 float N1S_pp_tot3p5e = 86;
 // from fitting.
-float N1S_pp_tot3p5s=0.0135;
+float N1S_pp_tot3p5s=0.0328;
 float N2S_pp_tot3p5 = 1580;
 float N2S_pp_tot3p5e = 59;
 float N3S_pp_tot3p5 = 770;
@@ -400,7 +400,7 @@ float N3S_aa_tot4 = 7;
 float N3S_aa_tot4e =9;
 ///more
 float N2S_aa_tot4s=0.0712;
-float N1S_aa_tot3p5s=0.0291;
+float N1S_aa_tot3p5s=0.0470;
 float N1S_aa_tot4s=0.0281;
 
 /* float N1S_pp_tot3p5s[nfitvars] = {5013.93,5132.63,5069.73,5185.89,5187.98,5158.67}; */
