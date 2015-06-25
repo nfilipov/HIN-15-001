@@ -93,7 +93,7 @@ CMS_lumi( TPad* pad, int iPeriod, int iPosX )
       lumiText += lumi_PbPb2011;
       lumiText += ", ";
       lumiText += lumi_pp2013;
-      lumiText2 += " #sqrt{s} = 2.76 TeV";
+      lumiText2 += " #sqrt{s_{NN}} = 2.76 TeV";
       // lumiText += " (2.76 TeV)";
     }
    
