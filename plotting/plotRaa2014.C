@@ -35,6 +35,7 @@ const bool plotDD=false;
 const bool plotTight=false;
 const bool FourBins=true;
 const string outSyst = "syst_outputfile.txt";
+const bool plotLin=true; // plot linear plots as well
 
 const TString basedir1 = "/tmp"; //"~/Desktop"
 const TString basedir2 = "/tmp"; //"~/Documents/PR/forTWiki/CSandRAA"
@@ -43,7 +44,7 @@ const TString basedir2 = "/tmp"; //"~/Documents/PR/forTWiki/CSandRAA"
 Color_t color1Spp = kCyan+1;
 Color_t color2Spp = kCyan+2;
 Color_t color3Spp = kCyan+3;
-Color_t color1Saa = kGreen+1;
+Color_t color1Saa = kGreen+2;
 Color_t color2Saa = kGreen+3;
 Color_t color3Saa = kGreen+4;
 Color_t color1Sraa = kOrange+1;
@@ -1583,8 +1584,8 @@ cout << "  --- 3S Cross section in pp vs. y short bins---" << endl;
     TLatex latexpt;
     latexpt.SetTextSize(gTextSize);
     latexpt.SetTextFont(42);
-    latexpt.DrawLatex(15.5,0.015,"|y| < 2.4");
-    latexpt.DrawLatex(13.3,0.009,"Cent. 0-100%");
+    TLatex* latexpty = latexpt.DrawLatex(15.5,0.015,"|y| < 2.4");
+    TLatex *latexptcent = latexpt.DrawLatex(13.3,0.009,"Cent. 0-100%");
 
     CMS_lumi(cptaa,101,33);
     cptaa->Update();
@@ -1593,6 +1594,26 @@ cout << "  --- 3S Cross section in pp vs. y short bins---" << endl;
  
  cptaa->SaveAs(basedir2 + TString("/CS_AAPt.pdf"));
  cptaa->SaveAs(basedir1 + TString("/Xsection_AA_1S_pt.png"));
+ if (plotLin)
+ {
+    cptaa->SetLogy(0);
+    legend->SetX1NDC(0.73); legend->SetX2NDC(0.88); legend->SetY1NDC(0.37); legend->SetY2NDC(0.52); legend->Draw();
+    cptaa->cd();
+    gPad->Update();
+    f4Ptaa->GetYaxis()->SetRangeUser(0.,0.05);
+    f4Ptaa->GetYaxis()->SetTitleOffset(2.1);
+    f4Ptaa->GetYaxis()->SetTitleSize(0.035);
+    f4Ptaa->GetYaxis()->SetLabelSize(0.04);
+    latexpty->SetY(0.034);
+    latexpty->Draw();
+    latexptcent->SetY(0.03);
+    latexptcent->Draw();
+    gPad->Update();
+    gPad->RedrawAxis();
+    gPad->GetFrame()->Draw();
+    cptaa->SaveAs(basedir2 + TString("/CS_AAPt_lin.pdf"));
+    cptaa->SaveAs(basedir1 + TString("/Xsection_AA_1S_pt_lin.png"));
+ } 
  //////////
  // pp
  TCanvas *cptpp = new TCanvas("cptpp","cptpp"); 
@@ -1608,7 +1629,7 @@ cout << "  --- 3S Cross section in pp vs. y short bins---" << endl;
  f4Pt->GetXaxis()->SetTitleOffset(f4Pt->GetXaxis()->GetTitleOffset()*1.3);
  f4Pt->GetYaxis()->SetTitleSize(0.045);
  f4Pt->GetYaxis()->SetLabelSize(0.9*f4Pt->GetYaxis()->GetLabelSize()); // cheating a little bit because the Y axis title is fat
- f4Pt->GetYaxis()->SetTitleOffset(1.64);
+ f4Pt->GetYaxis()->SetTitleOffset(1.55);
  f4Pt->GetYaxis()->SetRangeUser(0.0005,0.2);
  //f4Pt->GetYaxis()->SetRangeUser(0.01,.09);
  f4Pt->GetXaxis()->CenterTitle(kTRUE);
@@ -1738,7 +1759,7 @@ cout << "  --- 3S Cross section in pp vs. y short bins---" << endl;
     TLatex latexpt;
     latexpt.SetTextSize(gTextSize);
     latexpt.SetTextFont(42);
-    latexpt.DrawLatex(15.7,0.025,"|y| < 2.4");
+    TLatex *latexpttxt = latexpt.DrawLatex(15.7,0.025,"|y| < 2.4");
 
     CMS_lumi(cptpp,102,33);
     cptpp->Update();
@@ -1747,6 +1768,24 @@ cout << "  --- 3S Cross section in pp vs. y short bins---" << endl;
  
  cptpp->SaveAs(basedir2 + TString("/CS1S_ppPt.pdf"));
  cptpp->SaveAs(basedir1 + TString("/Xsection_pp1S_Pt.png"));
+
+ if (plotLin)
+ {
+    cptpp->SetLogy(0);
+    legend->SetX1NDC(0.77); legend->SetX2NDC(1.); legend->SetY1NDC(0.40); legend->SetY2NDC(0.61); legend->Draw();
+    cptpp->cd();
+    gPad->Update();
+    f4Pt->GetYaxis()->SetRangeUser(0.,0.12);
+    f4Pt->GetYaxis()->SetTitleOffset(1.8);
+    f4Pt->GetYaxis()->SetTitleSize(0.04);
+    latexpttxt->SetY(0.085);
+    latexpttxt->Draw();
+    gPad->Update();
+    gPad->RedrawAxis();
+    gPad->GetFrame()->Draw();
+    cptpp->SaveAs(basedir2 + TString("/CS1S_ppPt_lin.pdf"));
+    cptpp->SaveAs(basedir1 + TString("/Xsection_pp1S_Pt_lin.png"));
+ }
  }
 
 
@@ -2316,10 +2355,29 @@ legendB->SetTextFont(42);
     TLatex latexrapaa;
     latexrapaa.SetTextSize(gTextSize);
     latexrapaa.SetTextFont(42);
-    latexrapaa.DrawLatex(1.6,0.1,"Cent. 0-100%");
+    TLatex *latexrapaatxt = latexrapaa.DrawLatex(1.6,0.1,"Cent. 0-100%");
 
  crapaa->SaveAs(basedir2 + TString("/CS_AA_Rap.pdf"));
  crapaa->SaveAs(basedir1 + TString("/Xsection_AA_1S2S_Rap.png"));
+
+ if (plotLin)
+ {
+    crapaa->SetLogy(0);
+    legendB->SetY1NDC(0.44); legendB->SetY2NDC(0.63); legendB->Draw();
+    crapaa->cd();
+    gPad->Update();
+    f4Rapaa->GetYaxis()->SetRangeUser(0.,0.45);
+    f4Rapaa->GetYaxis()->SetTitleOffset(1.9);
+    f4Rapaa->GetYaxis()->SetTitleSize(0.04);
+    f4Rapaa->GetYaxis()->SetLabelSize(0.045);
+    latexrapaatxt->SetY(0.16);
+    latexrapaatxt->Draw();
+    gPad->Update();
+    gPad->RedrawAxis();
+    gPad->GetFrame()->Draw();
+    crapaa->SaveAs(basedir2 + TString("/CS_AA_Rap_lin.pdf"));
+    crapaa->SaveAs(basedir1 + TString("/Xsection_AA_1S2S_Rap_lin.png"));
+ }
  //////////////////////////////////////////////
  TCanvas *crappp = new TCanvas("crappp","crappp"); 
  crappp->SetLogy();
@@ -2472,8 +2530,24 @@ legendB->SetTextFont(42);
 
  crappp->SaveAs(basedir2 + TString("/CS1S_ppRap.pdf")); 
  crappp->SaveAs(basedir1 + TString("/Xsection_pp_1S_Rap.png"));
- //////////////////////////////////////////////////////////////////
+
+ if (plotLin)
+ {
+    crappp->SetLogy(0);
+    legendB->SetY1NDC(0.44); legendB->SetY2NDC(0.63); legendB->Draw();
+    crappp->cd();
+    gPad->Update();
+    f4Rap->GetYaxis()->SetRangeUser(0.,1.);
+    f4Rap->GetYaxis()->SetTitleOffset(1.6);
+    f4Rap->GetYaxis()->SetTitleSize(0.045);
+    gPad->Update();
+    gPad->RedrawAxis();
+    gPad->GetFrame()->Draw();
+    crappp->SaveAs(basedir2 + TString("/CS1S_ppRap_lin.pdf")); 
+    crappp->SaveAs(basedir1 + TString("/Xsection_pp_1S_Rap_lin.png"));
  }
+ }
+ //////////////////////////////////////////////////////////////////
 
 if(plotRAA){
   TCanvas *cRaarap = new TCanvas("cRaarap","cRaarap"); 
