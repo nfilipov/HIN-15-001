@@ -284,16 +284,29 @@ void plotRaa2014()
   float threeBins[nPtBins_2010]={0.5,1.5,2.5};
   float fiveBins[nPtBins_2013]={0.5,1.5,2.5,3.5,4.5};
   float sixBins[nRapBins_2014]={0.5,1.5,2.5,3.5,4.5,5.5};
-  //systematics (fit variations, bkgd variations, tnp, plus global stuff sometimes hardcoded)
-  float syst1S_raa_global=sqrt((0.057*0.057)+(0.2/5.4)*(0.2/5.4)+pow(N1S_pp_tot3p5s,2)+pow(N1S_pp_tot3p5e/N1S_pp_tot3p5,2)+pow(t_1S_pythia_tot3p5e/t_1S_pythia_tot3p5,2));
-  float syst1S_raa_global4=sqrt((0.057*0.057)+(0.2/5.4)*(0.2/5.4)+pow(N1S_pp_tot4s,2)+pow(N1S_pp_tot4e/N1S_pp_tot4,2)+pow(t_1S_pythia_tot4e/t_1S_pythia_tot4,2));
-  float syst2S_raa_global=sqrt((0.2/5.4)*(0.2/5.4)+pow(N2S_pp_tot4s,2)+pow(N2S_pp_tot4e/N2S_pp_tot4,2));
-  float syst2S_pp_glob=sqrt((0.057*0.057)+(0.2/5.4)*(0.2/5.4));
-  /// L_pp + pp_fit(stat) +pp_fit(syst) + tnp_pp1S  
-  // taa uncertainty + unfolding uncertainties + Lumi uncertainty. commenting out unfolding for now. +(0.045*0.045)+(0.02*0.02)
-  float syst1S_pp_glob=sqrt((0.2/5.4)*(0.2/5.4));
-  // taa?? + unfolding pp + lumi. commenting out unfolding and t_aa for now. (0.057*0.057)+(0.02*0.02)
-
+  //(very global) systematics:
+  //1. pp uncertainty from tracking and lumi:
+  float syst_global_pp = sqrt(pow(tracking_pp,2)+pow(L_pp_e,2)); // , L_pp_e
+  //2. AA uncertainty from tracking and N_MB
+  float syst_global_AA = sqrt(pow(tracking_aa,2)+pow(T_AA_e,2)); // taa not included here: T_AA_e is for MB TAA uncertainty, and float taa2014e is the binned taa uncertainty.
+  //3. total syst. uncertainties for signal: pp,1S,2S,3S, and pbpb, 1S, 2S.
+  float syst1S_pp_glob = sqrt(pow(N1S_pp_tot3p5e/N1S_pp_tot3p5,2)+pow(N1S_pp_tot3p5s,2)+pow(Aet_1S_pythia_tote,2));
+  float syst2S_pp_glob = sqrt(pow(N2S_pp_tot4e/N2S_pp_tot4,2)+pow(N2S_pp_tot4s,2)+pow(Aet_2S_pythia_tote,2));
+  float syst3S_pp_glob = sqrt(pow(N3S_pp_tot4e/N3S_pp_tot4,2)+pow(N3S_pp_tot4s,2)+pow(Aet_3S_pythia_tote,2));
+  float syst1S_AA_glob = sqrt(pow(N1S_aa_tot3p5e/N1S_aa_tot3p5,2)+pow(N1S_aa_tot3p5s,2)+pow(Aet_1S_pyquen_tote,2));
+  float syst2S_AA_glob = sqrt(pow(N2S_aa_tot4e/N2S_aa_tot4,2)+pow(N2S_aa_tot4s,2)+pow(Aet_2S_pyquen_tote,2));
+  // now, orange box:
+  float syst1S_raa_global= sqrt(pow(T_AA_e,2)+pow(syst_global_pp,2)+pow(syst_global_AA,2));//sqrt((0.057*0.057)+(0.2/5.4)*(0.2/5.4)+pow(N1S_pp_tot3p5s,2)+pow(N1S_pp_tot3p5e/N1S_pp_tot3p5,2)+pow(t_1S_pythia_tot3p5e/t_1S_pythia_tot3p5,2));
+  // and Red box:
+  float syst1S_raa_global4=0;//sqrt((0.057*0.057)+(0.2/5.4)*(0.2/5.4)+pow(N1S_pp_tot4s,2)+pow(N1S_pp_tot4e/N1S_pp_tot4,2)+pow(t_1S_pythia_tot4e/t_1S_pythia_tot4,2));
+  float syst2S_raa_global=0;//sqrt((0.2/5.4)*(0.2/5.4)+pow(N2S_pp_tot4s,2)+pow(N2S_pp_tot4e/N2S_pp_tot4,
+  //global syst for all states
+  float systAA_glob2 = syst2S_AA_glob;
+  float systAA_glob1 = syst1S_AA_glob;
+  // syst1S_aa_Cent4[i]+=(t_1S_pythia_tot3p5-1)*(t_1S_pythia_tot3p5-1)+(N1S_pp_tot3p5e/N1S_pp_tot3p5)*(N1S_pp_tot3p5e/N1S_pp_tot3p5)+N1S_pp_tot3p5s*N1S_pp_tot3p5s+L_pp_e*L_pp_e+N_MB_e*N_MB_e;
+  float syst1S_pp_centGlob= syst1S_pp_glob ;// sqrt((L_pp_e*L_pp_e)+(N1S_pp_tot3p5e*N1S_pp_tot3p5e)/(N1S_pp_tot3p5*N1S_pp_tot3p5)+(t_1S_pythia_tot3p5e*t_1S_pythia_tot3p5e)/(t_1S_pythia_tot3p5*t_1S_pythia_tot3p5)+N1S_pp_tot3p5s*N1S_pp_tot3p5s); //L_pp + stat_pp tot(1S) + tnp_pp1S + syst_tot(1S)
+  float syst2S_pp_centGlob4 = syst2S_pp_glob; //  sqrt((L_pp_e*L_pp_e)+(N2S_pp_tot4s*N2S_pp_tot4s)+(N2S_pp_tot4e*N2S_pp_tot4e)/(N2S_pp_tot4*N2S_pp_tot4)+(t_2S_pythia_tote/t_2S_pythia_tot)*(t_2S_pythia_tote/t_2S_pythia_tot)+N1S_pp_tot4s*N1S_pp_tot4s); //L_pp + stat_pp tot(2S) + tnp_pp2S 
+  float syst1S_pp_centGlob4=sqrt((L_pp_e*L_pp_e)+(N1S_pp_tot4e*N1S_pp_tot4e)/(N1S_pp_tot4*N1S_pp_tot4)+pow(t_1S_pythia_tot4e/t_1S_pythia_tot4,2)); //L_pp + stat_pp tot(1S)pt4 + tnp_pp1S pt4 +
   float syst1S_pp_pt[nPtBins_2013]={};//fit syst. uncertainty.
   float syst2S_pp_pt[nPtBins_2013]={};
   float syst2S_pp_ptLoose[nPtBins_2013]={};
@@ -3129,13 +3142,7 @@ float plot2010()
   float syst1S_aatnp_Cent[nCentBins_2014]={};
   float syst1S_aatnp_Cent4[nCentBins_2014]={};
   float syst2S_aatnp_Cent[nCentBins2S]={};
-  //global syst for all!
-  float systAA_glob2 = sqrt(N_MB_e*N_MB_e+(0.057*0.057)+(N2S_aa_tot4s*N2S_aa_tot4s));
-  float systAA_glob1 = sqrt(N_MB_e*N_MB_e+(0.057*0.057)+(N1S_aa_tot3p5s*N1S_aa_tot3p5s));
-  // syst1S_aa_Cent4[i]+=(t_1S_pythia_tot3p5-1)*(t_1S_pythia_tot3p5-1)+(N1S_pp_tot3p5e/N1S_pp_tot3p5)*(N1S_pp_tot3p5e/N1S_pp_tot3p5)+N1S_pp_tot3p5s*N1S_pp_tot3p5s+L_pp_e*L_pp_e+N_MB_e*N_MB_e;
-  float syst1S_pp_centGlob=sqrt((L_pp_e*L_pp_e)+(N1S_pp_tot3p5e*N1S_pp_tot3p5e)/(N1S_pp_tot3p5*N1S_pp_tot3p5)+(t_1S_pythia_tot3p5e*t_1S_pythia_tot3p5e)/(t_1S_pythia_tot3p5*t_1S_pythia_tot3p5)+N1S_pp_tot3p5s*N1S_pp_tot3p5s); //L_pp + stat_pp tot(1S) + tnp_pp1S + syst_tot(1S)
-  float syst2S_pp_centGlob4=sqrt((L_pp_e*L_pp_e)+(N2S_pp_tot4s*N2S_pp_tot4s)+(N2S_pp_tot4e*N2S_pp_tot4e)/(N2S_pp_tot4*N2S_pp_tot4)+(t_2S_pythia_tote/t_2S_pythia_tot)*(t_2S_pythia_tote/t_2S_pythia_tot)+N1S_pp_tot4s*N1S_pp_tot4s); //L_pp + stat_pp tot(2S) + tnp_pp2S 
-  float syst1S_pp_centGlob4=sqrt((L_pp_e*L_pp_e)+(N1S_pp_tot4e*N1S_pp_tot4e)/(N1S_pp_tot4*N1S_pp_tot4)+pow(t_1S_pythia_tot4e/t_1S_pythia_tot4,2)); //L_pp + stat_pp tot(1S)pt4 + tnp_pp1S pt4 +
+
   //taa-point-to-point syst.
   float syst1S_taa_cent[nCentBins_2014]={};
   float syst2S_taa_cent[nCentBins_2014-1]={};
@@ -3206,6 +3213,18 @@ float plot2010()
   syst2S_aa_Cent[1]= sqrt (pow(RMS( N2S_aa_cent4Large[1],N2S_aa_cent4Larges_50,nfitvars),2)+ pow(maxDeviation( N2S_aa_cent4Large[1],N2B_aa_cent4Larges_50,nbkgdvars),2)) ;
   syst2S_aa_Cent[0]= sqrt (pow(RMS( N2S_aa_cent4Large[0],N2S_aa_cent4Larges_100,nfitvars),2)+ pow(maxDeviation( N2S_aa_cent4Large[0],N2B_aa_cent4Larges_100,nbkgdvars),2))  ;
 
+  float syst1S_pp_glob = sqrt(pow(N1S_pp_tot3p5e/N1S_pp_tot3p5,2)+pow(N1S_pp_tot3p5s,2)+pow(Aet_1S_pythia_tote,2));
+  float syst1S_pp_glob4 = sqrt(pow(N1S_pp_tot4e/N1S_pp_tot4,2)+pow(N1S_pp_tot4s,2)+pow(Aet_1S_pythia_tot4e,2));
+  float syst2S_pp_glob = sqrt(pow(N2S_pp_tot4e/N2S_pp_tot4,2)+pow(N2S_pp_tot4s,2)+pow(Aet_2S_pythia_tote,2));
+  float syst3S_pp_glob = sqrt(pow(N3S_pp_tot4e/N3S_pp_tot4,2)+pow(N3S_pp_tot4s,2)+pow(Aet_3S_pythia_tote,2));
+  float syst1S_AA_glob = sqrt(pow(N1S_aa_tot3p5e/N1S_aa_tot3p5,2)+pow(N1S_aa_tot3p5s,2)+pow(Aet_1S_pyquen_tote,2));
+  float syst2S_AA_glob = sqrt(pow(N2S_aa_tot4e/N2S_aa_tot4,2)+pow(N2S_aa_tot4s,2)+pow(Aet_2S_pyquen_tote,2));
+
+  float systAA_glob2 = syst2S_AA_glob;
+  float syst2S_pp_centGlob4 = sqrt(pow(syst2S_pp_glob,2)+pow(tracking_pp,2)+pow(tracking_aa,2)+pow(L_pp_e,2)); //  sqrt((L_pp_e*L_pp_e)+(N2S_pp_tot4s*N2S_pp_tot4s)+(N2S_pp_tot4e*N2S_pp_tot4e)/(N2S_pp_tot4*N2S_pp_tot4)+(t_2S_pythia_tote/t_2S_pythia_tot)*(t_2S_pythia_tote/t_2S_pythia_tot)+N1S_pp_tot4s*N1S_pp_tot4s); //L_pp + stat_pp tot(2S) + tnp_pp2S 
+  float systAA_glob1 = sqrt(pow(syst1S_AA_glob,2)+pow(tracking_aa,2)+pow(N_MB_e,2));
+  float syst1S_pp_centGlob= sqrt(pow(syst1S_pp_glob,2)+pow(tracking_aa,2)+pow(tracking_pp,2)+pow(L_pp_e,2));
+  float syst1S_pp_centGlob4=sqrt(pow(syst1S_pp_glob4,2)+pow(tracking_pp,2)+pow(L_pp_e,2)); //L_pp + stat_pp tot(1S)pt4 + tnp_pp1S pt4 +
 
   // 1S
   for(int i=0; i<nCentBins_2014;i++){
@@ -3289,7 +3308,7 @@ float plot2010()
  cout << "wow!"<< endl;
   for(int centi =0 ; centi<nCentBins_2014; centi++){ //for fun
     taa2014[centi]=taa2014[centi]*1000;
-    taa2015[centi]=taa2015[centi]*1000;
+    //    taa2015[centi]=taa2015[centi]*1000;
     CS1S_aa_cent[centi]= computeRatio( N1S_aa_cent3p5[centi] , Aet_1S_pyquen_cent2014[centi] );
     CS1S_aa_cente[centi] = computeRatioError( N1S_aa_cent3p5[centi] , Aet_1S_pyquen_cent2014[centi], N1S_aa_cent3p5e[centi] ,0); // Aet_1S_pyquen_cent2014e[centi]
     CS1S_aa_cent[centi]=CS1S_aa_cent[centi]/(mb_percentage2014[centi]*N_MB_corr * taa2014[centi]);
@@ -3307,7 +3326,7 @@ float plot2010()
       CS1S_pp_tots = N1S_pp_tot3p5*syst1S_pp_centGlob;
       CS1S_aa_tots = N1S_aa_tot3p5*systAA_glob1;
       CS2S_pp_tots = N2S_pp_tot3p5*syst2S_pp_centGlob4;
-      CS2S_aa_tots = N2S_aa_tot3p5*systAA_glob2;
+      CS2S_aa_tots = N2S_aa_tot4*systAA_glob2;
       CS1S_pp_tote = computeRatioError(N1S_pp_tot3p5,Aet_1S_pythia_tot,N1S_pp_tot3p5e,Aet_1S_pythia_tote);
       CS1S_pp_tote =CS1S_pp_tote/(L_pp_invNb);
       CS1S_pp_tots =CS1S_pp_tots/(L_pp_invNb);
@@ -3412,9 +3431,9 @@ float plot2010()
   cout << setprecision(3)<<" total_sigma(1S)_AA = "<<CS1S_aa_tot <<" \\pm " <<CS1S_aa_tote  <<" \\pm " <<CS1S_aa_tots<<endl;
   cout << setprecision(3)<<" total_sigma(2S)_AA = "<<CS2S_aa_tot <<" \\pm " <<CS2S_aa_tote <<" \\pm " <<CS2S_aa_tots<<endl;
   cout << setprecision(3)<<" total_sigma(3S)_AA = "<<CS3S_aa_tot <<" \\pm " <<CS3S_aa_tote<<endl;
-  cout  << setprecision(3)<< "Raa_1S = "<<RAA_1S_tot<<" \\pm "<<RAA_1S_tote<<"  \\pm " << RAA_1S_tots <<" syst." << endl;
-  cout << setprecision(3)<< "Raa_2S = "<<RAA_2S_tot<<" \\pm "<<RAA_2S_tote<<"  \\pm " << RAA_2S_tots <<" syst." << endl;
-  cout<< setprecision(3) << "Raa_3S = "<<RAA_3S_tot<<" \\pm "<<RAA_3S_tote << endl;
+  cout  << setprecision(2)<< "Raa_1S = "<<RAA_1S_tot<<" \\pm "<<RAA_1S_tote<<"  \\pm " << RAA_1S_tots <<" syst." << endl;
+  cout << setprecision(2)<< "Raa_2S = "<<RAA_2S_tot<<" \\pm "<<RAA_2S_tote<<"  \\pm " << RAA_2S_tots <<" syst." << endl;
+  cout<< setprecision(2) << "Raa_3S = "<<RAA_3S_tot<<" \\pm "<<RAA_3S_tote << endl;
   cout<<" FC 95% Confidence on upper limit sigma(3S)_AA = "<<CS3S_aa_UL <<" nb "<<endl;
   cout << " FC 95% Confidence on upper limit Raa_3S = "<<RAA_3S_UL<<endl;
 
@@ -3614,7 +3633,7 @@ float plot2010()
       box2S->Draw();
     }
     if(plotTight){
-      TBox *box1S4 = new TBox(385,1-syst1S_pp_centGlob4,400,1+syst1S_pp_centGlob4);
+      TBox *box1S4 = new TBox(385,1-syst2S_pp_centGlob4,400,1+syst2S_pp_centGlob4);
       box1S4->SetFillColor(kGreen+1);
       box1S4->Draw();
       TBox *box1S = new TBox(370,1-syst1S_pp_centGlob,385,1+syst1S_pp_centGlob);
