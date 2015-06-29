@@ -578,10 +578,10 @@ for(int i=0; i<nRapBins_2014; i++){
   stat1S_pp_rap4[i]=N1S_pp_rap4_2014e[i]/N1S_pp_rap4_2014[i];
   stat2S_pp_rap[i]=N2S_pp_rap4_2014e[i]/N2S_pp_rap4_2014[i];
   stat3S_pp_rap[i]=N3S_pp_rap4_2014e[i]/N3S_pp_rap4_2014[i];
-  syst1S_raa_pointRap[i]=sqrt(syst1S_pp_rap[i]*syst1S_pp_rap[i]+syst1S_aa_rap[i]*syst1S_aa_rap[i]+syst1S_pptnp_rap[i]*syst1S_pptnp_rap[i]+syst1S_aatnp_rap[i]*syst1S_aatnp_rap[i]);//this one is big : stat.pp + syst.pp + syst.pbpb + tnp_pp + tnp_pbpb
-  syst1S_raa_pointRap4[i]=sqrt(syst1S_pp_rap4[i]*syst1S_pp_rap4[i]+syst1S_aa_rap4[i]*syst1S_aa_rap4[i]+syst1S_pptnp_rap4[i]*syst1S_pptnp_rap4[i]+syst1S_aatnp_rap4[i]*syst1S_aatnp_rap4[i]);//this one is big : stat.pp + syst.pp + syst.pbpb + tnp_pp + tnp_pbpb
-  syst1S_raa_rap[i]=sqrt(syst1S_raa_pointRap[i]*syst1S_raa_pointRap[i]+syst1S_raa_global*syst1S_raa_global+pow(Aet_1S_pyquen_rap2014s[i]/Aet_1S_pyquen_rap2014[i],2)+pow(Aet_1S_pythia_rap2014s[i]/Aet_1S_pythia_rap2014s[i],2));
-  syst1S_raa_rap4[i]=sqrt(syst1S_raa_pointRap4[i]*syst1S_raa_pointRap4[i]+syst1S_raa_global4*syst1S_raa_global4+pow(Aet_1S_pyquen_rap42014s[i]/Aet_1S_pyquen_rap42014[i],2)+pow(Aet_1S_pythia_rap4s[i]/Aet_1S_pythia_rap4s[i],2));
+  syst1S_raa_pointRap[i]=sqrt(syst1S_pp_rap[i]*syst1S_pp_rap[i]+syst1S_aa_rap[i]*syst1S_aa_rap[i]+syst1S_pptnp_rap[i]*syst1S_pptnp_rap[i]+syst1S_aatnp_rap[i]*syst1S_aatnp_rap[i]);//this one is big :  syst.pp + syst.pbpb + tnp_pp + tnp_pbpb
+  syst1S_raa_pointRap4[i]=sqrt(syst1S_pp_rap4[i]*syst1S_pp_rap4[i]+syst1S_aa_rap4[i]*syst1S_aa_rap4[i]+syst1S_pptnp_rap4[i]*syst1S_pptnp_rap4[i]+syst1S_aatnp_rap4[i]*syst1S_aatnp_rap4[i]);//this one is big : syst.pp + syst.pbpb + tnp_pp + tnp_pbpb
+  syst1S_raa_rap[i]=sqrt(syst1S_raa_pointRap[i]*syst1S_raa_pointRap[i]+syst1S_raa_global*syst1S_raa_global+pow(Aet_1S_pythia_rap2014s[i]/Aet_1S_pythia_rap2014[i],2)); // syst1S_raa_global*syst1S_raa_global pow(Aet_1S_pyquen_rap2014s[i]/Aet_1S_pyquen_rap2014[i],2)+
+  syst1S_raa_rap4[i]=sqrt(syst1S_raa_pointRap4[i]*syst1S_raa_pointRap4[i]+syst1S_raa_global4*syst1S_raa_global4+pow(Aet_1S_pyquen_rap42014s[i]/Aet_1S_pyquen_rap42014[i],2)+pow(Aet_1S_pythia_rap4s[i]/Aet_1S_pythia_rap4[i],2));
   syst1S_cspp_rap[i]=sqrt(syst1S_pptnp_rap[i]*syst1S_pptnp_rap[i]+syst1S_pp_rap[i]*syst1S_pp_rap[i]+(0.2/5.4)*(0.2/5.4)+pow(Aet_1S_pythia_rap2014s[i]/Aet_1S_pythia_rap2014[i],2));
   syst1S_cspp_rap4[i]=sqrt(syst1S_pptnp_rap4[i]*syst1S_pptnp_rap4[i]+syst1S_pp_rap4[i]*syst1S_pp_rap4[i]+(0.2/5.4)*(0.2/5.4)+pow(Aet_1S_pythia_rap4s[i]/Aet_1S_pythia_rap4[i],2));
   syst2S_cspp_rap[i]=sqrt(syst2S_pptnp_rap[i]*syst2S_pptnp_rap[i]+syst2S_pp_rap[i]*syst2S_pp_rap[i]+(0.2/5.4)*(0.2/5.4)+pow(Aet_2S_pythia_rap2014s[i]/Aet_2S_pythia_rap2014[i],2));
@@ -1095,13 +1095,13 @@ cout << "  --- 1S RAA vs. p_{T} in LARGE BINS---" << endl;
 cout << "  --- 2S RAA vs. p_{T} ---" << endl;
  for(int j =0 ; j<nPtBins_2010 ; j++)
    {
-     cout <<"j="<< j << "' , Raa = "<< RAA_2S_pt[j] <<" \\pm "<< RAA_2S_pte[j]<<" \\pm "<< RAA_2S_tnp_ptsT[j]<< endl;
+     cout <<"j="<< j << "' , Raa = "<< RAA_2S_pt[j] <<" \\pm "<< RAA_2S_pte[j]<<" \\pm "<< RAA_2S_tnp_pts[j]<< endl;
    }
 
 cout << "  --- 2S RAA vs. y ---" << endl;
  for(int j =0 ; j<nRapBins_2010 ; j++)
    {
-     cout <<"j="<< j << "' , Raa = "<< RAA_2S_rap[j] <<" \\pm "<< RAA_2S_rape[j]<< " \\pm "<< RAA_2S_tnp_rapsT[j]<< endl;
+     cout <<"j="<< j << "' , Raa = "<< RAA_2S_rap[j] <<" \\pm "<< RAA_2S_rape[j]<< " \\pm "<< RAA_2S_tnp_raps[j]<< endl;
    }
 
  //for the cross sections in pp : shorter bins
@@ -3287,18 +3287,20 @@ float plot2010()
   syst2S_aa_Cent[1]= sqrt (pow(RMS( N2S_aa_cent4Large[1],N2S_aa_cent4Larges_50,nfitvars),2)+ pow(maxDeviation( N2S_aa_cent4Large[1],N2B_aa_cent4Larges_50,nbkgdvars),2)) ;
   syst2S_aa_Cent[0]= sqrt (pow(RMS( N2S_aa_cent4Large[0],N2S_aa_cent4Larges_100,nfitvars),2)+ pow(maxDeviation( N2S_aa_cent4Large[0],N2B_aa_cent4Larges_100,nbkgdvars),2))  ;
 
-  float syst1S_pp_glob = sqrt(pow(N1S_pp_tot3p5e/N1S_pp_tot3p5,2)+pow(N1S_pp_tot3p5s,2)+pow(Aet_1S_pythia_tote,2));
+  float syst1S_pp_glob = sqrt(pow(N1S_pp_tot3p5e/N1S_pp_tot3p5,2)_pow(N1S_pp_tot3p5s,2)+pow(Aet_1S_pythia_tote/Aet_1S_pythia_tot,2));//
   float syst1S_pp_glob4 = sqrt(pow(N1S_pp_tot4e/N1S_pp_tot4,2)+pow(N1S_pp_tot4s,2)+pow(Aet_1S_pythia_tot4e,2));
-  float syst2S_pp_glob = sqrt(pow(N2S_pp_tot4e/N2S_pp_tot4,2)+pow(N2S_pp_tot4s,2)+pow(Aet_2S_pythia_tote,2));
+  float syst2S_pp_glob = sqrt(pow(N2S_pp_tot4e/N2S_pp_tot4,2)+pow(N2S_pp_tot4s,2)+pow(Aet_2S_pythia_tote/Aet_2S_pythia_tot,2));
   float syst3S_pp_glob = sqrt(pow(N3S_pp_tot4e/N3S_pp_tot4,2)+pow(N3S_pp_tot4s,2)+pow(Aet_3S_pythia_tote,2));
   float syst1S_AA_glob = sqrt(pow(N1S_aa_tot3p5e/N1S_aa_tot3p5,2)+pow(N1S_aa_tot3p5s,2)+pow(Aet_1S_pyquen_tote,2));
   float syst2S_AA_glob = sqrt(pow(N2S_aa_tot4e/N2S_aa_tot4,2)+pow(N2S_aa_tot4s,2)+pow(Aet_2S_pyquen_tote,2));
 
   float systAA_glob2 = syst2S_AA_glob;
-  float syst2S_pp_centGlob4 = sqrt(pow(syst2S_pp_glob,2)+pow(tracking_pp,2)+pow(tracking_aa,2)+pow(L_pp_e,2)); //  sqrt((L_pp_e*L_pp_e)+(N2S_pp_tot4s*N2S_pp_tot4s)+(N2S_pp_tot4e*N2S_pp_tot4e)/(N2S_pp_tot4*N2S_pp_tot4)+(t_2S_pythia_tote/t_2S_pythia_tot)*(t_2S_pythia_tote/t_2S_pythia_tot)+N1S_pp_tot4s*N1S_pp_tot4s); //L_pp + stat_pp tot(2S) + tnp_pp2S 
+  float syst2S_pp_centGlob4 = sqrt(pow(syst2S_pp_glob,2)+pow(tracking_pp,2)+pow(tracking_aa,2)+pow(L_pp_e,2)+pow(N_MB_e,2)); //  sqrt((L_pp_e*L_pp_e)+(N2S_pp_tot4s*N2S_pp_tot4s)+(N2S_pp_tot4e*N2S_pp_tot4e)/(N2S_pp_tot4*N2S_pp_tot4)+(t_2S_pythia_tote/t_2S_pythia_tot)*(t_2S_pythia_tote/t_2S_pythia_tot)+N1S_pp_tot4s*N1S_pp_tot4s); //L_pp + stat_pp tot(2S) + tnp_pp2S 
   float systAA_glob1 = sqrt(pow(syst1S_AA_glob,2)+pow(tracking_aa,2)+pow(N_MB_e,2));
-  float syst1S_pp_centGlob= sqrt(pow(syst1S_pp_glob,2)+pow(tracking_aa,2)+pow(tracking_pp,2)+pow(L_pp_e,2));
+  float syst1S_pp_centGlob= sqrt(pow(syst1S_pp_glob,2)+pow(tracking_aa,2)+pow(tracking_pp,2)+pow(L_pp_e,2)+pow(N_MB_e,2));
   float syst1S_pp_centGlob4=sqrt(pow(syst1S_pp_glob4,2)+pow(tracking_pp,2)+pow(L_pp_e,2)); //L_pp + stat_pp tot(1S)pt4 + tnp_pp1S pt4 +
+
+  
 
   // 1S
   for(int i=0; i<nCentBins_2014;i++){
@@ -3467,7 +3469,7 @@ float plot2010()
   //   }
   for(int j =nCentBins_2014-1 ; j>=0 ; j--)
     {
-      cout << (binsCent[j]).c_str() << " "<< RAA_1S_cent[j] <<" \\pm "<< RAA_1S_cente[j]<< " \\pm "<< RAA_1S_centsT[j]<< endl;
+      cout << (binsCent[j]).c_str() << " "<< RAA_1S_cent[j] <<" \\pm "<< RAA_1S_cente[j]<< " \\pm "<< RAA_1S_cents[j]<< endl;
     }
 
   cout << "  ---1S pt 4 Cross section in PbPb vs. nPart ---" << endl;
@@ -3490,13 +3492,13 @@ float plot2010()
   cout << "  --- 2S RAA vs. nPart ---" << endl;
   for(int j =4-1 ; j>=0 ; j--)
     {
-      cout << (bins4Bin[j]).c_str() << " "<< RAA_2S_cent[j] <<" \\pm "<< RAA_2S_cente[j]<< " \\pm "<< RAA_2S_centsT[j]<< endl;
+      cout << (bins4Bin[j]).c_str() << " "<< RAA_2S_cent[j] <<" \\pm "<< RAA_2S_cente[j]<< " \\pm "<< RAA_2S_cents[j]<< endl;
     }
 
   cout << "  --- 2S RAA vs. nPart in 4 bins ---" << endl;
   for(int j =3 ; j>=0 ; j--)
     {
-      cout << (bins4Bin[j]).c_str() << " "<< RAA_2S_4bin[j] <<" \\pm "<< RAA_2S_4bine[j]<<" \\pm "<< RAA_2S_centsT[j]<< endl; endl;
+      cout << (bins4Bin[j]).c_str() << " "<< RAA_2S_4bin[j] <<" \\pm "<< RAA_2S_4bine[j]<<" \\pm "<< RAA_2S_cents[j]<< endl; endl;
     }
 
   cout << setprecision(3)<<" total_sigma(1S)_pp = "<<CS1S_pp_tot <<" \\pm " <<CS1S_pp_tote  <<" \\pm " <<CS1S_pp_tots<<endl;
@@ -3505,9 +3507,9 @@ float plot2010()
   cout << setprecision(3)<<" total_sigma(1S)_AA = "<<CS1S_aa_tot <<" \\pm " <<CS1S_aa_tote  <<" \\pm " <<CS1S_aa_tots<<endl;
   cout << setprecision(3)<<" total_sigma(2S)_AA = "<<CS2S_aa_tot <<" \\pm " <<CS2S_aa_tote <<" \\pm " <<CS2S_aa_tots<<endl;
   cout << setprecision(3)<<" total_sigma(3S)_AA = "<<CS3S_aa_tot <<" \\pm " <<CS3S_aa_tote<<endl;
-  cout  << setprecision(2)<< "Raa_1S = "<<RAA_1S_tot<<" \\pm "<<RAA_1S_tote<<"  \\pm " << RAA_1S_tots <<" syst." << endl;
-  cout << setprecision(2)<< "Raa_2S = "<<RAA_2S_tot<<" \\pm "<<RAA_2S_tote<<"  \\pm " << RAA_2S_tots <<" syst." << endl;
-  cout<< setprecision(2) << "Raa_3S = "<<RAA_3S_tot<<" \\pm "<<RAA_3S_tote << endl;
+  cout  << setprecision(3)<< "Raa_1S = "<<RAA_1S_tot<<" \\pm "<<RAA_1S_tote<<"  \\pm " << RAA_1S_tots <<" syst." << endl;
+  cout << setprecision(3)<< "Raa_2S = "<<RAA_2S_tot<<" \\pm "<<RAA_2S_tote<<"  \\pm " << RAA_2S_tots <<" syst." << endl;
+  cout<< setprecision(3) << "Raa_3S = "<<RAA_3S_tot<<" \\pm "<<RAA_3S_tote << endl;
   cout<<" FC 95% Confidence on upper limit sigma(3S)_AA = "<<CS3S_aa_UL <<" nb "<<endl;
   cout << " FC 95% Confidence on upper limit Raa_3S = "<<RAA_3S_UL<<endl;
 
@@ -3702,9 +3704,11 @@ float plot2010()
     if(!plotTight){TBox *box1S = new TBox(370,1-syst1S_pp_centGlob,385,1+syst1S_pp_centGlob);
       box1S->SetFillColor(color1Sraa);
       box1S->Draw();
+      cout << "Syst1S_pp_cent_glob = " << syst1S_pp_centGlob << endl;
       TBox *box2S = new TBox(385,1-syst2S_pp_centGlob4,400,1+syst2S_pp_centGlob4);
       box2S->SetFillColor(color2Sraa);
       box2S->Draw();
+      cout << "Syst2S_pp_cent_glob = " << syst2S_pp_centGlob4 << endl;
     }
     if(plotTight){
       TBox *box1S4 = new TBox(385,1-syst2S_pp_centGlob4,400,1+syst2S_pp_centGlob4);
