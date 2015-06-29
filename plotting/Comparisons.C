@@ -324,5 +324,12 @@ void Comparisons()
   gPad->RedrawAxis();
   cRaarap->cd();
   CMS_lumi(cRaarap,103,33);
+  cRaarap->Update();
+  cRaarap->RedrawAxis();
+  cRaarap->GetFrame()->Draw();
+  cRaarap->SaveAs(basedir1 + TString("/RAA_RAP1S_Strickland.pdf"));
+  cRaarap->SaveAs(basedir1 + TString("/RAA_RAP1S_Strickland.png"));
+  cRaarap->SaveAs(basedir2 + TString("/RAA_RAP1S_Strickland.pdf"));
+  cRaarap->SaveAs(basedir2 + TString("/RAA_RAP1S_Strickland.png"));
 }
 
