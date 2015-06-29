@@ -311,25 +311,155 @@ void Comparisons()
   leg3->SetFillColor(0);
   leg3->SetFillStyle(0);
   
-  leg3->SetHeader("Nucl.Phys. A879 (2012) 25-58"); // (arXiv:1106.2571)
-  leg3->AddEntry(pgStrickland_Ups1S_RAP3,"#varUpsilon(1S), 4#pi#eta/s = 3","L");
-  leg3->AddEntry(pgStrickland_Ups1S_RAP2,"#varUpsilon(1S), 4#pi#eta/s = 2","L");
-  leg3->AddEntry(pgStrickland_Ups1S_RAP1,"#varUpsilon(1S), 4#pi#eta/s = 1","L");
-  leg3->Draw();
-  leg2->Draw();
-  TLatex latexrap;
-  latexrap.SetTextSize(gTextSize);
-  latexrap.SetTextFont(42);
-  latexrap.DrawLatex(1.6,0.15,"Cent. 0-100%");
-  gPad->RedrawAxis();
-  cRaarap->cd();
-  CMS_lumi(cRaarap,103,33);
-  cRaarap->Update();
-  cRaarap->RedrawAxis();
-  cRaarap->GetFrame()->Draw();
-  cRaarap->SaveAs(basedir1 + TString("/RAA_RAP1S_Strickland.pdf"));
-  cRaarap->SaveAs(basedir1 + TString("/RAA_RAP1S_Strickland.png"));
-  cRaarap->SaveAs(basedir2 + TString("/RAA_RAP1S_Strickland.pdf"));
-  cRaarap->SaveAs(basedir2 + TString("/RAA_RAP1S_Strickland.png"));
+leg3->SetHeader("Nucl.Phys. A879 (2012) 25-58"); // (arXiv:1106.2571)
+leg3->AddEntry(pgStrickland_Ups1S_RAP3,"#varUpsilon(1S), 4#pi#eta/s = 3","L");
+leg3->AddEntry(pgStrickland_Ups1S_RAP2,"#varUpsilon(1S), 4#pi#eta/s = 2","L");
+leg3->AddEntry(pgStrickland_Ups1S_RAP1,"#varUpsilon(1S), 4#pi#eta/s = 1","L");
+leg3->Draw();
+leg2->Draw();
+TLatex latexrap;
+latexrap.SetTextSize(gTextSize);
+latexrap.SetTextFont(42);
+latexrap.DrawLatex(1.6,0.15,"Cent. 0-100%");
+gPad->RedrawAxis();
+cRaarap->cd();
+CMS_lumi(cRaarap,103,33);
+cRaarap->Update();
+cRaarap->RedrawAxis();
+cRaarap->GetFrame()->Draw();
+cRaarap->SaveAs(basedir1 + TString("/RAA_RAP1S_Strickland.pdf"));
+cRaarap->SaveAs(basedir1 + TString("/RAA_RAP1S_Strickland.png"));
+cRaarap->SaveAs(basedir2 + TString("/RAA_RAP1S_Strickland.pdf"));
+cRaarap->SaveAs(basedir2 + TString("/RAA_RAP1S_Strickland.png"));
+
+  ///////////
+  //Strickland vs. nPart
+  ///////////
+
+TCanvas *cRaanpart = new TCanvas("cRaanpart", "cRaanpart",423,55,600,600);
+  cRaanpart->cd();
+
+    TF1 *f4 = new TF1("f4","1",0,400);
+    f4->SetLineWidth(1);
+    f4->GetYaxis()->SetRangeUser(0.0,1.6);
+    f4->GetXaxis()->SetTitle("N_{Part}");
+    f4->GetXaxis()->CenterTitle(true);
+    f4->GetYaxis()->SetTitle("R_{AA}");
+    f4->SetLineColor(kBlack);
+    f4->Draw();
+TGraphErrors *gcent1syst = new TGraphErrors(nCentBins_2014,nPart2014,RAA_1S_npart,centErr2014,RAA_1S_nparts); //for fun
+gcent1syst->SetLineColor(color1Sraa);
+gcent1syst->SetFillStyle(0);
+gcent1syst->SetLineWidth(2);
+gcent1syst->SetMarkerSize(0);
+gcent1syst->Draw("2");
+TGraphErrors *gcent1 = new TGraphErrors(nCentBins_2014,nPart2014,RAA_1S_npart,centnoErr,RAA_1S_nparte); //for fun
+
+gcent1->SetMarkerColor(color1Sraa);
+gcent1->SetMarkerStyle(21);
+gcent1->SetMarkerSize(1.2);
+
+TGraphErrors *gcent1circle = new TGraphErrors(nCentBins_2014,nPart2014,RAA_1S_npart,centnoErr,RAA_1S_nparte);
+gcent1circle->SetMarkerStyle(25);
+gcent1circle->SetMarkerSize(1.2);
+gcent1circle->SetLineColor(kBlack);
+gcent1->Draw("pe");
+gcent1circle->Draw("p");
+f4->Draw("same");
+gPad->RedrawAxis();
+
+
+
+float NPART[101];
+  float Raa_Y1Snpart1[101], Raa_Y1Snpart2[101], Raa_Y1Snpart3[101];
+  ifstream in_1Snpart1, in_1Snpart2, in_1Snpart3;
+  in_1Snpart1.open("Y1sFull-potb-eta1-npart.dat");
+  in_1Snpart2.open("Y1sFull-potb-eta2-npart.dat");
+  in_1Snpart3.open("Y1sFull-potb-eta3-npart.dat");
+  for (int i=0; i<101; i++) {
+    in_1Snpart1 >> NPART[i] >> Raa_Y1Snpart1[i];
+    in_1Snpart2 >> NPART[i] >> Raa_Y1Snpart2[i];
+    in_1Snpart3 >> NPART[i] >> Raa_Y1Snpart3[i];
+  } 
+  pgStrickland_Ups1S_NPART1 = new TGraph(101, NPART, Raa_Y1Snpart1);
+  pgStrickland_Ups1S_NPART1->SetLineWidth(2);
+  pgStrickland_Ups1S_NPART1->SetLineColor(kBlack);
+  pgStrickland_Ups1S_NPART1->SetLineStyle(1);
+  pgStrickland_Ups1S_NPART1->Draw("");
+  pgStrickland_Ups1S_NPART2 = new TGraph(101, NPART, Raa_Y1Snpart2);
+  pgStrickland_Ups1S_NPART2->SetLineWidth(2);
+  pgStrickland_Ups1S_NPART2->SetLineColor(kBlack);
+  pgStrickland_Ups1S_NPART2->SetLineStyle(2);
+  pgStrickland_Ups1S_NPART2->Draw("");
+  pgStrickland_Ups1S_NPART3 = new TGraph(101, NPART, Raa_Y1Snpart3);
+  pgStrickland_Ups1S_NPART3->SetLineWidth(2);
+  pgStrickland_Ups1S_NPART3->SetLineColor(kBlack);
+  pgStrickland_Ups1S_NPART3->SetLineStyle(3);
+  pgStrickland_Ups1S_NPART3->Draw("");
+
+ TBox *box1S = new TBox(385,1-OrangeBox,400,1+OrangeBox);
+box1S->SetFillColor(color1Sraa);
+box1S->Draw();
+  //Nucl.Phys. A879 (2012) 25-58
+  TLegend *legend = new TLegend(0.65,0.68,0.8,0.77);
+  legend->SetTextSize(gTextSize);
+  legend->SetFillStyle(0);
+  legend->SetFillColor(0);
+  legend->SetBorderSize(0);
+  legend->SetTextFont(42);
+  legend->AddEntry(gcent1,"#varUpsilon(1S)","pe");
+  //  legend->AddEntry(gRaaPt2TNP,"#varUpsilon(2S)","pe");
+  legend->Draw();
+  TLegend *leg2= new TLegend(0.65,0.63,0.8,0.7);
+  leg2->SetBorderSize(0);
+  leg2->SetTextSize(0.036);
+  leg2->SetTextFont(42);
+  leg2->SetLineColor(0);
+  leg2->SetLineStyle(1);
+  leg2->SetLineWidth(0.4);
+  leg2->SetFillColor(0);
+  leg2->SetFillStyle(0);
+  leg2->AddEntry(box1S,"global syst.","f");
+  leg3 = new TLegend(0.2,0.7,0.6,0.9);
+  leg3->SetBorderSize(0);
+  leg3->SetTextSize(0.036);
+  leg3->SetTextFont(42);
+  leg3->SetLineColor(0);
+  leg3->SetLineStyle(1);
+  leg3->SetLineWidth(0.4);
+  leg3->SetFillColor(0);
+  leg3->SetFillStyle(0);
+  
+leg3->SetHeader("Nucl.Phys. A879 (2012) 25-58"); // (arXiv:1106.2571)
+leg3->AddEntry(pgStrickland_Ups1S_NPART3,"#varUpsilon(1S), 4#pi#eta/s = 3","L");
+leg3->AddEntry(pgStrickland_Ups1S_NPART2,"#varUpsilon(1S), 4#pi#eta/s = 2","L");
+leg3->AddEntry(pgStrickland_Ups1S_NPART1,"#varUpsilon(1S), 4#pi#eta/s = 1","L");
+leg3->Draw();
+leg2->Draw();
+
+  // |y| < 2.4
+    TLatex latexrap;
+    latexrap.SetTextSize(gTextSize);
+    latexrap.SetTextFont(42);
+    latexrap.DrawLatex(30,0.2,"|y| < 2.4");
+
+
+gPad->RedrawAxis();
+cRaanpart->cd();
+CMS_lumi(cRaanpart,103,33);
+cRaanpart->Update();
+cRaanpart->RedrawAxis();
+cRaanpart->GetFrame()->Draw();
+cRaanpart->SaveAs(basedir1 + TString("/RAA_NPART1S_Strickland.pdf"));
+cRaanpart->SaveAs(basedir1 + TString("/RAA_NPART1S_Strickland.png"));
+cRaanpart->SaveAs(basedir2 + TString("/RAA_NPART1S_Strickland.pdf"));
+cRaanpart->SaveAs(basedir2 + TString("/RAA_NPART1S_Strickland.png"));
+
+
+      // TBox *box2S = new TBox(385,1-syst2S_pp_centGlob4,400,1+syst2S_pp_centGlob4);
+      // box2S->SetFillColor(color2Sraa);
+      // box2S->Draw();
+      // cout << "Syst2S_pp_cent_glob = " << syst2S_pp_centGlob4 << endl;
+
 }
 
