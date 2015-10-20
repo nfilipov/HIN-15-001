@@ -170,10 +170,10 @@ private:
   int Reco_QQ_size;       // Number of reconstructed Onia 
   int Reco_QQ_type[Max_QQ_size];   // Onia category: GG, GT, TT
   int Reco_QQ_sign[Max_QQ_size];   /* Mu Mu combinations sign:
-			     0 = +/- (signal)
-			     1 = +/+
-			     2 = -/- 
-			  */
+				      0 = +/- (signal)
+				      1 = +/+
+				      2 = -/- 
+				   */
   int Reco_QQ_trig[Max_QQ_size];      // Vector of trigger bits matched to the Onia
   float Reco_QQ_VtxProb[Max_QQ_size]; // chi2 probability of vertex fitting 
   float Reco_QQ_ctau[Max_QQ_size];    // ctau: flight time
@@ -409,7 +409,7 @@ private:
   float zVtx;
   float nPV;
 
- // Triger stuff
+  // Triger stuff
   // PUT HERE THE *LAST FILTERS* OF THE BITS YOU LIKE
   static const unsigned int sNTRIGGERS = 20;
   unsigned int NTRIGGERS;
@@ -479,7 +479,7 @@ HiOniaAnalyzer::HiOniaAnalyzer(const edm::ParameterSet& iConfig):
   _oniaPDG(iConfig.getParameter<int>("oniaPDG")),
   _iConfig(iConfig)
 {
-   //now do what ever initialization is needed
+  //now do what ever initialization is needed
   nEvents = 0;
   passedCandidates = 0;
   centrality_ = 0;
@@ -550,7 +550,7 @@ HiOniaAnalyzer::HiOniaAnalyzer(const edm::ParameterSet& iConfig):
   
 
   for(std::vector<std::string>::iterator it = theTriggerNames.begin(); it != theTriggerNames.end(); ++it){
-      mapTriggerNameToIntFired_[*it] = -9999;
+    mapTriggerNameToIntFired_[*it] = -9999;
   }
 }
 
@@ -558,8 +558,8 @@ HiOniaAnalyzer::HiOniaAnalyzer(const edm::ParameterSet& iConfig):
 HiOniaAnalyzer::~HiOniaAnalyzer()
 {
  
-   // do anything here that needs to be done at desctruction time
-   // (e.g. close files, deallocate resources etc.)
+  // do anything here that needs to be done at desctruction time
+  // (e.g. close files, deallocate resources etc.)
 
 }
 
@@ -1009,42 +1009,42 @@ HiOniaAnalyzer::fillTreeJpsi(int iSign, int count) {
       //		<< std::endl;
       
 
-       if (track->qualityByName("highPurity") &&
-	   track->pt()>0.2 && fabs(track->eta())<2.4 &&
-	   track->ptError()/track->pt()<0.1 && 
-	   fabs(dz/dzsigma)<3.0 && fabs(dxy/dxysigma)<3.0)  {
+      if (track->qualityByName("highPurity") &&
+	  track->pt()>0.2 && fabs(track->eta())<2.4 &&
+	  track->ptError()/track->pt()<0.1 && 
+	  fabs(dz/dzsigma)<3.0 && fabs(dxy/dxysigma)<3.0)  {
 	 
-	 Reco_QQ_NtrkPt02[Reco_QQ_size]++;
-	 if (track->pt()>0.3) Reco_QQ_NtrkPt03[Reco_QQ_size]++;
-	 if (track->pt()>0.4) {
-	   Reco_QQ_NtrkPt04[Reco_QQ_size]++;
+	Reco_QQ_NtrkPt02[Reco_QQ_size]++;
+	if (track->pt()>0.3) Reco_QQ_NtrkPt03[Reco_QQ_size]++;
+	if (track->pt()>0.4) {
+	  Reco_QQ_NtrkPt04[Reco_QQ_size]++;
 
-	 if (iTrack_mupl->charge()==track->charge()) {
-	   double Reco_QQ_mupl_NtrkDeltaR = deltaR(iTrack_mupl->eta(), iTrack_mupl->phi(), track->eta(), track->phi());
-	   double Reco_QQ_mupl_RelDelPt = abs(1.0 - iTrack_mupl->pt()/track->pt());
+	  if (iTrack_mupl->charge()==track->charge()) {
+	    double Reco_QQ_mupl_NtrkDeltaR = deltaR(iTrack_mupl->eta(), iTrack_mupl->phi(), track->eta(), track->phi());
+	    double Reco_QQ_mupl_RelDelPt = abs(1.0 - iTrack_mupl->pt()/track->pt());
 
-	   if ( Reco_QQ_mupl_NtrkDeltaR<0.001 &&
-		Reco_QQ_mupl_RelDelPt<0.001 )
-	     continue;
-	 }
-	 else {
-	   double Reco_QQ_mumi_NtrkDeltaR = deltaR(iTrack_mumi->eta(), iTrack_mumi->phi(), track->eta(), track->phi());
-	   double Reco_QQ_mumi_RelDelPt = abs(1.0 - iTrack_mumi->pt()/track->pt());
+	    if ( Reco_QQ_mupl_NtrkDeltaR<0.001 &&
+		 Reco_QQ_mupl_RelDelPt<0.001 )
+	      continue;
+	  }
+	  else {
+	    double Reco_QQ_mumi_NtrkDeltaR = deltaR(iTrack_mumi->eta(), iTrack_mumi->phi(), track->eta(), track->phi());
+	    double Reco_QQ_mumi_RelDelPt = abs(1.0 - iTrack_mumi->pt()/track->pt());
 
-	   if ( Reco_QQ_mumi_NtrkDeltaR<0.001 &&
-		Reco_QQ_mumi_RelDelPt<0.001 ) 
-	     continue;
-	 }
+	    if ( Reco_QQ_mumi_NtrkDeltaR<0.001 &&
+		 Reco_QQ_mumi_RelDelPt<0.001 ) 
+	      continue;
+	  }
 
-	   double Reco_QQ_NtrkDeltaR = deltaR(aJpsiCand->eta(), aJpsiCand->phi(), track->eta(), track->phi());
-	   if (Reco_QQ_NtrkDeltaR<0.3)
-	     Reco_QQ_NtrkDeltaR03[Reco_QQ_size]++;
-	   if (Reco_QQ_NtrkDeltaR<0.4)
-	     Reco_QQ_NtrkDeltaR04[Reco_QQ_size]++;
-	   if (Reco_QQ_NtrkDeltaR<0.5)
-	     Reco_QQ_NtrkDeltaR05[Reco_QQ_size]++;
-	 }
-       }
+	  double Reco_QQ_NtrkDeltaR = deltaR(aJpsiCand->eta(), aJpsiCand->phi(), track->eta(), track->phi());
+	  if (Reco_QQ_NtrkDeltaR<0.3)
+	    Reco_QQ_NtrkDeltaR03[Reco_QQ_size]++;
+	  if (Reco_QQ_NtrkDeltaR<0.4)
+	    Reco_QQ_NtrkDeltaR04[Reco_QQ_size]++;
+	  if (Reco_QQ_NtrkDeltaR<0.5)
+	    Reco_QQ_NtrkDeltaR05[Reco_QQ_size]++;
+	}
+      }
     }
   }
 
@@ -1210,19 +1210,19 @@ HiOniaAnalyzer::makeCuts(int sign) {
 	/*
 	// global + global?
 	if (checkCuts(cand,muon1,muon2,&HiOniaAnalyzer::selGlobalMuon,&HiOniaAnalyzer::selGlobalMuon)){
-	  _thePassedCats[sign].push_back(GlbGlb);  _thePassedCands[sign].push_back(cand);
-	  //	  continue;
+	_thePassedCats[sign].push_back(GlbGlb);  _thePassedCands[sign].push_back(cand);
+	//	  continue;
 	}
 		
 	// global + tracker? (x2)    
 	if (checkCuts(cand,muon1,muon2,&HiOniaAnalyzer::selGlobalMuon,&HiOniaAnalyzer::selTrackerMuon)){
-	  _thePassedCats[sign].push_back(GlbTrk);  _thePassedCands[sign].push_back(cand);
-	  //	  continue;
+	_thePassedCats[sign].push_back(GlbTrk);  _thePassedCands[sign].push_back(cand);
+	//	  continue;
 	}
 
 	if (checkCuts(cand,muon2,muon1,&HiOniaAnalyzer::selGlobalMuon,&HiOniaAnalyzer::selTrackerMuon)){
-	  _thePassedCats[sign].push_back(GlbTrk);  _thePassedCands[sign].push_back(cand);
-	  //	  continue;
+	_thePassedCats[sign].push_back(GlbTrk);  _thePassedCands[sign].push_back(cand);
+	//	  continue;
 	}
 	*/
 
@@ -1297,14 +1297,14 @@ HiOniaAnalyzer::selGlobalMuon(const pat::Muon* aMuon) {
   reco::TrackRef gTrack = aMuon->globalTrack();
   //  const reco::HitPattern& q = gTrack->hitPattern();
   /* Z analysis cuts
-  return (isMuonInAccept(aMuon) &&
-	  iTrack->found() > 10 &&
-	  gTrack->chi2()/gTrack->ndof() < 10.0 &&
-	  q.numberOfValidMuonHits() > 0 &&
-	  iTrack->chi2()/iTrack->ndof() < 4.0 &&
-	  iTrack->ptError()/iTrack->pt() <= 0.1 &&
-	  fabs(iTrack->dxy(RefVtx)) < 0.03 &&
-	  fabs(iTrack->dz(RefVtx)) < 0.150 );
+     return (isMuonInAccept(aMuon) &&
+     iTrack->found() > 10 &&
+     gTrack->chi2()/gTrack->ndof() < 10.0 &&
+     q.numberOfValidMuonHits() > 0 &&
+     iTrack->chi2()/iTrack->ndof() < 4.0 &&
+     iTrack->ptError()/iTrack->pt() <= 0.1 &&
+     fabs(iTrack->dxy(RefVtx)) < 0.03 &&
+     fabs(iTrack->dz(RefVtx)) < 0.150 );
   */
   // J/psi tuned as of 2011-03-18
   return (isMuonInAccept(aMuon) &&
@@ -1570,7 +1570,7 @@ HiOniaAnalyzer::fillRecoMuons(int iCent)
       else muType = -1;
 
       if ( //muType==0 ||
-	   muType==1 ) {
+	  muType==1 ) {
 	nGoodMuons++;
 
 	int trigBits=0;
@@ -2013,10 +2013,10 @@ HiOniaAnalyzer::hltReport(const edm::Event &iEvent ,const edm::EventSetup& iSetu
 
 	//-------prescale factor------------
 	/*
-	if (!_isMC) {
+	  if (!_isMC) {
 	  const std::pair<int,int> prescales(hltConfig.prescaleValues(iEvent,iSetup,triggerPathName));
 	  mapTriggerNameToPrescaleFac_[triggerPathName] = prescales.first * prescales.second;
-	}
+	  }
 	*/
       }
     }

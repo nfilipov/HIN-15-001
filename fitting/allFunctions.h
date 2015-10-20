@@ -1,3 +1,6 @@
+#ifndef allFunctions_h
+#define allFunctions_h
+
 #include <iostream.h>
 const double mass_l =  7.5;
 const double mass_h = 14.0;
@@ -14,3 +17,4 @@ double computeSingleError(RooRealVar& x, RooRealVar& y, double correlation );
 double computeSingle(RooRealVar& x, RooRealVar& y);
 
 
+#endif // #ifndef allFunctions_h

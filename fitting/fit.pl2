@@ -19,8 +19,8 @@ my $samend   = 6;
 my @choseSamples = ("","pp7tev-d0", "pp7tev-d3","pbpbPPrecoTT", "pbpbPPrecoGG","pbpbZhen2011","PbPb","pp2p76tev","aaMC1S","pPb5tev");##pp2p76tev
 # ------------------------------------------------------
 #first, make the /output level (which will exist forever)
-my $txtOutputDir=$workDir."/txtOutput";
-my $pdfOutputDir=$workDir."/pdfOutput";
+my $txtOutputDir=$workDir."/txtOutput_MinBias";
+my $pdfOutputDir=$workDir."/pdfOutput_MinBias";
 #then, make the /date level (which will always change, not very helpful but hey...)
 my $todaysDate = "/04-2015";
 my $pdfDateDir = $pdfOutputDir.$todaysDate;
@@ -40,9 +40,9 @@ my @ChooseWhat2Fit = ("yield_m8_14","ratio1","ratio23","ratio32");
 #then, the pt cut (can add vProb or other observables there in the same fashion)
 
 my $ptMuStart1 = 2;#single muon pt > 4GeV/c cut, that no-one wants to change... that makes me sad.
-my $ptMuEnd1 = 4;
-my $ptMuStart2 = 2;
-my $ptMuEnd2 = 4;
+my $ptMuEnd1 = 2;
+my $ptMuStart2 = 3;
+my $ptMuEnd2 = 3;
 my @chooseptMu = ("","3","3.5","4","4.5");
 my @outPdfPrefix_ptMu1 = ("/pt0","/pt_3","/pt_3p5","/pt_4","/pt_4p5");
 my @outPdfPrefix_ptMu2 = ("_noPtCut","_3","_3p5","_4","_4p5");
@@ -119,8 +119,8 @@ for($rapStart..$rapEnd) {
     $binNameEndRap[$_] =~ tr/./p/;
     if($DoRapNow==1) {   say $binNameStartRap[$_].$binNameEndRap[$_];}
 }
-my $ptStart=0;
-my $ptEnd=5;
+my $ptStart=9;
+my $ptEnd=9;
 my @binNameStartPt;
 my @binNameEndPt;
 my @upsPtBinMin = ("0","2.5","5","8" ,"12","20" ,"0"  ,"5","0","0");  
@@ -133,7 +133,7 @@ for($ptStart..$ptEnd) {
     if($DoPtNow==1){    say $binNameStartPt[$_].$binNameEndPt[$_];}
 }
 my $centstart=0;
-my $centend=8;
+my $centend=0;
 my @centrality_min;
 my @centrality_max;
 #######################0    1   2   3    4   5    6    7    8    9   10  11   12

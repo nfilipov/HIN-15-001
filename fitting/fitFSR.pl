@@ -1,5 +1,6 @@
 #!/opt/star/bin/perl -w
 #
+
 use strict;
 #naming the directories: 
 my $workDir      = "/Users/nicolas/Project/ups2013/code/";
@@ -9,8 +10,8 @@ my $workDir      = "/Users/nicolas/Project/ups2013/code/";
 # vP_0p01       |    vP_0p05       |vP_0p01     |   vP_0p05
 #pt_3 | pt_3p5 | pt_4 | pt_4p5 (in each vP subdirectory)
 
-my $pdfPrefix = "pdfOutput/MC_FSR/";
-my $txtPrefix = "txtOutput/MC_FSR/";
+my $pdfPrefix = "pdfOutput/MC_FSR/2015_06/";
+my $txtPrefix = "txtOutput/MC_FSR/2015_06/";
 my $outFigDirStep = $workDir.$pdfPrefix;
 my $outDatDirStep = $workDir.$txtPrefix;
 # my $outFigDir;
@@ -24,18 +25,18 @@ print "Welcome to SuperFitter! ";
 ###
 ###
 #------------------------ OUTPUT DIRECTORIES per samples
-my @sampleIndex  = ("","1"); #Input data sample. 1: pp@7TeV-d0 data ; 2: pp@7TeV-d3 data; 3: PbPb@276 regit 4: pp reco TT 5: pp reco GG 6: zhen tree, GG 7: pp@2.76TeV data 8: MC, 9:pPb5tevfirst part of the run.
-my $samstart = 1;
+my @sampleIndex  = ("0","1"); #Input data sample. 1: pp@7TeV-d0 data ; 2: pp@7TeV-d3 data; 3: PbPb@276 regit 4: pp reco TT 5: pp reco GG 6: zhen tree, GG 7: pp@2.76TeV data 8: MC, 9:pPb5tevfirst part of the run.
+my $samstart = 0;
 my $samend   = 1;
-my @choseSamples = ("","Pyquen");##pp2p76tev
+my @choseSamples = ("Pythia","Pyquen");##pp2p76tev
 # ------------------------------------------------------
 my $doNarrowMass = 0; 
 my $choseFitParams = 0; #what you want 0: (1s, 2s, 3s) 1: (1s, 2s/1s; 3s/1s); 2: (1S, (2s+3s)/1s); 3:(1S, 2S/1S, 3S/1S, 3S/2S)
 my @choseWhat2Fit = ("MCpars");
 my $prefix          = $choseWhat2Fit[$choseFitParams];
 
-my $ptMuStart1 = 2;#single muon pt > 4GeV/c cut, that no-one wants to change... that makes me sad.
-my $ptMuEnd1 = 2;
+my $ptMuStart1 = 3;#single muon pt > 4GeV/c cut, that no-one wants to change... that makes me sad.
+my $ptMuEnd1 = 3;
 my $ptMuStart2 = 3;
 my $ptMuEnd2 = 3;
 my @chooseptMu = ("","3","3.5","4","4.5");
@@ -56,15 +57,15 @@ my @useRef   = ("0","1","2"); # 0 free; 1:data-driven estimation, 2:MC study, 3:
 my $refstart  = 0;
 my $refend    = 0;
 
-my $centstart =1;
-my $centend   =1;
+my $centstart =0;
+my $centend   =0;
 #my @centrality_min = ("0","4", "8", "0", "50", "20","0");
 #my @centrality_max = ("4","8", "24", "8","100", "40","0");
 # ----------------------0----1---2---3----4----5----6----7---8---9---10---11--12---13--; 0->7 1S binning, 8->11 2S binning, n>11 for trials
  my @centrality_min = ("0", "0","2","4", "8","12","16","20","28","0","4", "8","0","20"); 
  my @centrality_max = ("40","2","4","8","12","16","20","28","40","4","8","40","8","40");
 
-my $isHI=1; ### turn to one ONLY when fitting Pyquen samples!
+my $isHI; ### turn to one ONLY when fitting Pyquen samples!
 # 0-5 | 5-10 | 10-20 | 20-30 | 30-40 | 40-50(60) | 50(60)-100 | 0-20 | 20-90(alice comparisons)
 
 my $modelstart =0;
@@ -117,7 +118,7 @@ my @rapBinMax = ("0.4","0.8","1.2","1.6","2.","2.4","1.2","2.4","2.4");
 #my $whatBin=0;
 my  $rapStart=0;
 my  $rapEnd=8;
-my  $ptStart=8;
+my  $ptStart=0;
 my  $ptEnd=9;
 # pT binning for 2S:
 #my @upsPtBinMin = ("0","6.5","10","0");	 
@@ -127,8 +128,8 @@ my  $ptEnd=9;
 # my @upsPtBinMax = ("2.5","5" , "8","12","20","50","6.5","10","20","50");
 # ------------------0-----1-----2---3----4----5-----6-----7------8---9## pT binning for 1S (0->X), 2S (Y->Z);
 my @upsPtBinMin = ("0","2.5","5","8" ,"12","20" ,"0"  ,"5","12","0");
-my @upsPtBinMax = ("2.5","5" , "8","12","20","50","5","12","20","20");
-## (in theory, I could also do pt 20-50 GeV...)
+my @upsPtBinMax = ("2.5","5" , "8","12","20","40","5","12","20","20");
+#
 my $dontDoRapNow =1;
 my $dontDoPtNow =0;
 #loop for mkdir purposes
@@ -176,8 +177,9 @@ for( my $icent=$centstart; $icent <=$centend; $icent++)
   {
     for ( $isam=$samstart; $isam<=$samend; $isam++)
       {
-#	$doNarrowMass = 0; 
-	if ($isam==1) {$doNarrowMass=1;}
+	  $doNarrowMass = 1; 
+	  if ($isam==1) {$isHI=1;} 
+	  if ($isam==0) {$isHI=0;} 
 	#loop over vertex probabilities
 	# these two lines are repeated because $outFigDir and $outDatDir go in the function's arguments
 	# for (my $ivProb=$vProbStart; $ivProb<=$vProbEnd; $ivProb++)
@@ -232,7 +234,7 @@ for( my $icent=$centstart; $icent <=$centend; $icent++)
 					    my $centMin = $centrality_min[$i1stLoop];
 					    my $centMax = $centrality_max[$i1stLoop];
 					    $upsPtCutMin=0.0;
-					    $upsPtCutMax=50.0;
+					    $upsPtCutMax=40.0;
 					    $dimuYMin=0.0;
 					    $dimuYMax=2.4;
 					
@@ -282,7 +284,7 @@ for( my $icent=$centstart; $icent <=$centend; $icent++)
 					my $centMin = $centrality_min[0];
 					my $centMax = $centrality_max[0];
 					$upsPtCutMin=0.0;
-					$upsPtCutMax=50.0;
+					$upsPtCutMax=40.0;
 					for(my $i1stLoop=$secondloopStart; $i1stLoop<=$secondloopEnd; $i1stLoop++)
 					{
 				
@@ -311,8 +313,8 @@ for( my $icent=$centstart; $icent <=$centend; $icent++)
 					{   ### pt loop
 					    # $dimuYMin=-1.93;
 					    # $dimuYMax=1.93;
-					     $dimuYMin=0.0;
-					     $dimuYMax=2.4;
+					    $dimuYMin=0.0;
+					    $dimuYMax=2.4;
 					    $upsPtCutMin=$upsPtBinMin[$i1stLoop];
 					    $upsPtCutMax=$upsPtBinMax[$i1stLoop];
 					    print"Cent: $centMin - $centMax \n BkgModel: $bkgType \n Sample: $sample \n Muon cut:	$muonEtaMin - $muonEtaMax\n";

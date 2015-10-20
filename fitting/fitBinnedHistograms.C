@@ -50,13 +50,13 @@
 #include <fstream>
 #include <new>
 #include <iostream>
-double mass_l =  8.8;
+double mass_l =  8.;
 double mass_h = 10.;
 double binw   = 0.01;    //bin width of the histogram
 
 const int nData   = 2;
-const char* choseSampleLegend[nData] = {"",
-					"CMS Simulation"}; //CMS simulation, pp #sqrt{s} = 2.76 TeV
+const char* choseSampleLegend[nData] = {"PYTHIA",
+					"PYTHIA+HYDJET"}; //CMS simulation, pp #sqrt{s} = 2.76 TeV
 
 const char* choseSampleLumi[nData] = {"",
 				      ""};
@@ -113,12 +113,13 @@ void fitBinnedHistograms(int choseSample    = 1, //Input data sample. 1: pyquen 
  switch (choseSample) 
     {
     case 0:
-      finput ="";
-      cout << "you don't pick any tree! Fuck I'm gonna crash fo' sure..." << endl;
+      finput ="../dimuonTree_upsiMiniTree_pp2p76tev_Pythia1S_WithIDCut_GlbGlb_RunHIN-15-001_trigBit2_allTriggers0.root";
+      cout << "Pythia 1S !!!" << endl;
       break;
     case 1:
-      finput = "~/Project/ups2013/upsiMiniTree_Pyquen1S_QQtrigbit1_Trig_Unfolding_postCut_deltaRmatched_withCentrality.root";
-      cout << "picked the 1S embedded sample, filtered for only passing events" << endl;
+      //      finput = "~/Project/ups2013/upsiMiniTree_Pyquen1S_QQtrigbit1_Trig_Unfolding_postCut_deltaRmatched_withCentrality.root";
+      finput = "../dimuonTree_upsiMiniTree_AA2p76tev_Pyquen1S_WithIDCut_GlbGlb_RunHIN-15-001_trigBit1_allTriggers0.root";
+      cout << "Pyquen 1S !!!" << endl;
       break;
     default: break;
     }
@@ -172,19 +173,17 @@ void fitBinnedHistograms(int choseSample    = 1, //Input data sample. 1: pyquen 
     cout << "been there" << endl;
     int centrality_max = centralityMax;  ///  
     int centrality_min = centralityMin; 
-    if(choseSample!=1){ TString cut_ap("");}
-    else { TString cut_ap(Form("  (%.2f<RecoMuPlusEta && RecoMuPlusEta < %.2f) && (%.2f<RecoMuMinusEta && RecoMuMinusEta < %.2f) && (%.2f<RecoUpsPt && RecoUpsPt<%.2f)  && (abs(RecoUpsRap)<%.2f && abs(RecoUpsRap)>%.2f)  &&((RecoMuPlusPt > %.2f && RecoMuMinusPt > %.2f) || (RecoMuPlusPt > %.2f && RecoMuMinusPt > %.2f))",muonEtaCut_min,muonEtaCut_max,muonEtaCut_min,muonEtaCut_max,dimuPtMin,dimuPtMax,dimuYMax,dimuYMin,muonPtCut_min1,muonPtCut_min2,muonPtCut_min2,muonPtCut_min1));}
+    TString cut_ap(Form("  (%.2f<muPlusEta && muPlusEta < %.2f) && (%.2f<muMinusEta && muMinusEta < %.2f) && (%.2f<upsPt && upsPt<%.2f)  && (abs(upsRapidity)<%.2f && abs(upsRapidity)>%.2f)  &&((muPlusPt > %.2f && muMinusPt > %.2f) || (muPlusPt > %.2f && muMinusPt > %.2f))",muonEtaCut_min,muonEtaCut_max,muonEtaCut_min,muonEtaCut_max,dimuPtMin,dimuPtMax,dimuYMax,dimuYMin,muonPtCut_min1,muonPtCut_min2,muonPtCut_min2,muonPtCut_min1));
     
 
     int centMin = centrality_min;
     int centMax = centrality_max;
     if (centralityMin==28) binw=0.05;
     
-    if(choseSample==1) 
-      {
-	centMin = (int)(centrality_min*2.5);
-	centMax = (int)(centrality_max*2.5);
-      }
+    if(choseSample==1){
+    centMin = (int)(centrality_min*2.5);
+    centMax = (int)(centrality_max*2.5);
+    }
     TString figName_(Form("%s_%s_cent%d-%d_bkgModel%d_sigModel%d_muonEta%.2f%.2f_muonPt%.2f-%.2f_dimuPt%.2f%.2f_dimuY%.2f%.2f_trkRot%d_constrain%d_fsr%d_sigma%d_ref%d",
 			  outFilePrefix,choseSampleCase,centMin,centMax,
 			  bkgdModel, signalModel , muonEtaCut_min,muonEtaCut_max,muonPtCut_min1,muonPtCut_min2,dimuPtMin,dimuPtMax,dimuYMin,dimuYMax,doTrkRot,doConstrainFit,fixFSR,fixSigma1,useRef));
@@ -199,29 +198,34 @@ void fitBinnedHistograms(int choseSample    = 1, //Input data sample. 1: pyquen 
     // -----------    
     TFile *f = new TFile(finput.c_str());
     TTree* theTree       = (TTree*)gROOT->FindObject("UpsilonTree"); // OS --- all mass
-    RooRealVar* mass       = new RooRealVar("RecoUpsM","#mu#mu mass",mass_l,mass_h,"GeV/c^{2}");
-    RooRealVar* upsPt      = new RooRealVar("RecoUpsPt","p_{T}(#Upsilon)",0,60,"GeV");
+    RooRealVar* mass       = new RooRealVar("invariantMass","#mu#mu mass",mass_l,mass_h,"GeV/c^{2}");
+    RooRealVar* upsPt      = new RooRealVar("upsPt","p_{T}(#Upsilon)",0,200,"GeV");
     //  RooRealVar* upsEta     = new RooRealVar("upsEta",  "upsEta"  ,-10,10);
-    RooRealVar* upsRapidity= new RooRealVar("RecoUpsRap",  "upsRapidity",-1000, 1000);
+    RooRealVar* upsRapidity= new RooRealVar("upsRapidity",  "upsRapidity",-1000, 1000);
     RooRealVar* vProb      = new RooRealVar("_VtxProb",  "vProb"  ,0.01,1.00);
     //   RooRealVar* QQsign     = new RooRealVar("QQsign",  "QQsign"  ,-1,5);
-    RooRealVar* Centrality = new RooRealVar("centrality","centrality",0,100);
-    RooRealVar* GenUpsPt= new RooRealVar("GenUpsPt","p_{T}(#Upsilon^{GEN})",0,200,"GeV");
-    RooRealVar* GenMuPlusPt   = new RooRealVar("GenMuPlusPt","GenMuPlusPt",muonPtCut_min1,100);
-    RooRealVar* GenMuMinusPt  = new RooRealVar("GenMuMinusPt","GenMuMinusPt",muonPtCut_min1,100);
-    RooRealVar* GenMuPlusEta  = new RooRealVar("GenMuPlusEta","GenMuPlusEta",  -2.4,2.4);
-    RooRealVar* GenMuMinusEta = new RooRealVar("GenMuMinusEta","GenMuMinusEta",-2.4,2.4);
-    RooRealVar* muPlusPt   = new RooRealVar("RecoMuPlusPt","RecoMuPlusPt",muonPtCut_min1,100);
-    RooRealVar* muMinusPt  = new RooRealVar("RecoMuMinusPt","RecoMuMinusPt",muonPtCut_min1,100);
-    RooRealVar* muPlusEta  = new RooRealVar("RecoMuPlusEta","RecoMuPlusEta",  -2.4,2.4);
-    RooRealVar* muMinusEta = new RooRealVar("RecoMuMinusEta","RecoMuMinusEta",-2.4,2.4);
+    RooRealVar* Centrality = new RooRealVar("Centrality","Centrality",0,100);
+    RooRealVar* upsPt_gen= new RooRealVar("upsPt_gen","p_{T}(#Upsilon^{GEN})",0,200,"GeV/c");
+    RooRealVar* muPlusPt_gen   = new RooRealVar("muPlusPt_gen","muPlusPt_gen",muonPtCut_min1,100);
+    RooRealVar* muMinusPt_gen  = new RooRealVar("muMinusPt_gen","muMinusPt_gen",muonPtCut_min1,100);
+    RooRealVar* muPlusEta_gen  = new RooRealVar("muPlusEta_gen","muPlusEta_gen",  -2.4,2.4);
+    RooRealVar* muMinusEta_gen = new RooRealVar("muMinusEta_gen","muMinusEta_gen",-2.4,2.4);
+    RooRealVar* muPlusPt   = new RooRealVar("muPlusPt","muPlusPt",muonPtCut_min1,100);
+    RooRealVar* muMinusPt  = new RooRealVar("muMinusPt","muMinusPt",muonPtCut_min1,100);
+    RooRealVar* muPlusEta  = new RooRealVar("muPlusEta","muPlusEta",  -2.4,2.4);
+    RooRealVar* muMinusEta = new RooRealVar("muMinusEta","muMinusEta",-2.4,2.4);
     RooDataSet *data0 = new RooDataSet("data0","data0",theTree,
-				       RooArgSet(*mass,*upsPt,*muPlusPt,*muMinusPt,*muPlusEta,*muMinusEta,*upsRapidity,*GenUpsPt,*Centrality));
+				       RooArgSet(*mass,*upsPt,*muPlusPt,*muMinusPt,*muPlusEta,*muMinusEta,*upsRapidity,*upsPt_gen,*Centrality));
     RooDataSet *redData;
     // RooDataSet *tmp;
-    RooFormulaVar wFunc("w","event weight","GenUpsPt>30?0:(GenUpsPt>15.0?(0.0877039/107560.0):(GenUpsPt>12?(0.0977067/117270.0):(GenUpsPt>9?(0.169418/162777.0):(GenUpsPt>6?(0.430737/172165.0):(GenUpsPt>3?(1.1129191/171048.0):(1.0/172208.0))))))",*GenUpsPt);
-    RooRealVar *w = (RooRealVar*) data0->addColumn(wFunc);
-
+    if (choseSample==1){
+      RooFormulaVar wFunc("w","event weight","upsPt_gen>40?0:(upsPt_gen>15.0?(0.0877039/107560.0):(upsPt_gen>12?(0.0977067/117270.0):(upsPt_gen>9?(0.169418/162777.0):(upsPt_gen>6?(0.430737/172165.0):(upsPt_gen>3?(1.1129191/171048.0):(1.0/172208.0))))))",*upsPt_gen);
+      RooRealVar *w = (RooRealVar*) data0->addColumn(wFunc);
+    }
+    else if (choseSample==0){
+      RooFormulaVar wFunc("w","event weight","upsPt_gen>40?0:1",*upsPt_gen);
+      RooRealVar *w = (RooRealVar*) data0->addColumn(wFunc);
+    }
     data0->Print();
     redData = new RooDataSet(data0->GetName(),data0->GetTitle(),data0,*data0->get(),cut_ap,w->GetName());
     // for weighting 
@@ -259,7 +263,7 @@ void fitBinnedHistograms(int choseSample    = 1, //Input data sample. 1: pyquen 
     RooFormulaVar *sigma2S = new RooFormulaVar("sigma2S","@0*@1",RooArgList(*sigma1,*rat2));
     RooFormulaVar *sigma3S = new RooFormulaVar("sigma3S","@0*@1",RooArgList(*sigma1,*rat3));
     RooRealVar *alpha  = new RooRealVar("#alpha_{CB}","tail shift",alpha_min[whatBin],alpha_max[whatBin]);    // MC 5tev 1S pol2 
-    RooRealVar *npow   = new RooRealVar("npow","power order",npow_min[whatBin],npow_max[whatBin]);    // MC 5tev 1S pol2 
+    RooRealVar *npow   = new RooRealVar("npow","power order",npow_min[whatBin],120);    // MC 5tev 1S pol2 
     RooRealVar *sigmaFraction = new RooRealVar("sigmaFraction","Sigma Fraction",0.,1.);
     // scale the sigmaGaus with sigma1S*scale=sigmaGaus now.
     RooRealVar    *scaleWidth = new RooRealVar("#sigma_{CB2}/#sigma_{CB1}","scaleWidth",1.,2.7);
@@ -323,19 +327,22 @@ void fitBinnedHistograms(int choseSample    = 1, //Input data sample. 1: pyquen 
     }
     // bkg Chebychev
     RooRealVar *nbkgd   = new RooRealVar("n_{Bkgd}","nbkgd",0,nt);
-    RooRealVar *bkg_a1  = new RooRealVar("a1_bkg", "bkg_{a1}", 0, -5, 5);
-    RooRealVar *bkg_a2  = new RooRealVar("a2_Bkg", "bkg_{a2}", 0, -5, 5);
+    RooRealVar *bkg_a1  = new RooRealVar("a1_bkg", "bkg_{a1}", 0, -1, 1);
+    RooRealVar *bkg_a2  = new RooRealVar("a2_Bkg", "bkg_{a2}", 0, -1, 1);
     RooRealVar *bkg_a3  = new RooRealVar("a3_Bkg", "bkg_{a3}", 0, -2, 2);
     RooAbsPdf  *pdf_combinedbkgd  = new RooChebychev("bkgPdf","bkgPdf",
 						     *mass, RooArgList(*bkg_a1,*bkg_a2));
     bkg_a2->setVal(0);
     bkg_a2->setConstant();
+    bkg_a1->setVal(0);
+    bkg_a1->setConstant();
+
     RooRealVar *bkgdFraction = new RooRealVar("bkgdFrac","Background normalisation",0.001,0,1);
     //fitted histo
     int nbins = ceil((mass_h-mass_l)/binw); 
     TH1D *MReco;
     MReco = new TH1D("MReco","Reco di-muon mass",nbins,mass_l,mass_h);
-    MReco = (TH1D*) redData->createHistogram("RecoUpsM",*mass);
+    MReco = (TH1D*) redData->createHistogram("invariantMass",*mass);
     MReco->SetBinErrorOption(TH1::kPoisson);
     cout << "kokomo" << endl;
     RooDataHist binnedData ("binnedData","binnedData",*mass,Import(*MReco));
@@ -380,6 +387,8 @@ void fitBinnedHistograms(int choseSample    = 1, //Input data sample. 1: pyquen 
     frame->GetXaxis()->SetTitle("m_{#mu^{+}#mu^{-}} (GeV/c^{2})");
     frame->GetXaxis()->CenterTitle(kTRUE);
     frame->GetYaxis()->SetTitleOffset(1.3);
+    if(choseSample==0){frame->GetYaxis()->SetRangeUser(1,1e5);}
+    else {frame->GetYaxis()->SetRangeUser(1e-2,1);}
     frame->Draw();
     c.Draw();
     c.SaveAs(figsDir+figName_+paramOn_+".pdf");
@@ -399,7 +408,7 @@ void fitBinnedHistograms(int choseSample    = 1, //Input data sample. 1: pyquen 
     TPad *pPad2 = new TPad("pPad2","pPad2",0.05,0.05,1,0.3);
     pPad2->SetTopMargin(0.0);
     pPad2->SetBottomMargin(-0.1);
-    frame->SetMinimum(0.00001);
+    if(choseSample==1) frame->SetMinimum(0.00001);
     pPad1->SetLogy();
     // pPad2->SetBottomMargin(gStyle->GetPadBottomMargin()/0.3);
     // pPad1->SetTopMargin(gStyle->GetPadTopMargin()/0.7);
