@@ -9,14 +9,14 @@
 double tnp_weight_muidtrg_pbpb(double x, double eta, int idx)
 {
    // denominator (from MC)
-   double den;
+   double den=1;
    if (fabs(eta)<0.9) den = 0.9724*TMath::Erf((x-0.4114)/3.3775);
    else if (fabs(eta)<1.6) den = 0.9502*TMath::Erf((x-1.3857)/2.0757);
    else if (fabs(eta)<2.1) den = 0.8971*TMath::Erf((x-1.0984)/2.3510);
    else den = 0.7763*TMath::Erf((x-0.8419)/1.6742);
 
    // numerator (from data)
-   double num;
+   double num=1;
 
    if (fabs(eta)<0.9)
    {
@@ -445,14 +445,14 @@ double tnp_weight_muidtrg_pbpb(double x, double eta, int idx)
 double tnp_weight_muidtrg_pp(double x, double eta, int idx)
 {
    // denominator (from MC)
-   double den;
+   double den=1;
    if (fabs(eta)<0.9) den = 0.9547*TMath::Erf((x-1.7776)/2.0497);
    else if (fabs(eta)<1.6) den = 0.9150*TMath::Erf((x-1.8502)/1.6651);
    else if (fabs(eta)<2.1) den = 0.8721*TMath::Erf((x-1.1449)/2.5504);
    else den = 0.6137*TMath::Erf((x-1.0202)/1.0729);
 
    // numerator (from data)
-   double num;
+   double num=1;
    if (fabs(eta)<0.9)
    {
       if (idx==0) num = 0.9452*TMath::Erf((x-1.9895)/1.6646);
@@ -880,12 +880,12 @@ double tnp_weight_muidtrg_pp(double x, double eta, int idx)
 double tnp_weight_sta_pbpb(double x, double eta, int idx)
 {
    // denominator (from MC)
-   double den;
+   double den=1;
    if (fabs(eta)<1.6) den = 1.0000*TMath::Erf((x-1.5330)/2.8467);
    else den = 0.9523*TMath::Erf((x-0.7714)/2.0628);
    
    // numerator (from data)
-   double num;
+   double num=1;
    if (fabs(eta)<1.6)
    {
       if (idx==0) num = 1.0000*TMath::Erf((x-1.3923)/2.3653);
@@ -1105,12 +1105,12 @@ double tnp_weight_sta_pbpb(double x, double eta, int idx)
 double tnp_weight_sta_pp(double x, double eta, int idx)
 {
    // denominator (from MC)
-   double den;
+   double den=1;
    if (fabs(eta)<1.6) den = 0.9911*TMath::Erf((x-1.4336)/2.8548);
    else den = den = 0.9132*TMath::Erf((x-0.8045)/1.8366);
    
    // numerator (from data)
-   double num;
+   double num=1;
    if (fabs(eta)<1.6)
    {
       if (idx==0) num = 0.9891*TMath::Erf((x-1.4814)/2.5014);
