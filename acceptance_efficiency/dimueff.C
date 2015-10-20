@@ -63,7 +63,7 @@ const double rapbins_2S[NRAP2S+1] = {0,1.2,2.4};
 const int centbins_2S[NCENT2S+1] = {0,10./2.5,30./2.5,50./2.5,100./2.5};
 const float fcentbins_2S[NCENT2S+1] = {0,10./2.5,30./2.5,50./2.5,100./2.5};
 
-void dimueff::Loop(int YS, bool ispbpb, int strategy, int binningYS, int var_tp)
+void dimueff::Loop(int YS, bool ispbpb, int strategy, int binningYS, int var_tp1, int var_tp2)
    // YS = N for NS
    // ispbpb = true for PbPb, false for pp
    // strategy = 0 for fit + reco quantities
@@ -71,7 +71,8 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int binningYS, int var_tp)
    //            2 for count + reco quantities
    //            3 for count + reco quantities
    // binningYS = 1 for fine binning (1S in PbPb style), 2 for coarse binning (2S in PbPb style)
-   // var_tp = 0 for nominal tag and probe corrections, 1..100 for the variations
+   // var_tp1 = 0 for nominal tag and probe corrections (muid+trg), 1..100 for the variations
+   // var_tp2 = 0 for nominal tag and probe corrections (STA), 1..100 for the variations
 {
 //   In a ROOT session, you can do:
 //      Root > .L dimueff.C
@@ -371,7 +372,8 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int binningYS, int var_tp)
          TLorentzVector *tlvmum = (TLorentzVector*) Reco_QQ_mumi_4mom->At(irec);
          if (YS==1 && !smuacc_loose(tlvmup,tlvmum)) continue;
          if (YS!=1 && !smuacc_tight(tlvmup,tlvmum)) continue;
-         weighttp=weight_tp(tlvmup->Pt(),tlvmup->Eta(),ispbpb,var_tp)*weight_tp(tlvmum->Pt(),tlvmum->Eta(),ispbpb,var_tp);
+         weighttp=weight_tp(tlvmup->Pt(),tlvmup->Eta(),ispbpb,var_tp1,var_tp2)
+            *weight_tp(tlvmum->Pt(),tlvmum->Eta(),ispbpb,var_tp1,var_tp2);
          recupspt = tlvrec->Pt();
          recupsrap = tlvrec->Rapidity();
          // // testing
@@ -826,21 +828,25 @@ double dimueff::weightrap(double rap, int dosyst)
    else return 1.;
 }
 
-double dimueff::weight_tp(double pt, double eta, bool ispbpb, int idx_variation)
+double dimueff::weight_tp(double pt, double eta, bool ispbpb, int idx_variation1, int idx_variation2)
 {
    if (!ispbpb)
    {
-      if (fabs(eta)<1.6)
-         return tnp_weight_pp_midrap(pt, idx_variation);
-      else
-         return tnp_weight_pp_fwdrap(pt, idx_variation);
+      return tnp_weight_muidtrg_pbpb(pt, eta, idx_variation1)
+         * tnp_weight_sta_pbpb(pt, eta, idx_variation2);
+      // if (fabs(eta)<1.6)
+      //    return tnp_weight_pp_midrap(pt, idx_variation);
+      // else
+      //    return tnp_weight_pp_fwdrap(pt, idx_variation);
    }
    else
    {
-      if (fabs(eta)<1.6)
-         return tnp_weight_pbpb_midrap(pt, idx_variation);
-      else
-         return tnp_weight_pbpb_fwdrap(pt, idx_variation);
+      return tnp_weight_muidtrg_pp(pt, eta, idx_variation1)
+         * tnp_weight_sta_pp(pt, eta, idx_variation2);
+      // if (fabs(eta)<1.6)
+      //    return tnp_weight_pbpb_midrap(pt, idx_variation);
+      // else
+      //    return tnp_weight_pbpb_fwdrap(pt, idx_variation);
    }
 }
 
