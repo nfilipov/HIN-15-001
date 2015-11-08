@@ -52,19 +52,11 @@ void draw_variations_muidtrg_pbpb(int ieta, bool plotAll, int stamode)
       }
    }
    if (stamode==1 && !plotAll) {
-      // is the STA correction at pt=+ifty >1 or <1?
-      char m1, m2;
-      if (tnp_weight_sta_pbpb(20,eta,0) > 1) {
-         m1 = '*'; m2 = '/';
-      } else {
-         m1 = '/'; m2 = '*';
-      }
-
-      TF1 *func1 = new TF1("var1_-1",Form("tnp_weight_muidtrg_pbpb(x,%f,-1)%ctnp_weight_sta_pbpb(x,%f,0)",eta,m1,eta),ptmin,20);
+      TF1 *func1 = new TF1("var1_0",Form("tnp_weight_muidtrg_pbpb(x,%f,0)*tnp_weight_sta_pbpb(x,%f,0)",eta,eta),ptmin,20);
       func1->SetLineColor(kBlue);
       func1->Draw("same");
-      tleg->AddEntry(func1,"variation * STA", "l");
-      TF1 *func2 = new TF1("var2_-2",Form("tnp_weight_muidtrg_pbpb(x,%f,-2)%ctnp_weight_sta_pbpb(x,%f,0)",eta,m2,eta),ptmin,20);
+      tleg->AddEntry(func1,"nominal * STA", "l");
+      TF1 *func2 = new TF1("var2_0",Form("tnp_weight_muidtrg_pbpb(x,%f,0)/tnp_weight_sta_pbpb(x,%f,0)",eta,eta),ptmin,20);
       func2->SetLineColor(kBlue);
       func2->Draw("same");
    }
@@ -128,19 +120,11 @@ void draw_variations_muidtrg_pp(int ieta, bool plotAll, double stamode)
       }
    }
    if (stamode==1 && !plotAll) {
-      // is the STA correction at pt=+ifty >1 or <1?
-      char m1, m2;
-      if (tnp_weight_sta_pbpb(20,eta,0) > 1) {
-         m1 = '*'; m2 = '/';
-      } else {
-         m1 = '/'; m2 = '*';
-      }
-
-      TF1 *func1 = new TF1("var1_-1",Form("tnp_weight_muidtrg_pp(x,%f,-1)%ctnp_weight_sta_pp(x,%f,0)",eta,m1,eta),ptmin,20);
+      TF1 *func1 = new TF1("var1_0",Form("tnp_weight_muidtrg_pp(x,%f,0)*tnp_weight_sta_pp(x,%f,0)",eta,eta),ptmin,20);
       func1->SetLineColor(kBlue);
       func1->Draw("same");
-      tleg->AddEntry(func1,"variation * STA", "l");
-      TF1 *func2 = new TF1("var2_-2",Form("tnp_weight_muidtrg_pp(x,%f,-2)%ctnp_weight_sta_pp(x,%f,0)",eta,m2,eta),ptmin,20);
+      tleg->AddEntry(func1,"nominal * STA", "l");
+      TF1 *func2 = new TF1("var2_0",Form("tnp_weight_muidtrg_pp(x,%f,0)/tnp_weight_sta_pp(x,%f,0)",eta,eta),ptmin,20);
       func2->SetLineColor(kBlue);
       func2->Draw("same");
    }
