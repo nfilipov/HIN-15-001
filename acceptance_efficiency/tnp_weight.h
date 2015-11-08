@@ -3,6 +3,12 @@
 
 #include "TMath.h"
 
+// NB
+// idx = 0 -> nominal
+// idx = 1..100 -> 100 variations
+// idx = -1 ->typical +1 sigma
+// idx = -2 -> typical -1 sigma
+
 /////////////////////////////////////////////////////////////
 //               M U I D + T R G    P b P b                //
 /////////////////////////////////////////////////////////////
@@ -21,6 +27,8 @@ double tnp_weight_muidtrg_pbpb(double x, double eta, int idx)
    if (fabs(eta)<0.9)
    {
       if (idx==0) num = 0.9646*TMath::Erf((x-0.1260)/3.5155);
+      else if (idx == -1   ) num =   0.9708*TMath::Erf((x-0.0024)/3.6167);
+      else if (idx == -2   ) num =   0.9582*TMath::Erf((x-0.3940)/3.2851);
       else if (idx == 1   ) num =    0.9648*TMath::Erf((x-0.0000)/3.6528);
       else if (idx == 2   ) num =    0.9694*TMath::Erf((x-0.5131)/3.2478);
       else if (idx == 3   ) num =    0.9631*TMath::Erf((x-0.1540)/3.3775);
@@ -125,6 +133,8 @@ double tnp_weight_muidtrg_pbpb(double x, double eta, int idx)
    else if (fabs(eta)<1.6)
    {
       if (idx==0) num = 0.9725*TMath::Erf((x-1.0054)/2.3187);
+      else if (idx == -1   ) num =   1.0000*TMath::Erf((x-0.7401)/2.5070);
+      else if (idx == -2   ) num =   0.9173*TMath::Erf((x-1.3831)/1.8138);
       else if (idx == 1   ) num =    0.9698*TMath::Erf((x-1.0154)/2.3301);
       else if (idx == 2   ) num =    0.8525*TMath::Erf((x-1.6729)/1.3115);
       else if (idx == 3   ) num =    0.9739*TMath::Erf((x-0.6024)/2.6989);
@@ -229,6 +239,8 @@ double tnp_weight_muidtrg_pbpb(double x, double eta, int idx)
    else if (fabs(eta)<2.1)
    {
       if (idx==0) num = 0.9194*TMath::Erf((x-0.9733)/2.1374);
+      else if (idx == -1   ) num =   0.9324*TMath::Erf((x-0.9239)/2.0178);
+      else if (idx == -2   ) num =   0.9065*TMath::Erf((x-1.0432)/2.2318);
       else if (idx == 1   ) num =    0.9277*TMath::Erf((x-1.0984)/2.0348);
       else if (idx == 2   ) num =    0.8985*TMath::Erf((x-1.0875)/2.3712);
       else if (idx == 3   ) num =    0.9281*TMath::Erf((x-1.0283)/2.1330);
@@ -333,6 +345,8 @@ double tnp_weight_muidtrg_pbpb(double x, double eta, int idx)
    else
    {
       if (idx==0) num = 0.8079*TMath::Erf((x-0.9421)/0.8577);
+      else if (idx == -1   ) num =   0.8324*TMath::Erf((x-0.8321)/0.5872);
+      else if (idx == -2   ) num =   0.7843*TMath::Erf((x-1.1443)/0.9628);
       else if (idx == 1   ) num =    0.8261*TMath::Erf((x-1.2050)/0.6735);
       else if (idx == 2   ) num =    0.7743*TMath::Erf((x-0.8567)/1.6445);
       else if (idx == 3   ) num =    0.8154*TMath::Erf((x-0.1403)/1.3527);
@@ -456,6 +470,8 @@ double tnp_weight_muidtrg_pp(double x, double eta, int idx)
    if (fabs(eta)<0.9)
    {
       if (idx==0) num = 0.9452*TMath::Erf((x-1.9895)/1.6646);
+      else if (idx == -1   ) num =   0.9488*TMath::Erf((x-1.8449)/1.7647);
+      else if (idx == -2   ) num =   0.9416*TMath::Erf((x-2.1177)/1.5746);
       else if (idx == 1   ) num =    0.9483*TMath::Erf((x-1.3362)/2.1673);
       else if (idx == 2   ) num =    0.9477*TMath::Erf((x-1.6542)/2.0202);
       else if (idx == 3   ) num =    0.9423*TMath::Erf((x-1.8122)/1.8067);
@@ -560,6 +576,8 @@ double tnp_weight_muidtrg_pp(double x, double eta, int idx)
    else if (fabs(eta)<1.6)
    {
       if (idx==0) num = 0.9296*TMath::Erf((x-1.8082)/1.4939);
+      else if (idx == -1   ) num =   0.9353*TMath::Erf((x-1.7519)/1.5470);
+      else if (idx == -2   ) num =   0.9239*TMath::Erf((x-1.8612)/1.4438);
       else if (idx == 1   ) num =    0.9264*TMath::Erf((x-1.8875)/1.3760);
       else if (idx == 2   ) num =    0.9235*TMath::Erf((x-1.8870)/1.3730);
       else if (idx == 3   ) num =    0.9278*TMath::Erf((x-1.7989)/1.5252);
@@ -664,6 +682,8 @@ double tnp_weight_muidtrg_pp(double x, double eta, int idx)
    else if (fabs(eta)<2.1)
    {
       if (idx==0) num = 0.8808*TMath::Erf((x-0.8275)/2.6569);
+      else if (idx == -1   ) num =   0.8880*TMath::Erf((x-0.7862)/2.7019);
+      else if (idx == -2   ) num =   0.8736*TMath::Erf((x-0.8687)/2.6119);
       else if (idx == 1   ) num =    0.8770*TMath::Erf((x-0.7880)/2.6943);
       else if (idx == 2   ) num =    0.8796*TMath::Erf((x-0.8924)/2.5517);
       else if (idx == 3   ) num =    0.8837*TMath::Erf((x-0.8413)/2.6633);
@@ -768,6 +788,8 @@ double tnp_weight_muidtrg_pp(double x, double eta, int idx)
    else
    {
       if (idx==0) num = 0.7180*TMath::Erf((x-0.8578)/0.8700);
+      else if (idx == -1   ) num =   0.7274*TMath::Erf((x-0.0676)/1.4583);
+      else if (idx == -2   ) num =   0.7086*TMath::Erf((x-1.1692)/0.6079);
       else if (idx == 1   ) num =    0.7166*TMath::Erf((x-1.2516)/0.5359);
       else if (idx == 2   ) num =    0.7318*TMath::Erf((x-0.0027)/1.7106);
       else if (idx == 3   ) num =    0.7214*TMath::Erf((x-0.7102)/1.0657);
