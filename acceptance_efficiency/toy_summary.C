@@ -3,9 +3,10 @@
 double denominator_pbpb(double x, double eta);
 double denominator_pp(double x, double eta);
 
-void toy_summary(int ieta, bool ispbpb) {
+void toy_summary(int ieta, bool ispbpb, double nsigma=-1) {
    // ieta = 0 (0-0.9), 1 (0.9-1.6), 2 (1.6-2.1), 3 (2.1-2.4)
    // ispbpb = true for PbPb, false for pp
+   // nsigma should typically be +1 or -1
 
    const int npoints = 100;
    double eta;
@@ -34,7 +35,7 @@ void toy_summary(int ieta, bool ispbpb) {
       double mean = sumy/100.;
       double rms = sqrt(sumy2*100. - sumy*sumy)/100.;
       // ypoints[i] = nominal + rms;
-      ypoints[i] = nominal - rms;
+      ypoints[i] = nominal + nsigma * rms;
 
       if (i<10) cout << xpoints[i] << " " << ypoints[i] <<  " " << sumy << " " << sumy2 << " " << mean << " " << rms << endl;
    }
@@ -47,6 +48,8 @@ void toy_summary(int ieta, bool ispbpb) {
    tf->SetParLimits(2,0,10.);
    tg->Fit(tf);
    tg->Draw("AP");
+
+   cout << Form("%.4f*TMath::Erf((x-%.4f)/%.4f)",tf->GetParameter(0),tf->GetParameter(1),tf->GetParameter(2)) << endl;
 }
 
 double denominator_pbpb(double x, double eta) {
