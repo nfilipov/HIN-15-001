@@ -919,8 +919,8 @@ double tnp_weight_sta_pbpb(double x, double eta, int idx)
    if (fabs(eta)<1.6)
    {
       if (idx==0) num = 0.9891*TMath::Erf((x-1.4814)/2.5014);
-      else if (idx == -1  ) num = 1.0000*TMath::Erf((x-1.4610)/2.4279);
-      else if (idx == -2  ) num = 0.9732*TMath::Erf((x-1.5142)/2.5353);
+      else if (idx == -1  ) num = 0.9996*TMath::Erf((x-1.4885)/2.4666);
+      else if (idx == -2  ) num = 0.9764*TMath::Erf((x-1.4746)/2.5279);
       else if (idx == 1   ) num = 0.9948*TMath::Erf((x-1.0027)/3.0825);
       else if (idx == 2   ) num = 0.9658*TMath::Erf((x-1.8116)/1.9534);
       else if (idx == 3   ) num = 0.9601*TMath::Erf((x-1.5043)/2.5557);
@@ -1025,8 +1025,8 @@ double tnp_weight_sta_pbpb(double x, double eta, int idx)
    else
    {
       if (idx==0) num = 0.8956*TMath::Erf((x-0.5162)/1.7646);
-      else if (idx == -1  ) num = 0.9251*TMath::Erf((x-0.4919)/1.7789);
-      else if (idx == -2  ) num = 0.8662*TMath::Erf((x-0.5436)/1.7471);
+      else if (idx == -1  ) num = 0.9153*TMath::Erf((x-0.5049)/1.7401);
+      else if (idx == -2  ) num = 0.8762*TMath::Erf((x-0.5250)/1.7942);
       else if (idx == 1   ) num = 0.8422*TMath::Erf((x-0.2660)/1.6859);
       else if (idx == 2   ) num = 0.9189*TMath::Erf((x-0.8973)/1.4428);
       else if (idx == 3   ) num = 0.8999*TMath::Erf((x-0.5813)/1.7805);
@@ -1148,8 +1148,8 @@ double tnp_weight_sta_pp(double x, double eta, int idx)
    if (fabs(eta)<1.6)
    {
       if (idx==0) num = 0.9891*TMath::Erf((x-1.4814)/2.5014);
-      else if (idx == -1  ) num = 1.0000*TMath::Erf((x-1.4610)/2.4279);
-      else if (idx == -2  ) num = 0.9732*TMath::Erf((x-1.5142)/2.5353);
+      else if (idx == -1  ) num = 0.9996*TMath::Erf((x-1.4885)/2.4666);
+      else if (idx == -2  ) num = 0.9764*TMath::Erf((x-1.4746)/2.5279);
       else if (idx == 1   ) num = 0.9997*TMath::Erf((x-1.2305)/2.8470);
       else if (idx == 2   ) num = 0.9808*TMath::Erf((x-1.6531)/2.2358);
       else if (idx == 3   ) num = 0.9841*TMath::Erf((x-1.5142)/2.5031);
@@ -1254,8 +1254,8 @@ double tnp_weight_sta_pp(double x, double eta, int idx)
    else
    {
       if (idx==0) num = 0.8956*TMath::Erf((x-0.5162)/1.7646);
-      else if (idx == -1  ) num = 0.9251*TMath::Erf((x-0.4919)/1.7789);
-      else if (idx == -2  ) num = 0.8662*TMath::Erf((x-0.5436)/1.7471);
+      else if (idx == -1  ) num = 0.9153*TMath::Erf((x-0.5049)/1.7401);
+      else if (idx == -2  ) num = 0.8762*TMath::Erf((x-0.5250)/1.7942);
       else if (idx == 1   ) num = 0.8598*TMath::Erf((x-0.3794)/1.6775);
       else if (idx == 2   ) num = 0.9071*TMath::Erf((x-0.7765)/1.5351);
       else if (idx == 3   ) num = 0.9070*TMath::Erf((x-0.5316)/1.8221);
