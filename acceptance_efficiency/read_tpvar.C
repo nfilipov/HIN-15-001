@@ -17,11 +17,13 @@ bool dotables=true;
 double firsteff(TTree *tr, const char* name, double binlow, double binhigh);
 void print(ifstream &intable, ofstream &outtable, double binmin, double binmax, double eff0, double efferr);
 void skip_lines(std::istream& pStream, size_t pLines);
+double systerr(TTree *tr, const char* name, double binlow, double binhigh, double eff0);
 
 void read_tpvar(const char* file, int YS, 
       const char* inputtable_pt, const char* outputtable_pt, 
       const char* inputtable_rap, const char* outputtable_rap, 
-      const char* inputtable_cent="nocentrality", const char* outputtable_cent="nocentrality")
+      const char* inputtable_cent="nocentrality", const char* outputtable_cent="nocentrality",
+      bool dosta=false, const char* systfile="nosyst")
 {
    // YS decides on the binning.
    // YS=1 -> fine binning
@@ -31,14 +33,23 @@ void read_tpvar(const char* file, int YS,
    TFile *f = new TFile("tpvar.root","RECREATE");
    TTree *tr = new TTree("tree","tree");
    tr->ReadFile(file,"name/C:binlow/F:binhigh/F:eff/F:stat/F:syst/F");
+   
+   bool dosyst=!(strcmp(systfile,"nosyst")==0);
+   cout << systfile << " " << dosyst << endl;
+   TTree *trsyst=NULL;
+   if (dosyst) {
+      trsyst = new TTree("treesyst","tree");
+      trsyst->ReadFile(systfile,"name/C:binlow/F:binhigh/F:eff/F:stat/F:syst/F");
+   }
+
 
    unsigned int NPTNS = YS==1 ? NPT1S : NPT2S;
    unsigned int NRAPNS = YS==1 ? NRAP1S : NRAP2S;
    unsigned int NCENTNS = YS==1 ? NCENT1S : NCENT2S;
 
-   double *ptbins_NS = YS==1 ? ptbins_1S : ptbins_2S;
-   double *rapbins_NS = YS==1 ? rapbins_1S : rapbins_2S;
-   int *centbins_NS = YS==1 ? centbins_1S : centbins_2S;
+   const double *ptbins_NS = YS==1 ? ptbins_1S : ptbins_2S;
+   const double *rapbins_NS = YS==1 ? rapbins_1S : rapbins_2S;
+   const int *centbins_NS = YS==1 ? centbins_1S : centbins_2S;
 
    bool docentrality=strcmp(inputtable_cent,"nocentrality");
    ifstream intable_pt(inputtable_pt);
@@ -49,7 +60,7 @@ void read_tpvar(const char* file, int YS,
    ofstream outtable_cent; if (docentrality) outtable_cent.open(outputtable_cent);
    double binmin, binmax, eff0, efferr, effmean;
 
-   TString var("pt_SF");
+   TString var = dosta ? TString("pt_SF_sta") : TString("pt_SF");
    tr->Draw("eff:1>>htemp(1,0,2)",Form("name==\"%s\"&&abs(binlow-%f)<.1&&abs(binhigh-%f)<.1",var.Data(),ptbins_NS[0],ptbins_NS[NPTNS]),"PROFs");
    // tr->Draw("eff:1>>htemp(1,0,2)",Form("name==\"%s\"&&abs(binlow-%f)<.1&&abs(binhigh-%f)<.1",var.Data(),ptbins_NS[0],40.),"PROFs"); // ugly fix
    TProfile *htemp = (TProfile*) gDirectory->Get("htemp");
@@ -57,6 +68,7 @@ void read_tpvar(const char* file, int YS,
    binmax=ptbins_NS[NPTNS]; //40.;//(ugly fix)
    eff0=firsteff(tr,var.Data(),binmin,binmax);
    efferr=htemp->GetBinError(1);
+   if (dosyst) efferr = sqrt(pow(efferr,2) + pow(systerr(trsyst,var.Data(),ptbins_NS[0],ptbins_NS[NPTNS],eff0),2));
    effmean=htemp->GetBinContent(1);
    cout << setprecision(3)<<fixed << var << " " << binmin << " " << binmax << " " << eff0 << " " << efferr << " " << effmean << endl;
    if (dotables) print(intable_pt,outtable_pt,binmin,binmax,eff0,efferr);
@@ -70,13 +82,14 @@ void read_tpvar(const char* file, int YS,
    }
    for (unsigned int i=0; i<NPTNS; i++)
    {
-      // cout << setprecision(3)<<fixed << Form("name==\"%s\"&&binlow==%f&&binhigh==%f",var.Data(),ptbins_1S[i],ptbins_1S[i+1]) << endl;
-      tr->Draw("eff:1>>htemp(1,0,2)",Form("name==\"%s\"&&abs(binlow-%f)<.1&&abs(binhigh-%f)<.1",var.Data(),ptbins_1S[i],ptbins_1S[i+1]),"PROFs");
+      // cout << setprecision(3)<<fixed << Form("name==\"%s\"&&binlow==%f&&binhigh==%f",var.Data(),ptbins_NS[i],ptbins_NS[i+1]) << endl;
+      tr->Draw("eff:1>>htemp(1,0,2)",Form("name==\"%s\"&&abs(binlow-%f)<.1&&abs(binhigh-%f)<.1",var.Data(),ptbins_NS[i],ptbins_NS[i+1]),"PROFs");
       htemp = (TProfile*) gDirectory->Get("htemp");
       binmin=ptbins_NS[i];
       binmax=ptbins_NS[i+1];
       eff0=firsteff(tr,var.Data(),ptbins_NS[i],ptbins_NS[i+1]);
       efferr=htemp->GetBinError(1);
+      if (dosyst) efferr = sqrt(pow(efferr,2) + pow(systerr(trsyst,var.Data(),ptbins_NS[i],ptbins_NS[i+1],eff0),2));
       effmean=htemp->GetBinContent(1);
       cout << setprecision(3)<<fixed << var << " " << binmin << " " << binmax << " " << eff0 << " " << efferr << " " << effmean << endl;
       if (dotables) print(intable_pt,outtable_pt,binmin,binmax,eff0,efferr);
@@ -89,15 +102,16 @@ void read_tpvar(const char* file, int YS,
       outtable_pt << "\\hline" << endl;
       skip_lines(intable_pt,1);// \hline
 
-      for (unsigned int i=0; i<NPT1S; i++)
+      for (unsigned int i=0; i<NPTNS; i++)
       {
-         // cout << setprecision(3)<<fixed << Form("name==\"%s\"&&binlow==%f&&binhigh==%f",var.Data(),ptbins_1S[i],ptbins_1S[i+1]) << endl;
-         tr->Draw("eff:1>>htemp(1,0,2)",Form("name==\"%s\"&&abs(binlow-%f)<.1&&abs(binhigh-%f)<.1",var.Data(),ptbins_1S[i],ptbins_1S[i+1]),"PROFs");
+         // cout << setprecision(3)<<fixed << Form("name==\"%s\"&&binlow==%f&&binhigh==%f",var.Data(),ptbins_NS[i],ptbins_NS[i+1]) << endl;
+         tr->Draw("eff:1>>htemp(1,0,2)",Form("name==\"%s\"&&abs(binlow-%f)<.1&&abs(binhigh-%f)<.1",var.Data(),ptbins_NS[i],ptbins_NS[i+1]),"PROFs");
          htemp = (TProfile*) gDirectory->Get("htemp");
          binmin=ptbins_NS[i];
          binmax=ptbins_NS[i+1];
          eff0=firsteff(tr,var.Data(),ptbins_NS[i],ptbins_NS[i+1]);
          efferr=htemp->GetBinError(1);
+         if (dosyst) efferr = sqrt(pow(efferr,2) + pow(systerr(trsyst,var.Data(),ptbins_NS[i],ptbins_NS[i+1],eff0),2));
          effmean=htemp->GetBinContent(1);
          cout << setprecision(3)<<fixed << var << " " << binmin << " " << binmax << " " << eff0 << " " << efferr << " " << effmean << endl;
          if (dotables) print(intable_pt,outtable_pt,binmin,binmax,eff0,efferr);
@@ -105,13 +119,14 @@ void read_tpvar(const char* file, int YS,
       }
    }
 
-   var = TString("rapidity_SF");
+   var = dosta ? TString("rapidity_SF_sta") : TString("rapidity_SF");
    tr->Draw("eff:1>>htemp(1,0,2)",Form("name==\"%s\"&&abs(binlow-%f)<.1&&abs(binhigh-%f)<.1",var.Data(),rapbins_NS[0],rapbins_NS[NRAPNS]),"PROFs");
    htemp = (TProfile*) gDirectory->Get("htemp");
    binmin=rapbins_NS[0];
    binmax=rapbins_NS[NRAPNS];
    eff0=firsteff(tr,var.Data(),rapbins_NS[0],rapbins_NS[NRAPNS]);
    efferr=htemp->GetBinError(1);
+   if (dosyst) efferr = sqrt(pow(efferr,2) + pow(systerr(trsyst,var.Data(),rapbins_NS[0],rapbins_NS[NRAPNS],eff0),2));
    effmean=htemp->GetBinContent(1);
    cout << setprecision(3)<<fixed << var << " " << binmin << " " << binmax << " " << eff0 << " " << efferr << " " << effmean << endl;
    delete htemp;
@@ -129,6 +144,7 @@ void read_tpvar(const char* file, int YS,
       binmax=rapbins_NS[i+1];
       eff0=firsteff(tr,var.Data(),rapbins_NS[i],rapbins_NS[i+1]);
       efferr=htemp->GetBinError(1);
+      if (dosyst) efferr = sqrt(pow(efferr,2) + pow(systerr(trsyst,var.Data(),rapbins_NS[i],rapbins_NS[i+1],eff0),2));
       effmean=htemp->GetBinContent(1);
       cout << setprecision(3)<<fixed << var << " " << binmin << " " << binmax << " " << eff0 << " " << efferr << " " << effmean << endl;
       if (dotables) print(intable_rap,outtable_rap,binmin,binmax,eff0,efferr);
@@ -149,6 +165,7 @@ void read_tpvar(const char* file, int YS,
          binmax=rapbins_NS[i+1];
          eff0=firsteff(tr,var.Data(),rapbins_NS[i],rapbins_NS[i+1]);
          efferr=htemp->GetBinError(1);
+         if (dosyst) efferr = sqrt(pow(efferr,2) + pow(systerr(trsyst,var.Data(),rapbins_NS[i],rapbins_NS[i+1],eff0),2));
          effmean=htemp->GetBinContent(1);
          cout << setprecision(3)<<fixed << var << " " << binmin << " " << binmax << " " << eff0 << " " << efferr << " " << effmean << endl;
          if (dotables) print(intable_rap,outtable_rap,binmin,binmax,eff0,efferr);
@@ -158,13 +175,14 @@ void read_tpvar(const char* file, int YS,
 
    if (!docentrality) return;
 
-   var = TString("centrality_SF");
+   var = dosta ? TString("centrality_SF_sta") : TString("centrality_SF");
    tr->Draw("eff:1>>htemp(1,0,2)",Form("name==\"%s\"&&abs(binlow-%f)<.1&&abs(binhigh-%f)<.1",var.Data(),centbins_NS[0]*2.5,centbins_NS[NCENTNS]*2.5),"PROFs");
    htemp = (TProfile*) gDirectory->Get("htemp");
    binmin=centbins_NS[0]*2.5;
    binmax=centbins_NS[NCENTNS]*2.5;
    eff0=firsteff(tr,var.Data(),centbins_NS[0]*2.5,centbins_NS[NCENTNS]*2.5);
    efferr=htemp->GetBinError(1);
+   if (dosyst) efferr = sqrt(pow(efferr,2) + pow(systerr(trsyst,var.Data(),centbins_NS[0]*2.5,centbins_NS[NCENTNS]*2.5,eff0),2));
    effmean=htemp->GetBinContent(1);
    cout << setprecision(3)<<fixed << var << " " << binmin << " " << binmax << " " << eff0 << " " << efferr << " " << effmean << endl;
    delete htemp;
@@ -186,6 +204,7 @@ void read_tpvar(const char* file, int YS,
       binmax=centbins_NS[i+1]*2.5;
       eff0=firsteff(tr,var.Data(),centbins_NS[i]*2.5,centbins_NS[i+1]*2.5);
       efferr=htemp->GetBinError(1);
+      if (dosyst) efferr = sqrt(pow(efferr,2) + pow(systerr(trsyst,var.Data(),centbins_NS[i]*2.5,centbins_NS[i+1]*2.5,eff0),2));
       effmean=htemp->GetBinContent(1);
       cout << setprecision(3)<<fixed << var << " " << binmin << " " << binmax << " " << eff0 << " " << efferr << " " << effmean << endl;
       if (dotables) print(intable_cent,outtable_cent,binmin,binmax,eff0,efferr);
@@ -205,6 +224,7 @@ void read_tpvar(const char* file, int YS,
          binmax=centbins_NS[i+1]*2.5;
          eff0=firsteff(tr,var.Data(),centbins_NS[i]*2.5,centbins_NS[i+1]*2.5);
          efferr=htemp->GetBinError(1);
+         if (dosyst) efferr = sqrt(pow(efferr,2) + pow(systerr(trsyst,var.Data(),centbins_NS[i]*2.5,centbins_NS[i+1]*2.5,eff0),2));
          effmean=htemp->GetBinContent(1);
          cout << setprecision(3)<<fixed << var << " " << binmin << " " << binmax << " " << eff0 << " " << efferr << " " << effmean << endl;
          if (dotables) print(intable_cent,outtable_cent,binmin,binmax,eff0,efferr);
@@ -237,7 +257,7 @@ void print(ifstream &intable, ofstream &outtable, double binmin, double binmax, 
 {
    // p$_{\rm T}$ [\GeVc]& Reco Efficiency &Acceptance& Acc$\times$Eff & Scale Factor & Acc$\times$Eff$\times$SF  & Sys Err \\
    // \hline
-   // 0.0-100.0   &  0.679  $\pm$  0.001  &  0.353  $\pm$  0.001  &  0.239  $\pm$  0.001  &  1.084  $\pm$  0.002  &  0.259  $\pm$  0.001  &  0.007 \\ 
+   // 0.0-100.0   &  0.679  $\pm$  0.001  &  0.353  $\pm$  0.001  &  0.239  $\pm$  0.001  &  1.084  $\pm$  0.002  &  0.259  $\pm$  0.001  &  0.007
 
    string dummy, label;
    double o_eff, o_efferr, o_acc, o_accerr, o_acceff, o_accefferr, o_sys, o_acceffsf;
@@ -264,4 +284,29 @@ void skip_lines(std::istream& pStream, size_t pLines)
    std::string s;
    for (++pLines; pLines; --pLines)
       std::getline(pStream, s);
+}
+
+double systerr(TTree *tr, const char* name, double binlow, double binhigh, double eff0) {
+   char namevar[1000];
+   float binlowvar, binhighvar, eff;
+   double effsyst=0;
+   TTree *tr2 = tr->CloneTree();
+   tr2->SetBranchAddress("name",&namevar);
+   tr2->SetBranchAddress("binlow",&binlowvar);
+   tr2->SetBranchAddress("binhigh",&binhighvar);
+   tr2->SetBranchAddress("eff",&eff);
+
+   // bool found=false;
+   for (int i=0; i<tr2->GetEntries(); i++)
+   {
+      tr2->GetEntry(i);
+      if (!strcmp(name,namevar) && fabs(binlow-binlowvar)<.1&&fabs(binhigh-binhighvar)<.1) {
+         // if (found) cout << "Warning, already found entry for " << name << " in [" << binlow << ", " << binhigh << "]: " << eff  << endl;
+         effsyst = max(effsyst, fabs(eff-eff0));
+         // found=true;
+      }
+   }
+
+   delete tr2;
+   return effsyst;
 }
