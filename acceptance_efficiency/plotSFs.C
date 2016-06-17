@@ -55,11 +55,11 @@ void plotSFs() {
       }
       TF1 *fp = new TF1("fp",tnp_weight_muidtrg_pbpb_wrapper,ptminval,30,2);
       fp->SetParameters(eta,-1);
-      fp->SetLineColor(kBlue);
+      fp->SetLineColor(kCyan);
       fp->Draw("same");
       TF1 *fm = new TF1("fm",tnp_weight_muidtrg_pbpb_wrapper,ptminval,30,2);
       fm->SetParameters(eta,-2);
-      fm->SetLineColor(kBlue);
+      fm->SetLineColor(kCyan);
       fm->Draw("same");
       TF1 *fnom = new TF1("fnom",tnp_weight_muidtrg_pbpb_wrapper,ptminval,30,2);
       fnom->SetParameters(eta,0);
@@ -93,11 +93,11 @@ void plotSFs() {
       }
       TF1 *fp = new TF1("fp",tnp_weight_muidtrg_pp_wrapper,ptminval,30,2);
       fp->SetParameters(eta,-1);
-      fp->SetLineColor(kBlue);
+      fp->SetLineColor(kCyan);
       fp->Draw("same");
       TF1 *fm = new TF1("fm",tnp_weight_muidtrg_pp_wrapper,ptminval,30,2);
       fm->SetParameters(eta,-2);
-      fm->SetLineColor(kBlue);
+      fm->SetLineColor(kCyan);
       fm->Draw("same");
       TF1 *fnom = new TF1("fnom",tnp_weight_muidtrg_pp_wrapper,ptminval,30,2);
       fnom->SetParameters(eta,0);
@@ -134,11 +134,11 @@ void plotSFs() {
       }
       TF1 *fp = new TF1("fp",tnp_weight_sta_pbpb_wrapper,ptminval,30,2);
       fp->SetParameters(eta,-1);
-      fp->SetLineColor(kBlue);
+      fp->SetLineColor(kCyan);
       fp->Draw("same");
       TF1 *fm = new TF1("fm",tnp_weight_sta_pbpb_wrapper,ptminval,30,2);
       fm->SetParameters(eta,-2);
-      fm->SetLineColor(kBlue);
+      fm->SetLineColor(kCyan);
       fm->Draw("same");
       TF1 *fnom = new TF1("fnom",tnp_weight_sta_pbpb_wrapper,ptminval,30,2);
       fnom->SetParameters(eta,0);
@@ -172,11 +172,11 @@ void plotSFs() {
       }
       TF1 *fp = new TF1("fp",tnp_weight_sta_pp_wrapper,ptminval,30,2);
       fp->SetParameters(eta,-1);
-      fp->SetLineColor(kBlue);
+      fp->SetLineColor(kCyan);
       fp->Draw("same");
       TF1 *fm = new TF1("fm",tnp_weight_sta_pp_wrapper,ptminval,30,2);
       fm->SetParameters(eta,-2);
-      fm->SetLineColor(kBlue);
+      fm->SetLineColor(kCyan);
       fm->Draw("same");
       TF1 *fnom = new TF1("fnom",tnp_weight_sta_pp_wrapper,ptminval,30,2);
       fnom->SetParameters(eta,0);
