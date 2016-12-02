@@ -1,16 +1,19 @@
 #define L_pp_invNb 5400
-#define L_pp_invNbe 199.8
-#define N_MB_uncorr 1.126653312	
-//#define N_MB_corr   1.138033648
-#define T_AA_b 5662
-#define T_AA_mb 5.662     
-#define T_AA_e 0.06
-#define L_pp_e 0.037
-#define N_MB_e 0.034
-#define tracking_pp 0.034 
-#define tracking_aa 0.10 
+float L_pp_invNbe =199.8;
+float N_MB_uncorr= 1.126653312	;
 
-#define RapBinWidth 4.8
+#define T_AA_b 5662
+float T_AA_mb =5.662;
+float T_AA_e =0.062; //// relative!
+float L_pp_e =0.037 ;///relative !!
+float N_MB_e =0.030  ;/// relative?? where does it come from ?
+/* #define tracking_pp 0.034  */
+/* #define tracking_aa 0.10  */
+float tracking_pp =0.006; // relative. 2 times the syst per muon.
+float tracking_aa =0.012; 
+
+float RapBinWidth =4.8;
+float PtBinWidth = 20;
 #define nPtBins_2013  5
 #define nPtBins_2014 6
 #define nPtBins_2010  3
@@ -32,14 +35,26 @@
 float  N_MB_corr= N_MB_uncorr/0.97;
 float pt15 [6] = {1.25, 3.75, 6.5, 10., 16.,30};
 float pt15e[6] = {1.25, 1.25, 1.5, 2., 4.,10};
+float ptShift [nPtBins_2013] = {1.6, 4.1, 6.9, 10.4, 16.4};
 float pt [6] = {1.25, 3.75, 6.5, 10., 16.};
-float pte[6] = {1.25, 1.25, 1.5, 2., 4.};
+//float pte[6] = {1.25, 1.25, 1.5, 2., 4.};
+float pte[6] = {.5, .5, .5, .5, .5};
 float pt2010 [3] = {2.5,8.5,16.};//{2.7,8.7,16.2};
-float pt2010e[3] = {2.5,3.5,4};
+float pt2010e[3] = {.5,.5,.5};
+//float pt2010e[3] = {2.5,3.5,4};
+float deltaPt[nPtBins_2013]   = {2.5,2.5,3,4,8};
 
 float massRatio = 10.02/9.460;
 float rap2010[2]={0.6,1.8};//{0.63,1.83};
-float rap2010e[2]={0.6,0.6};
+
+float rap2010e[2]={0.05,0.05};
+
+//float rap2010e[2]={0.6,0.6};
+
+float deltaPt_2010[nPtBins_2010]   = {5.,7.,8.};
+float deltaRap2010[nRapBins_2010] = {2.4,2.4};
+float deltaRapEven[nRapBins_2014] = {0.8,0.8,0.8,0.8,0.8,0.8};
+
 float cent2010[5]={308.6,64.24,261.3,355.7};//0-20,20-100,10-20,0-10
 float nPart1[nCentBins_2014] ={8.75,42.02, 86.3, 130.1, 187.3, 261.4, 330.3, 381.2}; // with 70-100, 50-70, 40-50, 30-40, 20-30, 10-20, 5-10, 0-5
 float nPart2[nCentBins2S] ={22.059352,108.1915,224.30475,355.7875};
@@ -47,16 +62,16 @@ float nPart2[nCentBins2S] ={22.059352,108.1915,224.30475,355.7875};
 float nPart2014[nCentBins_2014]  ={8.75, 42.02, 86.23, 130.06, 187.35, 261.49, 329.48, 381.41}; //from 2012_246_v5
 //float nPart2015[nCentBins_2014+1]  ={8.75, 42.02, 86.23, 130.06, 187.35, 261.49, 329.48, 368, 393}; //from 2012_246_v5
 float nPart2014e[nCentBins_2014] ={1.13,3.48,4.35,4.60,4.44,3.96,3.53,2.21}; //from 2012_246_v5
-
-string binsPt[nPtBins2015]={"\pt [{\\rm GeV}/c] $<$ 2.5",
-			     "2.5 $<$ \pt [{\\rm GeV}/c] $<$ 5",
-			     "5 $<$ \pt [{\\rm GeV}/c] $<$ 8",
-			     "8 $<$ \pt [{\\rm GeV}/c] $<$ 12",
-			     "12 $<$ \pt [{\\rm GeV}/c] $<$ 20",
-			     "20 $<$ \pt [{\\rm GeV}/c] $<$ 40"};
-string binsPt2010[nPtBins2S]={"\pt [{\\rm GeV}/c] $<$ 5",
-				   "5 $<$ \pt [{\\rm GeV}/c] $<$ 12",
-				 "12 $<$ \pt [{\\rm GeV}/c] $<$ 40"};
+ 
+string binsPt[nPtBins2015]={"\\pt [{\\rm GeV}/c] $<$ 2.5",
+			     "2.5 $<$ \\pt [{\\rm GeV}/c] $<$ 5",
+			     "5 $<$ \\pt [{\\rm GeV}/c] $<$ 8",
+			     "8 $<$ \\pt [{\\rm GeV}/c] $<$ 12",
+			     "12 $<$ \\pt [{\\rm GeV}/c] $<$ 20",
+			     "20 $<$ \\pt [{\\rm GeV}/c] $<$ 40"};
+string binsPt2010[nPtBins2S]={"\\pt [{\\rm GeV}/c] $<$ 5",
+				   "5 $<$ \\pt [{\\rm GeV}/c] $<$ 12",
+				 "12 $<$ \\pt [{\\rm GeV}/c] $<$ 40"};
    
 string binsRap[nRapBins2015]={"$|y| <$ 0.4",
 			       "0.4 $< |y| <$ 0.8  ",
@@ -77,7 +92,9 @@ float centErr2014[nCentBins_2014]={6,6,6,6,6,6,6,6};
 float centnoErr[nCentBins_2014+1]={0,0,0,0,0,0,0,0,0};
 float rap2014[6] = {0.2 , 0.6, 1.0, 1.4, 1.8,2.2}; // for the moment with bins of ∆y =0.8 except the last one which is 1.6-2.4
 float rap2014Shift[6] = {0.3 , 0.7, 1.1, 1.5, 1.9,2.3}; // for the moment with bins of ∆y =0.8 except the last one which is 1.6-2.4
-float rap2014e[6] = {0.2,0.2,0.2,0.2,0.2,0.2}; // for the moment with bins of ∆y =0.8 except the last one which is 1.6-2.4
+//float rap2014e[6] = {0.2,0.2,0.2,0.2,0.2,0.2}; // for the moment with bins of ∆y =0.8 except the last one which is 1.6-2.4
+
+float rap2014e[6] = {0.05,0.05,0.05,0.05,0.05,0.05}; // for the moment with bins of ∆y =0.8 except the last one which is 1.6-2.4
 float taa[7] = {0.486,2.748,5.089,8.782,14.477,20.47,25.901}; // taa of 40-50, 50-100
 float taae[7]= {0.073,0.30 , 0.43,0.58 ,0.76  , 0.94, 1.06};
 float taaDD[nCentBins_2010]={2.37,18.83171875};
@@ -105,7 +122,7 @@ float mb_percentage2S[nCentBins2S] = {0.5,0.2,0.2,0.1};
 /*          1S,2S,3S loose TOTAL YIELDS        */
 /* ------------------------------------------- */
 float N1S_pp_tot3p5 = 5014;
-float N1S_pp_tot3p5e = 86;
+float N1S_pp_tot3p5e = 87;
 // from fitting.
 float N1S_pp_tot3p5s=0.0328;
 float N2S_pp_tot3p5 = 1580;
@@ -113,12 +130,19 @@ float N2S_pp_tot3p5e = 59;
 float N3S_pp_tot3p5 = 770;
 float N3S_pp_tot3p5e = 49;
 /* 1s2s3s tight TOTAL YIELDS */
-float N1S_pp_tot4 = 3511;
-float N1S_pp_tot4e = 71;
-float N2S_pp_tot4 = 1208;
-float N2S_pp_tot4e = 49;
-float N3S_pp_tot4 = 619;
-float N3S_pp_tot4e =41;
+/* float N1S_pp_tot4 = 3511; */
+/* float N1S_pp_tot4e = 71; */
+/* float N2S_pp_tot4 = 1208; */
+/* float N2S_pp_tot4e = 49; */
+/* float N3S_pp_tot4 = 619; */
+/* float N3S_pp_tot4e =41; */
+
+float N1S_pp_tot4 = 3528;
+float N1S_pp_tot4e = 72;
+float N2S_pp_tot4 = 1214;
+float N2S_pp_tot4e = 51;
+float N3S_pp_tot4 = 618;
+float N3S_pp_tot4e =44;
 ///more
 float N2S_pp_tot4s=0.0209;
 float N3S_pp_tot4s=0.03;
@@ -149,7 +173,7 @@ float N1B_pp_pt3p5s_2p5[nbkgdvars] = {1570.19,1611.77};
 float N1B_pp_pt3p5s_5[nbkgdvars] = {1437.28,1498.7};
 float N1B_pp_pt3p5s_8[nbkgdvars] = {987.619,983.463};
 float N1B_pp_pt3p5s_12[nbkgdvars] = {612.943,617.179};
-float N1B_pp_pt3p5s_20[nbkgdvars] = {338.397,338.405};
+float N1B_pp_pt3p5s_20[nbkgdvars] = {338.397,338.405}; // {338.397,338.405};
 float N1B_pp_pt3p5s_40[nbkgdvars] = {55.6887,56.4811};
 //more.
 float N1S_pp_pt3p5Large[nPtBins_2010] = {2910.91,1587.86,336.5};
@@ -173,7 +197,7 @@ float Sigma1SFixed_pp_pt4[nPtBins_2014] = {0.0621682,0.0643807,0.064376,0.063423
 float Sigma1SFree_pp_pt4[nPtBins_2014] = {0.0648966,0.0648226,0.0716781,0.0742675,0.0664395,0.0670607};
 float dM1S_pp_pt4[nPtBins_2014] = {-0.0122481,-0.0129691,-0.015045,-0.0127823,-0.00127519,-0.0144875};
 float MassErr1S_pp_pt4[nPtBins_2014] = {0.00356131,0.00365256,0.00370633,0.00442942,0.00514867,0.0127577};
-float N1S_ppSignif_pt[nPtBins_2014] = {23.9346,23.0828,23.4673,20.3542,15.9144,6.13498};
+float N1S_ppSignif_pt4[nPtBins_2014] = {23.9346,23.0828,23.4673,20.3542,15.9144,6.13498};
 ///1S systematics
 float N1S_pp_pt4s_2p5[nfitvars] = {967.076,925.014,939.307,985.641,963.681,985.252};
 float N1S_pp_pt4s_5[nfitvars] = {801.956,766.787,772.959,804.004,797.791,808.687};
@@ -390,19 +414,19 @@ float N3B_pp_rap4Larges_2p4[nbkgdvars] = {209.785,227.897};
 /* ------------------------------------------- */
 /* 1S,2S,3S loose TOTAL YIELDS*/
 /* ------------------------------------------- */
-float N1S_aa_tot3p5 = 2540;
-float N1S_aa_tot3p5e = 79;
+float N1S_aa_tot3p5 = 2534;
+float N1S_aa_tot3p5e = 76;
 float N2S_aa_tot3p5 = 158;
-float N2S_aa_tot3p5e = 54;
-float N3S_aa_tot3p5 = 0;
-float N3S_aa_tot3p5e = 35;
+float N2S_aa_tot3p5e = 52;
+float N3S_aa_tot3p5 = -32;
+float N3S_aa_tot3p5e = 48;
 /* 1s2s3s tight TOTAL YIELDS */
 float N1S_aa_tot4 = 1793;
 float N1S_aa_tot4e = 61;
 float N2S_aa_tot4 = 173;
 float N2S_aa_tot4e = 41;
 float N3S_aa_tot4 = 7;
-float N3S_aa_tot4e =9;
+float N3S_aa_tot4e =38;
 ///more
 float N2S_aa_tot4s=0.0712;
 float N1S_aa_tot3p5s=0.0470;
@@ -413,6 +437,7 @@ float N1S_aa_tot4s=0.0281;
 /* ------------------------------------------- */
 //yields
 float N1S_aa_pt3p5[nPtBins_2014] = {760.933,678.866,530.796,361.6,177.961,46.192};
+//float N1S_aa_pt3p5[nPtBins_2014] = {728,678.866,530.796,361.6,177.961,46.192};
 float N1S_aa_pt3p5e[nPtBins_2014] = {43.4236,41.5262,35.1437,26.8422,16.4929,7.67069};
 float N2S_aa_pt3p5[nPtBins_2014] = {38.5345,61.0967,19.4428,32.9812,21.0261,5.90805};
 float N2S_aa_pt3p5e[nPtBins_2014] = {27.8995,29.7666,24.5745,19.2152,9.39404,3.73998};
@@ -695,7 +720,6 @@ float N2B_aa_cent4Larges_100[nfitvars] = {11.267,10.3624};
 /* ------------------------------------------- */
 /*            1S loose TOTAL E,A,T             */
 /* ------------------------------------------- */
-//CAREFUL : ERRORS FOR TAG AND PROBE ARE ONLY STAT FOR THE MOMENT
 //Acc*eff
 float Ae_1S_pythia_tot= 0.239;//new
 float Ae_1S_pythia_tote=0.001;///stat. err.
@@ -705,11 +729,15 @@ float e_1S_pythia_tot= 0.679;//new
 float e_1S_pythia_tote=0.001;///stat. unc
 float e_1S_pythia_tots=0.007;///stat. unc
 //sf from tag and probe = eff_corr/eff_noCorr
-float t_1S_pythia_tot3p5 = 1.095;
-float t_1S_pythia_tot3p5e = 0.006;
+float t_1S_pythia_tot3p5 = 1.096;
+float t_1S_pythia_tot3p5e = 0.011;//muID
+float t_1S_pythia_tot3p5_STAe = 0.037;//STA
+float t_1S_pythia_tot3p5_fulle = 0.009;//full
 //total
-float Aet_1S_pythia_tot=0.257;// 
-float Aet_1S_pythia_tote = Aet_1S_pythia_tot*sqrt(pow(t_1S_pythia_tot3p5e/t_1S_pythia_tot3p5,2)+Ae_1S_pythia_tote*Ae_1S_pythia_tote);
+float Aet_1S_pythia_tot=0.262;//
+float Aet_1S_pythia_totgse=0.001;// 
+float Aet_1S_pythia_tote =0.00928; //OK for new results. (tnp+genshape)
+float Aet_1S_pythia_tots =0.00922; //OK for new results. (tnp)
 /* ------------------------------------------- */
 /*                     1S pT                   */
 /* ------------------------------------------- */
@@ -721,12 +749,28 @@ float A_1S_pythia_pt3p5e[nPtBins2015]={0.0002,0.0001,0.0001,0.002,0.005,0.01};
 float Ae_1S_pythia_pt[nPtBins2015] = {0.301,0.193,0.190,0.267,0.388,0.5};//wrong
 float Ae_1S_pythia_pte[nPtBins2015] = {0.001,0.001,0.001,0.002,0.004,0.008};//fake
 //tnp. + uncertainty
-float t_1S_pythia_pt3p5[nPtBins2015]= {1.119,   1.112,   1.087,   1.06287,  1.040,  1.02923};
+float t_1S_pythia_pt3p5[nPtBins2015]= {1.125,   1.112,   1.087,   1.06287,  1.040,  1.02923};
 float t_1S_pythia_pt3p5e[nPtBins2015]={0.01,0.01,0.009,0.009,0.009,0.00698397};
-//A*e*t
-float Aet_1S_pythia_pt[nPtBins_2014]={0.339,0.214,0.207,0.284,0.404,0.41};
+//A*e*t OLD
+float Aet_1S_pythia_pt[nPtBins_2014]={0.339,0.215,0.207,0.284,0.404,0.41};
 float Aet_1S_pythia_pte[nPtBins_2014]={0.001,0.001,0.001,0.002,0.004,0.007};
 float Aet_1S_pythia_pts[nPtBins_2014]={0.008,0.004,0.006,0.008,0.011,0.012};
+//tnp. + uncertainty (muID+trg)
+float t_1S_pythia_pt3p5_muIDTrig[nPtBins_2014]= {1.130,1.115,1.088,1.061,1.034};
+float t_1S_pythia_pt3p5_muIDTrige[nPtBins_2014]={0.012,0.012,0.01,0.009,0.008};
+///2016 efficiencies, muIDtrig
+float Aet_1S_pythia_pt_muIDTrig[nPtBins_2014]={0.340,0.215,0.207,0.283,0.401};
+float Aet_1S_pythia_pt_muIDTrige[nPtBins_2014]={0.001,0.001,0.001,0.002,0.004};
+float Aet_1S_pythia_pt_muIDTrigs[nPtBins_2014]={0.008,0.005,0.006,0.008,0.011};
+//tnp. + uncertainty (STA)
+float t_1S_pythia_pt3p5_STA[nPtBins_2014]= {1.130,1.115,1.088,1.061,1.034};
+float t_1S_pythia_pt3p5_STAe[nPtBins_2014]={0.04,0.039,0.037,0.035,0.033};
+///2016 efficiencies, STA
+float Aet_1S_pythia_pt_STA[nPtBins_2014]={0.340,0.215,0.207,0.283,0.401};
+float Aet_1S_pythia_pt_STAe[nPtBins_2014]={0.001,0.001,0.001,0.002,0.004};
+float Aet_1S_pythia_pt_STAs[nPtBins_2014]={0.014,0.009,0.009,0.012,0.017};
+///2016 efficiency syst, FULL = sta+muidtrg, not genshape (computed with other stuff)
+float Aet_1S_pythia_pt_fulls[nPtBins_2014]={0.0125,0.0079,0.0073,0.0096,0.0132};
 /* ------------------------------------------- */
 /*                   1S rap                    */
 /* ------------------------------------------- */
@@ -742,6 +786,22 @@ float t_1S_pythia_rap3p5e[nRapBins2015]={0.006, 0.006, 0.006, 0.010, 0.019,0.025
 float Aet_1S_pythia_rap2014[nRapBins_2014]={0.300,0.299,0.303,0.289,0.238,0.085};
 float Aet_1S_pythia_rap2014e[nRapBins_2014]={0.002,0.002,0.002,0.002,0.002,0.001};
 float Aet_1S_pythia_rap2014s[nRapBins_2014]={0.003,0.003,0.002,0.003,0.003,0.002};
+///new, 2016 muIDtrig
+float t_1S_pythia_rap3p5_muIDTrig[nRapBins2015]={1.084,1.091,1.101,1.094,1.094,1.182};
+float t_1S_pythia_rap3p5_muIDTrige[nRapBins2015]={0.009,0.008,0.009,0.013,0.019,0.029};
+//A*e*t
+float Aet_1S_pythia_rap2014_muIDTrig[nRapBins_2014]={0.302,0.303,0.308,0.287,0.228,0.086};
+float Aet_1S_pythia_rap2014_muIDTrige[nRapBins_2014]={0.002,0.002,0.002,0.002,0.001,0.001};
+float Aet_1S_pythia_rap2014_muIDTrigs[nRapBins_2014]={0.004,0.004,0.003,0.004,0.004,0.002};
+///new, 2016 STA
+float t_1S_pythia_rap3p5_STA[nRapBins2015]={1.084,1.091,1.101,1.094,1.094,1.182};
+float t_1S_pythia_rap3p5_STAe[nRapBins2015]={0.034,0.034,0.035,0.039,0.051,0.067};
+//A*e*t
+float Aet_1S_pythia_rap2014_STA[nRapBins_2014]={0.302,0.303,0.308,0.287,0.228,0.086};
+float Aet_1S_pythia_rap2014_STAe[nRapBins_2014]={0.002,0.002,0.002,0.002,0.001,0.001};
+float Aet_1S_pythia_rap2014_STAs[nRapBins_2014]={0.01,0.01,0.01,0.011,0.011,0.005};
+///new, 2016 Full
+float Aet_1S_pythia_rap3p5_fulls[nRapBins2015]={0.0098,0.0097,0.0101,0.0108,0.0113,0.0053};
 /* ------------------------------------------- */
 /*                     1S pT4                  */
 /* ------------------------------------------- */
@@ -787,8 +847,6 @@ float Aet_1S_pythia_rap4s[nRapBins_2014]={0.001,0.001,0.001,0.001,0.002,0.001};
 /* ------------------------------------------- */
 /*                     2S pT                   */
 /* ------------------------------------------- */
-/// TOTAL
-//CAREFUL : ERRORS FOR TAG AND PROBE ARE ONLY STAT FOR THE MOMENT
 //Acc*eff
 float Ae_2S_pythia_tot= 0.279;//new
 float Ae_2S_pythia_tote=0.001;///stat. err.
@@ -798,11 +856,19 @@ float e_2S_pythia_tot= 0.743;//new
 float e_2S_pythia_tote=0.002;///stat. unc
 float e_2S_pythia_tots=0.006;///stat. unc
 //sf from tag and probe = eff_corr/eff_noCorr
-float t_2S_pythia_tot = 1.055;
+float t_2S_pythia_tot = 1.053;
 float t_2S_pythia_tote = 0.007;
+//2016 full
+float t_2S_pythia_tot_full = 1.052;
+float t_2S_pythia_tot_fulle = 0.0035;
 //total
-float Aet_2S_pythia_tot=0.218;// 
-float Aet_2S_pythia_tote = Aet_2S_pythia_tot*sqrt(t_2S_pythia_tote*t_2S_pythia_tote+Ae_2S_pythia_tote*Ae_2S_pythia_tote);
+float Aet_2S_pythia_tot=0.218;// new
+float Aet_2S_pythia_tote = 0.0074; //ok full total (tnp+gs)
+float Aet_2S_pythia_tots = 0.0073; //ok full total (tnp+gs)
+float Aet_2S_pythia_totgse = 0.001; //ok gs
+float Aet_2S_pythia_tot_muIDe = 0.006; //ok
+float Aet_2S_pythia_tot_STAe = 0.009; //ok 
+
 //eff., Acc., Acc*eff, 
 float e_2S_pythia_pt2013[nPtBins_2013]= {0.721,0.729,0.744,0.758,0.784};
 float e_2S_pythia_pt2013e[nPtBins_2013]={0.002,0.003,0.004,0.005,0.007};
@@ -813,10 +879,15 @@ float Ae_2S_pythia_pt2013e[nPtBins_2013]={0.0010,0.006,0.0008,0.0018,0.0043};
 //tnp. + uncertainty
 float t_2S_pythia_pt4[nPtBins2015]={1.08342 ,1.07619 ,1.06259 ,1.04968 ,1.03585 ,1.02531};
 float t_2S_pythia_pt4e[nPtBins2015]={ 0.00642526 ,0.00642385 ,0.00650645 ,0.00674736 ,0.00708275 ,0.0070219 }; 
-//A*e*t
-float Aet_2S_pythia_pt2013[nPtBins_2013]={0.293,0.171,0.172,0.246,0.379};
-float Aet_2S_pythia_pt2013e[nPtBins_2013]={0.002,0.001,0.001,0.003,0.006};
-float Aet_2S_pythia_pt2013s[nPtBins_2013]={0.007,0.004,0.005,0.008,0.010};
+
+//A*e*t //new2016
+float Aet_2S_pythia_pt2013[nPtBins_2013]={0.295,0.172,0.172,0.245,0.376}; 
+float Aet_2S_pythia_pt2013e[nPtBins_2013]={0.002,0.001,0.001,0.003,0.006}; //stat+syst from Gen Shape
+float Aet_2S_pythia_pt2013s[nPtBins_2013]={0.010,0.0059,0.0058,0.0082,0.012}; //full tnp syst
+///muIDTRig, sta
+float Aet_2S_pythia_pt2013_muIDTrige[nPtBins_2013]={0.008,0.004,0.005,0.008,0.01};//2016
+float Aet_2S_pythia_pt2013_STAe[nPtBins_2013]={0.012,0.007,0.008,0.011,0.016};//2016
+
 //a,e,t, large bins
 float e_2S_pythia_pt2010[nPtBins2S]= {0.726,0.750,0.784};
 float e_2S_pythia_pt2010e[nPtBins2S]={0.002,0.003,0.007};
@@ -825,12 +896,21 @@ float A_2S_pythia_pt2010e[nPtBins2S]={0.0002,0.0002,0.0041};
 float Ae_2S_pythia_pt2010[nPtBins2S]= {0.195,0.187,0.366};
 float Ae_2S_pythia_pt2010e[nPtBins2S]={0.001,0.001,0.006};
 //tnp+err
-float t_2S_pythia_pt2010[nPtBins2S] = {1.079,1.056,1.036};
-float t_2S_pythia_pt2010e[nPtBins2S] = {0.006,0.006,0.007};
+float t_2S_pythia_pt2010[nPtBins2S] = {1.086,1.055,1.026}; ///2016 full
+float t_2S_pythia_pt2010e[nPtBins2S] = {0.02,0.02,0.018}; //2016 full
 //total
-float Aet_2S_pythia_pt2013Large[nPtBins2S]={0.210,0.197,0.379};
-float Aet_2S_pythia_pt2013Largee[nPtBins2S]={0.001,0.001,0.006};
-float Aet_2S_pythia_pt2013Larges[nPtBins2S]={0.005,0.006,0.010};
+float Aet_2S_pythia_pt2013Large[nPtBins2S]={0.212,0.197,0.376};
+float Aet_2S_pythia_pt2013Largee[nPtBins2S]={0.001,0.001,0.006}; //2016 new
+float Aet_2S_pythia_pt2013Larges[nPtBins2S]={0.0075,0.0067,0.0124}; // 2016 new, full
+float Aet_2S_pythia_pt2013Large_muIDTrige[nPtBins2S]={0.005,0.006,0.01}; // 2016 new, muid
+float Aet_2S_pythia_pt2013Large_STAe[nPtBins2S]={0.009,0.006,0.016}; // 2016 new, sta
+
+/* //large 1S, tight and new does not exist... */
+/* float Aet_1S_pythia_pt2013Large[nPtBins2S]={0.212,0.197,0.376}; */
+/* float Aet_1S_pythia_pt2013Largee[nPtBins2S]={0.0044,0.0039,0.0089}; //2016 new */
+/* float Aet_1S_pythia_pt2013Larges[nPtBins2S]={0.0043,0.0037,0.0066}; // 2016 new, full */
+/* float Aet_1S_pythia_pt2013Large_muIDTrige[nPtBins2S]={0.005,0.006,0.01}; // 2016 new, muid */
+/* float Aet_1S_pythia_pt2013Large_STAe[nPtBins2S]={0.006,0.007,0.012}; // 2016 new, sta */
 /* ------------------------------------------- */
 /*                   2S rap                    */
 /* ------------------------------------------- */
@@ -845,9 +925,12 @@ float Ae_2S_pythia_rap2014e[nRapBins_2014]={0.002,0.002,0.002,0.002,0.002,0.001}
 float t_2S_pythia_rap4[nRapBins2015]={1.03332,1.03325,1.04035,1.06862,1.11817,1.1514};
 float t_2S_pythia_rap4e[nRapBins2015]={0.0035896 , 0.00362431 ,0.00452162,0.0083498 ,0.0155529  ,0.0207168};
 //A*e*t
-float Aet_2S_pythia_rap2014[nRapBins_2014]={0.253,0.255,0.250,0.238,0.195,0.069};
-float Aet_2S_pythia_rap2014e[nRapBins_2014]={0.002,0.002,0.002,0.002,0.002,0.001};
-float Aet_2S_pythia_rap2014s[nRapBins_2014]={0.004,0.004,0.003,0.004,0.003,0.002};
+float Aet_2S_pythia_rap2014[nRapBins_2014]={0.254,0.257,0.253,0.235,0.186,0.07}; //new 2016
+float Aet_2S_pythia_rap2014e[nRapBins_2014]={0.002,0.002,0.002,0.002,0.002,0.001}; //new stat
+float Aet_2S_pythia_rap2014s[nRapBins_2014]={0.0078,0.0081,0.0082,0.0087,0.0091,0.0043}; //full
+float Aet_2S_pythia_rap2014_muIDTrige[nRapBins_2014]={0.004,0.004,0.004,0.004,0.004,0.002}; //muIDtrig
+float Aet_2S_pythia_rap2014_STAe[nRapBins_2014]={0.009,0.009,0.008,0.009,0.009,0.004}; //STA
+
 //a,e,t, large bins
 float e_2S_pythia_rap2010[nRapBins2S]= {0.789,0.666};
 float e_2S_pythia_rap2010e[nRapBins2S]={0.002,0.002};
@@ -858,9 +941,11 @@ float Ae_2S_pythia_rap2010e[nRapBins2S] = {0.001,0.001};
 float t_2S_pythia_rap2010[nRapBins2S]={1.035,1.095};
 float t_2S_pythia_rap2010e[nRapBins2S]={0.004,0.012};
 //total
-float Aet_2S_pythia_rap2014Large[nRapBins2S]={0.253,0.175};
-float Aet_2S_pythia_rap2014Largee[nRapBins2S]={0.001,0.001};
-float Aet_2S_pythia_rap2014Larges[nRapBins2S]={0.004,0.005};
+float Aet_2S_pythia_rap2014Large[nRapBins2S]={0.254,0.172}; //new
+float Aet_2S_pythia_rap2014Largee[nRapBins2S]={0.001,0.001}; //new
+float Aet_2S_pythia_rap2014Larges[nRapBins2S]={0.0080,0.0073}; //full
+float Aet_2S_pythia_rap2014Large_muIDTrige[nRapBins2S]={0.004,0.005}; //MuiD
+float Aet_2S_pythia_rap2014Large_STAe[nRapBins2S]={0.009,0.008}; //STA
 /* ------------------------------------------- */
 /*                     3S pT                   */
 /* ------------------------------------------- */
@@ -875,11 +960,14 @@ float e_3S_pythia_tot= 0.752;//new
 float e_3S_pythia_tote=0.001;///stat. unc
 float e_3S_pythia_tots=0.007;///stat. unc
 //sf from tag and probe = eff_corr/eff_noCorr
-float t_3S_pythia_tot = 1.064;
+float t_3S_pythia_tot = 1.066;
 float t_3S_pythia_tote = 0.006;
 //total
 float Aet_3S_pythia_tot=0.263;// 
-float Aet_3S_pythia_tote = Aet_3S_pythia_tot*sqrt(t_3S_pythia_tote*t_3S_pythia_tote+Ae_3S_pythia_tote*Ae_3S_pythia_tote);
+float Aet_3S_pythia_tote = 0.0089; // total
+float Aet_3S_pythia_totgse = 0.00001; //ok gs
+float Aet_3S_pythia_tot_muIDe = 0.007; //ok
+float Aet_3S_pythia_tot_STAe = 0.011; //ok 
 //eff., Acc., Acc*eff, 
 float e_3S_pythia_pt2013[nPtBins_2013]= {0.731,0.732,0.751,0.769,0.795};
 float e_3S_pythia_pt2013e[nPtBins_2013]={0.002,0.002,0.003,0.003,0.004};
@@ -888,12 +976,14 @@ float A_3S_pythia_pt2013e[nPtBins_2013]={0.001,0.001,0.001,0.001,0.002};
 float Ae_3S_pythia_pt2013[nPtBins_2013]={0.333,0.199,0.187,0.254,0.375};
 float Ae_3S_pythia_pt2013e[nPtBins_2013]={0.001,0.001,0.001,0.001,0.002};
 //tnp. + uncertainty
-float t_3S_pythia_pt4[nPtBins2015]={1.08342 ,1.07619 ,1.06259 ,1.04968 ,1.03585 ,1.02531};
-float t_3S_pythia_pt4e[nPtBins2015]={ 0.00642526 ,0.00642385 ,0.00650645 ,0.00674736 ,0.00708275 ,0.0070219 }; 
+float t_3S_pythia_pt4[nPtBins2015]={1.092,1.082,1.064,1.047,1.027}; ///new
+float t_3S_pythia_pt4e[nPtBins2015]={0.02,0.0184,0.0169,0.0163,0.0176}; ///full
 //A*e*t
-float Aet_3S_pythia_pt2013[nPtBins_2013]={0.361,0.214,0.199,0.267,0.389};
+float Aet_3S_pythia_pt2013[nPtBins_2013]={0.364,0.215,0.199,0.266,0.385}; ///new
 float Aet_3S_pythia_pt2013e[nPtBins_2013]={0.001,0.001,0.001,0.001,0.002};
-float Aet_3S_pythia_pt2013s[nPtBins_2013]={0.009,0.005,0.005,0.008,0.011};
+float Aet_3S_pythia_pt2013s[nPtBins_2013]={0.0128,0.0076,0.0068,0.0089,0.0127}; //full
+float Aet_3S_pythia_pt2013_muIDTrige[nPtBins_2013]={0.01,0.005,0.005,0.008,0.011}; //muid
+float Aet_3S_pythia_pt2013_STAe[nPtBins_2013]={0.015,0.009,0.008,0.012,0.017}; //sta
 //a,e,t, large bins
 float e_3S_pythia_pt2010[nPtBins2S]= {0.732,0.759,0.795};
 float e_3S_pythia_pt2010e[nPtBins2S]={0.002,0.002,0.004};
@@ -907,24 +997,26 @@ float t_3S_pythia_pt2010e[nPtBins2S] = {0.006,0.006,0.007};
 //total
 float Aet_3S_pythia_pt2013Large[nPtBins2S]={0.266,0.224,0.389};
 float Aet_3S_pythia_pt2013Largee[nPtBins2S]={0.001,0.001,0.002};
-float Aet_3S_pythia_pt2013Larges[nPtBins2S]={0.006,0.007,0.011};
+float Aet_3S_pythia_pt2013Larges[nPtBins2S]={0.0063,0.0084,0.018};
 /* ------------------------------------------- */
-/*                   3S rap                   */
+/*                   3S rap                    */
 /* ------------------------------------------- */
 //eff., Acc., Acc*eff, 
 float e_3S_pythia_rap2014[nRapBins_2014]= {0.804,0.804,0.787,0.734,0.649,0.522};
 float e_3S_pythia_rap2014e[nRapBins_2014]={0.003,0.003,0.003,0.003,0.003,0.003};
 float A_3S_pythia_rap2014[nRapBins_2014]= {0.367,0.366,0.366,0.361,0.312,0.136};
 float A_3S_pythia_rap2014e[nRapBins_2014]={0.001,0.001,0.001,0.001,0.001,0.001};
-float Ae_3S_pythia_rap2014[nRapBins_2014]={0.295,0.294,0.288,0.265,0.203,0.071};//bug was here.
+float Ae_3S_pythia_rap2014[nRapBins_2014]={0.295,0.294,0.288,0.265,0.203,0.071};
 float Ae_3S_pythia_rap2014e[nRapBins_2014]={0.001,0.001,0.001,0.001,0.001,0.001};
 //tnp. + uncertainty
-float t_3S_pythia_rap4[nRapBins2015]={1.03332,1.03325,1.04035,1.06862,1.11817,1.1514};
-float t_3S_pythia_rap4e[nRapBins2015]={0.0035896 , 0.00362431 ,0.00452162,0.0083498 ,0.0155529  ,0.0207168};
+float t_3S_pythia_rap4[nRapBins2015]={1.052,1.058,1.068,1.066,1.074,1.171};//new
+float t_3S_pythia_rap4e[nRapBins2015]={0.006,0.005,0.007,0.01,0.014,0.029};//new
 //A*e*t
-float Aet_3S_pythia_rap2014[nRapBins_2014]= {0.308,0.307,0.302,0.285,0.228,0.082};
+float Aet_3S_pythia_rap2014[nRapBins_2014]= {0.310,0.311,0.308,0.282,0.218,0.083}; //new
 float Aet_3S_pythia_rap2014e[nRapBins_2014]={0.001,0.001,0.001,0.001,0.001,0.001};
-float Aet_3S_pythia_rap2014s[nRapBins_2014]={0.003,0.003,0.003,0.003,0.003,0.002};
+float Aet_3S_pythia_rap2014s[nRapBins_2014]={0.0097,0.0096,0.0099,0.0104,0.0108,0.0051}; //full
+float Aet_3S_pythia_rap2014_muIDTrige[nRapBins_2014]={0.004,0.004,0.004,0.004,0.004,0.002};///muid
+float Aet_3S_pythia_rap2014_STAe[nRapBins_2014]={0.01,0.01,0.01,0.01,0.01,0.005};///sta
 //a,e,t, large bins
 float e_3S_pythia_rap2010[nRapBins2S]= {0.798,0.673};
 float e_3S_pythia_rap2010e[nRapBins2S]={0.002,0.002};
@@ -951,11 +1043,14 @@ float Ae_1S_pyquen_tot=0.223;
 float Ae_1S_pyquen_tote=0.005;
 float e_1S_pyquen_tot=0.633;
 float e_1S_pyquen_tote=0.005;
-float t_1S_pyquen_tot3p5= 1.128;
-float t_1S_pyquen_tot3p5e=0.065;
-float Aet_1S_pyquen_tot=Ae_1S_pyquen_tot*t_1S_pyquen_tot3p5;
-float Aet_1S_pyquen_tote=Aet_1S_pyquen_tot*sqrt(Ae_1S_pyquen_tote*Ae_1S_pyquen_tote+pow(t_1S_pyquen_tot3p5e/t_1S_pyquen_tot3p5,2));
+float t_1S_pyquen_tot3p5= 1.078;//2016
+float t_1S_pyquen_tot3p5e=0.0055;//2016 full
+float Aet_1S_pyquen_tot=0.24;
+float Aet_1S_pyquen_tote=0.010;//new 2016 total (tnp)
+float Aet_1S_pyquen_totgse=0.001;//gs
 float t_1S_pyquen_tot4=1.070; //bof
+float Aet_1S_pyquen_tot3p5_muIDe = 0.006;
+float Aet_1S_pyquen_tot3p5_STAe = 0.011;
 /* ------------------------------------------- */
 /*                    1S pT                    */
 /* ------------------------------------------- */
@@ -969,9 +1064,31 @@ float Ae_1S_pyquen_pte[nPtBins2015]={0.0026,0.0017,0.0020,0.0023,0.0032,0.04}; /
 float t_1S_pyquen_pt3p5[nPtBins2015]= {1.172,  1.154,  1.118, 1.082, 1.048, 1.02826};
 float t_1S_pyquen_pt3p5e[nPtBins2015]={0.082,0.074,0.063,0.052, 0.045, 0.0330998};
 //
-float Aet_1S_pyquen_pt[nPtBins_2013+1]= {0.315,0.202,0.202,0.288,0.406,0.524};//bof
-float Aet_1S_pyquen_pte[nPtBins_2013+1]={0.002,0.002,0.002,0.003,0.004,0.01};
-float Aet_1S_pyquen_pts[nPtBins_2013+1]={0.022,0.013,0.012,0.016,0.020,0.02};
+float Aet_1S_pyquen_pt[nPtBins_2013]= {0.315,0.202,0.202,0.288,0.406};
+float Aet_1S_pyquen_pte[nPtBins_2013]={0.002,0.002,0.002,0.003,0.004};
+float Aet_1S_pyquen_pts[nPtBins_2013]={0.022,0.013,0.012,0.016,0.020};
+
+///new, 2016 muIDtrig
+//
+float t_1S_pyquen_pt3p5_muIDTrig[nPtBins_2014]= {1.104,1.094,1.073,1.050,1.029};
+float t_1S_pyquen_pt3p5_muIDTrige[nPtBins_2014]={0.013,0.013,0.013,0.012,0.012};
+//
+float Aet_1S_pyquen_pt_muIDTrig[nPtBins_2014]= {0.297,0.191,0.194,0.279,0.398};
+float Aet_1S_pyquen_pt_muIDTrige[nPtBins_2014]={0.002,0.002,0.002,0.003,0.004};
+float Aet_1S_pyquen_pt_muIDTrigs[nPtBins_2014]={0.005,0.004,0.005,0.009,0.01};
+
+///new, 2016 STA
+//
+float t_1S_pyquen_pt3p5_STA[nPtBins_2014]= {1.104,1.094,1.073,1.050,1.029};
+float t_1S_pyquen_pt3p5_STAe[nPtBins_2014]={0.049,0.046,0.042,0.039,0.039};
+//
+float Aet_1S_pyquen_pt_STA[nPtBins_2014]= {0.297,0.191,0.194,0.279,0.398};
+float Aet_1S_pyquen_pt_STAe[nPtBins_2014]={0.002,0.002,0.002,0.003,0.004};
+float Aet_1S_pyquen_pt_STAs[nPtBins_2014]={0.014,0.009,0.009,0.013,0.017};
+
+float Aet_1S_pyquen_pt_fulls[nPtBins_2014]={0.0136,0.0083,0.0079,0.0108,0.0158};//full new
+
+
 /* ------------------------------------------- */
 /*                    1S rap                   */
 /* ------------------------------------------- */
@@ -988,6 +1105,22 @@ float t_1S_pyquen_rap3p5e[nRapBins2015]={0.011549,0.011864,0.020660,0.059434,0.1
 float Aet_1S_pyquen_rap2014[nRapBins_2014]={0.269,0.280,0.298,0.289,0.237,0.087};
 float Aet_1S_pyquen_rap2014e[nRapBins_2014]={0.002,0.002,0.003,0.003,0.003,0.002};
 float Aet_1S_pyquen_rap2014s[nRapBins_2014]={0.012,0.012,0.014,0.019,0.023,0.011};
+//2016 muid
+float t_1S_pyquen_rap3p5_muIDTrig[nRapBins_2014]={1.062,1.073,1.092,1.094,1.073,1.056};
+float t_1S_pyquen_rap3p5_muIDTrige[nRapBins_2014]={0.017,0.014,0.011,0.012,0.018,0.038};
+
+float Aet_1S_pyquen_rap2014_muIDTrig[nRapBins_2014]={0.255,0.268,0.289,0.279,0.221,0.080}; ///new 2016
+float Aet_1S_pyquen_rap2014_muIDTrige[nRapBins_2014]={0.002,0.002,0.003,0.003,0.003,0.002};
+float Aet_1S_pyquen_rap2014_muIDTrigs[nRapBins_2014]={0.006,0.005,0.004,0.004,0.005,0.003};
+//2016 STA
+float t_1S_pyquen_rap3p5_STA[nRapBins_2014]={1.062,1.073,1.092,1.094,1.073,1.056};
+float t_1S_pyquen_rap3p5_STAe[nRapBins_2014]={0.041,0.042,0.042,0.045,0.059,0.072};
+
+float Aet_1S_pyquen_rap2014_STA[nRapBins_2014]={0.255,0.268,0.289,0.279,0.221,0.080};
+float Aet_1S_pyquen_rap2014_STAe[nRapBins_2014]={0.002,0.002,0.003,0.003,0.003,0.002};
+float Aet_1S_pyquen_rap2014_STAs[nRapBins_2014]={0.011,0.011,0.012,0.012,0.013,0.006};
+///2016 full
+float Aet_1S_pyquen_rap2014_fulls[nRapBins_2014]={0.0107,0.0111,0.0115,0.0118,0.0127,0.0065};
 /* ------------------------------------------- */
 /*                    1S cent                  */
 /* ------------------------------------------- */
@@ -1004,17 +1137,34 @@ float t_1S_pyquen_cent3p5e[nCentBins_2014]={0.064 ,0.065   ,0.065 ,0.066 ,0.066 
 float Aet_1S_pyquen_cent2014[nCentBins_2014]={0.261,0.262,0.259,0.258,0.257,0.253,0.249,0.241};
 float Aet_1S_pyquen_cent2014e[nCentBins_2014]={0.002,0.002,0.002,0.002,0.002,0.002,0.003,0.002};
 float Aet_1S_pyquen_cent2014s[nCentBins_2014]={0.011,0.011,0.011,0.011,0.011,0.011,0.011,0.010};
+///2016 muID
+float t_1S_pyquen_cent3p5_muIDTrig[nCentBins_2014]={1.078,1.078,1.078,1.078,1.078,1.079,1.078,1.078}; //,1.12672
+float t_1S_pyquen_cent3p5_muIDTrige[nCentBins_2014]={0.013,0.013,0.013,0.013,0.013,0.013,0.012,0.013};
+
+float Aet_1S_pyquen_cent2014_muIDTrig[nCentBins_2014]={0.249,0.250,0.248,0.247,0.246,0.242,0.238,0.231};
+float Aet_1S_pyquen_cent2014_muIDTrige[nCentBins_2014]={0.002,0.002,0.002,0.002,0.002,0.002,0.003,0.002};
+float Aet_1S_pyquen_cent2014_muIDTrigs[nCentBins_2014]={0.005,0.006,0.006,0.006,0.006,0.006,0.006,0.006};
+///2016 STA
+float t_1S_pyquen_cent3p5_STA[nCentBins_2014]={1.078,1.078,1.078,1.078,1.078,1.079,1.078,1.078}; //,1.12672
+float t_1S_pyquen_cent3p5_STAe[nCentBins_2014]={0.043,0.043,0.043,0.043,0.043,0.043,0.043,0.043};
+
+float Aet_1S_pyquen_cent2014_STA[nCentBins_2014]={0.249,0.250,0.248,0.247,0.246,0.242,0.238,0.231};
+float Aet_1S_pyquen_cent2014_STAe[nCentBins_2014]={0.002,0.002,0.002,0.002,0.002,0.002,0.003,0.002};
+float Aet_1S_pyquen_cent2014_STAs[nCentBins_2014]={0.011,0.011,0.011,0.011,0.011,0.011,0.011,0.01};
+float Aet_1S_pyquen_cent2014_fulls[nCentBins_2014]={0.0104,0.0104,0.0103,0.0103,0.0103,0.0101,0.0099,0.0096};//
+
+
 /* ------------------------------------------- */
 /*                    1S pT4                   */
 /* ------------------------------------------- */
 /* ---------------needs update...------------- */
 /* ------------------------------------------- */
-float e_1S_pyquen_pt[nPtBins2015] ={0.638,0.649,0.693,0.729,0.758,0.8};//wrong
-float e_1S_pyquen_pte[nPtBins2015]={0.008,0.009,0.009,0.007,0.005,0.1};
-float A_1S_pyquen_pt[nPtBins2015] ={0.270,0.158,0.186,0.292,0.453,0.6};
-float A_1S_pyquen_pte[nPtBins2015]={0.0009,0.0001,0.0006,0.0012,0.0027,0.03};//fake
-float Ae_1S_pyquen_pt[nPtBins2015] ={0.173,0.103,0.129,0.213,0.343,0.48};
-float Ae_1S_pyquen_pte[nPtBins2015]={0.002,0.001,0.002,0.003,0.004,0.04}; // wrong
+float e_1S_pyquen_pt4[nPtBins2015] ={0.638,0.649,0.693,0.729,0.758,0.8};//wrong
+float e_1S_pyquen_pt4e[nPtBins2015]={0.008,0.009,0.009,0.007,0.005,0.1};
+float A_1S_pyquen_pt4[nPtBins2015] ={0.270,0.158,0.186,0.292,0.453,0.6};
+float A_1S_pyquen_pt4e[nPtBins2015]={0.0009,0.0001,0.0006,0.0012,0.0027,0.03};//fake
+float Ae_1S_pyquen_pt4[nPtBins2015] ={0.173,0.103,0.129,0.213,0.343,0.48};
+float Ae_1S_pyquen_pt4e[nPtBins2015]={0.002,0.001,0.002,0.003,0.004,0.04}; // wrong
 //
 float t_1S_pyquen_pt4[nPtBins_2013]={1.093,1.079,1.061,1.045,1.032};
 float t_1S_pyquen_pt4e[nPtBins_2013]={0.012,0.013,0.014,0.010,0.008};
@@ -1064,11 +1214,15 @@ float Ae_2S_pyquen_tot=0.202;
 float Ae_2S_pyquen_tote=0.001;
 float e_2S_pyquen_tot=0.722;
 float e_2S_pyquen_tote=0.003;
-float t_2S_pyquen_tot4= 1.092;
-float t_2S_pyquen_tot4e=0.041;
-float Aet_2S_pyquen_tot=Ae_2S_pyquen_tot*t_2S_pyquen_tot4;
-float Aet_2S_pyquen_tote=Aet_2S_pyquen_tot*sqrt(Ae_2S_pyquen_tote*Ae_2S_pyquen_tote+t_2S_pyquen_tot4e*t_2S_pyquen_tot4e);
-//float t_2S_pyquen_tot4=1.070; //bof
+float t_2S_pyquen_tot4= 1.059;
+float t_2S_pyquen_tot4e=0.0044;
+//good for 2016
+float Aet_2S_pyquen_tot=0.214;//Ae_2S_pyquen_tot*t_2S_pyquen_tot4;
+float Aet_2S_pyquen_tote=0.001;
+float Aet_2S_pyquen_tots=0.0087;//full tnp syst
+float Aet_2S_pyquen_totgse=0.001;// gs
+float Aet_2S_pyquen_tot_muIDe=0.007;//
+float Aet_2S_pyquen_tot_STAe=0.01;//
 
 float e_2S_pyquen_pt2010[nPtBins2S]=   {0.692,0.741,0.789};
 float e_2S_pyquen_pt2010e[nPtBins2S]=  {0.005,0.005,0.004};
@@ -1079,10 +1233,12 @@ float Ae_2S_pyquen_pt2010e[nPtBins2S]= {0.001,0.002,0.006};
 
 float t_2S_pyquen_pt2010[nPtBins2S]=   {1.092,1.092,1.092};
 float t_2S_pyquen_pt2010e[nPtBins2S]=  {0.043,0.044,0.042};
-
-float Aet_2S_pyquen_pt2013Large[nPtBins2S]= {0.203,0.202,0.402};
-float Aet_2S_pyquen_pt2013Largee[nPtBins2S]={0.001,0.002,0.007};
-float Aet_2S_pyquen_pt2013Larges[nPtBins2S]={0.009,0.010,0.019};
+///muID 2016
+float Aet_2S_pyquen_pt2013Large[nPtBins2S]= {0.200,0.194,0.377}; // ok 2016
+float Aet_2S_pyquen_pt2013Largee[nPtBins2S]={0.001,0.002,0.006};// gs
+float Aet_2S_pyquen_pt2013Large_muIDTrige[nPtBins2S]={0.005,0.006,0.011}; //muid
+float Aet_2S_pyquen_pt2013Large_STAe[nPtBins2S]={0.009,0.009,0.017}; //sta
+float Aet_2S_pyquen_pt2013Large_fulls[nPtBins2S]={0.0085,0.0078,0.0151}; //full
 /* ------------------------------------------- */
 /*                    2S rap                   */
 /* ------------------------------------------- */
@@ -1095,10 +1251,13 @@ float Ae_2S_pyquen_rap2010e[nRapBins2S]= {0.002,0.001};
 
 float t_2S_pyquen_rap2010[nRapBins2S]= {1.082,1.108};
 float t_2S_pyquen_rap2010e[nRapBins2S]={0.014,0.089};
+///2016 new
+float Aet_2S_pyquen_rap2014Large[nRapBins2S]= {0.244,0.175}; ///full
+float Aet_2S_pyquen_rap2014Largee[nRapBins2S]={0.002,0.001}; //
+float Aet_2S_pyquen_rap2014Larges[nRapBins2S]={0.0095,0.0086}; //
+float Aet_2S_pyquen_rap2014Large_muIDTrige[nRapBins2S]={0.005,0.006}; //muid
+float Aet_2S_pyquen_rap2014Large_STAe[nRapBins2S]={0.01,0.01}; //sta
 
-float Aet_2S_pyquen_rap2014Large[nRapBins2S]= {0.250,0.182};
-float Aet_2S_pyquen_rap2014Largee[nRapBins2S]={0.002,0.001};
-float Aet_2S_pyquen_rap2014Larges[nRapBins2S]={0.005,0.016};
 /* ------------------------------------------- */
 /*                    2S cent                  */
 /* ------------------------------------------- */
@@ -1110,10 +1269,12 @@ float Ae_2S_pyquen_cent2014[nCentBins2S] ={0.207,0.205,0.202,0.195};
 float Ae_2S_pyquen_cent2014e[nCentBins2S]={0.001,0.002,0.002,0.002};
 float t_2S_pyquen_cent4[nCentBins2S]={1.09128,1.09186, 1.09144, 1.09124};
 float t_2S_pyquen_cent4e[nCentBins2S]= { 0.0395394, 0.0395981, 0.0389999, 0.0381379};
-
-float Aet_2S_pyquen_cent2014[nCentBins2S]= {0.226,0.224,0.220,0.213};
+///2016
+float Aet_2S_pyquen_cent2014[nCentBins2S]= {0.219,0.217,0.214,0.207};
 float Aet_2S_pyquen_cent2014e[nCentBins2S]={0.001,0.002,0.002,0.002};
-float Aet_2S_pyquen_cent2014s[nCentBins2S]={0.010,0.010,0.010,0.010};
+float Aet_2S_pyquen_cent2014s[nCentBins2S]={0.0089,0.0088,0.0087,0.0084};//full
+float Aet_2S_pyquen_cent2014_muIDTrige[nCentBins2S]={0.006,0.006,0.007,0.006};//muid
+float Aet_2S_pyquen_cent2014_STAe[nCentBins2S]={0.01,0.01,0.01,0.01};//sta
 
 
 ////////OTHER STUFF/////////////
@@ -1163,7 +1324,7 @@ float t_1S_pyquen_DDP020[nPtBins2S]=   {1.099,1.066,1.043};
 float t_1S_pyquen_DDP20100[nPtBins2S]=   {1.1,1.066,1.043};
 
 
-float Aet_1S_pyquen_ptLarge[nPtBins2S]={0.228,0.210,384};   //pyquen, cent. integrated
+float Aet_1S_pyquen_ptLarge[nPtBins2S]={0.228,0.210,0.384};   //pyquen, cent. integrated
 float Aet_1S_pyquen_ptLargee[nPtBins2S]={0.002,0.003,0.005};
 float Aet_1S_pyquen_rapLarge[nRapBins2S]={0.252,0.201};
 float Aet_1S_pyquen_rapLargee[nRapBins2S]={0.002,0.003};

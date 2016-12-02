@@ -16,6 +16,7 @@
 #include "systematics.C"
 #include "CMS_lumi.C"
 #include "tdrstyle.C"
+#include "data_raaSyst.h"
 // miscellaneous  
 #include <fstream>
 #include <iostream>
@@ -35,9 +36,10 @@ const bool plotDD=false;
 const bool plotTight=false;
 const bool FourBins=true;
 const string outSyst = "syst_outputfile.txt";
+const string outRes = "updatedResultFile.txt";
 const bool plotLin=true; // plot linear plots as well
 
-const TString basedir1 = "/tmp"; //"~/Desktop"
+const TString basedir1 = "~/Desktop/figs";
 const TString basedir2 = "/tmp"; //"~/Documents/PR/forTWiki/CSandRAA"
 
 // colors
@@ -51,18 +53,21 @@ Color_t color1Sraa = kOrange+1;
 Color_t color2Sraa = kOrange+4;
 Color_t color3Sraa = kOrange+3;
  
-const  ofstream ofSyst;
-
 const float gTextSize = 0.04;
 
 float computeRatio(float x, float y) ;
 float computeRatioError(float x, float y, float xerr, float yerr);
-void plot2010();
+void doplot2010();
 void combine_blue(double val1, double err1, double val2, double err2);
 void plotRAA_uncorr();
 void plotDoubleRatios();
 void plotRaa2014()
 {
+
+  
+  std::ofstream ofSyst;
+  std::ofstream ofRes;
+
   // gROOT->Macro("../code/cm/logon.C+");//it all looks much nicer with this.
   //  gROOT->Macro("data_raa.h");
 
@@ -190,7 +195,6 @@ void plotRaa2014()
   float CS2S_pp_tnp_pts[nPtBins_2013] ={};
   float CS2S_pp_tnp_pte[nPtBins_2010] = {};
   float CS2S_pp_tnp_pt2013e[nPtBins_2013] ={};
-  float CS2S_pp_tnp_pts[nPtBins_2013] ={};
   float CS2S_pp_rap[nRapBins_2010] = {};
   float CS2S_pp_rap2014[nRapBins_2014] = {};
   float CS2S_pp_rape[nRapBins_2010] = {};
@@ -208,7 +212,6 @@ void plotRaa2014()
   float CS2S_aa_tnp_pt[nPtBins_2010] = {};
   float CS2S_aa_tnp_pte[nPtBins_2010] = {};
   float CS2S_aa_tnp_rap[nRapBins_2010] = {};
-  float CS2S_aa_tnp_rape[nRapBins_2010] = {};
   float CS2S_aa_tnp_rape[nRapBins_2010] = {};
   float CS2S_aa_tnp_raps[nRapBins_2010] = {};
 
@@ -287,25 +290,25 @@ void plotRaa2014()
   float sixBins[nRapBins_2014]={0.5,1.5,2.5,3.5,4.5,5.5};
   //(very global) systematics:
   //1. pp uncertainty from tracking and lumi:
-  float syst_global_pp = sqrt(pow(tracking_pp,2)+pow(L_pp_e,2)); // , L_pp_e
+  float syst_global_pp = sqrt(pow(tracking_pp,2)+pow(L_pp_e,2)); // for bins of kinematics
   //2. AA uncertainty from tracking and N_MB
-  float syst_global_AA = sqrt(pow(tracking_aa,2)+pow(T_AA_e,2)); // taa not included here: T_AA_e is for MB TAA uncertainty, and float taa2014e is the binned taa uncertainty.
+  float syst_global_AA = sqrt(pow(tracking_aa,2)+pow(T_AA_e,2)+pow(N_MB_e,2)); // T_AA_e is for MB TAA 'relative' uncertainty, integrated.
   //3. total syst. uncertainties for signal: pp,1S,2S,3S, and pbpb, 1S, 2S.
-  float syst1S_pp_glob = sqrt(pow(N1S_pp_tot3p5e/N1S_pp_tot3p5,2)+pow(N1S_pp_tot3p5s,2)+pow(Aet_1S_pythia_tote,2));
-  float syst2S_pp_glob = sqrt(pow(N2S_pp_tot4e/N2S_pp_tot4,2)+pow(N2S_pp_tot4s,2)+pow(Aet_2S_pythia_tote,2));
-  float syst3S_pp_glob = sqrt(pow(N3S_pp_tot4e/N3S_pp_tot4,2)+pow(N3S_pp_tot4s,2)+pow(Aet_3S_pythia_tote,2));
-  float syst1S_AA_glob = sqrt(pow(N1S_aa_tot3p5e/N1S_aa_tot3p5,2)+pow(N1S_aa_tot3p5s,2)+pow(Aet_1S_pyquen_tote,2));
-  float syst2S_AA_glob = sqrt(pow(N2S_aa_tot4e/N2S_aa_tot4,2)+pow(N2S_aa_tot4s,2)+pow(Aet_2S_pyquen_tote,2));
-  // now, orange box:
-  float syst1S_raa_global= sqrt(pow(T_AA_e,2)+pow(syst_global_pp,2)+pow(syst_global_AA,2));//sqrt((0.057*0.057)+(0.2/5.4)*(0.2/5.4)+pow(N1S_pp_tot3p5s,2)+pow(N1S_pp_tot3p5e/N1S_pp_tot3p5,2)+pow(t_1S_pythia_tot3p5e/t_1S_pythia_tot3p5,2));
-  // and Red box:
-  float syst1S_raa_global4=0;//sqrt((0.057*0.057)+(0.2/5.4)*(0.2/5.4)+pow(N1S_pp_tot4s,2)+pow(N1S_pp_tot4e/N1S_pp_tot4,2)+pow(t_1S_pythia_tot4e/t_1S_pythia_tot4,2));
-  float syst2S_raa_global=0;//sqrt((0.2/5.4)*(0.2/5.4)+pow(N2S_pp_tot4s,2)+pow(N2S_pp_tot4e/N2S_pp_tot4,
+  float syst1S_pp_glob = sqrt(pow(N1S_pp_tot3p5s,2)+pow(Aet_1S_pythia_tote/Aet_1S_pythia_tot,2)+syst_global_pp*syst_global_pp); // for total systematics, not total error.;
+  float syst2S_pp_glob = sqrt(pow(N2S_pp_tot4s,2)+pow(Aet_2S_pythia_tote,2)+syst_global_pp*syst_global_pp); 
+  float syst3S_pp_glob = sqrt(pow(N3S_pp_tot4s,2)+pow(Aet_3S_pythia_tote,2)+syst_global_pp*syst_global_pp); 
+  float syst1S_AA_glob = sqrt(pow(N1S_aa_tot3p5s,2)+pow(Aet_1S_pyquen_tote/Aet_1S_pyquen_tot,2)+syst_global_AA*syst_global_AA);//for total only
+  float syst2S_AA_glob = sqrt(pow(N2S_aa_tot4s,2)+pow(Aet_2S_pyquen_tote/Aet_2S_pyquen_tot,2)+syst_global_AA*syst_global_AA); //not good
+  // grey box
+  float syst1S_raa_global= sqrt(pow(syst_global_pp,2)+pow(syst_global_AA,2));
+  // and grey box again (redundant):
+  float syst1S_raa_global4=0;//sqrt((0.062*0.062)+(0.2/5.4)*(0.2/5.4)+pow(N1S_pp_tot4s,2)+pow(N1S_pp_tot4e/N1S_pp_tot4,2)+pow(t_1S_pythia_tot4e/t_1S_pythia_tot4,2));
+  float syst2S_raa_global= sqrt(pow(syst_global_pp,2)+pow(syst_global_AA,2)) ;
   //global syst for all states
   float systAA_glob2 = syst2S_AA_glob;
   float systAA_glob1 = syst1S_AA_glob;
   // syst1S_aa_Cent4[i]+=(t_1S_pythia_tot3p5-1)*(t_1S_pythia_tot3p5-1)+(N1S_pp_tot3p5e/N1S_pp_tot3p5)*(N1S_pp_tot3p5e/N1S_pp_tot3p5)+N1S_pp_tot3p5s*N1S_pp_tot3p5s+L_pp_e*L_pp_e+N_MB_e*N_MB_e;
-  float syst1S_pp_centGlob= syst1S_pp_glob ;// sqrt((L_pp_e*L_pp_e)+(N1S_pp_tot3p5e*N1S_pp_tot3p5e)/(N1S_pp_tot3p5*N1S_pp_tot3p5)+(t_1S_pythia_tot3p5e*t_1S_pythia_tot3p5e)/(t_1S_pythia_tot3p5*t_1S_pythia_tot3p5)+N1S_pp_tot3p5s*N1S_pp_tot3p5s); //L_pp + stat_pp tot(1S) + tnp_pp1S + syst_tot(1S)
+  float syst1S_pp_centGlob= syst1S_pp_glob;
   float syst2S_pp_centGlob4 = syst2S_pp_glob; //  sqrt((L_pp_e*L_pp_e)+(N2S_pp_tot4s*N2S_pp_tot4s)+(N2S_pp_tot4e*N2S_pp_tot4e)/(N2S_pp_tot4*N2S_pp_tot4)+(t_2S_pythia_tote/t_2S_pythia_tot)*(t_2S_pythia_tote/t_2S_pythia_tot)+N1S_pp_tot4s*N1S_pp_tot4s); //L_pp + stat_pp tot(2S) + tnp_pp2S 
   float syst1S_pp_centGlob4=sqrt((L_pp_e*L_pp_e)+(N1S_pp_tot4e*N1S_pp_tot4e)/(N1S_pp_tot4*N1S_pp_tot4)+pow(t_1S_pythia_tot4e/t_1S_pythia_tot4,2)); //L_pp + stat_pp tot(1S)pt4 + tnp_pp1S pt4 +
   float syst1S_pp_pt[nPtBins_2013]={};//fit syst. uncertainty.
@@ -427,7 +430,10 @@ void plotRaa2014()
   float syst3S_cspp_rap[nRapBins_2014]={};
   float syst1S_csaa_rap[nRapBins_2014]={};
   float syst1S_csaa_rap4[nRapBins_2014]={};
-  ofSyst.open(outSyst.c_str(), ios_base::out);  //open the out stream for syst results.
+
+  // ofSyst.open(outSyst.c_str(), ios_base::out);  //open the out stream for syst results.
+  // ofRes.open(outRes.c_str(), ios_base::out);  //open the out stream for syst results.
+ 
   float recap_syst[10][nfitvars]; // array of relative deviations. the second dimensional array is for each variable 
   // 1S pt, 1S rap, 1S cent, 2S pt, 2S rap, 2S cent, 3S pt, 3S rap, 3S cent.
   // for(int j=0; j<10;j++)
@@ -488,32 +494,46 @@ void plotRaa2014()
 
  cout << "--------------------1S-pt--------------------" << endl;
 for(int i=0; i<nPtBins_2013; i++){  
-  syst1S_pptnp_pt[i]=t_1S_pythia_pt3p5e[i]/t_1S_pythia_pt3p5[i]; //add syst. unc. from tnp
+  // Aet_1S_pyquen_pts[i]=Aet_1S_pyquen_pt_STAs[i];
+  // Aet_1S_pythia_pts[i]=  Aet_1S_pythia_pt_STAs[i];
+  syst1S_pptnp_pt[i]=Aet_1S_pythia_pt_fulls[i]/Aet_1S_pythia_pt_STA[i]; //add syst. unc. from tnp
   syst1S_pptnp_pt4[i]=t_1S_pythia_pt4e[i]/t_1S_pythia_pt4[i]; //add syst. unc. from tnp
-  syst2S_pptnp_pt[i]=t_2S_pythia_pt4e[i]/t_2S_pythia_pt4[i];
-  syst3S_pptnp_pt[i]=t_3S_pythia_pt4e[i]/t_3S_pythia_pt4[i];
-  syst1S_aatnp_pt[i]=t_1S_pyquen_pt3p5e[i]/t_1S_pyquen_pt3p5[i];
+  syst2S_pptnp_pt[i]=Aet_2S_pythia_pt2013s[i]/Aet_2S_pythia_pt2013[i];
+  syst3S_pptnp_pt[i]=Aet_3S_pythia_pt2013s[i]/Aet_3S_pythia_pt2013[i];
+  syst1S_aatnp_pt[i]=Aet_1S_pyquen_pt_fulls[i]/Aet_1S_pyquen_pt_STA[i];
   syst1S_aatnp_pt4[i]=t_1S_pyquen_pt4e[i]/t_1S_pyquen_pt4[i];
     
+  // Aet_2S_pythia_pt2013s[i]=Aet_2S_pythia_pt2013s[i] ;// Aet_2S_pythia_pt2013_muIDTrigs;// Aet_2S_pythia_pt2013_STAs ;//0
+  // Aet_2S_pythia_pt2013[i]=Aet_2S_pythia_pt2013[i] ;//else Ae_2S_pythia_pt2013[i] if SF=0
+  // //removed +syst1S_pptnp_pt[i]*syst1S_pptnp_pt[i]+syst1S_aatnp_pt[i]*syst1S_aatnp_pt[i]
+
+
   stat1S_pp_pt[i]=N1S_pp_pt3p5e[i]/N1S_pp_pt3p5[i];
   stat1S_pp_pt4[i]=N1S_pp_pt4e[i]/N1S_pp_pt4[i];
   stat2S_pp_pt[i]=N2S_pp_pt4_2013e[i]/N2S_pp_pt4_2013[i];
   stat3S_pp_pt[i]=N3S_pp_pt4_2013e[i]/N3S_pp_pt4_2013[i];
-  syst1S_raa_pointPt[i]=sqrt(syst1S_pp_pt[i]*syst1S_pp_pt[i]+syst1S_aa_pt[i]*syst1S_aa_pt[i]+syst1S_pptnp_pt[i]*syst1S_pptnp_pt[i]+syst1S_aatnp_pt[i]*syst1S_aatnp_pt[i]+pow(Aet_1S_pyquen_pts[i]/Aet_1S_pyquen_pt[i],2)+pow(Aet_1S_pythia_pts[i]/Aet_1S_pythia_pt[i],2));//this one is big : stat.pp + syst.pp + syst.pbpb + tnp_pp + tnp_pbpb
-  syst1S_raa_pointPt4[i]=sqrt(syst1S_pp_pt4[i]*syst1S_pp_pt4[i]+syst1S_aa_pt4[i]*syst1S_aa_pt4[i]+syst1S_pptnp_pt4[i]*syst1S_pptnp_pt4[i]+syst1S_aatnp_pt4[i]*syst1S_aatnp_pt4[i]+pow(Aet_1S_pyquen_pt4s[i]/Aet_1S_pyquen_pt4[i],2)+pow(Aet_1S_pythia_pt4s[i]/Aet_1S_pythia_pt4[i],2));//this one is big : stat.pp + syst.pp + syst.pbpb + tnp_pp + tnp_pbpb
-  syst1S_raa_pt[i]=sqrt(syst1S_raa_pointPt[i]*syst1S_raa_pointPt[i]+syst1S_raa_global*syst1S_raa_global);
+
+  syst1S_raa_pointPt4[i]=sqrt(syst1S_pp_pt4[i]*syst1S_pp_pt4[i]+syst1S_aa_pt4[i]*syst1S_aa_pt4[i]+syst1S_pptnp_pt4[i]*syst1S_pptnp_pt4[i]+syst1S_aatnp_pt4[i]*syst1S_aatnp_pt4[i]+pow(Aet_1S_pyquen_pt4s[i]/Aet_1S_pyquen_pt4[i],2)+pow(Aet_1S_pythia_pt4s[i]/Aet_1S_pythia_pt4[i],2));// syst.pp + syst.pbpb + tnp_pp + tnp_pbpb
+
+
   syst1S_raa_pt4[i]=sqrt(syst1S_raa_pointPt4[i]*syst1S_raa_pointPt4[i]+syst1S_raa_global4*syst1S_raa_global4);
-  syst1S_cspp_pt[i]=sqrt(syst1S_pptnp_pt[i]*syst1S_pptnp_pt[i]+syst1S_pp_pt[i]*syst1S_pp_pt[i]+(0.2/5.4)*(0.2/5.4));
+  syst1S_cspp_pt[i]=sqrt(syst1S_pptnp_pt[i]*syst1S_pptnp_pt[i]+syst1S_pp_pt[i]*syst1S_pp_pt[i]+(0.2/5.4)*(0.2/5.4)+pow(Aet_1S_pythia_pt_STAe[i]/Aet_1S_pythia_pt_STA[i],2));//tnp_pp + pp_fits + lumi + genshape
   syst1S_cspp_pt4[i]=sqrt(syst1S_pptnp_pt4[i]*syst1S_pptnp_pt4[i]+syst1S_pp_pt4[i]*syst1S_pp_pt4[i]+(0.2/5.4)*(0.2/5.4));
-  syst2S_cspp_pt[i]=sqrt(syst2S_pptnp_pt[i]*syst2S_pptnp_pt[i]+syst2S_pp_pt[i]*syst2S_pp_pt[i]+(0.2/5.4)*(0.2/5.4)+pow(Aet_2S_pythia_pt2013s[i]/Aet_2S_pythia_pt2013[i],2));
-  syst3S_cspp_pt[i]=sqrt(syst3S_pptnp_pt[i]*syst3S_pptnp_pt[i]+syst3S_pp_pt[i]*syst3S_pp_pt[i]+(0.2/5.4)*(0.2/5.4)+pow(Aet_3S_pythia_pt2013s[i]/Aet_3S_pythia_pt2013[i],2));
-  syst1S_csaa_pt[i]=sqrt(syst1S_aatnp_pt[i]*syst1S_aatnp_pt[i]+syst1S_aa_pt[i]*syst1S_aa_pt[i]+(0.057*0.057));
-  syst1S_csaa_pt4[i]=sqrt(syst1S_aatnp_pt4[i]*syst1S_aatnp_pt4[i]+syst1S_aa_pt4[i]*syst1S_aa_pt4[i]+(0.057*0.057));
-  cout << (binsPt[i]).c_str() << " " << stat1S_pp_pt[i] << " " <<syst1S_pp_pt[i] <<" "<< syst1S_aa_pt[i] <<" "<< syst1S_pptnp_pt[i] <<" "<< syst1S_aatnp_pt[i]<<" "<< syst1S_raa_pointPt[i] <<" "<< syst1S_raa_pt[i]<< endl;
+  syst2S_cspp_pt[i]=sqrt(syst2S_pptnp_pt[i]*syst2S_pptnp_pt[i]+syst2S_pp_pt[i]*syst2S_pp_pt[i]+(0.2/5.4)*(0.2/5.4)+pow(Aet_2S_pythia_pt2013e[i]/Aet_2S_pythia_pt2013[i],2)); //tnp_pp + pp_fits + lumi + genshape
+  syst3S_cspp_pt[i]=sqrt(syst3S_pptnp_pt[i]*syst3S_pptnp_pt[i]+syst3S_pp_pt[i]*syst3S_pp_pt[i]+(0.2/5.4)*(0.2/5.4)+pow(Aet_3S_pythia_pt2013e[i]/Aet_3S_pythia_pt2013[i],2)); //tnp_pp + pp_fits + lumi + genshape
+  syst1S_csaa_pt[i]=sqrt(syst1S_aatnp_pt[i]*syst1S_aatnp_pt[i]+syst1S_aa_pt[i]*syst1S_aa_pt[i]+(0.062*0.062)+pow(Aet_1S_pyquen_pt_STAe[i]/Aet_1S_pyquen_pt_STA[i],2)); //tnp aa+ aa_fits+ taa + genshape
+  syst1S_csaa_pt4[i]=sqrt(syst1S_aatnp_pt4[i]*syst1S_aatnp_pt4[i]+syst1S_aa_pt4[i]*syst1S_aa_pt4[i]+(0.062*0.062));
+   /// cout << (binsPt[i]).c_str() << " " << stat1S_pp_pt[i] << " " <<syst1S_pp_pt[i] <<" "<< syst1S_aa_pt[i] <<" "<< syst1S_pptnp_pt[i] <<" "<< syst1S_aatnp_pt[i]<<" "<< syst1S_raa_pointPt[i] <<" "<< syst1S_raa_pt[i]<< endl;
+
+  //syst raa : pp(fit+tnp+genshape) + pbpb(fit+tnp+genshape), so no taa, no pp lumi here -> goes to global raa 1S uncertainty (same for 1S and nS).
+  syst1S_raa_pointPt[i]=sqrt(syst1S_pptnp_pt[i]*syst1S_pptnp_pt[i]+syst1S_pp_pt[i]*syst1S_pp_pt[i]+pow(Aet_1S_pythia_pt_STAe[i]/Aet_1S_pythia_pt_STA[i],2)+syst1S_aatnp_pt[i]*syst1S_aatnp_pt[i]+syst1S_aa_pt[i]*syst1S_aa_pt[i]+pow(Aet_1S_pyquen_pt_STAe[i]/Aet_1S_pyquen_pt_STA[i],2));
+  syst1S_raa_pt[i]=sqrt( syst1S_csaa_pt[i]*syst1S_csaa_pt[i] + syst1S_cspp_pt[i]*syst1S_cspp_pt[i] ); // this one is the total, cspp+csaa, no tracking as of now.
+
+
  }
  cout << "--------------------1Spt4---------------------" << endl;
 for(int i=0; i<nPtBins_2013; i++){
-cout << (binsPt[i]).c_str() << " " << stat1S_pp_pt4[i] << " " <<syst1S_pp_pt4[i] <<" "<< syst1S_aa_pt4[i] <<" "<< syst1S_pptnp_pt4[i] <<" "<< syst1S_aatnp_pt4[i]<<" "<< syst1S_raa_pointPt4[i] <<" "<< syst1S_raa_pt4[i]<< endl;
+ /// cout << (binsPt[i]).c_str() << " " << stat1S_pp_pt4[i] << " " <<syst1S_pp_pt4[i] <<" "<< syst1S_aa_pt4[i] <<" "<< syst1S_pptnp_pt4[i] <<" "<< syst1S_aatnp_pt4[i]<<" "<< syst1S_raa_pointPt4[i] <<" "<< syst1S_raa_pt4[i]<< endl;
  }
 
 
@@ -567,103 +587,111 @@ cout << (binsPt[i]).c_str() << " " << stat1S_pp_pt4[i] << " " <<syst1S_pp_pt4[i]
 
 
 for(int i=0; i<nRapBins_2014; i++){
-  syst1S_pptnp_rap[i] = t_1S_pythia_rap3p5e[i]/t_1S_pythia_rap3p5[i]; //add syst. unc. from tnp
+  // Aet_1S_pythia_rap2014s[i]=Aet_1S_pythia_rap2014_STAs[i];
+  // Aet_1S_pythia_rap2014[i]=Aet_1S_pythia_rap2014_STA[i];
+  // Aet_1S_pyquen_rap2014s[i]=Aet_1S_pyquen_rap2014_STAs[i];//Ae_1S_pyquen_rap42014s[];
+  // Aet_1S_pyquen_rap2014[i]=Aet_1S_pyquen_rap2014_STA[i];
+
+  // t_1S_pythia_rap3p5e[i]= t_1S_pythia_rap3p5_STAe[i];
+  // t_1S_pythia_rap3p5[i]= t_1S_pythia_rap3p5_STA[i];
+
+  syst1S_pptnp_rap[i] = Aet_1S_pythia_rap3p5_fulls[i]/Aet_1S_pythia_rap2014_STA[i];
   syst1S_pptnp_rap4[i]= t_1S_pythia_rap4e[i]/t_1S_pythia_rap4[i]; //add syst. unc. from tnp
-  syst2S_pptnp_rap[i] = t_2S_pythia_rap4e[i]/t_2S_pythia_rap4[i];
-  syst3S_pptnp_rap[i] = t_3S_pythia_rap4e[i]/t_3S_pythia_rap4[i];
-  syst1S_aatnp_rap[i] = t_1S_pyquen_rap3p5e[i]/t_1S_pyquen_rap3p5[i];
+  syst2S_pptnp_rap[i] = Aet_2S_pythia_rap2014s[i]/Aet_2S_pythia_rap2014[i];
+  syst3S_pptnp_rap[i] = Aet_3S_pythia_rap2014s[i]/Aet_3S_pythia_rap2014[i];
+  syst1S_aatnp_rap[i] = Aet_1S_pyquen_rap2014_fulls[i]/Aet_1S_pyquen_rap2014_STA[i];
   syst1S_aatnp_rap4[i]= t_1S_pyquen_rap4e[i]/t_1S_pyquen_rap4[i]; 
     
   stat1S_pp_rap[i]=N1S_pp_rap3p5_2014e[i]/N1S_pp_rap3p5_2014[i];
   stat1S_pp_rap4[i]=N1S_pp_rap4_2014e[i]/N1S_pp_rap4_2014[i];
   stat2S_pp_rap[i]=N2S_pp_rap4_2014e[i]/N2S_pp_rap4_2014[i];
   stat3S_pp_rap[i]=N3S_pp_rap4_2014e[i]/N3S_pp_rap4_2014[i];
-  syst1S_raa_pointRap[i]=sqrt(syst1S_pp_rap[i]*syst1S_pp_rap[i]+syst1S_aa_rap[i]*syst1S_aa_rap[i]+syst1S_pptnp_rap[i]*syst1S_pptnp_rap[i]+syst1S_aatnp_rap[i]*syst1S_aatnp_rap[i]);//this one is big :  syst.pp + syst.pbpb + tnp_pp + tnp_pbpb
-  syst1S_raa_pointRap4[i]=sqrt(syst1S_pp_rap4[i]*syst1S_pp_rap4[i]+syst1S_aa_rap4[i]*syst1S_aa_rap4[i]+syst1S_pptnp_rap4[i]*syst1S_pptnp_rap4[i]+syst1S_aatnp_rap4[i]*syst1S_aatnp_rap4[i]);//this one is big : syst.pp + syst.pbpb + tnp_pp + tnp_pbpb
-  syst1S_raa_rap[i]=sqrt(syst1S_raa_pointRap[i]*syst1S_raa_pointRap[i]+syst1S_raa_global*syst1S_raa_global+pow(Aet_1S_pythia_rap2014s[i]/Aet_1S_pythia_rap2014[i],2)); // syst1S_raa_global*syst1S_raa_global pow(Aet_1S_pyquen_rap2014s[i]/Aet_1S_pyquen_rap2014[i],2)+
-  syst1S_raa_rap4[i]=sqrt(syst1S_raa_pointRap4[i]*syst1S_raa_pointRap4[i]+syst1S_raa_global4*syst1S_raa_global4+pow(Aet_1S_pyquen_rap42014s[i]/Aet_1S_pyquen_rap42014[i],2)+pow(Aet_1S_pythia_rap4s[i]/Aet_1S_pythia_rap4[i],2));
-  syst1S_cspp_rap[i]=sqrt(syst1S_pptnp_rap[i]*syst1S_pptnp_rap[i]+syst1S_pp_rap[i]*syst1S_pp_rap[i]+(0.2/5.4)*(0.2/5.4)+pow(Aet_1S_pythia_rap2014s[i]/Aet_1S_pythia_rap2014[i],2));
+
+  // Syst pp nS = tnp(full syst)+ fits+ lumi+ genShape
+  syst1S_cspp_rap[i]=sqrt(syst1S_pptnp_rap[i]*syst1S_pptnp_rap[i]+syst1S_pp_rap[i]*syst1S_pp_rap[i]+(0.2/5.4)*(0.2/5.4)+pow(Aet_1S_pythia_rap2014_muIDTrige[i]/Aet_1S_pythia_rap2014_muIDTrig[i],2));
   syst1S_cspp_rap4[i]=sqrt(syst1S_pptnp_rap4[i]*syst1S_pptnp_rap4[i]+syst1S_pp_rap4[i]*syst1S_pp_rap4[i]+(0.2/5.4)*(0.2/5.4)+pow(Aet_1S_pythia_rap4s[i]/Aet_1S_pythia_rap4[i],2));
-  syst2S_cspp_rap[i]=sqrt(syst2S_pptnp_rap[i]*syst2S_pptnp_rap[i]+syst2S_pp_rap[i]*syst2S_pp_rap[i]+(0.2/5.4)*(0.2/5.4)+pow(Aet_2S_pythia_rap2014s[i]/Aet_2S_pythia_rap2014[i],2));
-  syst3S_cspp_rap[i]=sqrt(syst3S_pptnp_rap[i]*syst3S_pptnp_rap[i]+syst3S_pp_rap[i]*syst3S_pp_rap[i]+(0.2/5.4)*(0.2/5.4)+pow(Aet_3S_pythia_rap2014s[i]/Aet_3S_pythia_rap2014[i],2));
-  syst1S_csaa_rap[i]=sqrt(syst1S_aatnp_rap[i]*syst1S_aatnp_rap[i]+syst1S_aa_rap[i]*syst1S_aa_rap[i]+(0.057*0.057)+pow(Aet_1S_pyquen_rap2014s[i]/Aet_1S_pyquen_rap2014[i],2));
-  syst1S_csaa_rap4[i]=sqrt(syst1S_aatnp_rap4[i]*syst1S_aatnp_rap4[i]+syst1S_aa_rap4[i]*syst1S_aa_rap4[i]+(0.057*0.057)+pow(Aet_1S_pyquen_rap42014s[i]/Aet_1S_pyquen_rap42014[i],2));
+  syst2S_cspp_rap[i]=sqrt(syst2S_pptnp_rap[i]*syst2S_pptnp_rap[i]+syst2S_pp_rap[i]*syst2S_pp_rap[i]+(0.2/5.4)*(0.2/5.4)+pow(Aet_2S_pythia_rap2014e[i]/Aet_2S_pythia_rap2014[i],2));
+  syst3S_cspp_rap[i]=sqrt(syst3S_pptnp_rap[i]*syst3S_pptnp_rap[i]+syst3S_pp_rap[i]*syst3S_pp_rap[i]+(0.2/5.4)*(0.2/5.4)+pow(Aet_3S_pythia_rap2014e[i]/Aet_3S_pythia_rap2014[i],2));
+  syst1S_csaa_rap[i]=sqrt(syst1S_aatnp_rap[i]*syst1S_aatnp_rap[i]+syst1S_aa_rap[i]*syst1S_aa_rap[i]+(0.062*0.062)+pow(Aet_1S_pyquen_rap2014_muIDTrige[i]/Aet_1S_pyquen_rap2014_muIDTrig[i],2));
+  syst1S_csaa_rap4[i]=sqrt(syst1S_aatnp_rap4[i]*syst1S_aatnp_rap4[i]+syst1S_aa_rap4[i]*syst1S_aa_rap4[i]+(0.062*0.062)+pow(Aet_1S_pyquen_rap42014s[i]/Aet_1S_pyquen_rap42014[i],2));
+
+  syst1S_raa_pointRap[i]=sqrt(syst1S_pptnp_rap[i]*syst1S_pptnp_rap[i]+syst1S_pp_rap[i]*syst1S_pp_rap[i]+pow(Aet_1S_pythia_rap2014_muIDTrige[i]/Aet_1S_pythia_rap2014_muIDTrig[i],2)+syst1S_aatnp_rap[i]*syst1S_aatnp_rap[i]+syst1S_aa_rap[i]*syst1S_aa_rap[i]+pow(Aet_1S_pyquen_rap2014_muIDTrige[i]/Aet_1S_pyquen_rap2014_muIDTrig[i],2)); // all of cs_pp and cs_aa, except lumi and taa
+  syst1S_raa_rap[i]=sqrt(syst1S_raa_pointRap[i]*syst1S_raa_pointRap[i]+syst1S_raa_global*syst1S_raa_global); //  pow(Aet_1S_pyquen_rap2014s[i]/Aet_1S_pyquen_rap2014[i],2)+
+
+  syst1S_raa_pointRap4[i]=sqrt(syst1S_pp_rap4[i]*syst1S_pp_rap4[i]+syst1S_aa_rap4[i]*syst1S_aa_rap4[i]+syst1S_pptnp_rap4[i]*syst1S_pptnp_rap4[i]+syst1S_aatnp_rap4[i]*syst1S_aatnp_rap4[i]);//this one is big : syst.pp + syst.pbpb + tnp_pp + tnp_pbpb
+  syst1S_raa_rap4[i]=sqrt(syst1S_raa_pointRap4[i]*syst1S_raa_pointRap4[i]+syst1S_raa_global4*syst1S_raa_global4+pow(Aet_1S_pyquen_rap42014s[i]/Aet_1S_pyquen_rap42014[i],2)+pow(Aet_1S_pythia_rap4s[i]/Aet_1S_pythia_rap4[i],2));
+
+
  } 
  cout << "--------------------1S-rap--------------------" << endl;
 
  
  for(int i=0; i<nRapBins_2014; i++){
-cout << (binsRap[i]).c_str() << " " << stat1S_pp_rap[i] << " " <<syst1S_pp_rap[i] <<" "<< syst1S_aa_rap[i] <<" "<< syst1S_pptnp_rap[i] <<" "<< syst1S_aatnp_rap[i]<<" "<< syst1S_raa_pointRap[i] <<" "<< syst1S_raa_rap[i]<< endl;
+ /// cout << (binsRap[i]).c_str() << " " << stat1S_pp_rap[i] << " " <<syst1S_pp_rap[i] <<" "<< syst1S_aa_rap[i] <<" "<< syst1S_pptnp_rap[i] <<" "<< syst1S_aatnp_rap[i]<<" "<< syst1S_raa_pointRap[i] <<" "<< syst1S_raa_rap[i]<< endl;
  }
  cout << "--------------------1Spt4---------------------" << endl;
 for(int i=0; i<nRapBins_2014; i++){
-cout << (binsRap[i]).c_str() << " " << stat1S_pp_rap4[i] << " " <<syst1S_pp_rap4[i] <<" "<< syst1S_aa_rap4[i] <<" "<< syst1S_pptnp_rap4[i] <<" "<< syst1S_aatnp_rap4[i]<<" "<< syst1S_raa_pointRap4[i] <<" "<< syst1S_raa_rap4[i]<< endl;
+ /// cout << (binsRap[i]).c_str() << " " << stat1S_pp_rap4[i] << " " <<syst1S_pp_rap4[i] <<" "<< syst1S_aa_rap4[i] <<" "<< syst1S_pptnp_rap4[i] <<" "<< syst1S_aatnp_rap4[i]<<" "<< syst1S_raa_pointRap4[i] <<" "<< syst1S_raa_rap4[i]<< endl;
  }
 
  cout << "--------------------2S pt ---------------------" << endl; 
  for(int i=0; i<nPtBins_2010; i++){      
-   stat2S_pp_ptLarge[i]=N2S_pp_pt4_2013Largee[i]/N2S_pp_pt4_2013Large[i];
-   //  syst2S_aa_pt[i]=sqrt(syst2S_aa_pt[i])/(nfitvars+nbkgdvars);//fit
-   //  syst2S_pp_ptLarge[i]=sqrt(syst2S_pp_ptLarge[i])/(nfitvars+nbkgdvars);  
-   syst2S_aatnp_pt[i]=t_2S_pyquen_pt2010e[i]/t_2S_pyquen_pt2010[i];//tnp
-   syst2S_pptnp_ptLarge[i]=sqrt((t_2S_pythia_pt2010[i]-1)*(t_2S_pythia_pt2010[i]-1));
-   syst2S_raa_pointPt[i]=sqrt(stat2S_pp_ptLarge[i]*stat2S_pp_ptLarge[i]+syst2S_pp_ptLarge[i]*syst2S_pp_ptLarge[i]+syst2S_aa_pt[i]*syst2S_aa_pt[i]+syst2S_pptnp_ptLarge[i]*syst2S_pptnp_ptLarge[i]+syst2S_aatnp_pt[i]*syst2S_aatnp_pt[i]+pow(Aet_2S_pythia_pt2013Larges[i]/Aet_2S_pythia_pt2013Large[i],2)+pow(Aet_2S_pyquen_pt2013Larges[i]/Aet_2S_pyquen_pt2013Large[i],2));//this one is big : stat.pp + syst.pp + syst.pbpb + tnp_pp + tnp_pbpb
-   syst2S_raa_pt[i]=sqrt(syst2S_raa_pointPt[i]*syst2S_raa_pointPt[i]+syst2S_raa_global*syst2S_raa_global);
-   syst2S_cspp_ptLarge[i]=sqrt(syst2S_pptnp_pt[i]*syst2S_pptnp_pt[i]+syst2S_pp_ptLarge[i]*syst2S_pp_ptLarge[i]+(0.2/5.4)*(0.2/5.4)+pow(Aet_2S_pythia_pt2013Larges[i]/Aet_2S_pythia_pt2013Large[i],2));//CS:tnp+fit+glob
-   syst2S_csaa_pt[i]=sqrt(syst2S_aatnp_pt[i]*syst2S_aatnp_pt[i]+syst2S_aa_pt[i]*syst2S_aa_pt[i]+(0.057*0.057)+pow(Aet_2S_pyquen_pt2013Larges[i]/Aet_2S_pyquen_pt2013Large[i],2));
-   cout << (binsPt2010[i]).c_str() << " " << stat2S_pp_ptLarge[i] << " " <<syst2S_pp_ptLarge[i] <<" "<< syst2S_aa_pt[i] <<" "<< syst2S_pptnp_ptLarge[i] <<" "<< syst2S_aatnp_pt[i]<<" "<< syst2S_raa_pointPt[i] <<" "<< syst2S_raa_pt[i]<< endl;
+   stat2S_pp_ptLarge[i]=N2S_pp_pt4_2013Largee[i]/N2S_pp_pt4_2013Large[i]; //why this?
+   syst2S_aatnp_pt[i]=Aet_2S_pyquen_pt2013Large_fulls[i]/Aet_2S_pyquen_pt2013Large[i];
+   syst2S_pptnp_ptLarge[i]=Aet_2S_pythia_pt2013Larges[i]/Aet_2S_pythia_pt2013Large[i];
+
+   syst2S_cspp_ptLarge[i]=sqrt(syst2S_pptnp_ptLarge[i]*syst2S_pptnp_ptLarge[i]+syst2S_pp_ptLarge[i]*syst2S_pp_ptLarge[i]+(0.2/5.4)*(0.2/5.4)+pow(Aet_2S_pythia_pt2013Largee[i]/Aet_2S_pythia_pt2013Large[i],2));//CS:tnp+fit+glob
+   syst2S_csaa_pt[i]=sqrt(syst2S_aatnp_pt[i]*syst2S_aatnp_pt[i]+syst2S_aa_pt[i]*syst2S_aa_pt[i]+(0.062*0.062)+pow(Aet_2S_pyquen_pt2013Largee[i]/Aet_2S_pyquen_pt2013Large[i],2));
+   
+   syst2S_raa_pointPt[i]=sqrt(syst2S_pptnp_ptLarge[i]*syst2S_pptnp_ptLarge[i]+syst2S_pp_ptLarge[i]*syst2S_pp_ptLarge[i]+pow(Aet_2S_pythia_pt2013Largee[i]/Aet_2S_pythia_pt2013Large[i],2)+syst2S_aatnp_pt[i]*syst2S_aatnp_pt[i]+syst2S_aa_pt[i]*syst2S_aa_pt[i]+pow(Aet_2S_pyquen_pt2013Largee[i]/Aet_2S_pyquen_pt2013Large[i],2)); // just like we've done for RAA(1S) : all of CS_pp and CS_aa except TAA and LUMI.
+   syst2S_raa_pt[i]=sqrt(syst2S_raa_pointPt[i]*syst2S_raa_pointPt[i]+syst2S_raa_global*syst2S_raa_global); //including TAA and LUMI, not tracking as of now.
+    /// cout << (binsPt2010[i]).c_str() << " " << stat2S_pp_ptLarge[i] << " " <<syst2S_pp_ptLarge[i] <<" "<< syst2S_aa_pt[i] <<" "<< syst2S_pptnp_ptLarge[i] <<" "<< syst2S_aatnp_pt[i]<<" "<< syst2S_raa_pointPt[i] <<" "<< syst2S_raa_pt[i]<< endl;
  }
- cout << "--------------------2S rap ---------------------" << endl; 
+ cout << "--------------------2S rap ---------------------" << endl;
  for(int i=0; i<nRapBins_2010; i++){
    stat2S_pp_rapLarge[i]=N2S_pp_rap4_2014Largee[i]/N2S_pp_rap4_2014Large[i];
-   //  syst2S_aa_rap[i]=sqrt(syst2S_aa_rap[i])/(nfitvars+nbkgdvars);//fit
-   //   syst2S_pp_rapLarge[i]=sqrt(syst2S_pp_rapLarge[i])/(nfitvars+nbkgdvars);  
-   syst2S_aatnp_rap[i]=t_2S_pyquen_rap2010e[i]/t_2S_pyquen_rap2010[i];//tnp
-   syst2S_pptnp_rapLarge[i]=t_2S_pythia_rap2010e[i]/t_2S_pythia_rap2010[i];
-   syst2S_raa_pointRap[i]=sqrt(syst2S_pp_rapLarge[i]*syst2S_pp_rapLarge[i]+syst2S_aa_rap[i]*syst2S_aa_rap[i]+syst2S_pptnp_rapLarge[i]*syst2S_pptnp_rapLarge[i]+syst2S_aatnp_rap[i]*syst2S_aatnp_rap[i]+pow(Aet_2S_pyquen_rap2014Larges[i]/Aet_2S_pyquen_rap2014Large[i],2)+pow(Aet_2S_pythia_rap2014Larges[i]/Aet_2S_pythia_rap2014Large[i],2));//this one is big : stat.pp + syst.pp + syst.pbpb + tnp_pp + tnp_pbpb + Ae_syst pp + Ae_syst pbpb 
-   syst2S_raa_rap[i]=sqrt(syst2S_raa_pointRap[i]*syst2S_raa_pointRap[i]+syst2S_raa_global*syst2S_raa_global);
-   syst2S_cspp_rapLarge[i]=sqrt(syst2S_pptnp_rap[i]*syst2S_pptnp_rap[i]+syst2S_pp_rapLarge[i]*syst2S_pp_rapLarge[i]+(0.2/5.4)*(0.2/5.4));//CS:tnp+fit+glob
-   syst2S_csaa_rap[i]=sqrt(syst2S_aatnp_rap[i]*syst2S_aatnp_rap[i]+syst2S_aa_rap[i]*syst2S_aa_rap[i]+(0.057*0.057));
-  
-  cout << (binsRap2010[i]).c_str() << " " << stat2S_pp_rapLarge[i] << " " <<syst2S_pp_rapLarge[i] <<" "<< syst2S_aa_rap[i] <<" "<< syst2S_pptnp_rapLarge[i] <<" "<< syst2S_aatnp_rap[i]<<" "<< syst2S_raa_pointRap[i] <<" "<< syst2S_raa_rap[i]<< endl;
+   syst2S_aatnp_rap[i]=Aet_2S_pyquen_rap2014Larges[i]/Aet_2S_pyquen_rap2014Large[i];
+   syst2S_pptnp_rapLarge[i]=Aet_2S_pythia_rap2014Larges[i]/Aet_2S_pythia_rap2014Large[i];
 
-   // syst2S_aa_rap[i]=(syst2S_aa_rap[i])/(nfitvars+nbkgdvars);
-   // syst2S_aa_rap[i]+=((t_2S_pyquen_rap2010[i]-1)*(t_2S_pyquen_rap2010[i]-1));
-   // syst2S_pp_rapLarge[i]=(syst2S_pp_rapLarge[i])/(nfitvars+nbkgdvars);
-   // syst2S_pp_rapLarge[i]+=((t_2S_pythia_rap2010[i]-1)*(t_2S_pythia_rap2010[i]-1));
+   syst2S_cspp_rapLarge[i]=sqrt(syst2S_pptnp_rapLarge[i]*syst2S_pptnp_rapLarge[i]+syst2S_pp_rapLarge[i]*syst2S_pp_rapLarge[i]+(0.2/5.4)*(0.2/5.4)+pow(Aet_2S_pythia_rap2014Largee[i]/Aet_2S_pythia_rap2014Large[i],2));//CS:tnp+fit+glob
+   syst2S_csaa_rap[i]=sqrt(syst2S_aatnp_rap[i]*syst2S_aatnp_rap[i]+syst2S_aa_rap[i]*syst2S_aa_rap[i]+(0.062*0.062)+pow(Aet_2S_pyquen_rap2014Largee[i]/Aet_2S_pyquen_rap2014Large[i],2));
 
-   // syst2S_aa_rap[i]=sqrt(syst2S_aa_rap[i]);
-   // syst2S_pp_rapLarge[i]=sqrt(syst2S_pp_rapLarge[i]);
+   syst2S_raa_pointRap[i]=sqrt(syst2S_pptnp_rapLarge[i]*syst2S_pptnp_rapLarge[i]+syst2S_pp_rapLarge[i]*syst2S_pp_rapLarge[i]+pow(Aet_2S_pythia_rap2014Largee[i]/Aet_2S_pythia_rap2014Large[i],2)+syst2S_aatnp_rap[i]*syst2S_aatnp_rap[i]+syst2S_aa_rap[i]*syst2S_aa_rap[i]+pow(Aet_2S_pyquen_rap2014Largee[i]/Aet_2S_pyquen_rap2014Large[i],2)); // all of cs_pp and cs_aa, except lumi and taa
+   syst2S_raa_rap[i]=sqrt(syst2S_raa_pointRap[i]*syst2S_raa_pointRap[i]+syst2S_raa_global*syst2S_raa_global);  
+   /// cout << (binsRap2010[i]).c_str() << " " << stat2S_pp_rapLarge[i] << " " <<syst2S_pp_rapLarge[i] <<" "<< syst2S_aa_rap[i] <<" "<< syst2S_pptnp_rapLarge[i] <<" "<< syst2S_aatnp_rap[i]<<" "<< syst2S_raa_pointRap[i] <<" "<< syst2S_raa_rap[i]<< endl;
+
+ 
  }
 
 for(int i=0; i<nPtBins_2013; i++){
-  ofSyst<< "1S_pp_pt_" << (binsPt[i]).c_str() << " "<< 100*syst1S_pp_pt[i]<<" %"<<endl;
-  ofSyst<< "1S_aa_pt_"<<i << " "<< 100*syst1S_aa_pt[i]<< " %"<<endl;
-  ofSyst<< "2S_pp_pt_"<<i << " "<< 100*syst2S_pp_pt[i]<<" %"<< endl;
-  ofSyst<< "3S_pp_pt_"<<i << " "<< 100*syst3S_pp_pt[i]<<" %"<< endl;
+  //ofSyst<< "1S_pp_pt_" << (binsPt[i]).c_str() << " "<< 100*syst1S_pp_pt[i]<<" %"<<endl;
+  //ofSyst<< "1S_aa_pt_"<<i << " "<< 100*syst1S_aa_pt[i]<< " %"<<endl;
+  //ofSyst<< "2S_pp_pt_"<<i << " "<< 100*syst2S_pp_pt[i]<<" %"<< endl;
+  //ofSyst<< "3S_pp_pt_"<<i << " "<< 100*syst3S_pp_pt[i]<<" %"<< endl;
 }
 
 for(int i=0; i<nPtBins_2010; i++){
-ofSyst<< "2S_aa_pt_"<<i << " "<< 100*syst2S_aa_pt[i]<< " %"<<endl;
-ofSyst<< "2S_pp_ptLarge_"<<i << " "<< 100*syst2S_pp_ptLarge[i]<< " %"<<endl;
+//ofSyst<< "2S_aa_pt_"<<i << " "<< 100*syst2S_aa_pt[i]<< " %"<<endl;
+//ofSyst<< "2S_pp_ptLarge_"<<i << " "<< 100*syst2S_pp_ptLarge[i]<< " %"<<endl;
 }
 
 for(int i=0; i<nRapBins_2014; i++){
-  ofSyst<< "1S_pp_rap_"<<i << " "<< 100*syst1S_pp_rap[i]<<" %"<<endl;
-  ofSyst<< "1S_aa_rap_"<<i << " "<< 100*syst1S_aa_rap[i]<< " %"<<endl;
-  ofSyst<< "2S_pp_rap_"<<i << " "<< 100*syst2S_pp_rap[i]<<" %"<< endl;
-  ofSyst<< "3S_pp_rap_"<<i << " "<< 100*syst3S_pp_rap[i]<<" %"<< endl;
+  //ofSyst<< "1S_pp_rap_"<<i << " "<< 100*syst1S_pp_rap[i]<<" %"<<endl;
+  //ofSyst<< "1S_aa_rap_"<<i << " "<< 100*syst1S_aa_rap[i]<< " %"<<endl;
+  //ofSyst<< "2S_pp_rap_"<<i << " "<< 100*syst2S_pp_rap[i]<<" %"<< endl;
+  //ofSyst<< "3S_pp_rap_"<<i << " "<< 100*syst3S_pp_rap[i]<<" %"<< endl;
  }
 for(int i=0; i<nRapBins_2010; i++){
-ofSyst<< "2S_aa_rap_"<<i << " "<< 100*syst2S_aa_rap[i]<< " %"<<endl;
-ofSyst<< "2S_pp_rapLarge_"<<i << " "<< 100*syst2S_pp_rapLarge[i]<< " %"<<endl;
-
- ofSyst.close();
+//ofSyst<< "2S_aa_rap_"<<i << " "<< 100*syst2S_aa_rap[i]<< " %"<<endl;
+//ofSyst<< "2S_pp_rapLarge_"<<i << " "<< 100*syst2S_pp_rapLarge[i]<< " %"<<endl;
 }
-
+//ofSyst.close();
   for(int i = 0 ; i<nPtBins_2013 ; i++)
     {
       //significance stuff, for all non-believers out there
+      // Aet_1S_pythia_pt[i]=  Aet_1S_pythia_pt_STA[i];
+      // Aet_1S_pythia_pte[i]=  Aet_1S_pythia_pt_STAe[i];
+      //      Aet_1S_pythia_pte[i]=  Ae_1S_pythia_pte[i];
       SigOverErr_ppPt1S3p5[i]=computeRatio(N1S_pp_pt3p5[i],N1S_pp_pt3p5e[i]);
       SigOverErr_aaPt1S3p5[i]=computeRatio(N1S_aa_pt3p5[i],N1S_aa_pt3p5e[i]);
       SigOverErr_ppPt2S3p5[i]=computeRatio(N2S_pp_pt3p5[i],N2S_pp_pt3p5e[i]);
@@ -674,12 +702,20 @@ ofSyst<< "2S_pp_rapLarge_"<<i << " "<< 100*syst2S_pp_rapLarge[i]<< " %"<<endl;
       SigOverErr_ppPt3S4[i]=computeRatio(N3S_pp_pt4_2013[i],N3S_pp_pt4_2013e[i]);
 
       // tnp
-      CS1S_pp_tnp_pt[i]= computeRatio( N1S_pp_pt3p5[i] , Aet_1S_pythia_pt[i] ); 
-      CS1S_aa_tnp_pt[i]= computeRatio( N1S_aa_pt3p5[i] , Aet_1S_pyquen_pt[i] );
-      CS1S_pp_tnp_pte[i] = computeRatioError( N1S_pp_pt3p5[i] , Aet_1S_pythia_pt[i], N1S_pp_pt3p5e[i] , Aet_1S_pythia_pte[i]);
-      CS1S_aa_tnp_pte[i] = computeRatioError(  N1S_aa_pt3p5[i] , Aet_1S_pyquen_pt[i] ,  N1S_aa_pt3p5e[i] , Aet_1S_pyquen_pte[i] );
-      CS1S_pp_tnp_pts[i] = N1S_pp_pt3p5[i]*syst1S_cspp_pt[i];
-      CS1S_aa_tnp_pts[i] = N1S_aa_pt3p5[i]*syst1S_csaa_pt[i];
+      // CS1S_pp_tnp_pt[i]= computeRatio( N1S_pp_pt3p5[i] , Aet_1S_pythia_pt[i] ); 
+      // CS1S_aa_tnp_pt[i]= computeRatio( N1S_aa_pt3p5[i] , Aet_1S_pyquen_pt[i] );
+      // CS1S_pp_tnp_pte[i] = computeRatioError( N1S_pp_pt3p5[i] , Aet_1S_pythia_pt[i], N1S_pp_pt3p5e[i] , Aet_1S_pythia_pte[i]);
+      // CS1S_aa_tnp_pte[i] = computeRatioError(  N1S_aa_pt3p5[i] , Aet_1S_pyquen_pt[i] ,  N1S_aa_pt3p5e[i] , Aet_1S_pyquen_pte[i] );
+      
+      //2016 muIDTrig
+      CS1S_pp_tnp_pt[i]= computeRatio( N1S_pp_pt3p5[i] , Aet_1S_pythia_pt_STA[i] ); 
+      CS1S_aa_tnp_pt[i]= computeRatio( N1S_aa_pt3p5[i] , Aet_1S_pyquen_pt_STA[i] );
+      CS1S_pp_tnp_pte[i] = computeRatioError( N1S_pp_pt3p5[i] , Aet_1S_pythia_pt_STA[i], N1S_pp_pt3p5e[i] ,0);
+      CS1S_aa_tnp_pte[i] = computeRatioError(  N1S_aa_pt3p5[i] , Aet_1S_pyquen_pt_STA[i] ,  N1S_aa_pt3p5e[i] , 0 ); 
+      CS1S_pp_tnp_pts[i] = N1S_pp_pt3p5[i]*syst1S_cspp_pt[i] / Aet_1S_pythia_pt_STA[i];
+      CS1S_aa_tnp_pts[i] = N1S_aa_pt3p5[i]*syst1S_csaa_pt[i] /  Aet_1S_pyquen_pt_STA[i] ;
+
+  
       //pt4
       CS1S_pp_tnp_pt4[i]= computeRatio( N1S_pp_pt4[i] , Aet_1S_pythia_pt4[i] ); 
       CS1S_aa_tnp_pt4[i]= computeRatio( N1S_aa_pt4[i] , Aet_1S_pyquen_pt4[i] );
@@ -699,12 +735,12 @@ ofSyst<< "2S_pp_rapLarge_"<<i << " "<< 100*syst2S_pp_rapLarge[i]<< " %"<<endl;
       RAA_1S_tnp_pt4sT[i] = RAA_1S_tnp_pt4[i]*syst1S_raa_pt4[i]; //computeRatioError( CS1S_aa_tnp_pt[i] , CS1S_pp_tnp_pt[i], CS1S_aa_tnp_pts[i] , CS1S_pp_tnp_pts[i]);
     
       //excited ones
-      CS2S_pp_tnp_pts[i] = N2S_pp_pt4_2013[i]*syst2S_cspp_pt[i];
-      CS3S_pp_tnp_pts[i] = N3S_pp_pt4_2013[i]*syst3S_cspp_pt[i];
+      CS2S_pp_tnp_pts[i] = N2S_pp_pt4_2013[i]*syst2S_cspp_pt[i] / Aet_2S_pythia_pt2013[i];
+      CS3S_pp_tnp_pts[i] = N3S_pp_pt4_2013[i]*syst3S_cspp_pt[i] / Aet_3S_pythia_pt2013[i];
       CS2S_pp_tnp_pt2013[i]= computeRatio( N2S_pp_pt4_2013[i] , Aet_2S_pythia_pt2013[i] ); 
-      CS2S_pp_tnp_pt2013e[i] = computeRatioError( N2S_pp_pt4_2013[i] , Aet_2S_pythia_pt2013[i] , N2S_pp_pt4_2013e[i] , Aet_2S_pythia_pt2013e[i] );        
+      CS2S_pp_tnp_pt2013e[i] = computeRatioError( N2S_pp_pt4_2013[i] , Aet_2S_pythia_pt2013[i] , N2S_pp_pt4_2013e[i] , 0);        
       CS3S_pp_tnp_pt2013[i]= computeRatio( N3S_pp_pt4_2013[i] , Aet_3S_pythia_pt2013[i] ); 
-      CS3S_pp_tnp_pt2013e[i] = computeRatioError( N3S_pp_pt4_2013[i] , Aet_3S_pythia_pt2013[i] , N3S_pp_pt4_2013e[i] , Aet_3S_pythia_pt2013e[i] );
+      CS3S_pp_tnp_pt2013e[i] = computeRatioError( N3S_pp_pt4_2013[i] , Aet_3S_pythia_pt2013[i] , N3S_pp_pt4_2013e[i] , 0);
 
       //fiducial shit
       CS2S_pp_pt2013Fiducial[i]= computeRatio( N2S_pp_pt4_2013[i] , e_2S_pythia_pt2013[i] );      
@@ -756,7 +792,7 @@ ofSyst<< "2S_pp_rapLarge_"<<i << " "<< 100*syst2S_pp_rapLarge[i]<< " %"<<endl;
       // cout <<"sigma(1S)_pp vs Pt ="<< endl;
       //invariant yields, corrected by taa and lumi corr.//////raaaaaaaa!
       RAA_1S_tnp_pt[i] = computeRatio( CS1S_aa_tnp_pt[i] , CS1S_pp_tnp_pt[i]);
-      RAA_1S_tnp_pte[i] = computeRatioError( CS1S_aa_tnp_pt[i] , CS1S_pp_tnp_pt[i], CS1S_aa_tnp_pte[i] , CS1S_pp_tnp_pte[i]);
+      RAA_1S_tnp_pte[i] = computeRatioError( CS1S_aa_tnp_pt[i] , CS1S_pp_tnp_pt[i], CS1S_aa_tnp_pte[i] , CS1S_pp_tnp_pte[i]); // stat uncertainties go here !
       RAA_1S_tnp_pts[i] = RAA_1S_tnp_pt[i]*syst1S_raa_pointPt[i]; //computeRatioError( CS1S_aa_tnp_pt[i] , CS1S_pp_tnp_pt[i], CS1S_aa_tnp_pts[i] , CS1S_pp_tnp_pts[i]);
       RAA_1S_tnp_ptsT[i] = RAA_1S_tnp_pt[i]*syst1S_raa_pt[i]; //computeRatioError( CS1S_aa_tnp_pt[i] , CS1S_pp_tnp_pt[i], CS1S_aa_tnp_pts[i] , CS1S_pp_tnp_pts[i]);
       R_A_1S_pt[i]=computeRatio(A_1S_pythia_pt3p5[i],A_1S_pyquen_pt[i]);
@@ -800,7 +836,7 @@ ofSyst<< "2S_pp_rapLarge_"<<i << " "<< 100*syst2S_pp_rapLarge[i]<< " %"<<endl;
       CS1S_aa_rape[i]=CS1S_aa_rape[i]/(N_MB_corr * T_AA_b);
       CS1S_pp_rap2014[i]=CS1S_pp_rap2014[i]/(deltaRapEven[i]);
       CS1S_aa_rap[i]=CS1S_aa_rap[i]/deltaRapEven[i];
-      CS1S_pp_rap2014e[i]=CS1S_pp_rap2014e[i]; ///(deltaRapEven[i]);
+      CS1S_pp_rap2014e[i]=CS1S_pp_rap2014e[i]/(deltaRapEven[i]);
       CS1S_aa_rape[i]=CS1S_aa_rape[i]/deltaRapEven[i];
       //2S
       CS2S_pp_rap2014[i]= computeRatio( N2S_pp_rap4_2014[i] , Ae_2S_pythia_rap2014[i] ); 
@@ -816,17 +852,17 @@ ofSyst<< "2S_pp_rapLarge_"<<i << " "<< 100*syst2S_pp_rapLarge[i]<< " %"<<endl;
       CS3S_pp_rap2014e[i]= CS3S_pp_rap2014e[i];///(deltaRapEven[i]);
       //TAG AND PROBE COMPARISON
       //1S
-      CS1S_pp_tnp_rap2014[i]= computeRatio( N1S_pp_rap3p5_2014[i] , Aet_1S_pythia_rap2014[i] ); 
-      //    CS1S_pp_tnp_rap2014[i]= computeRatio( CS1S_pp_tnp_rap2014[i], t_1S_pythia_rap3p5[i] ); 
-      CS1S_aa_tnp_rap2014[i]= computeRatio( N1S_aa_rap3p5_2014[i] , Aet_1S_pyquen_rap2014[i] );
-      // CS1S_aa_tnp_rap2014[i]= computeRatio( CS1S_aa_tnp_rap2014[i] , t_1S_pyquen_rap3p5[i] );
-       CS1S_pp_tnp_rap2014e[i] = computeRatioError(  N1S_pp_rap3p5_2014[i] , Aet_1S_pythia_rap2014[i] ,  N1S_pp_rap3p5_2014e[i] , 0);
-       //  CS1S_pp_tnp_rap2014e[i] = computeRatioError(N1S_pp_rap3p5_2014[i] , Ae_1S_pythia_rap2014[i]*t_1S_pythia_rap3p5[i] ,  N1S_pp_rap3p5_2014e[i] , Ae_1S_pythia_rap2014e[i] );
-      CS1S_pp_tnp_rap2014s[i] = N1S_pp_rap3p5_2014[i]*syst1S_cspp_rap[i];
-      
-      CS1S_aa_tnp_rap2014e[i] = computeRatioError(N1S_aa_rap3p5_2014[i] , Aet_1S_pyquen_rap2014[i] ,  N1S_aa_rap3p5_2014e[i] , 0); 
-      //CS1S_aa_tnp_rap2014e[i] = computeRatioError(N1S_aa_rap3p5_2014[i] , Ae_1S_pyquen_rap2014[i]*t_1S_pyquen_rap3p5[i]  ,  N1S_aa_rap3p5_2014e[i] , Ae_1S_pyquen_rap2014e[i]); 
-      CS1S_aa_tnp_rap2014s[i] =N1S_aa_rap3p5_2014[i]*syst1S_csaa_rap[i];
+      // Aet_1S_pythia_rap2014[i]=Ae_1S_pythia_rap2014[i];
+      // Aet_1S_pyquen_rap2014[i]=Ae_1S_pyquen_rap2014[i];
+      // Aet_1S_pythia_rap2014e[i]=Ae_1S_pythia_rap2014e[i];
+      // Aet_1S_pyquen_rap2014e[i]=Ae_1S_pyquen_rap2014e[i];
+
+      CS1S_pp_tnp_rap2014[i]= computeRatio( N1S_pp_rap3p5_2014[i] , Aet_1S_pythia_rap2014_STA[i] ); 
+      CS1S_aa_tnp_rap2014[i]= computeRatio( N1S_aa_rap3p5_2014[i] , Aet_1S_pyquen_rap2014_STA[i] );
+      CS1S_pp_tnp_rap2014e[i] = computeRatioError(  N1S_pp_rap3p5_2014[i] , Aet_1S_pythia_rap2014_STA[i] ,  N1S_pp_rap3p5_2014e[i] , 0);
+      CS1S_pp_tnp_rap2014s[i] = N1S_pp_rap3p5_2014[i]*syst1S_cspp_rap[i] / Aet_1S_pythia_rap2014_STA[i];      
+      CS1S_aa_tnp_rap2014e[i] = computeRatioError(N1S_aa_rap3p5_2014[i] , Aet_1S_pyquen_rap2014_STA[i] ,  N1S_aa_rap3p5_2014e[i] , 0); 
+      CS1S_aa_tnp_rap2014s[i] =N1S_aa_rap3p5_2014[i]*syst1S_csaa_rap[i] /Aet_1S_pyquen_rap2014_STA[i];
      
  
       CS1S_pp_tnp_rap2014[i]=CS1S_pp_tnp_rap2014[i]/L_pp_invNb;
@@ -866,7 +902,7 @@ ofSyst<< "2S_pp_rapLarge_"<<i << " "<< 100*syst2S_pp_rapLarge[i]<< " %"<<endl;
       CS2S_pp_tnp_rap2014e[i]= computeRatioError(  N2S_pp_rap4_2014[i] , Aet_2S_pythia_rap2014[i] ,  N2S_pp_rap4_2014e[i] , 0 );
       CS2S_pp_tnp_rap2014[i] = CS2S_pp_tnp_rap2014[i]/(deltaRapEven[i] * L_pp_invNb);
       CS2S_pp_tnp_rap2014e[i]= CS2S_pp_tnp_rap2014e[i]/(deltaRapEven[i] * L_pp_invNb);
-      CS2S_pp_tnp_rap2014s[i]= N2S_pp_rap4_2014[i]*syst2S_cspp_rap[i];
+      CS2S_pp_tnp_rap2014s[i]= N2S_pp_rap4_2014[i]*syst2S_cspp_rap[i] /  Aet_2S_pythia_rap2014[i] ;
       CS2S_pp_tnp_rap2014s[i]= CS2S_pp_tnp_rap2014s[i]/(deltaRapEven[i] * L_pp_invNb);
       //3S
       CS3S_pp_tnp_rap2014[i]= computeRatio( N3S_pp_rap4_2014[i] ,  Aet_3S_pythia_rap2014[i] ); 
@@ -875,7 +911,7 @@ ofSyst<< "2S_pp_rapLarge_"<<i << " "<< 100*syst2S_pp_rapLarge[i]<< " %"<<endl;
       CS3S_pp_tnp_rap2014[i]=  CS3S_pp_tnp_rap2014[i]/(deltaRapEven[i]);
       CS3S_pp_tnp_rap2014e[i]= CS3S_pp_tnp_rap2014e[i]/L_pp_invNb;
       CS3S_pp_tnp_rap2014e[i]= CS3S_pp_tnp_rap2014e[i]/(deltaRapEven[i]);
-      CS3S_pp_tnp_rap2014s[i]= N3S_pp_rap4_2014[i]*syst3S_cspp_rap[i];
+      CS3S_pp_tnp_rap2014s[i]= N3S_pp_rap4_2014[i]*syst3S_cspp_rap[i] /  Aet_3S_pythia_rap2014[i];
       CS3S_pp_tnp_rap2014s[i]= CS3S_pp_tnp_rap2014s[i]/(deltaRapEven[i] * L_pp_invNb);
       //RAAAA and other ratios!
       RAA_1S_rap[i]= computeRatio( CS1S_aa_rap[i] , CS1S_pp_rap2014[i]);
@@ -899,78 +935,93 @@ ofSyst<< "2S_pp_rapLarge_"<<i << " "<< 100*syst2S_pp_rapLarge[i]<< " %"<<endl;
     }
 
 
-cout << "  --- 1S Cross section in pp vs. y ---" << endl;
+std::cout << "  --- 1S Cross section in pp vs. y ---" << endl;
  for(int j =0 ; j<nRapBins_2014 ; j++)
    {
-     cout <<"j= "<< (binsRap[j]).c_str() << " & " << setprecision(3) << CS1S_pp_tnp_rap2014[j] <<" \\pm "<<CS1S_pp_tnp_rap2014e[j]  <<" \\pm "<<CS1S_pp_tnp_rap2014s[j] <<" & " << endl;
+     //cs, staterr, systerr(muId), systerr(sta), systerr(aeff+fit
+     std::cout <<"j= "<< (binsRap[j]).c_str() << " & " << setprecision(3) << 
+       CS1S_pp_tnp_rap2014[j] <<" \\pm "<<
+       CS1S_pp_tnp_rap2014e[j]/CS1S_pp_tnp_rap2014[j]  <<" \\pm "<<
+       syst1S_pp_rap[j] <<" \\pm " << 
+       (t_1S_pythia_rap3p5_muIDTrige[j]/t_1S_pythia_rap3p5_muIDTrig[j])  <<" \\pm "<< //muid
+       (t_1S_pythia_rap3p5_STAe[j]/t_1S_pythia_rap3p5_muIDTrig[j])  <<" \\pm "<< //sta
+       (sqrt(pow(Aet_1S_pythia_rap2014_STAe[j]/Aet_1S_pythia_rap2014_STA[j],2)+(0.2/5.4)*(0.2/5.4))) <<" & " << endl; //genshape+ppfits+L_pp
+// CS1S_pp_tnp_rap2014[j]*
+// CS1S_pp_tnp_rap2014[j]*
+// CS1S_pp_tnp_rap2014[j]*
    }
 
-cout << "  --- 1S Cross section in pp vs. pt ---" << endl;
+std::cout << "  --- 1S Cross section in pp vs. pt ---" << endl;
  for(int j =0 ; j<nPtBins_2013 ; j++)
    {
-    cout <<"j= "<< (binsPt[j]).c_str() << " & " << CS1S_pp_tnp_pt[j] <<"\\pm "<<CS1S_pp_tnp_pte[j]  <<" \\pm "<<CS1S_pp_tnp_pts[j]<<" \\" << endl;
+     // std::cout <<"j= "<< (binsPt[j]).c_str() << " & " << CS1S_pp_tnp_pt[j] <<"\\pm "<<CS1S_pp_tnp_pte[j]  <<" \\pm "<<CS1S_pp_tnp_pts[j]<<" \\" << endl;
+     std::cout <<"j= "<< (binsPt[j]).c_str() << " & " << setprecision(3) << 
+       CS1S_pp_tnp_pt[j] <<" \\pm "<<
+       CS1S_pp_tnp_pte[j]/CS1S_pp_tnp_pt[j]  <<" \\pm "<<
+       syst1S_pp_pt[j] <<" \\pm "<<
+      (t_1S_pythia_pt3p5_muIDTrige[j]/t_1S_pythia_pt3p5_muIDTrig[j])  <<" \\pm "<<
+      (t_1S_pythia_pt3p5_STAe[j]/t_1S_pythia_pt3p5_muIDTrig[j])  <<" \\pm "<<
+      (sqrt(pow(Aet_1S_pythia_pt_STAe[j]/Aet_1S_pythia_pt_STA[j],2)+(0.2/5.4)*(0.2/5.4))) <<" & " << endl;
+
+ // CS1S_pp_tnp_pt[j]*
+ // CS1S_pp_tnp_pt[j]*
+ // CS1S_pp_tnp_pt[j]*
+
    }
 
-cout << "  --- 1S pt4 Cross section in pp vs. y ---" << endl;
+std::cout << "  --- 1S Cross section in PbPb vs. y ---" << endl;
  for(int j =0 ; j<nRapBins_2014 ; j++)
    {
-     cout <<"j= "<< (binsRap[j]).c_str() << " & "  << CS1S_pp_tnp_rap42014[j] <<" \\pm "<<CS1S_pp_tnp_rap42014e[j]  <<" \\pm "<<CS1S_pp_tnp_rap42014s[j] <<" & " << endl;
+     //     std::cout <<"j= "<< (binsRap[j]).c_str() << " & " << CS1S_aa_tnp_rap2014[j] <<" \\pm "<<CS1S_aa_tnp_rap2014e[j] <<" \\pm "<<CS1S_aa_tnp_rap2014s[j]<<" \\" << endl;
+     std::cout <<"j= "<< (binsRap[j]).c_str() << " & " << setprecision(3) << 
+       CS1S_aa_tnp_rap2014[j] <<" \\pm "<<
+       CS1S_aa_tnp_rap2014e[j]/CS1S_aa_tnp_rap2014[j]  <<" \\pm "<<
+       syst1S_aa_rap[j] <<" \\pm "<<
+       (t_1S_pyquen_rap3p5_muIDTrige[j]/t_1S_pyquen_rap3p5_muIDTrig[j])  <<" \\pm "<<
+       (t_1S_pyquen_rap3p5_STAe[j]/t_1S_pyquen_rap3p5_muIDTrig[j])  <<" \\pm "<<
+       (sqrt(pow(Aet_1S_pyquen_rap2014e[j]/Aet_1S_pyquen_rap2014[j],2)+(0.062*0.062))) <<" & " << endl;
+ // CS1S_aa_tnp_rap2014[j]*
+ // CS1S_aa_tnp_rap2014[j]*
+ // CS1S_aa_tnp_rap2014[j]*
    }
 
- 
-cout << "  --- 1S pt4 Cross section in pp vs. pt ---" << endl;
+std::cout << "  --- 1S Cross section in PbPb vs. pt ---" << endl;
  for(int j =0 ; j<nPtBins_2013 ; j++)
    {
-     cout <<"j= "<< (binsPt[j]).c_str() <<setprecision(3) <<" & " << CS1S_pp_tnp_pt4[j] <<"\\pm "<<CS1S_pp_tnp_pt4e[j]  <<" \\pm "<<CS1S_pp_tnp_pt4s[j]<<" \\" << endl;
-   }
-
-cout << "  --- 1S pt4 Cross section in AA vs. y ---" << endl;
- for(int j =0 ; j<nRapBins_2014 ; j++)
-   {
-     cout <<"j= "<< (binsRap[j]).c_str() <<setprecision(3)<< " & "  << CS1S_aa_tnp_rap42014[j] <<" \\pm "<<CS1S_aa_tnp_rap42014e[j]  <<" \\pm "<<CS1S_aa_tnp_rap42014s[j] <<" & " << endl;
-   }
-
-
-cout << "  --- 1S pt4 Cross section in AA vs. pt ---" << endl;
- for(int j =0 ; j<nPtBins_2013 ; j++)
-   {
-    cout <<"j= "<< (binsPt[j]).c_str() <<setprecision(3)<< " & " << CS1S_aa_tnp_pt4[j] <<"\\pm "<<CS1S_aa_tnp_pt4e[j]  <<" \\pm "<<CS1S_aa_tnp_pt4s[j]<<" \\" << endl;
-   }
-
-
-cout << "  --- 1S Cross section in PbPb vs. y ---" << endl;
- for(int j =0 ; j<nRapBins_2014 ; j++)
-   {
-    cout <<"j= "<< (binsRap[j]).c_str() << " & " << CS1S_aa_tnp_rap2014[j] <<" \\pm "<<CS1S_aa_tnp_rap2014e[j] <<" \\pm "<<CS1S_aa_tnp_rap2014s[j]<<" \\" << endl;
-   }
-
-cout << "  --- 1S Cross section in PbPb vs. pt ---" << endl;
- for(int j =0 ; j<nPtBins_2013 ; j++)
-   {
-    cout <<"j= "<< (binsPt[j]).c_str() << " & "<< CS1S_aa_tnp_pt[j] <<" \\pm "<<CS1S_aa_tnp_pte[j]  <<" \\pm "<<CS1S_aa_tnp_pts[j] <<" \\" << endl;
+     //  std::cout <<"j= "<< (binsPt[j]).c_str() << " & "<< CS1S_aa_tnp_pt[j] <<" \\pm "<<CS1S_aa_tnp_pte[j]  <<" \\pm "<<CS1S_aa_tnp_pts[j] <<" \\" << endl;
+    std::cout <<"j= "<< (binsPt[j]).c_str() << " & " << setprecision(3) << 
+      CS1S_aa_tnp_pt[j] <<" \\pm "<<
+      CS1S_aa_tnp_pte[j]/CS1S_aa_tnp_pt[j]  <<" \\pm "<<
+      syst1S_aa_pt[j]  <<" \\pm "<<
+      (t_1S_pyquen_pt3p5_muIDTrige[j]/t_1S_pyquen_pt3p5_muIDTrig[j])  <<" \\pm "<<
+      (t_1S_pyquen_pt3p5_STAe[j]/t_1S_pyquen_pt3p5_muIDTrig[j])  <<" \\pm "<<
+      (sqrt(pow(Aet_1S_pyquen_pt_STAe[j]/Aet_1S_pyquen_pt_STA[j],2)+(0.062*0.062))) <<" & " << endl;
+// CS1S_aa_tnp_pt[j]*
+// CS1S_aa_tnp_pt[j]*
+// CS1S_aa_tnp_pt[j]*
    }
 
 cout << "  --- 1S RAA vs. p_{T} ---" << endl;
  for(int j =0 ; j<nPtBins_2013 ; j++)
    {
-    cout <<"j= "<< (binsPt[j]).c_str() << " & "<< RAA_1S_tnp_pt[j] <<" \\pm "<< RAA_1S_tnp_pte[j] <<" \\pm "<< RAA_1S_tnp_ptsT[j]<< endl;
+     /// cout <<"j= "<< (binsPt[j]).c_str() << " & "<< RAA_1S_tnp_pt[j] <<" \\pm "<< RAA_1S_tnp_pte[j] <<" \\pm "<< RAA_1S_tnp_ptsT[j]<< endl;
    }
 
 cout << "  --- 1S RAA vs. y ---" << endl;
  for(int j =0 ; j<nRapBins_2014 ; j++)
    {
-    cout <<"j= "<< (binsRap[j]).c_str() << " & "<< RAA_1S_tnp_rap[j] <<" \\pm "<< RAA_1S_tnp_rape[j]<<" \\pm "<< RAA_1S_tnp_rapsT[j]<< endl;
+     /// cout <<"j= "<< (binsRap[j]).c_str() << " & "<< RAA_1S_tnp_rap[j] <<" \\pm "<< RAA_1S_tnp_rape[j]<<" \\pm "<< RAA_1S_tnp_rapsT[j]<< endl;
    }
 cout << "  --- 1S pt4 RAA vs. p_{T} ---" << endl;
  for(int j =0 ; j<nPtBins_2013 ; j++)
    {
-    cout <<"j= "<< (binsPt[j]).c_str() << " & "<< RAA_1S_tnp_pt4[j] <<" \\pm "<< RAA_1S_tnp_pt4e[j] <<" \\pm "<< RAA_1S_tnp_pt4sT[j]<< endl;
+     /// cout <<"j= "<< (binsPt[j]).c_str() << " & "<< RAA_1S_tnp_pt4[j] <<" \\pm "<< RAA_1S_tnp_pt4e[j] <<" \\pm "<< RAA_1S_tnp_pt4sT[j]<< endl;
    }
 
 cout << "  --- 1S pt4 RAA vs. y ---" << endl;
  for(int j =0 ; j<nRapBins_2014 ; j++)
    {
-    cout <<"j= "<< (binsRap[j]).c_str() << " & "<< RAA_1S_tnp_rap4[j] <<" \\pm "<< RAA_1S_tnp_rap4e[j]<<" \\pm "<< RAA_1S_tnp_rap4sT[j]<< endl;
+     /// cout <<"j= "<< (binsRap[j]).c_str() << " & "<< RAA_1S_tnp_rap4[j] <<" \\pm "<< RAA_1S_tnp_rap4e[j]<<" \\pm "<< RAA_1S_tnp_rap4sT[j]<< endl;
    }
 
  for(int i=0 ; i<nRapBins_2010; i++)
@@ -982,16 +1033,16 @@ cout << "  --- 1S pt4 RAA vs. y ---" << endl;
      // CS2S_pp_rap[i]= computeRatio( N2S_pp_rap4_2014Large[i] , Ae_2S_pythia_rap2010[i] ); 
      // CS2S_aa_rap[i]= computeRatio( N2S_aa_rap4_2014Large[i] , Ae_2S_pyquen_rap[i] );
      //plot tnp
-     CS2S_pp_tnp_rap[i]= computeRatio( N2S_pp_rap4_2014Large[i] , Aet_2S_pythia_rap2014Large[i] ); 
-     CS2S_aa_tnp_rap[i]= computeRatio( N2S_aa_rap4_2014Large[i] , Aet_2S_pyquen_rap2014Large[i] );
-     CS2S_aa_tnp_raps[i]= N2S_aa_rap4_2014Large[i]*syst2S_csaa_rap[i];
-     CS2S_pp_tnp_raps[i]= N2S_pp_rap4_2014Large[i]*syst2S_cspp_rapLarge[i];
+     CS2S_pp_tnp_rap[i]= computeRatio( N2S_pp_rap4_2014Large[i] , Aet_2S_pythia_rap2014Large[i] );  //these are up to date.
+     CS2S_aa_tnp_rap[i]= computeRatio( N2S_aa_rap4_2014Large[i] , Aet_2S_pyquen_rap2014Large[i] );  //these are up to date.
+     CS2S_aa_tnp_raps[i]= N2S_aa_rap4_2014Large[i]*syst2S_csaa_rap[i]     /Aet_2S_pythia_rap2014Large[i] ;
+     CS2S_pp_tnp_raps[i]= N2S_pp_rap4_2014Large[i]*syst2S_cspp_rapLarge[i]/Aet_2S_pyquen_rap2014Large[i] ;
      //
      // CS2S_pp_rape[i] = computeRatioError(  N2S_pp_rap4_2014Large[i] , Ae_2S_pythia_rap2010[i] ,  N2S_pp_rap4_2014Largee[i] , Ae_2S_pythia_rap2010e[i] );
      // CS2S_aa_rape[i] = computeRatioError(   N2S_aa_rap4_2014Large[i] , Ae_2S_pyquen_rap[i] ,  N2S_aa_rap4_2014Largee[i] , Ae_2S_pyquen_rape[i]);
      //tnp
-     CS2S_pp_tnp_rape[i] = computeRatioError(  N2S_pp_rap4_2014Large[i] , Aet_2S_pythia_rap2014Large[i] ,  N2S_pp_rap4_2014Largee[i] , Aet_2S_pythia_rap2014Largee[i] );
-     CS2S_aa_tnp_rape[i] = computeRatioError(  N2S_aa_rap4_2014Large[i] , Aet_2S_pyquen_rap2014Large[i] ,  N2S_aa_rap4_2014Largee[i] , Aet_2S_pyquen_rap2014Largee[i]);
+     CS2S_pp_tnp_rape[i] = computeRatioError(  N2S_pp_rap4_2014Large[i] , Aet_2S_pythia_rap2014Large[i] ,  N2S_pp_rap4_2014Largee[i] , 0);
+     CS2S_aa_tnp_rape[i] = computeRatioError(  N2S_aa_rap4_2014Large[i] , Aet_2S_pyquen_rap2014Large[i] ,  N2S_aa_rap4_2014Largee[i] , 0);
      CS2S_pp_tnp_rap[i]=CS2S_pp_tnp_rap[i]/(L_pp_invNb*deltaRap2010[i]);
      CS2S_aa_tnp_rap[i]=CS2S_aa_tnp_rap[i]/(N_MB_corr * T_AA_b * deltaRap2010[i]);
      CS2S_pp_tnp_rape[i]=CS2S_pp_tnp_rape[i]/(L_pp_invNb*deltaRap2010[i]);
@@ -1029,18 +1080,14 @@ cout << "  --- 1S pt4 RAA vs. y ---" << endl;
      CS1S_aa_ptLarge[i]=CS1S_aa_ptLarge[i]/(RapBinWidth*N_MB_corr*T_AA_b*deltaPt_2010[i]);
      CS1S_pp_pteLarge[i]=CS1S_pp_pteLarge[i]/(RapBinWidth*L_pp_invNb*deltaPt_2010[i]);
      CS1S_aa_pteLarge[i]=CS1S_aa_pteLarge[i]/(RapBinWidth*N_MB_corr*T_AA_b*deltaPt_2010[i]);
-     //invariant yields.
-     // CS2S_pp_pt[i]= computeRatio( N2S_pp_pt4_2013Large[i] , Ae_2S_pythia_pt2010[i] ); 
-     // CS2S_aa_pt[i]= computeRatio( N2S_aa_pt4_2013Large[i] , Ae_2S_pyquen_pt[i] );
-     // CS2S_pp_pte[i]= computeRatioError( N2S_pp_pt4_2013Large[i] , Ae_2S_pythia_pt2010[i], N2S_pp_pt4_2013Largee[i] , Ae_2S_pythia_pt2010e[i]);
-     // CS2S_aa_pte[i]= computeRatioError(  N2S_aa_pt4_2013Large[i] , Ae_2S_pyquen_pt[i] ,  N2S_aa_pt4_2013Largee[i] , Ae_2S_pyquen_pte[i] );
 
-     CS2S_pp_pt[i]= computeRatio( N2S_pp_pt4_2013Large[i] , Aet_2S_pythia_pt2013Large[i] ); 
+     //2S yields
+     CS2S_pp_pt[i]= computeRatio( N2S_pp_pt4_2013Large[i] , Aet_2S_pythia_pt2013Large[i] );  // large bins !
      CS2S_aa_pt[i]= computeRatio( N2S_aa_pt4_2013Large[i] , Aet_2S_pyquen_pt2013Large[i] );
-     CS2S_pp_pte[i]= computeRatioError( N2S_pp_pt4_2013Large[i] , Aet_2S_pythia_pt2013Large[i],N2S_pp_pt4_2013Largee[i], Aet_2S_pythia_pt2013Largee[i]);
-     CS2S_aa_pte[i]= computeRatioError(  N2S_aa_pt4_2013Large[i] , Aet_2S_pyquen_pt2013Large[i] ,  N2S_aa_pt4_2013Largee[i] , Aet_2S_pyquen_pt2013Largee[i] );
-     CS2S_pp_pts[i]= N2S_pp_pt4_2013Large[i]*syst2S_cspp_ptLarge[i];
-     CS2S_aa_pts[i]=N2S_aa_pt4_2013Large[i]*syst2S_csaa_pt[i];
+     CS2S_pp_pte[i]= computeRatioError( N2S_pp_pt4_2013Large[i] , Aet_2S_pythia_pt2013Large[i],N2S_pp_pt4_2013Largee[i], 0);
+     CS2S_aa_pte[i]= computeRatioError(  N2S_aa_pt4_2013Large[i] , Aet_2S_pyquen_pt2013Large[i] ,  N2S_aa_pt4_2013Largee[i] ,0 );
+     CS2S_pp_pts[i]= N2S_pp_pt4_2013Large[i]*syst2S_cspp_ptLarge[i] / Aet_2S_pythia_pt2013Large[i] ;
+     CS2S_aa_pts[i]=N2S_aa_pt4_2013Large[i]*syst2S_csaa_pt[i] / Aet_2S_pyquen_pt2013Large[i];
      // here, changed a few things.from 4 to 3p5.
      CS2S_aa_pts[i]=  CS2S_aa_pts[i]/(N_MB_corr * T_AA_b*RapBinWidth);
      CS2S_pp_pt[i]=CS2S_pp_pt[i]/(RapBinWidth*L_pp_invNb*deltaPt_2010[i]);
@@ -1061,74 +1108,163 @@ cout << "  --- 1S pt4 RAA vs. y ---" << endl;
      RAA_2S_tnp_ptsT[i]=RAA_2S_pt[i]*syst2S_raa_pt[i];//computeRatioError( CS2S_aa_pt[i] , CS2S_pp_pt[i], CS2S_aa_pts[i] , CS2S_pp_pts[i]);
    }
 
- cout << "  --- 2S Cross section in pp vs. y in large bins---" << endl;
+
+ std::cout << "  --- 2S Cross section in pp vs. pt in large bins---" << endl;
+ for(int j =0 ; j<nPtBins_2010 ; j++)
+   {
+      //// cout <<"j="<< j << "' ,sigma(2S)_pp = "<< CS2S_pp_pt[j] <<" \\pm "<<CS2S_pp_pte[j] <<" \\pm " <<CS2S_pp_pts[j] <<" \\" << endl;
+     std::cout <<"j= "<< (binsPt2010[j]).c_str() << " & " << setprecision(3) << 
+       CS2S_pp_pt[j] <<" \\pm "<<
+       CS2S_pp_pte[j]/CS2S_pp_pt[j]  <<" \\pm "<<
+       syst2S_pp_ptLarge[j]  <<" \\pm "<<
+       (Aet_2S_pythia_pt2013Large_muIDTrige[j]/Aet_2S_pythia_pt2013Large[j])  <<" \\pm "<<
+       (Aet_2S_pythia_pt2013Large_STAe[j]/Aet_2S_pythia_pt2013Large[j])  <<" \\pm "<<
+       (sqrt(pow(Aet_2S_pythia_pt2013Largee[j]/Aet_2S_pythia_pt2013Large[j],2)+(0.2/5.4)*(0.2/5.4))) <<" & " <<
+      endl;
+
+ // CS2S_pp_pt[j]*
+ // CS2S_pp_pt[j]*
+ // CS2S_pp_pt[j]*
+   }
+
+ std::cout << " --- 2S Cross section in pp vs. y in large bins---" << endl;
  for(int j =0 ; j<nRapBins_2010 ; j++)
    {
-     cout <<"j="<< j << "' ,sigma(2S)_pp = "<< CS2S_pp_tnp_rap[j] <<" \\pm "<<CS2S_pp_tnp_rape[j]<<" \\pm "<<CS2S_pp_tnp_raps[j]<<" \\"  << endl;
+      /// cout <<"j="<< j << "' ,sigma(2S)_pp = "<< CS2S_pp_tnp_rap[j] <<" \\pm "<<CS2S_pp_tnp_rape[j]<<" \\pm "<<CS2S_pp_tnp_raps[j]<<" \\"  << endl;
+  std::cout <<"j= "<< (binsRap2010[j]).c_str() << " & " << setprecision(3) << 
+    CS2S_pp_tnp_rap[j] <<" \\pm "<<
+    CS2S_pp_tnp_rape[j]/CS2S_pp_tnp_rap[j]  <<" \\pm "<<
+    syst2S_pp_ptLarge[j]<<" \\pm "<<
+    (Aet_2S_pythia_rap2014_muIDTrige[j]/Aet_2S_pythia_rap2014[j])  <<" \\pm "<<
+    (Aet_2S_pythia_rap2014_STAe[j]/Aet_2S_pythia_rap2014[j])  <<" \\pm "<<
+    (sqrt(pow(Aet_2S_pythia_rap2014e[j]/Aet_2S_pythia_rap2014[j],2)+(0.2/5.4)*(0.2/5.4))) <<" & " << endl;
+
+
+ // CS2S_pp_tnp_rap[j]*
+ // CS2S_pp_tnp_rap[j]*
+ // CS2S_pp_tnp_rap[j]*
    }
 
-cout << "  --- 2S Cross section in pp vs. pt in large bins---" << endl;
- for(int j =0 ; j<nPtBins_2010 ; j++)
-   {
-     cout <<"j="<< j << "' ,sigma(2S)_pp = "<< CS2S_pp_pt[j] <<" \\pm "<<CS2S_pp_pte[j] <<" \\pm " <<CS2S_pp_pts[j] <<" \\" << endl;
-   }
 
-
-cout << "  --- 2S Cross section in PbPb vs. y ---" << endl;
+std::cout << "  --- 2S Cross section in PbPb vs. y ---" << endl;
  for(int j =0 ; j<nRapBins_2010 ; j++)
    {
-     cout <<"j="<< j << "' ,sigma(2S)_PbPb = "<< CS2S_aa_tnp_rap[j] <<" \\pm "<<CS2S_aa_tnp_rape[j] << " \\pm "<<CS2S_aa_tnp_raps[j]<<" \\" << endl;
+     //      std::cout <<"j="<< j << "' ,sigma(2S)_PbPb = "<< CS2S_aa_tnp_rap[j] <<" \\pm "<<CS2S_aa_tnp_rape[j] << " \\pm "<<CS2S_aa_tnp_raps[j]<<" \\" << endl;
+     std::cout <<"j= "<< (binsRap2010[j]).c_str() << " & " << setprecision(3) <<
+       CS2S_aa_tnp_rap[j] <<" \\pm "<<
+       CS2S_aa_tnp_rape[j]/CS2S_aa_tnp_rap[j]  <<" \\pm "<<
+       syst2S_aa_rap[j]  <<" \\pm "<<
+       (Aet_2S_pyquen_rap2014Large_muIDTrige[j]/Aet_2S_pyquen_rap2014Large[j])  <<" \\pm "<< //muid
+       (Aet_2S_pyquen_rap2014Large_STAe[j]/Aet_2S_pyquen_rap2014Large[j])  <<" \\pm "<< ///sta
+       (sqrt(pow(Aet_2S_pyquen_rap2014Largee[j]/Aet_2S_pyquen_rap2014Large[j],2)+(0.062*0.062))) <<" & " <<
+       endl;
+ // CS2S_aa_tnp_rap[j]*
+ // CS2S_aa_tnp_rap[j]*
+ // CS2S_aa_tnp_rap[j]*
    }
 
-cout << "  --- 2S Cross section in PbPb vs. pt ---" << endl;
+std::cout << "  --- 2S Cross section in PbPb vs. pt ---" << endl;
  for(int j =0 ; j<nPtBins_2010 ; j++)
    {
-     cout <<"j="<< j << "' ,sigma(2S)_PbPb = "<< CS2S_aa_pt[j] <<" \\pm "<<CS2S_aa_pte[j]<< " \\pm "<<CS2S_aa_pts[j]<< " \\" << endl;
+     //      std::cout <<"j="<< j << "' ,sigma(2S)_PbPb = "<< CS2S_aa_pt[j] <<" \\pm "<<CS2S_aa_pte[j]<< " \\pm "<<CS2S_aa_pts[j]<< " \\" << endl;
+    std::cout <<"j= "<< (binsPt2010[j]).c_str() << " & " << setprecision(3) << CS2S_aa_pt[j] <<" \\pm "<<
+      CS2S_aa_pte[j]/CS2S_aa_pt[j]  <<" \\pm "<<
+      syst2S_aa_pt[j]  <<" \\pm "<<
+      (Aet_2S_pyquen_pt2013Large_muIDTrige[j]/Aet_2S_pyquen_pt2013Large[j])  <<" \\pm "<<
+      (Aet_2S_pyquen_pt2013Large_STAe[j]/Aet_2S_pyquen_pt2013Large[j])  <<" \\pm "<<
+      (sqrt(pow(Aet_2S_pyquen_pt2013Largee[j]/Aet_2S_pyquen_pt2013Large[j],2)+(0.062*0.062))) <<" & " <<
+      endl;
+// CS2S_aa_pt[j]*
+// CS2S_aa_pt[j]*
+// CS2S_aa_pt[j]*
    }
 
-cout << "  --- 1S RAA vs. p_{T} in LARGE BINS---" << endl;
+ //std::cout << "  --- 1S RAA vs. p_{T} in LARGE BINS---" << endl;
  for(int j =0 ; j<nPtBins_2010 ; j++)
    {
-     cout <<"j="<< j << "' , Raa = "<< RAA_1S_ptLarge[j] <<" \\pm "<< RAA_1S_pteLarge[j]<< endl;
+      /// cout <<"j="<< j << "' , Raa = "<< RAA_1S_ptLarge[j] <<" \\pm "<< RAA_1S_pteLarge[j]<< endl;
    }
 
-cout << "  --- 2S RAA vs. p_{T} ---" << endl;
+ //std::cout << "  --- 2S RAA vs. p_{T} ---" << endl;
  for(int j =0 ; j<nPtBins_2010 ; j++)
    {
-     cout <<"j="<< j << "' , Raa = "<< RAA_2S_pt[j] <<" \\pm "<< RAA_2S_pte[j]<<" \\pm "<< RAA_2S_tnp_pts[j]<< endl;
+      /// cout <<"j="<< j << "' , Raa = "<< RAA_2S_pt[j] <<" \\pm "<< RAA_2S_pte[j]<<" \\pm "<< RAA_2S_tnp_pts[j]<< endl;
    }
 
-cout << "  --- 2S RAA vs. y ---" << endl;
+ //std::cout << "  --- 2S RAA vs. y ---" << endl;
  for(int j =0 ; j<nRapBins_2010 ; j++)
    {
-     cout <<"j="<< j << "' , Raa = "<< RAA_2S_rap[j] <<" \\pm "<< RAA_2S_rape[j]<< " \\pm "<< RAA_2S_tnp_raps[j]<< endl;
+      /// cout <<"j="<< j << "' , Raa = "<< RAA_2S_rap[j] <<" \\pm "<< RAA_2S_rape[j]<< " \\pm "<< RAA_2S_tnp_raps[j]<< endl;
    }
 
  //for the cross sections in pp : shorter bins
 
 
-cout << "  --- 2S Cross section in pp vs. pt short bins---" << endl;
+ std::cout << " --- 2S Cross section in pp vs. pt short bins---" << endl;
  for(int j =0 ; j<nPtBins_2013 ; j++)
    {
-     cout <<"j= "<< (binsPt[j]).c_str() << " & " << CS2S_pp_tnp_pt2013[j] <<" \\pm "<<CS2S_pp_tnp_pt2013e[j]<<" \\pm "<<CS2S_pp_tnp_pts[j]<<"  &" << endl;
+     //      std::cout <<"j= "<< (binsPt[j]).c_str() << " & " << CS2S_pp_tnp_pt2013[j] <<" \\pm "<<CS2S_pp_tnp_pt2013e[j]<<" \\pm "<<CS2S_pp_tnp_pts[j]<<"  &" << endl;
+     std::cout <<"j= "<< (binsPt[j]).c_str() << " & " << setprecision(3) << CS2S_pp_tnp_pt2013[j] <<" \\pm "<<
+       CS2S_pp_tnp_pt2013e[j]/CS2S_pp_tnp_pt2013[j]  <<" \\pm "<<
+       syst2S_pp_pt[j] <<" \\pm "<<
+       (Aet_2S_pythia_pt2013_muIDTrige[j]/Aet_2S_pythia_pt2013[j])  <<" \\pm "<<
+       (Aet_2S_pythia_pt2013_STAe[j]/Aet_2S_pythia_pt2013[j])  <<" \\pm "<<
+       (sqrt(pow(Aet_2S_pythia_pt2013e[j]/Aet_2S_pythia_pt2013[j],2)+(0.2/5.4)*(0.2/5.4))) <<" & " <<
+       endl;
+// CS2S_pp_tnp_pt2013[j]*
+// CS2S_pp_tnp_pt2013[j]*
+// CS2S_pp_tnp_pt2013[j]*
+
    }
 
-cout << "  --- 2S Cross section in pp vs. y short bins---" << endl;
+std::cout << "  --- 2S Cross section in pp vs. y short bins---" << endl;
  for(int j =0 ; j<nRapBins_2014 ; j++)
    {
-     cout <<"j= "<< (binsRap[j]).c_str() << " & " << CS2S_pp_tnp_rap2014[j] <<" \\pm "<<CS2S_pp_tnp_rap2014e[j]<<" \\pm "<<CS2S_pp_tnp_rap2014s[j]<<"  &" << endl;
-   }
+     //    std::cout <<"j= "<< (binsRap[j]).c_str() << " & " << CS2S_pp_tnp_rap2014[j] <<" \\pm "<<CS2S_pp_tnp_rap2014e[j]<<" \\pm "<<CS2S_pp_tnp_rap2014s[j]<<"  &" << endl;
+     std::cout <<"j= "<< (binsRap[j]).c_str() << " & " << setprecision(3) << CS2S_pp_tnp_rap2014[j] <<" \\pm "<<
+       CS2S_pp_tnp_rap2014e[j]/CS2S_pp_tnp_rap2014[j]  <<" \\pm "<<
+       syst2S_pp_rap[j] <<" \\pm "<<
+       (Aet_2S_pythia_rap2014_muIDTrige[j]/Aet_2S_pythia_rap2014[j])  <<" \\pm "<<
+       (Aet_2S_pythia_rap2014_STAe[j]/Aet_2S_pythia_rap2014[j])  <<" \\pm "<<
+       (sqrt(pow(Aet_2S_pythia_rap2014e[j]/Aet_2S_pythia_rap2014[j],2)+(0.2/5.4)*(0.2/5.4))) <<" & " <<
+       endl; 
+// CS2S_pp_tnp_rap2014[j]*
+// CS2S_pp_tnp_rap2014[j]*
+// CS2S_pp_tnp_rap2014[j]*
 
-cout << "  --- 3S Cross section in pp vs. pt short bins---" << endl;
+  }
+
+std::cout << "  --- 3S Cross section in pp vs. pt short bins---" << endl;
  for(int j =0 ; j<nPtBins_2013 ; j++)
    {
-     cout <<"j= "<< (binsPt[j]).c_str() << " & " << CS3S_pp_tnp_pt2013[j] <<" \\pm "<<CS3S_pp_tnp_pt2013e[j]<<" \\pm "<<CS3S_pp_tnp_pts[j]<<"  &" << endl;
+     //  std::cout <<"j= "<< (binsPt[j]).c_str() << " & " << CS3S_pp_tnp_pt2013[j] <<" \\pm "<<CS3S_pp_tnp_pt2013e[j]<<" \\pm "<<CS3S_pp_tnp_pts[j]<<"  &" << endl;
+     std::cout <<"j= "<< (binsPt[j]).c_str() << " & " << setprecision(3) << CS3S_pp_tnp_pt2013[j] <<" \\pm "<<
+       CS3S_pp_tnp_pt2013e[j]/CS3S_pp_tnp_pt2013[j]  <<" \\pm "<<
+       syst3S_pp_pt[j]  <<" \\pm "<<
+       (Aet_3S_pythia_pt2013_muIDTrige[j]/Aet_3S_pythia_pt2013[j])  <<" \\pm "<<
+       (Aet_3S_pythia_pt2013_STAe[j]/Aet_3S_pythia_pt2013[j])  <<" \\pm "<<
+       (sqrt(pow(Aet_3S_pythia_pt2013e[j]/Aet_3S_pythia_pt2013[j],2)+(0.2/5.4)*(0.2/5.4))) <<" & " <<
+       endl;
+
+// CS3S_pp_tnp_pt2013[j]*
+// CS3S_pp_tnp_pt2013[j]*
+// CS3S_pp_tnp_pt2013[j]*
    }
 
-cout << "  --- 3S Cross section in pp vs. y short bins---" << endl;
+std::cout << "  --- 3S Cross section in pp vs. y short bins---" << endl;
  for(int j =0 ; j<nRapBins_2014 ; j++)
    {
-     cout <<"j= "<< (binsRap[j]).c_str() << " & " << CS3S_pp_tnp_rap2014[j] <<" \\pm "<<CS3S_pp_tnp_rap2014e[j]<<" \\pm "<<CS3S_pp_tnp_rap2014s[j]<<"  &" << endl;
+     //        std::cout <<"j= "<< (binsRap[j]).c_str() << " & " << CS3S_pp_tnp_rap2014[j] <<" \\pm "<<CS3S_pp_tnp_rap2014e[j]<<" \\pm "<<CS3S_pp_tnp_rap2014s[j]<<"  &" << endl; 
+     std::cout <<"j= "<< (binsRap[j]).c_str() << " & " << setprecision(3) << CS3S_pp_tnp_rap2014[j] <<" \\pm "<<
+       CS3S_pp_tnp_rap2014e[j]/CS3S_pp_tnp_rap2014[j]  <<" \\pm "<<
+       syst3S_pp_rap[j] <<" \\pm "<<
+       (Aet_3S_pythia_rap2014_muIDTrige[j]/Aet_3S_pythia_rap2014[j])  <<" \\pm "<<
+       (Aet_3S_pythia_rap2014_STAe[j]/Aet_3S_pythia_rap2014[j])  <<" \\pm "<<
+       (sqrt(pow(Aet_3S_pythia_rap2014e[j]/Aet_3S_pythia_rap2014[j],2)+(0.2/5.4)*(0.2/5.4))) <<" & " <<
+       endl; 
+// CS3S_pp_tnp_pt2013[j]*
+// CS3S_pp_tnp_pt2013[j]*
+// CS3S_pp_tnp_pt2013[j]*
    }
  ///plotting TNP corrections vs pt, rap, cent.
  if(plotTNP){
@@ -1217,42 +1353,42 @@ cout << "  --- 3S Cross section in pp vs. y short bins---" << endl;
    // pSignificance1->SetRightMargin(0.03);
    // pSignificance1->SetLeftMargin(0.16);
    //   pSignificance1->SetLogy();
-   TF1 *f4Significance = new TF1("f4Significance","1",0,2.4);
-   f4Significance->SetLineWidth(0);
-   f4Significance->GetYaxis()->SetTitleOffset(1.05);
-   f4Significance->GetYaxis()->SetRangeUser(0,1);
-   f4Significance->GetXaxis()->SetTitle("y");	
-   f4Significance->GetXaxis()->SetTitleSize(0.048);	
-   f4Significance->GetYaxis()->SetTitle("Efficiency");
-   f4Significance->GetYaxis()->SetTitleSize(0.048);
-   f4Significance->GetXaxis()->CenterTitle(kTRUE);
-   f4Significance->Draw();
+   TF1 *f5Significance = new TF1("f5Significance","1",0,2.4);
+   f5Significance->SetLineWidth(0);
+   f5Significance->GetYaxis()->SetTitleOffset(1.05);
+   f5Significance->GetYaxis()->SetRangeUser(0,1);
+   f5Significance->GetXaxis()->SetTitle("y");	
+   f5Significance->GetXaxis()->SetTitleSize(0.048);	
+   f5Significance->GetYaxis()->SetTitle("Efficiency");
+   f5Significance->GetYaxis()->SetTitleSize(0.048);
+   f5Significance->GetXaxis()->CenterTitle(kTRUE);
+   f5Significance->Draw();
 
-   TGraph *g1AA = new TGraph(nRapBins_2014,rap2014Shift,et_1S_pyquen_rap2014);
+   g1AA = new TGraph(nRapBins_2014,rap2014Shift,et_1S_pyquen_rap2014);
    g1AA->SetMarkerColor(kBlue);
    g1AA->SetMarkerStyle(22);
    g1AA->SetMarkerSize(1.4);
    g1AA->Draw("pe");
 
-   TGraph *g1pp = new TGraph(nRapBins_2014,rap2014,et_1S_pythia_rap2014);
+   g1pp = new TGraph(nRapBins_2014,rap2014,et_1S_pythia_rap2014);
    g1pp->SetMarkerColor(kRed);
    g1pp->SetMarkerStyle(22);
    g1pp->SetMarkerSize(1.4);
    g1pp->Draw("pe");
 
-   TGraph *g1AA_noCorr = new TGraph(nRapBins_2014,rap2014Shift,e_1S_pyquen_rap2014);
+   g1AA_noCorr = new TGraph(nRapBins_2014,rap2014Shift,e_1S_pyquen_rap2014);
    g1AA_noCorr->SetMarkerColor(kBlue);
    g1AA_noCorr->SetMarkerStyle(20);
    g1AA_noCorr->SetMarkerSize(1.4);
    g1AA_noCorr->Draw("pe");
 
-   TGraph *g1pp_noCorr = new TGraph(nRapBins_2014,rap2014,e_1S_pythia_rap3p5);
+   g1pp_noCorr = new TGraph(nRapBins_2014,rap2014,e_1S_pythia_rap3p5);
    g1pp_noCorr->SetMarkerColor(kRed);
    g1pp_noCorr->SetMarkerStyle(20);
    g1pp_noCorr->SetMarkerSize(1.4);
    g1pp_noCorr->Draw("pe");
    
-   TLegend *legend = new TLegend(0.45,0.3,0.88,0.45);
+   legend = new TLegend(0.45,0.3,0.88,0.45);
    legend->SetTextSize(0.029);
    legend->SetFillStyle(0);
    legend->SetFillColor(0);
@@ -1280,15 +1416,15 @@ cout << "  --- 3S Cross section in pp vs. y short bins---" << endl;
      //   pSignificance1->SetLogy();
      pSignificance1->Draw();
      pSignificance1->cd();
-     TF1 *f4Significance = new TF1("f4Significance","0",0,5);
-     f4Significance->SetLineWidth(0);
-     f4Significance->GetYaxis()->SetTitleOffset(1.5);
-     f4Significance->GetYaxis()->SetRangeUser(0,35);
-     f4Significance->GetXaxis()->SetTitle("Pt Bin Number");		
-     f4Significance->GetYaxis()->SetTitle("Significance");
-     f4Significance->GetYaxis()->SetTitleSize(0.038);
-     f4Significance->GetXaxis()->CenterTitle(kTRUE);
-     f4Significance->Draw();
+     TF1 *f6Significance = new TF1("f6Significance","0",0,5);
+     f6Significance->SetLineWidth(0);
+     f6Significance->GetYaxis()->SetTitleOffset(1.5);
+     f6Significance->GetYaxis()->SetRangeUser(0,35);
+     f6Significance->GetXaxis()->SetTitle("Pt Bin Number");		
+     f6Significance->GetYaxis()->SetTitle("Significance");
+     f6Significance->GetYaxis()->SetTitleSize(0.038);
+     f6Significance->GetXaxis()->CenterTitle(kTRUE);
+     f6Significance->Draw();
 
      TGraph *g1 = new TGraph(nPtBins_2013,fiveBins,SigOverErr_ppPt1S3p5);
      g1->SetMarkerColor(kBlue);
@@ -1314,7 +1450,7 @@ cout << "  --- 3S Cross section in pp vs. y short bins---" << endl;
      g4->SetMarkerSize(2);
      g4->Draw("pe");
 
-     TLegend *legend = new TLegend(0.6,0.7,0.8,0.9);
+     legend = new TLegend(0.6,0.7,0.8,0.9);
      legend->SetTextSize(0.029);
      legend->SetFillStyle(0);
      legend->SetFillColor(0);
@@ -1338,15 +1474,15 @@ cout << "  --- 3S Cross section in pp vs. y short bins---" << endl;
      //   pSignificance2->SetLogy();
      pSignificance2->Draw();
      pSignificance2->cd();
-     TF1 *f4Significance = new TF1("f4Significance","3",0,6);
-     f4Significance->SetLineWidth(0);
-     f4Significance->GetYaxis()->SetTitleOffset(1.5);
-     f4Significance->GetYaxis()->SetRangeUser(0,35);
-     f4Significance->GetXaxis()->SetTitle("Rap Bin Number");		
-     f4Significance->GetYaxis()->SetTitle("Significance");
-     f4Significance->GetYaxis()->SetTitleSize(0.038);
-     f4Significance->GetXaxis()->CenterTitle(kTRUE);
-     f4Significance->Draw();
+     TF1 *f7Significance = new TF1("f7Significance","3",0,6);
+     f7Significance->SetLineWidth(0);
+     f7Significance->GetYaxis()->SetTitleOffset(1.5);
+     f7Significance->GetYaxis()->SetRangeUser(0,35);
+     f7Significance->GetXaxis()->SetTitle("Rap Bin Number");		
+     f7Significance->GetYaxis()->SetTitle("Significance");
+     f7Significance->GetYaxis()->SetTitleSize(0.038);
+     f7Significance->GetXaxis()->CenterTitle(kTRUE);
+     f7Significance->Draw();
      TGraph *g5 = new TGraph(nRapBins_2014,sixBins,SigOverErr_ppRap1S3p5);
      g5->SetMarkerColor(kBlue);
      g5->SetMarkerStyle(21);
@@ -1371,7 +1507,7 @@ cout << "  --- 3S Cross section in pp vs. y short bins---" << endl;
      g8->SetMarkerSize(2);
      g8->Draw("pe");
 
-     TLegend *legend = new TLegend(0.65,0.7,0.85,0.9);
+     legend = new TLegend(0.65,0.7,0.85,0.9);
      legend->SetTextSize(0.029);
      legend->SetFillStyle(0);
      legend->SetFillColor(0);
@@ -1477,6 +1613,7 @@ cout << "  --- 3S Cross section in pp vs. y short bins---" << endl;
    //f4Pt->Draw("same");
    gPad->RedrawAxis(); 
  }
+ legend = 0;
  TLegend *legend = new TLegend(0.7,0.55,0.9,0.7);
  legend->SetTextSize(0.029);
  legend->SetFillStyle(0);
@@ -1569,7 +1706,7 @@ cout << "  --- 3S Cross section in pp vs. y short bins---" << endl;
  gpt2TNP->Draw("pe");
  gpt2TNPcircle->Draw("p");
  f4Ptaa->Draw("same");
- TLegend *legend = new TLegend(0.20,0.17,0.35,0.32);
+ legend = new TLegend(0.20,0.17,0.35,0.32);
  legend->SetTextSize(gTextSize);
  legend->SetFillStyle(0);
  legend->SetFillColor(0);
@@ -1628,50 +1765,14 @@ cout << "  --- 3S Cross section in pp vs. y short bins---" << endl;
  f4Pt->GetXaxis()->SetTitleSize(0.045);
  f4Pt->GetXaxis()->SetTitleOffset(f4Pt->GetXaxis()->GetTitleOffset()*1.3);
  f4Pt->GetYaxis()->SetTitleSize(0.045);
- f4Pt->GetYaxis()->SetLabelSize(0.9*f4Pt->GetYaxis()->GetLabelSize()); // cheating a little bit because the Y axis title is fat
+ f4Pt->GetYaxis()->SetLabelSize(0.9*f4Pt->GetYaxis()->GetLabelSize()); //  Y axis title is fat
  f4Pt->GetYaxis()->SetTitleOffset(1.55);
  f4Pt->GetYaxis()->SetRangeUser(0.0005,0.2);
  //f4Pt->GetYaxis()->SetRangeUser(0.01,.09);
  f4Pt->GetXaxis()->CenterTitle(kTRUE);
  f4Pt->Draw();
- if(!plotTNP){
-   TGraphErrors *g2circle = new TGraphErrors(nPtBins_2013,pt,CS2S_pp_pt2013,0,CS2S_pp_pt2013e);
-   g2circle->SetMarkerStyle(20);
-   g2circle->SetMarkerSize(1.2);
-   g2circle->SetLineColor(color2Spp);
-   g2pt->Draw("pe");
-   g2circle->Draw("p");
-
-   TGraphErrors *g3circle = new TGraphErrors(nPtBins_2013,pt,CS3S_pp_pt2013,0,CS3S_pp_pt2013e);
-   g3circle->SetMarkerStyle(22);
-   g3circle->SetMarkerSize(1.2);
-   g3circle->SetLineColor(color3Spp);
-   g3pt->Draw("pe");
-   g3circle->Draw("p");
-
-   TGraphErrors *gpt1pp = new TGraphErrors(nPtBins_2013,pt,CS1S_pp_pt,0,CS1S_pp_pte);
-   gpt1pp->SetMarkerColor(color1Spp);
-   gpt1pp->SetMarkerStyle(21);
-   gpt1pp->SetMarkerSize(1.2);
-   TGraphErrors *gpt1circlepp = new TGraphErrors(nPtBins_2013,pt,CS1S_pp_pt,0,CS1S_pp_pte);
-   gpt1circlepp->SetMarkerStyle(21);
-   gpt1circlepp->SetMarkerSize(1.22);
-   gpt1circlepp->SetLineColor(kBlack);
-   gpt1pp->Draw("pe");
-   gpt1circlepp->Draw("p");
-   TGraphErrors *g2pt = new TGraphErrors(nPtBins_2013,pt,CS2S_pp_pt2013,pte,CS2S_pp_pt2013e);
-   g2pt->SetMarkerColor(color2Spp);
-   g2pt->SetMarkerStyle(21);
-   g2pt->SetMarkerSize(1.2);
-
-   TGraphErrors *g3pt = new TGraphErrors(nPtBins_2013,pt,CS3S_pp_pt2013,pte,CS3S_pp_pt2013e);
-   g3pt->SetMarkerColor(color3Spp);
-   g3pt->SetMarkerStyle(21);
-   g3pt->SetMarkerSize(1.2);
- }
-
  
- if(plotTNP){
+ if(plotTNP){///should be always true now!
    TGraphErrors *gPt2ppsyst = new TGraphErrors(nPtBins_2013,pt,CS2S_pp_tnp_pt2013,pte,CS2S_pp_tnp_pts);
    gPt2ppsyst->SetLineColor(color2Spp);
    gPt2ppsyst->SetFillStyle(0);
@@ -1735,7 +1836,7 @@ cout << "  --- 3S Cross section in pp vs. y short bins---" << endl;
  gPad->RedrawAxis();
  //f4Pt->Draw("same");
  gPad->RedrawAxis();
- TLegend *legend = new TLegend(0.24,0.19,0.49,0.40);
+ legend = new TLegend(0.24,0.19,0.49,0.40);
  legend->SetTextSize(gTextSize);
  legend->SetFillStyle(0);
  legend->SetFillColor(0);
@@ -1788,7 +1889,281 @@ cout << "  --- 3S Cross section in pp vs. y short bins---" << endl;
  }
  }
 
+ for(int u=0;u<nPtBins_2013;u++){
+   cs1Spppt_stat[u]+=pt1[u];
+   cs1Spppt_fits[u]+=pt1[u];
+   cs1Spppt_muid[u]+=pt1[u];
+   cs1Spppt_sta[u]+=pt1[u];
+   cs1Spppt_lumiGen[u]+=pt1[u];
 
+   cs2Spppt_stat[u]+=pt1[u];
+   cs2Spppt_fits[u]+=pt1[u];
+   cs2Spppt_muid[u]+=pt1[u];
+   cs2Spppt_sta[u]+=pt1[u];
+   cs2Spppt_lumiGen[u]+=pt1[u];
+
+   cs3Spppt_stat[u]+=pt1[u];
+   cs3Spppt_fits[u]+=pt1[u];
+   cs3Spppt_muid[u]+=pt1[u];
+   cs3Spppt_sta[u]+=pt1[u];
+   cs3Spppt_lumiGen[u]+=pt1[u];
+ }
+
+ for(int u=0;u<nRapBins_2014;u++){
+   cs1Spprap_stat[u]+=rap1[u];
+   cs1Spprap_fits[u]+=rap1[u];
+   cs1Spprap_muid[u]+=rap1[u];
+   cs1Spprap_sta[u]+=rap1[u];
+   cs1Spprap_lumiGen[u]+=rap1[u];
+
+   cs2Spprap_stat[u]+=rap1[u];
+   cs2Spprap_fits[u]+=rap1[u];
+   cs2Spprap_muid[u]+=rap1[u];
+   cs2Spprap_sta[u]+=rap1[u];
+   cs2Spprap_lumiGen[u]+=rap1[u];
+
+   cs3Spprap_stat[u]+=rap1[u];
+   cs3Spprap_fits[u]+=rap1[u];
+   cs3Spprap_muid[u]+=rap1[u];
+   cs3Spprap_sta[u]+=rap1[u];
+   cs3Spprap_lumiGen[u]+=rap1[u];
+ }
+ TCanvas *crapppS = new TCanvas("crapppS","crapppS",1200,600); 
+ crapppS->Divide(3);
+ crapppS->cd(1);
+ TF1 *f4Ps = new TF1("f4Ps","1",0,2.4);
+ f4Ps->SetLineWidth(0);
+ f4Ps->SetLineColor(1);
+ // f4Ps->GetYaxis()->SetTitleOffset(1.5);
+ f4Ps->GetXaxis()->SetTitle("|y|");		
+ f4Ps->GetYaxis()->SetTitle("size of uncertainties, #sigma = 1"); // % of #frac{1}{#Deltay} #frac{d#sigma[#varUpsilon(1S)]}{dp_{T}}  [nb/ GeV/c]
+
+ f4Ps->GetXaxis()->SetTitleSize(0.045);
+ f4Ps->GetXaxis()->SetTitleOffset(f4Ps->GetXaxis()->GetTitleOffset()*1.3);
+ f4Ps->GetYaxis()->SetTitleSize(0.045);
+ f4Ps->GetYaxis()->SetLabelSize(0.9*f4Ps->GetYaxis()->GetLabelSize()); //  Y axis title is fat
+ f4Ps->GetYaxis()->SetTitleOffset(1.55);
+ f4Ps->GetYaxis()->SetRangeUser(1.0,1.3);
+ f4Ps->GetXaxis()->CenterTitle(kTRUE);
+ f4Ps->Draw();
+ TGraphErrors *g2stat = new TGraphErrors(nRapBins_2014,rap2014,cs1Spprap_stat,rap2014e,0);
+ g2stat->SetLineColor(1);
+ g2stat->SetFillStyle(0);
+ g2stat->SetLineWidth(3);
+ g2stat->SetMarkerSize(0);
+ g2stat->Draw("2");
+ TGraphErrors *g2fits = new TGraphErrors(nRapBins_2014,rap2014,cs1Spprap_fits,rap2014e,0);
+ g2fits->SetLineColor(2);
+ g2fits->SetFillStyle(0);
+ g2fits->SetLineWidth(3);
+ g2fits->SetMarkerSize(0);
+ g2fits->Draw("2");
+ TGraphErrors *g2muid = new TGraphErrors(nRapBins_2014,rap2014,cs1Spprap_muid,rap2014e,0);
+ g2muid->SetLineColor(3);
+ g2muid->SetFillStyle(0);
+ g2muid->SetLineWidth(3);
+ g2muid->SetMarkerSize(0);
+ g2muid->Draw("2");
+ TGraphErrors *g2sta = new TGraphErrors(nRapBins_2014,rap2014,cs1Spprap_sta,rap2014e,0);
+ g2sta->SetLineColor(4);
+ g2sta->SetFillStyle(0);
+ g2sta->SetLineWidth(3);
+ g2sta->SetMarkerSize(0);
+ g2sta->Draw("2");
+ TGraphErrors *g2lumiGen = new TGraphErrors(nRapBins_2014,rap2014,cs1Spprap_lumiGen,rap2014e,0);
+ g2lumiGen->SetLineColor(5);
+ g2lumiGen->SetFillStyle(0);
+ g2lumiGen->SetLineWidth(3);
+ g2lumiGen->SetMarkerSize(0);
+ g2lumiGen->Draw("2");
+
+ crapppS->cd(2);
+ f4Ps->Draw();
+ TGraphErrors *g2stat = new TGraphErrors(nRapBins_2014,rap2014,cs2Spprap_stat,rap2014e,0);
+ g2stat->SetLineColor(1);
+ g2stat->SetFillStyle(0);
+ g2stat->SetLineWidth(3);
+ g2stat->SetMarkerSize(0);
+ g2stat->Draw("2");
+ TGraphErrors *g2fits = new TGraphErrors(nRapBins_2014,rap2014,cs2Spprap_fits,rap2014e,0);
+ g2fits->SetLineColor(2);
+ g2fits->SetFillStyle(0);
+ g2fits->SetLineWidth(3);
+ g2fits->SetMarkerSize(0);
+ g2fits->Draw("2");
+ TGraphErrors *g2muid = new TGraphErrors(nRapBins_2014,rap2014,cs2Spprap_muid,rap2014e,0);
+ g2muid->SetLineColor(3);
+ g2muid->SetFillStyle(0);
+ g2muid->SetLineWidth(3);
+ g2muid->SetMarkerSize(0);
+ g2muid->Draw("2");
+ TGraphErrors *g2sta = new TGraphErrors(nRapBins_2014,rap2014,cs2Spprap_sta,rap2014e,0);
+ g2sta->SetLineColor(4);
+ g2sta->SetFillStyle(0);
+ g2sta->SetLineWidth(3);
+ g2sta->SetMarkerSize(0);
+ g2sta->Draw("2");
+ TGraphErrors *g2lumiGen = new TGraphErrors(nRapBins_2014,rap2014,cs2Spprap_lumiGen,rap2014e,0);
+ g2lumiGen->SetLineColor(5);
+ g2lumiGen->SetFillStyle(0);
+ g2lumiGen->SetLineWidth(3);
+ g2lumiGen->SetMarkerSize(0);
+ g2lumiGen->Draw("2");
+
+ crapppS->cd(3);
+ f4Ps->Draw();
+ TGraphErrors *g2stat = new TGraphErrors(nRapBins_2014,rap2014,cs3Spprap_stat,rap2014e,0);
+ g2stat->SetLineColor(1);
+ g2stat->SetFillStyle(0);
+ g2stat->SetLineWidth(3);
+ g2stat->SetMarkerSize(0);
+ g2stat->Draw("2");
+ TGraphErrors *g2fits = new TGraphErrors(nRapBins_2014,rap2014,cs3Spprap_fits,rap2014e,0);
+ g2fits->SetLineColor(2);
+ g2fits->SetFillStyle(0);
+ g2fits->SetLineWidth(3);
+ g2fits->SetMarkerSize(0);
+ g2fits->Draw("2");
+ TGraphErrors *g2muid = new TGraphErrors(nRapBins_2014,rap2014,cs3Spprap_muid,rap2014e,0);
+ g2muid->SetLineColor(3);
+ g2muid->SetFillStyle(0);
+ g2muid->SetLineWidth(3);
+ g2muid->SetMarkerSize(0);
+ g2muid->Draw("2");
+ TGraphErrors *g2sta = new TGraphErrors(nRapBins_2014,rap2014,cs3Spprap_sta,rap2014e,0);
+ g2sta->SetLineColor(4);
+ g2sta->SetFillStyle(0);
+ g2sta->SetLineWidth(3);
+ g2sta->SetMarkerSize(0);
+ g2sta->Draw("2");
+ TGraphErrors *g2lumiGen = new TGraphErrors(nRapBins_2014,rap2014,cs3Spprap_lumiGen,rap2014e,0);
+ g2lumiGen->SetLineColor(5);
+ g2lumiGen->SetFillStyle(0);
+ g2lumiGen->SetLineWidth(3);
+ g2lumiGen->SetMarkerSize(0);
+ g2lumiGen->Draw("2");
+
+ crapppS->SaveAs(basedir2 + TString("/Uncertainties_Rap.pdf"));
+ crapppS->SaveAs(basedir1 + TString("/Uncertainties_Rap.png"));
+
+ TCanvas *cptppS = new TCanvas("cptppS","cptppS",1200,600); 
+ cptppS->Divide(3);
+ cptppS->cd(1);
+ TF1 *f4Ps1 = new TF1("f4Ps1","1",0,20);
+ f4Ps1->SetLineWidth(0);
+ f4Ps1->SetLineColor(1);
+ // f4Ps->GetYaxis()->SetTitleOffset(1.5);
+ f4Ps1->GetXaxis()->SetTitle("p_{T}^{#varUpsilon} (GeV/c)");		
+ f4Ps1->GetYaxis()->SetTitle("size of uncertainties, #sigma = 1"); // % of #frac{1}{#Deltay} #frac{d#sigma[#varUpsilon(1S)]}{dp_{T}}  [nb/ GeV/c]
+
+ f4Ps1->GetXaxis()->SetTitleSize(0.045);
+ f4Ps1->GetXaxis()->SetTitleOffset(f4Ps->GetXaxis()->GetTitleOffset()*1.3);
+ f4Ps1->GetYaxis()->SetTitleSize(0.045);
+ f4Ps1->GetYaxis()->SetLabelSize(0.9*f4Ps->GetYaxis()->GetLabelSize()); //  Y axis title is fat
+ f4Ps1->GetYaxis()->SetTitleOffset(1.55);
+ f4Ps1->GetYaxis()->SetRangeUser(1.0,1.3);
+ f4Ps1->GetXaxis()->CenterTitle(kTRUE);
+ f4Ps1->Draw();
+ TGraphErrors *g2stat = new TGraphErrors(nPtBins_2013,pt,cs1Spppt_stat,pte,0);
+ g2stat->SetLineColor(1);
+ g2stat->SetFillStyle(0);
+ g2stat->SetLineWidth(3);
+ g2stat->SetMarkerSize(0);
+ g2stat->Draw("2");
+ TGraphErrors *g2fits = new TGraphErrors(nPtBins_2013,pt,cs1Spppt_fits,pte,0);
+ g2fits->SetLineColor(2);
+ g2fits->SetFillStyle(0);
+ g2fits->SetLineWidth(3);
+ g2fits->SetMarkerSize(0);
+ g2fits->Draw("2");
+ TGraphErrors *g2muid = new TGraphErrors(nPtBins_2013,pt,cs1Spppt_muid,pte,0);
+ g2muid->SetLineColor(3);
+ g2muid->SetFillStyle(0);
+ g2muid->SetLineWidth(3);
+ g2muid->SetMarkerSize(0);
+ g2muid->Draw("2");
+ TGraphErrors *g2sta = new TGraphErrors(nPtBins_2013,pt,cs1Spppt_sta,pte,0);
+ g2sta->SetLineColor(4);
+ g2sta->SetFillStyle(0);
+ g2sta->SetLineWidth(3);
+ g2sta->SetMarkerSize(0);
+ g2sta->Draw("2");
+ TGraphErrors *g2lumiGen = new TGraphErrors(nPtBins_2013,pt,cs1Spppt_lumiGen,pte,0);
+ g2lumiGen->SetLineColor(5);
+ g2lumiGen->SetFillStyle(0);
+ g2lumiGen->SetLineWidth(3);
+ g2lumiGen->SetMarkerSize(0);
+ g2lumiGen->Draw("2");
+
+ cptppS->cd(2);
+ f4Ps1->Draw();
+ TGraphErrors *g2stat = new TGraphErrors(nPtBins_2013,pt,cs2Spppt_stat,pte,0);
+ g2stat->SetLineColor(1);
+ g2stat->SetFillStyle(0);
+ g2stat->SetLineWidth(3);
+ g2stat->SetMarkerSize(0);
+ g2stat->Draw("2");
+ TGraphErrors *g2fits = new TGraphErrors(nPtBins_2013,pt,cs2Spppt_fits,pte,0);
+ g2fits->SetLineColor(2);
+ g2fits->SetFillStyle(0);
+ g2fits->SetLineWidth(3);
+ g2fits->SetMarkerSize(0);
+ g2fits->Draw("2");
+ TGraphErrors *g2muid = new TGraphErrors(nPtBins_2013,pt,cs2Spppt_muid,pte,0);
+ g2muid->SetLineColor(3);
+ g2muid->SetFillStyle(0);
+ g2muid->SetLineWidth(3);
+ g2muid->SetMarkerSize(0);
+ g2muid->Draw("2");
+ TGraphErrors *g2sta = new TGraphErrors(nPtBins_2013,pt,cs2Spppt_sta,pte,0);
+ g2sta->SetLineColor(4);
+ g2sta->SetFillStyle(0);
+ g2sta->SetLineWidth(3);
+ g2sta->SetMarkerSize(0);
+ g2sta->Draw("2");
+ TGraphErrors *g2lumiGen = new TGraphErrors(nPtBins_2013,pt,cs2Spppt_lumiGen,pte,0);
+ g2lumiGen->SetLineColor(5);
+ g2lumiGen->SetFillStyle(0);
+ g2lumiGen->SetLineWidth(3);
+ g2lumiGen->SetMarkerSize(0);
+ g2lumiGen->Draw("2");
+
+ cptppS->cd(3);
+ f4Ps1->Draw();
+ TGraphErrors *g2stat = new TGraphErrors(nPtBins_2013,pt,cs3Spppt_stat,pte,0);
+ g2stat->SetLineColor(1);
+ g2stat->SetFillStyle(0);
+ g2stat->SetLineWidth(3);
+ g2stat->SetMarkerSize(0);
+ g2stat->Draw("2");
+ TGraphErrors *g2fits = new TGraphErrors(nPtBins_2013,pt,cs3Spppt_fits,pte,0);
+ g2fits->SetLineColor(2);
+ g2fits->SetFillStyle(0);
+ g2fits->SetLineWidth(3);
+ g2fits->SetMarkerSize(0);
+ g2fits->Draw("2");
+ TGraphErrors *g2muid = new TGraphErrors(nPtBins_2013,pt,cs3Spppt_muid,pte,0);
+ g2muid->SetLineColor(3);
+ g2muid->SetFillStyle(0);
+ g2muid->SetLineWidth(3);
+ g2muid->SetMarkerSize(0);
+ g2muid->Draw("2");
+ TGraphErrors *g2sta = new TGraphErrors(nPtBins_2013,pt,cs3Spppt_sta,pte,0);
+ g2sta->SetLineColor(4);
+ g2sta->SetFillStyle(0);
+ g2sta->SetLineWidth(3);
+ g2sta->SetMarkerSize(0);
+ g2sta->Draw("2");
+ TGraphErrors *g2lumiGen = new TGraphErrors(nPtBins_2013,pt,cs3Spppt_lumiGen,pte,0);
+ g2lumiGen->SetLineColor(5);
+ g2lumiGen->SetFillStyle(0);
+ g2lumiGen->SetLineWidth(3);
+ g2lumiGen->SetMarkerSize(0);
+ g2lumiGen->Draw("2");
+
+ cptppS->SaveAs(basedir2 + TString("/Uncertainties_Pt.pdf"));
+ cptppS->SaveAs(basedir1 + TString("/Uncertainties_Pt.png"));
+ 
  if(plotFiducial){
  //////////
  //2S+1S pp FIDUCIAL
@@ -1847,7 +2222,7 @@ TGraphErrors *gpt1ppF = new TGraphErrors(nPtBins_2013,pt,CS1S_pp_ptFiducial,pte,
  gPad->RedrawAxis();
  f4Pt->Draw("same");
  gPad->RedrawAxis();
- TLegend *legend = new TLegend(0.482,0.84,0.88,0.7);
+ legend = new TLegend(0.482,0.84,0.88,0.7);
  legend->SetTextSize(0.029);
  legend->SetFillStyle(0);
  legend->SetFillColor(0);
@@ -1923,7 +2298,7 @@ TGraphErrors *gpt1ppF = new TGraphErrors(nPtBins_2013,pt,CS1S_pp_ptFiducial,pte,
  gPad->RedrawAxis();
  f4Pt->Draw("same");
  gPad->RedrawAxis();
- TLegend *legend = new TLegend(0.482,0.84,0.88,0.7);
+ legend = new TLegend(0.482,0.84,0.88,0.7);
  legend->SetTextSize(0.029);
  legend->SetFillStyle(0);
  legend->SetFillColor(0);
@@ -1948,21 +2323,11 @@ lyL->DrawLatex(2,0.000000002,"Fiducial");
  if(plotRAA){
  TCanvas *cRaapt = new TCanvas("cRaapt","cRaapt"); 
  cRaapt->cd();
- // TPad *ppt2 = new TPad("ppt2","ppt2",0.0,0.0,0.98,0.92);
- // ppt2->SetBottomMargin(0.12);
- // ppt2->SetTopMargin(0.03);
- // ppt2->SetRightMargin(0.03);
- // ppt2->SetLeftMargin(0.12);
- // ppt2->Draw();
- // ppt2->cd();
- //one pad to draw RaaPt!
  TF1 *f4RaaPt = new TF1("f4RaaPt","1",0,20);
  f4RaaPt->SetLineWidth(0);
  f4RaaPt->SetLineColor(kBlack);
  f4RaaPt->GetXaxis()->SetTitle("p_{T}^{#varUpsilon} (GeV/c)");
  f4RaaPt->GetYaxis()->SetTitle("R_{AA}");
- // f4RaaPt->GetYaxis()->SetTitleOffset(1.05);
- // f4RaaPt->GetYaxis()->SetTitleSize(0.05);
  f4RaaPt->GetXaxis()->SetTitleOffset(f4RaaPt->GetXaxis()->GetTitleOffset()*1.3);
  f4RaaPt->GetXaxis()->SetTitleSize(0.045);
  f4RaaPt->GetYaxis()->SetRangeUser(0.,1.4);
@@ -2046,30 +2411,10 @@ lyL->DrawLatex(2,0.000000002,"Fiducial");
  
  box->SetFillColor(kGray);//color1Sraa);
  box->Draw();
- if(!plotTight){
- // TBox *box2S = new TBox(18,1-syst2S_raa_global,19,1+syst2S_raa_global);
- // 
- // box2S->SetFillColor(color2Sraa);
- // box2S->Draw();
- }
- if(plotTight){
-   TBox *box1S4 = new TBox(18,1-syst1S_pp_glob,19,1+syst1S_pp_glob);
-   box1S4->SetFillColor(color1Sraa);
-   box1S4->Draw();
- }
- // TLatex *l1CMSpt = new TLatex(16,1.27, "CMS");
- // l1CMSpt->SetTextFont(62);
- // l1CMSpt->SetTextSize(gTextSize);
- // l1CMSpt->Draw();
- // TLatex *lyLPT= new TLatex(2,1.3,"2011 L_{int}^{PbPb} = 166 #mub^{-1}; 2013 L_{int}^{pp} = 5.4 pb^{-1};");
- // lyLPT->SetTextFont(42);
- // lyLPT->SetTextSize(0.027);
- // lyLPT->Draw();
- // if(plot2010){ lyLPT->DrawLatex(2,1.2,"2010 L_{int}^{PbPb} = 7.28 #mub^{-1}; L_{int}^{pp} = 225 nb^{-1};");}
- // ppt2->Update();
+
  //2010stuff
- // TLegend *legend = new TLegend(0.24,0.75,0.4,0.88);
- TLegend *legend = new TLegend(0.23,0.50,0.39,0.65);
+ // legend = new TLegend(0.24,0.75,0.4,0.88);
+ legend = new TLegend(0.23,0.50,0.39,0.65);
  legend->SetTextSize(gTextSize);
  legend->SetFillStyle(0);
  legend->SetFillColor(0);
@@ -2288,7 +2633,7 @@ legendB->SetTextFont(42);
  lyL->SetTextSize(0.029);
  lyL->DrawLatex(0.15,2,"L_{pp} = 5.4 pb^{-1}; |y| < 2.4");
  lyL->Draw();
- crap->SaveAs(basedir1 + TString("/test.pdf"));
+ // crap->SaveAs(basedir1 + TString("/test.pdf"));
 
  TCanvas *crapaa = new TCanvas("crapaa","crapaa"); 
  crapaa->SetLogy();
@@ -2332,7 +2677,7 @@ legendB->SetTextFont(42);
  grap2TNP->Draw("pe");
  grap2TNPcircle->Draw("p");
  gPad->RedrawAxis();
- TLegend *legendB = new TLegend(0.23,0.44,0.46,0.56);
+ legendB = new TLegend(0.23,0.44,0.46,0.56);
  legendB->SetTextSize(0.035);
  legendB->SetFillStyle(0);
  legendB->SetFillColor(0);
@@ -2401,132 +2746,84 @@ legendB->SetTextFont(42);
  f4Rap->GetXaxis()->SetNdivisions(6,8,0,kFALSE);
  f4Rap->GetYaxis()->SetTitleOffset(f4Rap->GetYaxis()->GetTitleOffset()*0.9);
  f4Rap->Draw();
- if(!plotTNP){
-   //pp data
-   TGraphErrors *grap2pp = new TGraphErrors(nRapBins_2014,rap2014,CS2S_pp_rap2014,0,CS2S_pp_rap2014e);
-   grap2pp->SetMarkerColor(color2Spp);
-   grap2pp->SetMarkerStyle(20);
-   grap2pp->SetMarkerSize(1.2);
-   TGraphErrors *grap3pp = new TGraphErrors(nRapBins_2014,rap2014,CS3S_pp_rap2014,0,CS3S_pp_rap2014e);
-   grap3pp->SetMarkerColor(color3Spp);
-   grap3pp->SetMarkerStyle(22);
-   grap3pp->SetMarkerSize(1.2);
-   grap2pp->Draw("pe");
-   g2rapcircle->Draw("p");
-   TGraphErrors *g3rapcircle = new TGraphErrors(nRapBins_2014,rap2014,CS3S_pp_rap2014,rap2014e,CS3S_pp_rap2014e);
-   g3rapcircle->SetMarkerStyle(25);
-   g3rapcircle->SetMarkerSize(1.2);
-   g3rapcircle->SetLineColor(kBlack);
-   grap3pp->Draw("pe");
-   g3rapcircle->Draw("p");
-   TGraphErrors *grap1pp = new TGraphErrors(nRapBins_2014,rap2014,CS1S_pp_rap2014,0,CS1S_pp_rap2014e);
-   grap1pp->SetMarkerColor(color1Spp);
-   grap1pp->SetMarkerStyle(21);
-   grap1pp->SetMarkerSize(1.2);
-   TGraphErrors *grap1circlepp = new TGraphErrors(nRapBins_2014,rap2014,CS1S_pp_rap2014,0,CS1S_pp_rap2014e);
-   grap1circlepp->SetMarkerStyle(25);
-   grap1circlepp->SetMarkerSize(1.2);
-   grap1circlepp->SetLineColor(kBlack);
-   grap1pp->Draw("pe");
-   grap1circlepp->Draw("p");
- }else{
-   TGraphErrors *gRap1ppsyst = new TGraphErrors(nRapBins_2014,rap2014,CS1S_pp_tnp_rap2014,rap2014e,CS1S_pp_tnp_rap2014s);
-   gRap1ppsyst->SetLineColor(color1Spp);
-   gRap1ppsyst->SetFillStyle(0);
-   gRap1ppsyst->SetLineWidth(2);
-   gRap1ppsyst->SetMarkerSize(0);
-   gRap1ppsyst->Draw("2");
-   TGraphErrors *grap1TNPpp = new TGraphErrors(nRapBins_2014,rap2014,CS1S_pp_tnp_rap2014,0,CS1S_pp_tnp_rap2014e);
-   grap1TNPpp->SetMarkerColor(color1Spp);
-   grap1TNPpp->SetMarkerStyle(21);
-   grap1TNPpp->SetMarkerSize(1.2);
-   TGraphErrors *grap1TNPcirclepp = new TGraphErrors(nRapBins_2014,rap2014,CS1S_pp_tnp_rap2014,0,CS1S_pp_tnp_rap2014e);
-   grap1TNPcirclepp->SetMarkerStyle(25);
-   grap1TNPcirclepp->SetMarkerSize(1.2);
-   grap1TNPcirclepp->SetLineColor(kBlack);
-   grap1TNPpp->Draw("pe");
-   grap1TNPcirclepp->Draw("p");
-   f4Rap->Draw("same");
-   TGraphErrors *grap2ppTNP = new TGraphErrors(nRapBins_2014,rap2014,CS2S_pp_tnp_rap2014,0,CS2S_pp_tnp_rap2014e);
-   grap2ppTNP->SetMarkerColor(color2Spp);
-   grap2ppTNP->SetMarkerStyle(20);
-   grap2ppTNP->SetMarkerSize(1.2);
-   TGraphErrors *grap3ppTNP = new TGraphErrors(nRapBins_2014,rap2014,CS3S_pp_tnp_rap2014,0,CS3S_pp_tnp_rap2014e);
-   grap3ppTNP->SetMarkerColor(color3Spp);
-   grap3ppTNP->SetMarkerStyle(22);
-   grap3ppTNP->SetMarkerSize(1.2);
-   TGraphErrors *g2rapcircleTNP = new TGraphErrors(nRapBins_2014,rap2014,CS2S_pp_tnp_rap2014,0,CS2S_pp_tnp_rap2014e);
-   g2rapcircleTNP->SetMarkerStyle(24);
-   g2rapcircleTNP->SetMarkerSize(1.2);
-   g2rapcircleTNP->SetLineColor(kBlack);
-   TGraphErrors *g3rapcircleTNP = new TGraphErrors(nRapBins_2014,rap2014,CS3S_pp_tnp_rap2014,0,CS3S_pp_tnp_rap2014e);
-   g3rapcircleTNP->SetMarkerStyle(26);
-   g3rapcircleTNP->SetMarkerSize(1.2);
-   g3rapcircleTNP->SetLineColor(kBlack);
-   TGraphErrors *gRap2ppsyst = new TGraphErrors(nRapBins_2014,rap2014,CS2S_pp_tnp_rap2014,rap2014e,CS2S_pp_tnp_rap2014s);
-   gRap2ppsyst->SetLineColor(color2Spp);
-   gRap2ppsyst->SetFillStyle(0);
-   gRap2ppsyst->SetLineWidth(2);
-   gRap2ppsyst->SetMarkerSize(0);
-   gRap2ppsyst->Draw("2");
-   grap2ppTNP->Draw("pe");
-   g2rapcircleTNP->Draw("p");
-   TGraphErrors *gRap3ppsyst = new TGraphErrors(nRapBins_2014,rap2014,CS3S_pp_tnp_rap2014,rap2014e,CS3S_pp_tnp_rap2014s);
-   gRap3ppsyst->SetLineColor(color3Spp);
-   gRap3ppsyst->SetFillStyle(0);
-   gRap3ppsyst->SetLineWidth(2);
-   gRap3ppsyst->SetMarkerSize(0);
-   gRap3ppsyst->Draw("2");
-   grap3ppTNP->Draw("pe");
-   g3rapcircleTNP->Draw("p");
-   TGraphErrors *gRap1ppsyst = new TGraphErrors(nRapBins_2014,rap2014,CS1S_pp_tnp_rap2014,rap2014e,CS1S_pp_tnp_rap2014s);
-   gRap1ppsyst->SetLineColor(color1Spp);
-   gRap1ppsyst->SetFillStyle(0);
-   gRap1ppsyst->SetLineWidth(2);
-   gRap1ppsyst->SetMarkerSize(0);
-   gRap1ppsyst->Draw("2");
-   grap1TNPpp->Draw("pe");
-   grap1TNPcirclepp->Draw("p");
- 
- }
- // f4Rap->Draw("same");
 
-
- // TLatex *l1CMSpt = new TLatex(0.15,6, "CMS Internal #sqrt{s} = 2.76 TeV");
- // l1CMSpt->SetTextFont(42);
- // l1CMSpt->SetTextSize(0.038);
- // l1CMSpt->Draw();
-
- 
- // TLatex *lyL= new TLatex();//0.15,3,"L_{PbPb} = 166 #mub^{-1}; |y| < 2.4");
- 
- // lyL->SetTextSize(0.029);
- // lyL->DrawLatex(0.15,2,"L_{pp} = 5.4 pb^{-1}; |y| < 2.4");
- // lyL->Draw();
-
- TLegend *legendB = new TLegend(0.22,0.18,0.40,0.37);
+ TGraphErrors *gRap1ppsyst = new TGraphErrors(nRapBins_2014,rap2014,CS1S_pp_tnp_rap2014,rap2014e,CS1S_pp_tnp_rap2014s);
+ gRap1ppsyst->SetLineColor(color1Spp);
+ gRap1ppsyst->SetFillStyle(0);
+ gRap1ppsyst->SetLineWidth(2);
+ gRap1ppsyst->SetMarkerSize(0);
+ gRap1ppsyst->Draw("2");
+ TGraphErrors *grap1TNPpp = new TGraphErrors(nRapBins_2014,rap2014,CS1S_pp_tnp_rap2014,0,CS1S_pp_tnp_rap2014e);
+ grap1TNPpp->SetMarkerColor(color1Spp);
+ grap1TNPpp->SetMarkerStyle(21);
+ grap1TNPpp->SetMarkerSize(1.2);
+ TGraphErrors *grap1TNPcirclepp = new TGraphErrors(nRapBins_2014,rap2014,CS1S_pp_tnp_rap2014,0,CS1S_pp_tnp_rap2014e);
+ grap1TNPcirclepp->SetMarkerStyle(25);
+ grap1TNPcirclepp->SetMarkerSize(1.2);
+ grap1TNPcirclepp->SetLineColor(kBlack);
+ grap1TNPpp->Draw("pe");
+ grap1TNPcirclepp->Draw("p");
+ f4Rap->Draw("same");
+ TGraphErrors *grap2ppTNP = new TGraphErrors(nRapBins_2014,rap2014,CS2S_pp_tnp_rap2014,0,CS2S_pp_tnp_rap2014e);
+ grap2ppTNP->SetMarkerColor(color2Spp);
+ grap2ppTNP->SetMarkerStyle(20);
+ grap2ppTNP->SetMarkerSize(1.2);
+ TGraphErrors *grap3ppTNP = new TGraphErrors(nRapBins_2014,rap2014,CS3S_pp_tnp_rap2014,0,CS3S_pp_tnp_rap2014e);
+ grap3ppTNP->SetMarkerColor(color3Spp);
+ grap3ppTNP->SetMarkerStyle(22);
+ grap3ppTNP->SetMarkerSize(1.2);
+ TGraphErrors *g2rapcircleTNP = new TGraphErrors(nRapBins_2014,rap2014,CS2S_pp_tnp_rap2014,0,CS2S_pp_tnp_rap2014e);
+ g2rapcircleTNP->SetMarkerStyle(24);
+ g2rapcircleTNP->SetMarkerSize(1.2);
+ g2rapcircleTNP->SetLineColor(kBlack);
+ TGraphErrors *g3rapcircleTNP = new TGraphErrors(nRapBins_2014,rap2014,CS3S_pp_tnp_rap2014,0,CS3S_pp_tnp_rap2014e);
+ g3rapcircleTNP->SetMarkerStyle(26);
+ g3rapcircleTNP->SetMarkerSize(1.2);
+ g3rapcircleTNP->SetLineColor(kBlack);
+ TGraphErrors *gRap2ppsyst = new TGraphErrors(nRapBins_2014,rap2014,CS2S_pp_tnp_rap2014,rap2014e,CS2S_pp_tnp_rap2014s);
+ gRap2ppsyst->SetLineColor(color2Spp);
+ gRap2ppsyst->SetFillStyle(0);
+ gRap2ppsyst->SetLineWidth(2);
+ gRap2ppsyst->SetMarkerSize(0);
+ gRap2ppsyst->Draw("2");
+ grap2ppTNP->Draw("pe");
+ g2rapcircleTNP->Draw("p");
+ TGraphErrors *gRap3ppsyst = new TGraphErrors(nRapBins_2014,rap2014,CS3S_pp_tnp_rap2014,rap2014e,CS3S_pp_tnp_rap2014s);
+ gRap3ppsyst->SetLineColor(color3Spp);
+ gRap3ppsyst->SetFillStyle(0);
+ gRap3ppsyst->SetLineWidth(2);
+ gRap3ppsyst->SetMarkerSize(0);
+ gRap3ppsyst->Draw("2");
+ grap3ppTNP->Draw("pe");
+ g3rapcircleTNP->Draw("p");
+ TGraphErrors *gRap1ppsyst = new TGraphErrors(nRapBins_2014,rap2014,CS1S_pp_tnp_rap2014,rap2014e,CS1S_pp_tnp_rap2014s);
+ gRap1ppsyst->SetLineColor(color1Spp);
+ gRap1ppsyst->SetFillStyle(0);
+ gRap1ppsyst->SetLineWidth(2);
+ gRap1ppsyst->SetMarkerSize(0);
+ gRap1ppsyst->Draw("2");
+ grap1TNPpp->Draw("pe");
+ grap1TNPcirclepp->Draw("p");
+   
+ legendB = new TLegend(0.22,0.18,0.40,0.37);
  legendB->SetTextSize(gTextSize);
  legendB->SetFillStyle(0);
  legendB->SetFillColor(0);
  legendB->SetBorderSize(0);
  legendB->SetTextFont(42);
- if(!plotTNP){
-   legendB->AddEntry(grap1pp,"#varUpsilon(1S) ","pe");
-   legendB->AddEntry(grap2pp,"#varUpsilon(2S) ","pe");
-   legendB->AddEntry(grap3pp,"#varUpsilon(3S) ","pe");
- }else{
-   legendB->AddEntry(grap1TNPpp,"#varUpsilon(1S) ","pe");
-   legendB->AddEntry(grap2ppTNP,"#varUpsilon(2S) ","pe");
-   legendB->AddEntry(grap3ppTNP,"#varUpsilon(3S) ","pe");
- } legendB->Draw();
+
+ legendB->AddEntry(grap1TNPpp,"#varUpsilon(1S) ","pe");
+ legendB->AddEntry(grap2ppTNP,"#varUpsilon(2S) ","pe");
+ legendB->AddEntry(grap3ppTNP,"#varUpsilon(3S) ","pe");
+ legendB->Draw();
 
  gPad->RedrawAxis();
 
 
-    CMS_lumi(gPad,102,33);
-    gPad->Update();
-    gPad->RedrawAxis();
-    gPad->GetFrame()->Draw();
+ CMS_lumi(gPad,102,33);
+ gPad->Update();
+ gPad->RedrawAxis();
+ gPad->GetFrame()->Draw();
 
  crappp->SaveAs(basedir2 + TString("/CS1S_ppRap.pdf")); 
  crappp->SaveAs(basedir1 + TString("/Xsection_pp_1S_Rap.png"));
@@ -2665,7 +2962,7 @@ if(plotRAA){
   // lyLRAP->Draw();
   // if(plot2010) {lyLRAP->DrawLatex(0.2,1.35,"2010 L_{int}^{PbPb} = 7.28 #mub^{-1}; L_{int}^{pp} = 231 nb^{-1};");}
   prap2->Update();
-  TLegend *legend = new TLegend(0.23,0.50,0.39,0.65);
+  legend = new TLegend(0.23,0.50,0.39,0.65);
   legend->SetTextSize(gTextSize);
   legend->SetFillStyle(0);
   legend->SetFillColor(0);
@@ -2741,8 +3038,8 @@ if(plotRAA){
     cRaarap->SaveAs(basedir1 + TString("/RAA_Rap.png"));
   }
  }
-
- plot2010();
+ cout <<  "syst_1S_raa_global = " << syst1S_raa_global << endl;
+ doplot2010();
  plotRAA_uncorr();
  if(plotPA) plotDoubleRatios();
  if(plotEffOrAcc){
@@ -2776,7 +3073,7 @@ if(plotRAA){
   gCompRap1circle->Draw("p");
   f4CompRap->Draw("same");
   gPad->RedrawAxis();
-  TLegend *legend = new TLegend(0.482,0.84,0.88,0.7);
+  legend = new TLegend(0.482,0.84,0.88,0.7);
   legend->SetTextSize(0.029);
   legend->SetFillStyle(0);
   legend->SetFillColor(0);
@@ -2816,7 +3113,7 @@ if(plotRAA){
   gCompPt1circle->Draw("p");
   f4CompPt->Draw("same");
   gPad->RedrawAxis();
-  TLegend *legend = new TLegend(0.482,0.84,0.88,0.7);
+  legend = new TLegend(0.482,0.84,0.88,0.7);
   legend->SetTextSize(0.029);
   legend->SetFillStyle(0);
   legend->SetFillColor(0);
@@ -2950,7 +3247,7 @@ if(plotRAA){
   gCompRap1circle->Draw("p");
   f4CompRap->Draw("same");
   gPad->RedrawAxis();
-  TLegend *legend = new TLegend(0.482,0.84,0.88,0.7);
+  legend = new TLegend(0.482,0.84,0.88,0.7);
   legend->SetTextSize(0.029);
   legend->SetFillStyle(0);
   legend->SetFillColor(0);
@@ -3009,7 +3306,7 @@ if(plotRAA){
   gCompPt_pbpbcircle->Draw("p");
   f4CompPt->Draw("same");
   gPad->RedrawAxis();
-  TLegend *legend = new TLegend(0.482,0.4,0.88,0.7);
+  legend = new TLegend(0.482,0.4,0.88,0.7);
   legend->SetTextSize(0.05);
   legend->SetFillStyle(0);
   legend->SetFillColor(0);
@@ -3065,7 +3362,7 @@ if(plotRAA){
   f4CompPt->Draw("same");
   gPad->RedrawAxis();
 
-  TLegend *legend = new TLegend(0.482,0.3,0.9,0.5);
+  legend = new TLegend(0.482,0.3,0.9,0.5);
   //  legend->SetTextSize(0);
   legend->SetFillStyle(0);
   legend->SetFillColor(0);
@@ -3107,7 +3404,7 @@ if(plotRAA){
   gCompPt1circle->Draw("p");
   f4CompPt->Draw("same");
   gPad->RedrawAxis();
-  TLegend *legend = new TLegend(0.482,0.84,0.88,0.7);
+  legend = new TLegend(0.482,0.84,0.88,0.7);
   legend->SetTextSize(gTextSize);
   legend->SetFillStyle(0);
   legend->SetFillColor(0);
@@ -3116,7 +3413,6 @@ if(plotRAA){
   legend->AddEntry(gCompPt1,"#varUpsilon(1S) #epsilon_{pp}/#epsilon_{PbPb} ","pe");
   legend->Draw();
  }
-
 }
 
 float computeRatio(float x, float y) 
@@ -3139,7 +3435,7 @@ float computeRatioError(float x, float y, float xerr, float yerr)
 }
 
 
-float plot2010()
+void doplot2010()
 {
   float deltaPt_2010[nPtBins_2010]   = {5,7,8};
   float deltaRap2010[nRapBins_2010] = {2.4,2.4};
@@ -3184,12 +3480,13 @@ float plot2010()
   float CS2S_pp_tot;
   float CS2S_pp_tote;
   float CS2S_pp_tots;
-  float CS2S_pp_tote;
+
   float CS2S_aa_tot;
   float CS2S_aa_tots;
   float CS2S_aa_tote;
   float CS3S_pp_tot;
   float CS3S_pp_tote;
+  float CS3S_pp_tots;
   float CS3S_aa_tot;
   float CS3S_aa_tote;
   float CS3S_aa_UL;
@@ -3262,7 +3559,7 @@ float plot2010()
   //large things
   float CS1S_pp_rapLarge[nRapBins_2010] = {};
   float CS1S_pp_rapLargee[nRapBins_2010] = {};
-  ofSyst.open(outSyst.c_str(), ios_base::out | ios_base::app);  
+  //ofSyst.open(outSyst.c_str(), ios_base::out | ios_base::app);  
 
   syst1S_aa_Cent[7]= sqrt (pow(RMS(N1S_aa_cent3p5[7],N1S_aa_cents_5,nfitvars),2)+  pow(maxDeviation(N1S_aa_cent3p5[7],N1B_aa_cents_5,nbkgdvars),2)) ;
   syst1S_aa_Cent[6]= sqrt (pow(RMS(N1S_aa_cent3p5[6],N1S_aa_cents_10,nfitvars),2)+ pow(maxDeviation(N1S_aa_cent3p5[6],N1B_aa_cents_10,nbkgdvars),2)) ;
@@ -3286,38 +3583,45 @@ float plot2010()
   syst2S_aa_Cent[2]= sqrt (pow(RMS( N2S_aa_cent4Large[2],N2S_aa_cent4Larges_30,nfitvars),2)+ pow(maxDeviation( N2S_aa_cent4Large[2],N2B_aa_cent4Larges_30,nbkgdvars),2)) ;
   syst2S_aa_Cent[1]= sqrt (pow(RMS( N2S_aa_cent4Large[1],N2S_aa_cent4Larges_50,nfitvars),2)+ pow(maxDeviation( N2S_aa_cent4Large[1],N2B_aa_cent4Larges_50,nbkgdvars),2)) ;
   syst2S_aa_Cent[0]= sqrt (pow(RMS( N2S_aa_cent4Large[0],N2S_aa_cent4Larges_100,nfitvars),2)+ pow(maxDeviation( N2S_aa_cent4Large[0],N2B_aa_cent4Larges_100,nbkgdvars),2))  ;
-
-  float syst1S_pp_glob = sqrt(pow(N1S_pp_tot3p5e/N1S_pp_tot3p5,2)_pow(N1S_pp_tot3p5s,2)+pow(Aet_1S_pythia_tote/Aet_1S_pythia_tot,2));//
+  //pt4 dont care
   float syst1S_pp_glob4 = sqrt(pow(N1S_pp_tot4e/N1S_pp_tot4,2)+pow(N1S_pp_tot4s,2)+pow(Aet_1S_pythia_tot4e,2));
-  float syst2S_pp_glob = sqrt(pow(N2S_pp_tot4e/N2S_pp_tot4,2)+pow(N2S_pp_tot4s,2)+pow(Aet_2S_pythia_tote/Aet_2S_pythia_tot,2));
-  float syst3S_pp_glob = sqrt(pow(N3S_pp_tot4e/N3S_pp_tot4,2)+pow(N3S_pp_tot4s,2)+pow(Aet_3S_pythia_tote,2));
-  float syst1S_AA_glob = sqrt(pow(N1S_aa_tot3p5e/N1S_aa_tot3p5,2)+pow(N1S_aa_tot3p5s,2)+pow(Aet_1S_pyquen_tote,2));
-  float syst2S_AA_glob = sqrt(pow(N2S_aa_tot4e/N2S_aa_tot4,2)+pow(N2S_aa_tot4s,2)+pow(Aet_2S_pyquen_tote,2));
+  //real stuff
+  float syst_global_pp = sqrt(pow(tracking_pp,2)+pow(L_pp_e,2)); // 1st part global, but incomplete generally
+  //pp globals (used where?)
+  float syst1S_pp_glob = sqrt(pow(N1S_pp_tot3p5s,2)+pow(Aet_1S_pythia_tote/Aet_1S_pythia_tot,2)+syst_global_pp*syst_global_pp); //2nd part: total syst,
+  //  pp fitsyst + pp tnp and genshape syst + 1st part(L_pp, tracking) .
+  float syst2S_pp_glob = sqrt(pow(N2S_pp_tot4s,2)+pow(Aet_2S_pythia_tote/Aet_2S_pythia_tot,2)+syst_global_pp*syst_global_pp); //new, good for 2016
+  float syst3S_pp_glob = sqrt(pow(N3S_pp_tot4s,2)+pow(Aet_3S_pythia_tote/Aet_2S_pythia_tot,2)+syst_global_pp*syst_global_pp); //new, good for 2016
 
-  float systAA_glob2 = syst2S_AA_glob;
-  float syst2S_pp_centGlob4 = sqrt(pow(syst2S_pp_glob,2)+pow(tracking_pp,2)+pow(tracking_aa,2)+pow(L_pp_e,2)+pow(N_MB_e,2)); //  sqrt((L_pp_e*L_pp_e)+(N2S_pp_tot4s*N2S_pp_tot4s)+(N2S_pp_tot4e*N2S_pp_tot4e)/(N2S_pp_tot4*N2S_pp_tot4)+(t_2S_pythia_tote/t_2S_pythia_tot)*(t_2S_pythia_tote/t_2S_pythia_tot)+N1S_pp_tot4s*N1S_pp_tot4s); //L_pp + stat_pp tot(2S) + tnp_pp2S 
-  float systAA_glob1 = sqrt(pow(syst1S_AA_glob,2)+pow(tracking_aa,2)+pow(N_MB_e,2));
-  float syst1S_pp_centGlob= sqrt(pow(syst1S_pp_glob,2)+pow(tracking_aa,2)+pow(tracking_pp,2)+pow(L_pp_e,2)+pow(N_MB_e,2));
-  float syst1S_pp_centGlob4=sqrt(pow(syst1S_pp_glob4,2)+pow(tracking_pp,2)+pow(L_pp_e,2)); //L_pp + stat_pp tot(1S)pt4 + tnp_pp1S pt4 +
-
+  float syst_global_AA = sqrt(pow(tracking_aa,2)+pow(T_AA_e,2)+pow(N_MB_e,2)); // T_AA_e is for MB TAA uncertainty, the integrated.
+  //AA globals
+  float syst1S_AA_glob = sqrt(pow(N1S_aa_tot3p5s,2)+pow(Aet_1S_pyquen_tote/Aet_1S_pyquen_tot,2)+syst_global_AA*syst_global_AA); // global pbpb systematic = tnp+fits+genshape+taa(int)+tracking+nmb
+  float syst2S_AA_glob = sqrt(pow(N2S_aa_tot4s,2)+pow(Aet_2S_pyquen_tote/Aet_1S_pyquen_tot,2)+syst_global_AA*syst_global_AA);
+  float systAA_glob2 = sqrt(syst2S_AA_glob*syst2S_AA_glob);
+  float systAA_glob1 = sqrt(syst1S_AA_glob*syst1S_AA_glob);
+  
+  float syst1S_pp_centGlob= sqrt(pow(syst1S_pp_glob,2)); // for the orange bar: global integrated pp syst + N_MB + tracking_aa (?)
+  float syst1S_pp_centGlob4=sqrt(pow(syst1S_pp_glob4,2)); //L_pp + stat_pp tot(1S)pt4 + tnp_pp1S pt4 +
+  float syst2S_pp_centGlob4 = sqrt(syst2S_pp_glob*syst2S_pp_glob); // for the bar
   
 
   // 1S
   for(int i=0; i<nCentBins_2014;i++){
     /////////////////////////////////////////////////////////////////////////////
     // point-to-point systematics : syst(fit)_aa + tnp_aa + T_aa + AccEff_syst //
-    // global systematics: syst_pp + L_pp + tnp_pp + unf_pp,AA + stat_pp       //
+    // global systematics: syst_pp + L_pp + tnp_pp + stat_pp       //
     /////////////////////////////////////////////////////////////////////////////
-    syst1S_aatnp_Cent[i]=(t_1S_pyquen_cent3p5e[i]/t_1S_pyquen_cent3p5[i]);
+    // t_1S_pyquen_cent3p5e[i]=0;
+    // t_1S_pyquen_cent3p5[i]=t_1S_pyquen_cent3p5[i];
+
+    syst1S_aatnp_Cent[i]=(Aet_1S_pyquen_cent2014_fulls[i]/Aet_1S_pyquen_cent2014_STA[i]);
     syst1S_taa_cent[i]=taa2014e[i]/taa2014[i];
-    syst1S_raa_pointCent[i]=sqrt(syst1S_taa_cent[i]*syst1S_taa_cent[i]+syst1S_aatnp_Cent[i]*syst1S_aatnp_Cent[i]+syst1S_aa_Cent[i]*syst1S_aa_Cent[i]+pow(Aet_1S_pyquen_cent2014s[i]/Aet_1S_pyquen_cent2014[i],2));
-    syst1S_raa_cent[i]=sqrt(syst1S_pp_centGlob*syst1S_pp_centGlob+syst1S_raa_pointCent[i]*syst1S_raa_pointCent[i]+pow(Aet_1S_pythia_tote/Aet_1S_pythia_tot,2));
+    syst1S_raa_pointCent[i]=sqrt(syst1S_aatnp_Cent[i]*syst1S_aatnp_Cent[i]+syst1S_taa_cent[i]*syst1S_taa_cent[i]+syst1S_aa_Cent[i]*syst1S_aa_Cent[i]+pow(Aet_1S_pyquen_cent2014_STAe[i]/Aet_1S_pyquen_cent2014_STA[i],2)); /// taa[i]+tnp+fits+genshape 
+    syst1S_raa_cent[i]=sqrt(syst1S_pp_glob*syst1S_pp_glob+syst1S_raa_pointCent[i]*syst1S_raa_pointCent[i]); // raa point-by-point + (pp total = Lpp + tnp(int) + genshape(int) + fits(int)) // taa ??
     //pt4!
     syst1S_aatnp_Cent4[i]=t_1S_pyquen_cent4e[i]/t_1S_pyquen_cent4[i];
     syst1S_raa_pointCent4[i]=sqrt(syst1S_taa_cent[i]*syst1S_taa_cent[i]+syst1S_aatnp_Cent4[i]*syst1S_aatnp_Cent4[i]+syst1S_aa_Cent4[i]*syst1S_aa_Cent4[i]+pow(Aet_1S_pyquen_cent2014s[i]/Aet_1S_pyquen_cent2014[i],2));
-    syst1S_raa_cent4[i]=sqrt(syst1S_pp_centGlob4*syst1S_pp_centGlob4+syst1S_raa_pointCent4[i]*syst1S_raa_pointCent4[i]+pow(Aet_1S_pythia_tote/Aet_1S_pythia_tot,2));
-   
-  
+    syst1S_raa_cent4[i]=sqrt(syst1S_pp_centGlob4*syst1S_pp_centGlob4+syst1S_raa_pointCent4[i]*syst1S_raa_pointCent4[i]);
   }
 
   for(int i=0; i<nCentBins2S;i++){
@@ -3325,23 +3629,23 @@ float plot2010()
     syst2S_taa_cent[i]=(taa2Se[i]/taa2S[i]);//same for 2S and 1Spt4
   
     syst2S_raa_pointCent[i]=sqrt(syst2S_taa_cent[i]*syst2S_taa_cent[i]+syst2S_aatnp_Cent[i]*syst2S_aatnp_Cent[i]+syst2S_aa_Cent[i]*syst2S_aa_Cent[i]+Aet_2S_pyquen_cent2014s[i]/Aet_2S_pyquen_cent2014[i]);
-    syst2S_raa_cent[i]=sqrt(syst2S_pp_centGlob4*syst2S_pp_centGlob4+syst2S_raa_pointCent[i]*syst2S_raa_pointCent[i]+pow(Aet_2S_pythia_tote/Aet_2S_pythia_tot,2));
+    syst2S_raa_cent[i]=sqrt(syst2S_pp_centGlob4*syst2S_pp_centGlob4+syst2S_raa_pointCent[i]*syst2S_raa_pointCent[i]);
   }
 
-  cout << "---------------------1S cent---------------------" <<endl;
+  //std::cout << "---------------------1S cent---------------------" <<endl;
   for(int i=nCentBins_2014-1; i>=0;i--){
-    ofSyst<< "syst1S_aa_Cent_"<<i << " "<< 100*syst1S_aa_Cent[i]<< " %"<<endl;
-    cout << (binsCent[i]).c_str() <<setprecision(3)<< " " << syst1S_aa_Cent[i] << " " << syst1S_aatnp_Cent[i] <<" "<< syst1S_taa_cent[i] <<" "<< syst1S_pp_centGlob <<" "<< syst1S_raa_pointCent[i] <<" "<< syst1S_raa_cent[i]<< endl;
+    //ofSyst<< "syst1S_aa_Cent_"<<i << " "<< 100*syst1S_aa_Cent[i]<< " %"<<endl;
+     // std::cout << (binsCent[i]).c_str() <<setprecision(3)<< " " << syst1S_aa_Cent[i] << " " << syst1S_aatnp_Cent[i] <<" "<< syst1S_taa_cent[i] <<" "<< syst1S_pp_centGlob <<" "<< syst1S_raa_pointCent[i] <<" "<< syst1S_raa_cent[i]<< endl;
   }
-  cout << "---------------------1S cent pt4---------------------" <<endl;
+  //std::cout << "---------------------1S cent pt4---------------------" <<endl;
   for(int i=nCentBins_2014-1; i>=0;i--){
-    //   ofSyst<< "syst1S_aa_Cent_pt4"<<i << " "<< 100*syst1S_aa_Cent4[i]<< " %"<<endl;
-    cout << (binsCent[i]).c_str() <<setprecision(3)<< " " << syst1S_aa_Cent4[i] << " " << syst1S_aatnp_Cent4[i] <<" "<< syst1S_taa_cent[i] <<" "<< syst1S_pp_centGlob4 <<" "<< syst1S_raa_pointCent4[i] <<" "<< syst1S_raa_cent4[i]<< endl; 
+    //   //ofSyst<< "syst1S_aa_Cent_pt4"<<i << " "<< 100*syst1S_aa_Cent4[i]<< " %"<<endl;
+     /// cout << (binsCent[i]).c_str() <<setprecision(3)<< " " << syst1S_aa_Cent4[i] << " " << syst1S_aatnp_Cent4[i] <<" "<< syst1S_taa_cent[i] <<" "<< syst1S_pp_centGlob4 <<" "<< syst1S_raa_pointCent4[i] <<" "<< syst1S_raa_cent4[i]<< endl; 
   }
-  cout << "---------------------2S-cent--------------------" <<endl;
+  //std::cout << "---------------------2S-cent--------------------" <<endl;
   for(int i=4-1; i>=0;i--){
-    //  ofSyst<< "syst2S_aa_Cent_"<<i << " "<< 100*syst2S_aa_Cent[i]<< " %"<<endl;
-    cout << (bins4Bin[i]).c_str() <<setprecision(3)<< " " << syst2S_aa_Cent[i] << " " << syst2S_aatnp_Cent[i] <<" "<< syst2S_taa_cent[i] <<" "<< syst2S_pp_centGlob4 <<" "<< syst2S_raa_pointCent[i] <<" "<< syst2S_raa_cent[i]<< endl;
+    //  //ofSyst<< "syst2S_aa_Cent_"<<i << " "<< 100*syst2S_aa_Cent[i]<< " %"<<endl;
+    //std::cout << (bins4Bin[i]).c_str() <<setprecision(3)<< " " << syst2S_aa_Cent[i] << " " << syst2S_aatnp_Cent[i] <<" "<< syst2S_taa_cent[i] <<" "<< syst2S_pp_centGlob4 <<" "<< syst2S_raa_pointCent[i] <<" "<< syst2S_raa_cent[i]<< endl;
   }
   for(int centi =0 ; centi<nCentBins2S ; centi++)
     {
@@ -3354,13 +3658,14 @@ float plot2010()
       ///changed
       if(centi==0){
 	CS2S_pp_tot = computeRatio(N2S_pp_tot4,Aet_2S_pythia_tot);
-	CS2S_pp_tote = computeRatioError(N2S_pp_tot4,Aet_2S_pythia_tot,N2S_pp_tot4e,Aet_2S_pythia_tote);
+	CS2S_pp_tote = computeRatioError(N2S_pp_tot4,Aet_2S_pythia_tot,N2S_pp_tot4e,0);
 	CS2S_pp_tot = CS2S_pp_tot/(L_pp_invNb);
 	CS2S_pp_tote=CS2S_pp_tote/(L_pp_invNb);
 	CS3S_pp_tot = computeRatio(N3S_pp_tot4,Aet_3S_pythia_tot);
-	CS3S_pp_tote = computeRatioError(N3S_pp_tot4,Aet_3S_pythia_tot,N3S_pp_tot4e,Aet_3S_pythia_tote);
+	CS3S_pp_tote = computeRatioError(N3S_pp_tot4,Aet_3S_pythia_tot,N3S_pp_tot4e,0);
 	CS3S_pp_tot = CS3S_pp_tot/(L_pp_invNb);
 	CS3S_pp_tote=CS3S_pp_tote/(L_pp_invNb);
+	CS3S_pp_tots = N3S_pp_tot4*syst3S_pp_glob/L_pp_invNb;
       }
       RAA_2S_cent[centi]= computeRatio( CS2S_aa_cent[centi] , CS2S_pp_tot);
       RAA_2S_cente[centi]= computeRatioError( CS2S_aa_cent[centi] , CS2S_pp_tot,  CS2S_aa_cente[centi] ,0);
@@ -3371,22 +3676,26 @@ float plot2010()
     {
       taa2S[i]=taa2S[i]*1000;
       CS2S_aa_4bin[i]= computeRatio( N2S_aa_cent4Large[i] , Aet_2S_pyquen_cent2014[i] );
-      CS2S_aa_4bine[i] = computeRatioError( N2S_aa_cent4Large[i] ,  Aet_2S_pyquen_cent2014[i], N2S_aa_cent4Largee[i] , 0.002);
+      CS2S_aa_4bine[i] = computeRatioError( N2S_aa_cent4Large[i] ,  Aet_2S_pyquen_cent2014[i], N2S_aa_cent4Largee[i] ,0);
       CS2S_aa_4bin[i]=CS2S_aa_4bin[i]/(mb_percentage2S[i]*N_MB_corr * taa2S[i]);
       CS2S_aa_4bine[i]=CS2S_aa_4bine[i]/(mb_percentage2S[i]*N_MB_corr * taa2S[i]);
       RAA_2S_4bin[i]= computeRatio( CS2S_aa_4bin[i] , CS2S_pp_tot);
       RAA_2S_4bine[i]= computeRatioError( CS2S_aa_4bin[i] , CS2S_pp_tot,  CS2S_aa_4bine[i] ,0);
       RAA_2S_cents[i]=RAA_2S_4bin[i]*syst2S_raa_pointCent[i];//computeRatioError(CS2S_aa_cent[centi], CS2S_pp_tot, CS2S_aa_cents[centi], 0);
-      RAA_2S_centsT[i]=RAA_2S_4bin[i]*syst2S_raa_cent[i];
-      CS2S_aa_4bins[i]=CS2S_aa_4bin[i]*syst2S_raa_cent[i];
+      RAA_2S_centsT[i]=RAA_2S_4bin[i]*syst2S_raa_cent[i]; //total: global+pt by pt
+      CS2S_aa_4bins[i]=CS2S_aa_4bin[i]*syst2S_raa_cent[i]; // global pbpb + pt by pt but no pp (and taa in)
       
     }
  cout << "wow!"<< endl;
   for(int centi =0 ; centi<nCentBins_2014; centi++){ //for fun
     taa2014[centi]=taa2014[centi]*1000;
     //    taa2015[centi]=taa2015[centi]*1000;
-    CS1S_aa_cent[centi]= computeRatio( N1S_aa_cent3p5[centi] , Aet_1S_pyquen_cent2014[centi] );
-    CS1S_aa_cente[centi] = computeRatioError( N1S_aa_cent3p5[centi] , Aet_1S_pyquen_cent2014[centi], N1S_aa_cent3p5e[centi] ,0); // Aet_1S_pyquen_cent2014e[centi]
+    // Aet_1S_pyquen_cent2014[centi]=Ae_1S_pyquen_cent2014[centi];
+    // Aet_1S_pyquen_cent2014e[centi]=Ae_1S_pyquen_cent2014e[centi];
+
+
+    CS1S_aa_cent[centi]= computeRatio( N1S_aa_cent3p5[centi] , Aet_1S_pyquen_cent2014_STA[centi] );
+    CS1S_aa_cente[centi] = computeRatioError( N1S_aa_cent3p5[centi] , Aet_1S_pyquen_cent2014_STA[centi], N1S_aa_cent3p5e[centi] , 0); // 
     CS1S_aa_cent[centi]=CS1S_aa_cent[centi]/(mb_percentage2014[centi]*N_MB_corr * taa2014[centi]);
     CS1S_aa_cente[centi]=CS1S_aa_cente[centi]/(mb_percentage2014[centi]*N_MB_corr * taa2014[centi]);
     CS1S_aa_cents[centi]=N1S_aa_cent3p5[centi]*syst1S_raa_pointCent[centi]/(mb_percentage2014[centi]*N_MB_corr * taa2014[centi]);
@@ -3399,25 +3708,25 @@ float plot2010()
   
     if(centi==0){       
       CS1S_pp_tot = computeRatio(N1S_pp_tot3p5,Aet_1S_pythia_tot)/(L_pp_invNb);
-      CS1S_pp_tots = N1S_pp_tot3p5*syst1S_pp_centGlob;
-      CS1S_aa_tots = N1S_aa_tot3p5*systAA_glob1;
-      CS2S_pp_tots = N2S_pp_tot3p5*syst2S_pp_centGlob4;
+      CS1S_pp_tots = N1S_pp_tot3p5*syst1S_pp_centGlob;  //  pp global(L_pp, tracking) + pp syst + pp tnp + pp genshape but not + pp stat
+      CS1S_aa_tots = N1S_aa_tot3p5*systAA_glob1; // pbpb total global : fit+tnp+int(taa)+genshape+tracking+nmb
+      CS2S_pp_tots = N2S_pp_tot4*syst2S_pp_centGlob4;
       CS2S_aa_tots = N2S_aa_tot4*systAA_glob2;
-      CS1S_pp_tote = computeRatioError(N1S_pp_tot3p5,Aet_1S_pythia_tot,N1S_pp_tot3p5e,Aet_1S_pythia_tote);
+      CS1S_pp_tote = computeRatioError(N1S_pp_tot3p5,Aet_1S_pythia_tot,N1S_pp_tot3p5e,0);
       CS1S_pp_tote =CS1S_pp_tote/(L_pp_invNb);
       CS1S_pp_tots =CS1S_pp_tots/(L_pp_invNb);
       CS2S_pp_tots =CS2S_pp_tots/(L_pp_invNb);
       CS1S_pp_tot4 = computeRatio(N1S_pp_tot4,Aet_1S_pythia_tot4)/(L_pp_invNb);
       CS1S_pp_tot4s = N1S_pp_tot4*N1S_pp_tot4s;
       float CS1S_aa_tot4s = N1S_aa_tot4*N1S_aa_tot4s;
-      CS1S_pp_tot4e = computeRatioError(N1S_pp_tot4,Aet_1S_pythia_tot4,N1S_pp_tot4e,Aet_1S_pythia_tot4e);
+      CS1S_pp_tot4e = computeRatioError(N1S_pp_tot4,Aet_1S_pythia_tot4,N1S_pp_tot4e,0);
       CS1S_pp_tot4e =CS1S_pp_tot4e/(L_pp_invNb);
       CS1S_pp_tot4s =CS1S_pp_tot4s/(L_pp_invNb);//huh
     } 
     RAA_1S_cent[centi]= computeRatio( CS1S_aa_cent[centi] , CS1S_pp_tot);
     RAA_1S_cente[centi]= computeRatioError( CS1S_aa_cent[centi] , CS1S_pp_tot,  CS1S_aa_cente[centi] ,0);// CS1S_pp_tote
-    RAA_1S_cents[centi]=RAA_1S_cent[centi]*syst1S_raa_pointCent[centi];//computeRatioError(CS1S_aa_cent[centi], CS1S_pp_tot, CS1S_aa_cents[centi], 0)+RAA_1S_centsg[centi]; // OK!!
-    RAA_1S_centsT[centi]=RAA_1S_cent[centi]*syst1S_raa_cent[centi];
+    RAA_1S_cents[centi]=RAA_1S_cent[centi]*syst1S_raa_pointCent[centi]; // binned RAA vs npart systematic: syst(pbpb = fits+tnp+genshape+taa)
+    // RAA_1S_centsT[centi]=RAA_1S_cent[centi]*syst1S_raa_cent[centi]; //double counted taa?
     RAA_1S_cent4[centi]= computeRatio( CS1S_aa_cent4[centi] , CS1S_pp_tot4);
     RAA_1S_cent4e[centi]= computeRatioError( CS1S_aa_cent4[centi] , CS1S_pp_tot4,  CS1S_aa_cent4e[centi] ,0);// CS1S_pp_tote
     RAA_1S_cent4s[centi]=RAA_1S_cent4[centi]*syst1S_raa_pointCent4[centi];
@@ -3425,85 +3734,105 @@ float plot2010()
   }
 
   CS1S_aa_tot = computeRatio(N1S_aa_tot3p5,Aet_1S_pyquen_tot);
-  CS1S_aa_tote = computeRatioError(N1S_aa_tot3p5,Aet_1S_pyquen_tot,N1S_aa_tot3p5e,Aet_1S_pyquen_tote);
+  CS1S_aa_tote = computeRatioError(N1S_aa_tot3p5,Aet_1S_pyquen_tot,N1S_aa_tot3p5e,0);
   CS1S_aa_tot = CS1S_aa_tot/(N_MB_corr*T_AA_b);
   CS1S_aa_tote= CS1S_aa_tote/(N_MB_corr*T_AA_b);
   CS1S_aa_tots= CS1S_aa_tots/(N_MB_corr*T_AA_b);
   CS2S_aa_tots= CS2S_aa_tots/(N_MB_corr*T_AA_b);
   CS2S_aa_tot = computeRatio(N2S_aa_tot4,Aet_2S_pyquen_tot); // changed here 3p5
-  CS2S_aa_tote = computeRatioError(N2S_aa_tot4,Aet_2S_pyquen_tot,N2S_aa_tot4e,Aet_2S_pyquen_tote);
+  CS2S_aa_tote = computeRatioError(N2S_aa_tot4,Aet_2S_pyquen_tot,N2S_aa_tot4e,0);
   CS2S_aa_tot = CS2S_aa_tot/(N_MB_corr*T_AA_b);
   CS2S_aa_tote = CS2S_aa_tote/(N_MB_corr*T_AA_b);
   CS3S_aa_tot = computeRatio(N3S_aa_tot4,Aet_3S_pyquen_tot); // careful here
   //UPPER LIMIT
   CS3S_aa_UL=computeRatio(N3S_aa_tot4,Aet_3S_pyquen_tot);
-  CS3S_aa_tote = computeRatioError(N3S_aa_tot4,Aet_3S_pyquen_tot,N3S_aa_tot4e,Aet_3S_pyquen_tote);
+  CS3S_aa_tote = computeRatioError(N3S_aa_tot4,Aet_3S_pyquen_tot,N3S_aa_tot4e,0);
   CS3S_aa_tot = CS3S_aa_tot/(N_MB_corr*T_AA_b);
   CS3S_aa_UL=CS3S_aa_UL/(N_MB_corr*T_AA_b);
   CS3S_aa_tote=CS3S_aa_tote/(N_MB_corr*T_AA_b);
  float RAA_2S_tote;
   RAA_1S_tot = computeRatio(CS1S_aa_tot,CS1S_pp_tot);
-  RAA_1S_tote = computeRatioError(CS1S_aa_tot,CS1S_pp_tot,CS1S_aa_tote,CS1S_pp_tote);
-  RAA_1S_tots = RAA_1S_tot*sqrt(syst1S_pp_centGlob*syst1S_pp_centGlob+systAA_glob1*systAA_glob1); //computeRatioError(CS1S_aa_tot,CS1S_pp_tot,CS1S_aa_tots,CS1S_pp_tots);
+  RAA_1S_tote = computeRatioError(CS1S_aa_tot,CS1S_pp_tot,CS1S_aa_tote,0); // pbpb stat uncertainty only! 
+  RAA_1S_tots = RAA_1S_tot*sqrt(syst1S_pp_centGlob*syst1S_pp_centGlob+systAA_glob1*systAA_glob1);  //total syst = pbpb(tnp, taa, yield, genshape tracking) + pp global(L_pp, tracking) + pp syst + pp tnp + pp genshape + pp stat + N_MB_e.
   RAA_2S_tot = computeRatio(CS2S_aa_tot,CS2S_pp_tot);
-  RAA_2S_tote = computeRatioError(CS2S_aa_tot,CS2S_pp_tot,CS2S_aa_tote,CS2S_pp_tote);
+  RAA_2S_tote = computeRatioError(CS2S_aa_tot,CS2S_pp_tot,CS2S_aa_tote,0);
   RAA_2S_tots = RAA_2S_tot*sqrt(syst2S_pp_centGlob4*syst2S_pp_centGlob4+systAA_glob2*systAA_glob2);//computeRatioError(CS2S_aa_tot,CS2S_pp_tot,CS2S_aa_tots,CS2S_pp_tots);
   RAA_3S_tot = computeRatio(CS3S_aa_tot,CS3S_pp_tot);
   RAA_3S_UL= computeRatio(CS3S_aa_UL,CS3S_pp_tot); //upper limit
   RAA_3S_tote = computeRatioError(CS3S_aa_tot,CS3S_pp_tot,CS3S_aa_tote,CS3S_pp_tote);
 
-  cout << "  --- Cross section 1S in PbPb vs. nPart ---" << endl;//for fun
+ std::cout << " --- Cross section 1S in PbPb vs. nPart ---" << endl;//for fun
   // for(int j =nCentBins_2014-1 ; j>=0 ; j--) 
   //   {
   //     cout << (binsCent[j]).c_str() << " "<< CS1S_aa_cent[j] <<" \\pm "<<CS1S_aa_cente[j]<<" \\pm "<< CS1S_aa_cents[j]<<" \\" << endl;
   //   }
   for(int j =nCentBins_2014-1 ; j>=0 ; j--) 
     {
-      cout << (binsCent[j]).c_str() << " "<< CS1S_aa_cent[j] <<" \\pm "<<CS1S_aa_cente[j]<< " \\pm "<< CS1S_aa_cents[j]<<" \\" << endl;
+      //      std::cout << (binsCent[j]).c_str() << " "<< CS1S_aa_cent[j] <<" \\pm "<C<S1S_aa_cente[j]<< " \\pm "<< CS1S_aa_cents[j]<<" \\" << endl;
+      std::cout <<"j= "<< (binsCent[j]).c_str() << " & " << setprecision(3) << CS1S_aa_cent[j] <<" \\pm "<<
+	CS1S_aa_cente[j]/CS1S_aa_cent[j]  <<" \\pm "<< //stat unc.
+	syst1S_aa_Cent[j] <<" \\pm "<< //stat unc.
+	(t_1S_pyquen_cent3p5_muIDTrige[j]/t_1S_pyquen_cent3p5_muIDTrig[j])  <<" \\pm "<< // muidTrig syst.
+	(t_1S_pyquen_cent3p5_STAe[j]/t_1S_pyquen_cent3p5_STA[j])  <<" \\pm "<< // STA syst. part.
+	sqrt(pow(Aet_1S_pyquen_cent2014_STAe[j]/Aet_1S_pyquen_cent2014_STA[j],2)+pow(syst1S_taa_cent[j],2)) <<" \\pm "<< /// Acc*eff shape syst.+ fits+ taa
+	endl; 
+	// CS1S_aa_cent[j]*
+	// CS1S_aa_cent[j]*
+	// CS1S_aa_cent[j]* 
     }
 
-  cout << "  --- 1S RAA vs. nPart ---" << endl;
+ std::cout << " --- 1S RAA vs. nPart ---" << endl;
   // for(int j =nCentBins_2014-1 ; j>=0 ; j--)
   //   {
   //     cout << (binsCent[j]).c_str() << " "<< RAA_1S_cent[j] <<" \\pm "<< RAA_1S_cente[j]<< " \\pm "<< RAA_1S_centsT[j]<< endl;
   //   }
   for(int j =nCentBins_2014-1 ; j>=0 ; j--)
     {
-      cout << (binsCent[j]).c_str() << " "<< RAA_1S_cent[j] <<" \\pm "<< RAA_1S_cente[j]<< " \\pm "<< RAA_1S_cents[j]<< endl;
+       /// cout << (binsCent[j]).c_str() << " "<< RAA_1S_cent[j] <<" \\pm "<< RAA_1S_cente[j]<< " \\pm "<< RAA_1S_cents[j]<< endl;
     }
 
-  cout << "  ---1S pt 4 Cross section in PbPb vs. nPart ---" << endl;
+ std::cout << " ---1S pt 4 Cross section in PbPb vs. nPart ---" << endl;
   for(int j =7 ; j>=0 ; j--)
     {
-      cout << (binsCent[j]).c_str() << " "<< CS1S_aa_cent4[j] <<" \\pm "<< CS1S_aa_cent4e[j]<< " \\pm "<< CS1S_aa_cent4s[j]<<" (glob.))"<< endl;
+       /// cout << (binsCent[j]).c_str() << " "<< CS1S_aa_cent4[j] <<" \\pm "<< CS1S_aa_cent4e[j]<< " \\pm "<< CS1S_aa_cent4s[j]<<" (glob.))"<< endl;
     }
-  cout << "  --- 1S pt 4 RAA vs. nPart ---" << endl;
+ std::cout << " --- 1S pt 4 RAA vs. nPart ---" << endl;
   for(int j =7 ; j>=0 ; j--)
     {
-      cout << (binsCent[j]).c_str() << " "<<  RAA_1S_cent4[j] <<" \\pm "<< RAA_1S_cent4e[j]<< " \\pm "<< RAA_1S_cent4sT[j]<< endl;
+       /// cout << (binsCent[j]).c_str() << " "<<  RAA_1S_cent4[j] <<" \\pm "<< RAA_1S_cent4e[j]<< " \\pm "<< RAA_1S_cent4sT[j]<< endl;
     }
   std::cout << std::fixed;
-  cout << "  --- 2S Cross section in PbPb vs. nPart ---" << endl;
+ std::cout << " --- 2S Cross section in PbPb vs. nPart ---" << endl;
   for(int j =4-1 ; j>=0 ; j--)
     {
-      cout<<setprecision(3) << (bins4Bin[j]).c_str() << " "<< CS2S_aa_4bin[j] <<" \\pm "<<CS2S_aa_4bine[j]<<" \\pm"<<CS2S_aa_4bins[j] << " \\" << endl;
+      //       std::cout<<setprecision(3) << (bins4Bin[j]).c_str() << " "<< CS2S_aa_4bin[j] <<" \\pm "<<CS2S_aa_4bine[j]<<" \\pm"<<CS2S_aa_4bins[j] << " \\" << endl;
+    std::cout <<"j= "<< (bins4Bin[j]).c_str() << " & " << setprecision(3) << CS2S_aa_4bin[j] <<" \\pm "<<
+      CS2S_aa_4bine[j]/CS2S_aa_4bin[j]  <<" \\pm "<< //stat unc.
+      syst2S_aa_Cent[j] <<" \\pm "<< //fits.
+      (Aet_2S_pyquen_cent2014_muIDTrige[j]/Aet_2S_pyquen_cent2014[j])  <<" \\pm "<< // muidTrig syst.
+      (Aet_2S_pyquen_cent2014_STAe[j]/Aet_2S_pyquen_cent2014[j])  <<" \\pm "<< // STA syst. part.
+      sqrt(pow(Aet_2S_pyquen_cent2014e[j]/Aet_2S_pyquen_cent2014[j],2)+pow(syst2S_taa_cent[j],2)) <<" \\pm "<< /// Acc*eff shape syst.+ fits+ taa
+      endl; 
+	// CS2S_aa_4bin[j]*
+	// CS2S_aa_4bin[j]*
+	// CS2S_aa_4bin[j]*
     }
 
-  cout << "  --- 2S RAA vs. nPart ---" << endl;
+ std::cout << " --- 2S RAA vs. nPart ---" << endl;
   for(int j =4-1 ; j>=0 ; j--)
     {
-      cout << (bins4Bin[j]).c_str() << " "<< RAA_2S_cent[j] <<" \\pm "<< RAA_2S_cente[j]<< " \\pm "<< RAA_2S_cents[j]<< endl;
+       /// cout << (bins4Bin[j]).c_str() << " "<< RAA_2S_cent[j] <<" \\pm "<< RAA_2S_cente[j]<< " \\pm "<< RAA_2S_cents[j]<< endl;
     }
 
-  cout << "  --- 2S RAA vs. nPart in 4 bins ---" << endl;
+ std::cout << " --- 2S RAA vs. nPart in 4 bins ---" << endl;
   for(int j =3 ; j>=0 ; j--)
     {
-      cout << (bins4Bin[j]).c_str() << " "<< RAA_2S_4bin[j] <<" \\pm "<< RAA_2S_4bine[j]<<" \\pm "<< RAA_2S_cents[j]<< endl; endl;
+       /// cout << (bins4Bin[j]).c_str() << " "<< RAA_2S_4bin[j] <<" \\pm "<< RAA_2S_4bine[j]<<" \\pm "<< RAA_2S_cents[j]<< endl; endl;
     }
 
   cout << setprecision(3)<<" total_sigma(1S)_pp = "<<CS1S_pp_tot <<" \\pm " <<CS1S_pp_tote  <<" \\pm " <<CS1S_pp_tots<<endl;
   cout << setprecision(3)<<" total_sigma(2S)_pp = "<<CS2S_pp_tot <<" \\pm " <<CS2S_pp_tote<<" \\pm " <<CS2S_pp_tots<<endl;
-  cout << setprecision(3)<<" total_sigma(3S)_pp = "<<CS3S_pp_tot <<" \\pm " <<CS3S_pp_tote<< endl;
+  cout << setprecision(3)<<" total_sigma(3S)_pp = "<<CS3S_pp_tot <<" \\pm " <<CS3S_pp_tote<<" \\pm " <<CS3S_pp_tots<<endl; endl;
   cout << setprecision(3)<<" total_sigma(1S)_AA = "<<CS1S_aa_tot <<" \\pm " <<CS1S_aa_tote  <<" \\pm " <<CS1S_aa_tots<<endl;
   cout << setprecision(3)<<" total_sigma(2S)_AA = "<<CS2S_aa_tot <<" \\pm " <<CS2S_aa_tote <<" \\pm " <<CS2S_aa_tots<<endl;
   cout << setprecision(3)<<" total_sigma(3S)_AA = "<<CS3S_aa_tot <<" \\pm " <<CS3S_aa_tote<<endl;
@@ -3547,7 +3876,6 @@ float plot2010()
     gcent2syst->SetMarkerSize(0);
     gcent2syst->Draw("2");
     if(!plotTight){
-
       TGraphErrors *gcent1syst = new TGraphErrors(nCentBins_2014,nPart2014,RAA_1S_cent,centErr2014,RAA_1S_cents); //for fun
       gcent1syst->SetLineColor(color1Sraa);
       gcent1syst->SetFillStyle(0);
@@ -3570,13 +3898,13 @@ float plot2010()
       gPad->RedrawAxis();
     }
     if(plotTight){
- TGraphErrors *gcent1syst = new TGraphErrors(nCentBins_2014,nPart2014,RAA_1S_cent,centErr2014,RAA_1S_cents); //for fun
+ TGraphErrors *gcent1syst = new TGraphErrors(nCentBins_2014,nPart2014,RAA_1S_cent,centErr2014,RAA_1S_cents); //for real
       gcent1syst->SetLineColor(color1Sraa);
       gcent1syst->SetFillStyle(0);
       gcent1syst->SetLineWidth(2);
       gcent1syst->SetMarkerSize(0);
       gcent1syst->Draw("2");
-      TGraphErrors *gcent1 = new TGraphErrors(nCentBins_2014,nPart2014,RAA_1S_cent,centnoErr,RAA_1S_cente); //for fun
+      TGraphErrors *gcent1 = new TGraphErrors(nCentBins_2014,nPart2014,RAA_1S_cent,centnoErr,RAA_1S_cente); //for real
 
       gcent1->SetMarkerColor(color1Sraa);
       gcent1->SetMarkerStyle(21);
@@ -3701,7 +4029,7 @@ float plot2010()
     latexrap.SetTextFont(42);
     latexrap.DrawLatex(30,1.2,"|y| < 2.4");
    
-    if(!plotTight){TBox *box1S = new TBox(370,1-syst1S_pp_centGlob,385,1+syst1S_pp_centGlob);
+    if(!plotTight){TBox *box1S = new TBox(370,1-syst1S_pp_centGlob,385,1+syst1S_pp_centGlob); // global(L_pp, tracking) + pp syst + pp tnp + pp genshape + pp stat + N_MB_e.
       box1S->SetFillColor(color1Sraa);
       box1S->Draw();
       cout << "Syst1S_pp_cent_glob = " << syst1S_pp_centGlob << endl;
@@ -3750,12 +4078,12 @@ float plot2010()
     if(plotTight){
       c1->SaveAs(basedir2 + TString("/RAA_nPart_Tight.pdf"));
       c1->SaveAs(basedir1 + TString("/RAA_nPart_Tight.png"));
-      cout << "CHANGE FILE NAME !?!?!?!?! "<<endl;
+      /// cout << "CHANGE FILE NAME !?!?!?!?! "<<endl;
     }else if(!FourBins)
       {
 	c1->SaveAs(basedir2 + TString("/RAA_nPart.pdf"));
 	c1->SaveAs(basedir1 + TString("/RAA_nPart.png"));
-	cout << "CHANGE FILE NAME!!!!!" << endl;
+	/// cout << "CHANGE FILE NAME!!!!!" << endl;
       }						
     else if (FourBins)
       {
@@ -4047,7 +4375,7 @@ float plot2010()
 
 
   }
-  ofSyst.close();
+  //ofSyst.close();
 
 }
 //only for 1S - > uncorrected RAA
@@ -4165,7 +4493,7 @@ void plotRAA_uncorr(){
       f4Pt->Draw("same");
       gPad->RedrawAxis();
 
-      TLegend *legend = new TLegend(0.482,0.84,0.88,0.7);
+      legend = new TLegend(0.482,0.84,0.88,0.7);
       legend->SetTextSize(0.029);
       legend->SetFillStyle(0);
       legend->SetFillColor(0);
@@ -4285,7 +4613,7 @@ void plotRAA_uncorr(){
       lyLPT->SetTextSize(0.04);
       lyLPT->DrawLatex(7,0.15,"Uncorrected");
       // ppt2->Update();
-      TLegend *legend = new TLegend(0.2,0.65,0.4,0.75);
+      legend = new TLegend(0.2,0.65,0.4,0.75);
       legend->SetTextSize(0.029);
       legend->SetFillStyle(0);
       legend->SetFillColor(0);
@@ -4352,7 +4680,7 @@ void plotRAA_uncorr(){
       f4Rap->Draw("same");
       gPad->RedrawAxis();
 
-      TLegend *legend = new TLegend(0.482,0.84,0.88,0.7);
+      legend = new TLegend(0.482,0.84,0.88,0.7);
       legend->SetTextSize(0.029);
       legend->SetFillStyle(0);
       legend->SetFillColor(0);
@@ -4521,7 +4849,7 @@ void plotDoubleRatios()
   lyLPT->Draw();
   gPad->RedrawAxis();
 
-  TLegend *legend = new TLegend(0.6,0.21,0.8,0.4);
+  legend = new TLegend(0.6,0.21,0.8,0.4);
   legend->SetTextSize(0.029);
   legend->SetFillStyle(0);
   legend->SetFillColor(0);
@@ -4613,7 +4941,7 @@ void plotDoubleRatios()
   lyLPT->Draw();
   gPad->RedrawAxis();
 
-  TLegend *legend = new TLegend(0.2,0.5,0.5,0.7);
+  legend = new TLegend(0.2,0.5,0.5,0.7);
   legend->SetTextSize(0.029);
   legend->SetFillStyle(0);
   legend->SetFillColor(0);
@@ -4637,5 +4965,12 @@ void combine_blue(double val1, double err1, double val2, double err2)
    cout << w1*val1+w2*val2 << "\\pm" << err1*err2/sqrt(err1*err1+err2*err2) << endl;
 }
 
-
-
+/// ///////
+// q      0.13 +/- 0.04 +/- 0.02 +/- 0.01 psi2S 0-100
+// qqqqq  0.28 +/- 0.04 +/- 0.02          psi   0-100
+// q      0.67 +/- psi2S fwd
+//        0.40 +/-  jsi fwd
+// q
+// q
+// q
+// q
