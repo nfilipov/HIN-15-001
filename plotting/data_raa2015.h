@@ -3,6 +3,7 @@ float L_pp_invNbe =199.8;
 float N_MB_uncorr= 1.126653312	;
 
 #define T_AA_b 5662
+<<<<<<< HEAD
 float T_AA_mb =5.662;
 float T_AA_e =0.062; //// relative!
 float L_pp_e =0.037 ;///relative !!
@@ -14,6 +15,16 @@ float tracking_aa =0.012;
 
 float RapBinWidth =4.8;
 float PtBinWidth = 20;
+=======
+#define T_AA_mb 5.662     
+#define T_AA_e 0.062 // 0.35/5.66
+#define L_pp_e 0.037
+#define N_MB_e 0.034
+#define tracking_pp 0.034 
+#define tracking_aa 0.10 
+
+#define RapBinWidth 4.8
+>>>>>>> 1dec6bafb188a8abbdd5f78885196d69eb897f30
 #define nPtBins_2013  5
 #define nPtBins_2014 6
 #define nPtBins_2010  3
@@ -433,6 +444,11 @@ float N1S_aa_tot3p5s=0.0470;
 float N1S_aa_tot4s=0.0281;
 
 /* ------------------------------------------- */
+/* upper limit on RAA*/
+/* ------------------------------------------- */
+float RAA3S_upper = 0.14;
+
+/* ------------------------------------------- */
 /*                      pT                     */
 /* ------------------------------------------- */
 //yields
@@ -720,6 +736,10 @@ float N2B_aa_cent4Larges_100[nfitvars] = {11.267,10.3624};
 /* ------------------------------------------- */
 /*            1S loose TOTAL E,A,T             */
 /* ------------------------------------------- */
+<<<<<<< HEAD
+=======
+//CAREFUL : ERRORS FOR TAG AND PROBE ARE ONLY STAT + MASS RANGE FOR THE MOMENT
+>>>>>>> 1dec6bafb188a8abbdd5f78885196d69eb897f30
 //Acc*eff
 float Ae_1S_pythia_tot= 0.239;//new
 float Ae_1S_pythia_tote=0.001;///stat. err.
@@ -729,6 +749,7 @@ float e_1S_pythia_tot= 0.679;//new
 float e_1S_pythia_tote=0.001;///stat. unc
 float e_1S_pythia_tots=0.007;///stat. unc
 //sf from tag and probe = eff_corr/eff_noCorr
+<<<<<<< HEAD
 float t_1S_pythia_tot3p5 = 1.096;
 float t_1S_pythia_tot3p5e = 0.011;//muID
 float t_1S_pythia_tot3p5_STAe = 0.037;//STA
@@ -738,6 +759,13 @@ float Aet_1S_pythia_tot=0.262;//
 float Aet_1S_pythia_totgse=0.001;// 
 float Aet_1S_pythia_tote =0.00928; //OK for new results. (tnp+genshape)
 float Aet_1S_pythia_tots =0.00922; //OK for new results. (tnp)
+=======
+float t_1S_pythia_tot3p5 = 1.092;
+float t_1S_pythia_tot3p5e = 0.007;
+//total
+float Aet_1S_pythia_tot=Ae_1S_pythia_tot*t_1S_pythia_tot3p5;// 
+float Aet_1S_pythia_tote = Aet_1S_pythia_tot*sqrt(pow(t_1S_pythia_tot3p5e/t_1S_pythia_tot3p5,2)+pow(Ae_1S_pythia_tote,2)+pow(Ae_1S_pythia_tots,2));
+>>>>>>> 1dec6bafb188a8abbdd5f78885196d69eb897f30
 /* ------------------------------------------- */
 /*                     1S pT                   */
 /* ------------------------------------------- */
@@ -847,8 +875,13 @@ float Aet_1S_pythia_rap4s[nRapBins_2014]={0.001,0.001,0.001,0.001,0.002,0.001};
 /* ------------------------------------------- */
 /*                     2S pT                   */
 /* ------------------------------------------- */
+<<<<<<< HEAD
+=======
+/// TOTAL
+//CAREFUL : ERRORS FOR TAG AND PROBE ARE ONLY STAT + MASS RANGE FOR THE MOMENT
+>>>>>>> 1dec6bafb188a8abbdd5f78885196d69eb897f30
 //Acc*eff
-float Ae_2S_pythia_tot= 0.279;//new
+float Ae_2S_pythia_tot= 0.207;//new
 float Ae_2S_pythia_tote=0.001;///stat. err.
 float Ae_2S_pythia_tots=0.006;///syst.: shape vars
 //eff
@@ -862,6 +895,7 @@ float t_2S_pythia_tote = 0.007;
 float t_2S_pythia_tot_full = 1.052;
 float t_2S_pythia_tot_fulle = 0.0035;
 //total
+<<<<<<< HEAD
 float Aet_2S_pythia_tot=0.218;// new
 float Aet_2S_pythia_tote = 0.0074; //ok full total (tnp+gs)
 float Aet_2S_pythia_tots = 0.0073; //ok full total (tnp+gs)
@@ -869,6 +903,10 @@ float Aet_2S_pythia_totgse = 0.001; //ok gs
 float Aet_2S_pythia_tot_muIDe = 0.006; //ok
 float Aet_2S_pythia_tot_STAe = 0.009; //ok 
 
+=======
+float Aet_2S_pythia_tot=0.218;// 
+float Aet_2S_pythia_tote = Aet_2S_pythia_tot*sqrt(pow(t_2S_pythia_tote/t_2S_pythia_tot,2)+pow(Ae_2S_pythia_tote,2)+pow(Ae_2S_pythia_tots,2));
+>>>>>>> 1dec6bafb188a8abbdd5f78885196d69eb897f30
 //eff., Acc., Acc*eff, 
 float e_2S_pythia_pt2013[nPtBins_2013]= {0.721,0.729,0.744,0.758,0.784};
 float e_2S_pythia_pt2013e[nPtBins_2013]={0.002,0.003,0.004,0.005,0.007};
@@ -950,9 +988,9 @@ float Aet_2S_pythia_rap2014Large_STAe[nRapBins2S]={0.009,0.008}; //STA
 /*                     3S pT                   */
 /* ------------------------------------------- */
 /// TOTAL
-//CAREFUL :  ERRORS FOR TAG AND PROBE ARE ONLY STAT FOR THE MOMENT
+//CAREFUL : ERRORS FOR TAG AND PROBE ARE ONLY STAT + MASS RANGE FOR THE MOMENT
 //Acc*eff
-float Ae_3S_pythia_tot= 0.329;//new
+float Ae_3S_pythia_tot= 0.247;//new
 float Ae_3S_pythia_tote=0.001;///stat. err.
 float Ae_3S_pythia_tots=0.007;///syst.: shape vars
 //eff
@@ -964,10 +1002,14 @@ float t_3S_pythia_tot = 1.066;
 float t_3S_pythia_tote = 0.006;
 //total
 float Aet_3S_pythia_tot=0.263;// 
+<<<<<<< HEAD
 float Aet_3S_pythia_tote = 0.0089; // total
 float Aet_3S_pythia_totgse = 0.00001; //ok gs
 float Aet_3S_pythia_tot_muIDe = 0.007; //ok
 float Aet_3S_pythia_tot_STAe = 0.011; //ok 
+=======
+float Aet_3S_pythia_tote = Aet_3S_pythia_tot*sqrt(pow(t_3S_pythia_tote/t_3S_pythia_tot,2)+pow(Ae_3S_pythia_tote,2)+pow(Ae_3S_pythia_tots,2));
+>>>>>>> 1dec6bafb188a8abbdd5f78885196d69eb897f30
 //eff., Acc., Acc*eff, 
 float e_3S_pythia_pt2013[nPtBins_2013]= {0.731,0.732,0.751,0.769,0.795};
 float e_3S_pythia_pt2013e[nPtBins_2013]={0.002,0.002,0.003,0.003,0.004};
@@ -1040,14 +1082,22 @@ float Aet_3S_pythia_rap2014Larges[nRapBins2S]={0.003,0.006};
 /*             1S loose TOTAL E,A,T            */
 /* ------------------------------------------- */
 float Ae_1S_pyquen_tot=0.223;
-float Ae_1S_pyquen_tote=0.005;
+float Ae_1S_pyquen_tote=0.011;
 float e_1S_pyquen_tot=0.633;
+<<<<<<< HEAD
 float e_1S_pyquen_tote=0.005;
 float t_1S_pyquen_tot3p5= 1.078;//2016
 float t_1S_pyquen_tot3p5e=0.0055;//2016 full
 float Aet_1S_pyquen_tot=0.24;
 float Aet_1S_pyquen_tote=0.010;//new 2016 total (tnp)
 float Aet_1S_pyquen_totgse=0.001;//gs
+=======
+float e_1S_pyquen_tote=0.003;
+float t_1S_pyquen_tot3p5= 1.127;
+float t_1S_pyquen_tot3p5e=0.042;
+float Aet_1S_pyquen_tot=Ae_1S_pyquen_tot*t_1S_pyquen_tot3p5;
+float Aet_1S_pyquen_tote=Aet_1S_pyquen_tot*sqrt(Ae_1S_pyquen_tote*Ae_1S_pyquen_tote+pow(t_1S_pyquen_tot3p5e/t_1S_pyquen_tot3p5,2));
+>>>>>>> 1dec6bafb188a8abbdd5f78885196d69eb897f30
 float t_1S_pyquen_tot4=1.070; //bof
 float Aet_1S_pyquen_tot3p5_muIDe = 0.006;
 float Aet_1S_pyquen_tot3p5_STAe = 0.011;
@@ -1211,9 +1261,10 @@ float Aet_1S_pyquen_cent42014s[nCentBins_2014]={0.002,0.002,0.003,0.003,0.003,0.
 /*             2S tight TOTAL E,A,T            */
 /* ------------------------------------------- */
 float Ae_2S_pyquen_tot=0.202;
-float Ae_2S_pyquen_tote=0.001;
+float Ae_2S_pyquen_tote=0.013;
 float e_2S_pyquen_tot=0.722;
 float e_2S_pyquen_tote=0.003;
+<<<<<<< HEAD
 float t_2S_pyquen_tot4= 1.059;
 float t_2S_pyquen_tot4e=0.0044;
 //good for 2016
@@ -1223,6 +1274,13 @@ float Aet_2S_pyquen_tots=0.0087;//full tnp syst
 float Aet_2S_pyquen_totgse=0.001;// gs
 float Aet_2S_pyquen_tot_muIDe=0.007;//
 float Aet_2S_pyquen_tot_STAe=0.01;//
+=======
+float t_2S_pyquen_tot4= 1.093;
+float t_2S_pyquen_tot4e=0.057;
+float Aet_2S_pyquen_tot=Ae_2S_pyquen_tot*t_2S_pyquen_tot4;
+float Aet_2S_pyquen_tote=Aet_2S_pyquen_tot*sqrt(pow(Ae_2S_pyquen_tote/Ae_2S_pyquen_tot,2)+pow(t_2S_pyquen_tot4e/t_2S_pyquen_tot4,2));
+//float t_2S_pyquen_tot4=1.070; //bof
+>>>>>>> 1dec6bafb188a8abbdd5f78885196d69eb897f30
 
 float e_2S_pyquen_pt2010[nPtBins2S]=   {0.692,0.741,0.789};
 float e_2S_pyquen_pt2010e[nPtBins2S]=  {0.005,0.005,0.004};

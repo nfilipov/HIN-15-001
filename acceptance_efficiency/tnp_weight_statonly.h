@@ -1,26 +1,27 @@
-#ifndef tnp_weight_h
-#define tnp_weight_h
+#ifndef tnp_weight_statonly_h
+#define tnp_weight_statonly_h
 
 #include "TMath.h"
 
-// IN THIS FILE YOU WILL FIND:
-// ---------------------------
-//
-// - MuIdTrg:
-//   * idx = 1..100: toy variations, stat. only
-//   * idx = -1: syst variation, "new_MAX", +1 sigma
-//   * idx = -2: syst variation, "new_MAX", -1 sigma
-// - STA:
-//   * central values are identical in pp and pbpb
-//   * idx = 1..100, pp: toy variations, stat. only
-//   * idx = 1..100, pbpb: toy variations from pp, stat increased by 4% everywhere in each toy
-//   * idx = -1: syst variation, "new_MAX", +1 sigma
-//   * idx = -2: syst variation, "new_MAX", -1 sigma
+////////////////////////////////////////////////
+//  ___ _____ _ _____    ___  _  _ _ __   __  //
+// / __|_   _/_\_   _|  / _ \| \| | |\ \ / /  //
+// \__ \ | |/ _ \| |   | (_) | .` | |_\ V /   //
+// |___/ |_/_/ \_\_|    \___/|_|\_|____|_|    //
+//                                            //
+////////////////////////////////////////////////
+
+// NB
+// idx = 0 -> nominal
+// idx = 1..100 -> 100 variations
+// idx = -1 ->typical +1 sigma
+// idx = -2 -> typical -1 sigma
+// idx = -1 or -2 ARE FOR ILLUSTRATING PURPOSE ONLY. DO NOT USE FOR ANALYSIS.
 
 /////////////////////////////////////////////////////////////
 //               M U I D + T R G    P b P b                //
 /////////////////////////////////////////////////////////////
-double tnp_weight_muidtrg_pbpb(double x, double eta, int idx)
+double tnp_weight_statonly_muidtrg_pbpb(double x, double eta, int idx)
 {
    // denominator (from MC)
    double den=1;
@@ -35,8 +36,8 @@ double tnp_weight_muidtrg_pbpb(double x, double eta, int idx)
    if (fabs(eta)<0.9)
    {
       if (idx==0) num = 0.9646*TMath::Erf((x-0.1260)/3.5155);
-      else if (idx == -1   ) num =   0.9689*TMath::Erf((x-0.2792)/3.3611);
-      else if (idx == -2   ) num =   0.9603*TMath::Erf((x-0.0062)/3.6371);
+      else if (idx == -1   ) num =   0.9708*TMath::Erf((x-0.0024)/3.6167);
+      else if (idx == -2   ) num =   0.9582*TMath::Erf((x-0.3940)/3.2851);
       else if (idx == 1   ) num = 0.9580*TMath::Erf((x-0.0001)/3.3987);
       else if (idx == 2   ) num = 0.9700*TMath::Erf((x-0.0001)/3.8239);
       else if (idx == 3   ) num = 0.9584*TMath::Erf((x-0.0010)/3.5980);
@@ -141,8 +142,8 @@ double tnp_weight_muidtrg_pbpb(double x, double eta, int idx)
    else if (fabs(eta)<1.6)
    {
       if (idx==0) num = 0.9725*TMath::Erf((x-1.0054)/2.3187);
-      else if (idx == -1   ) num =   0.9747*TMath::Erf((x-0.8107)/2.4694);
-      else if (idx == -2   ) num =   0.9698*TMath::Erf((x-1.1745)/2.1832);
+      else if (idx == -1   ) num =   1.0000*TMath::Erf((x-0.7401)/2.5070);
+      else if (idx == -2   ) num =   0.9173*TMath::Erf((x-1.3831)/1.8138);
       else if (idx==1   ) num = 0.9664*TMath::Erf((x-1.3309)/1.9451);
       else if (idx==2   ) num = 0.9632*TMath::Erf((x-1.3290)/1.9513);
       else if (idx==3   ) num = 0.9678*TMath::Erf((x-1.0148)/2.3376);
@@ -247,8 +248,8 @@ double tnp_weight_muidtrg_pbpb(double x, double eta, int idx)
    else if (fabs(eta)<2.1)
    {
       if (idx==0) num = 0.9194*TMath::Erf((x-0.9733)/2.1374);
-      else if (idx == -1   ) num =   0.9231*TMath::Erf((x-0.8453)/2.2609);
-      else if (idx == -2   ) num =   0.9147*TMath::Erf((x-1.0894)/2.0185);
+      else if (idx == -1   ) num =   0.9324*TMath::Erf((x-0.9239)/2.0178);
+      else if (idx == -2   ) num =   0.9065*TMath::Erf((x-1.0432)/2.2318);
       else if (idx == 1   ) num = 0.9136*TMath::Erf((x-0.8890)/2.2189);
       else if (idx == 2   ) num = 0.9143*TMath::Erf((x-1.1614)/1.8663);
       else if (idx == 3   ) num = 0.9219*TMath::Erf((x-1.0305)/2.0959);
@@ -353,8 +354,8 @@ double tnp_weight_muidtrg_pbpb(double x, double eta, int idx)
    else
    {
       if (idx==0) num = 0.8079*TMath::Erf((x-0.9421)/0.8577);
-      else if (idx == -1   ) num =   0.8211*TMath::Erf((x-0.9282)/0.8999);
-      else if (idx == -2   ) num =   0.7941*TMath::Erf((x-0.9906)/0.7813);
+      else if (idx == -1   ) num =   0.8324*TMath::Erf((x-0.8321)/0.5872);
+      else if (idx == -2   ) num =   0.7843*TMath::Erf((x-1.1443)/0.9628);
       else if (idx == 1   ) num = 0.8056*TMath::Erf((x-1.6103)/0.2200);
       else if (idx == 2   ) num = 0.8363*TMath::Erf((x-0.0000)/1.9077);
       else if (idx == 3   ) num = 0.8078*TMath::Erf((x-1.1152)/0.8519);
@@ -464,7 +465,7 @@ double tnp_weight_muidtrg_pbpb(double x, double eta, int idx)
 /////////////////////////////////////////////////////////////
 //               M U I D + T R G    P P                    //
 /////////////////////////////////////////////////////////////
-double tnp_weight_muidtrg_pp(double x, double eta, int idx)
+double tnp_weight_statonly_muidtrg_pp(double x, double eta, int idx)
 {
    // denominator (from MC)
    double den=1;
@@ -478,8 +479,8 @@ double tnp_weight_muidtrg_pp(double x, double eta, int idx)
    if (fabs(eta)<0.9)
    {
       if (idx==0) num = 0.9452*TMath::Erf((x-1.9895)/1.6646);
-      else if (idx == -1   ) num =   0.9464*TMath::Erf((x-1.9423)/1.6791);
-      else if (idx == -2   ) num =   0.9444*TMath::Erf((x-2.0398)/1.6463);
+      else if (idx == -1   ) num =   0.9488*TMath::Erf((x-1.8449)/1.7647);
+      else if (idx == -2   ) num =   0.9416*TMath::Erf((x-2.1177)/1.5746);
       else if (idx == 1   ) num = 0.9483*TMath::Erf((x-1.3362)/2.1673);
       else if (idx == 2   ) num = 0.9477*TMath::Erf((x-1.6542)/2.0202);
       else if (idx == 3   ) num = 0.9423*TMath::Erf((x-1.8122)/1.8067);
@@ -584,8 +585,8 @@ double tnp_weight_muidtrg_pp(double x, double eta, int idx)
    else if (fabs(eta)<1.6)
    {
       if (idx==0) num = 0.9296*TMath::Erf((x-1.8082)/1.4939);
-      else if (idx == -1   ) num =   0.9321*TMath::Erf((x-1.7773)/1.5122);
-      else if (idx == -2   ) num =   0.9273*TMath::Erf((x-1.8360)/1.4806);
+      else if (idx == -1   ) num =   0.9353*TMath::Erf((x-1.7519)/1.5470);
+      else if (idx == -2   ) num =   0.9239*TMath::Erf((x-1.8612)/1.4438);
       else if (idx == 1   ) num = 0.9264*TMath::Erf((x-1.8875)/1.3760);
       else if (idx == 2   ) num = 0.9235*TMath::Erf((x-1.8870)/1.3730);
       else if (idx == 3   ) num = 0.9278*TMath::Erf((x-1.7989)/1.5252);
@@ -690,8 +691,8 @@ double tnp_weight_muidtrg_pp(double x, double eta, int idx)
    else if (fabs(eta)<2.1)
    {
       if (idx==0) num = 0.8808*TMath::Erf((x-0.8275)/2.6569);
-      else if (idx == -1   ) num =   0.8880*TMath::Erf((x-0.8487)/2.6109);
-      else if (idx == -2   ) num =   0.8741*TMath::Erf((x-0.7909)/2.7254);
+      else if (idx == -1   ) num =   0.8880*TMath::Erf((x-0.7862)/2.7019);
+      else if (idx == -2   ) num =   0.8736*TMath::Erf((x-0.8687)/2.6119);
       else if (idx == 1   ) num = 0.8770*TMath::Erf((x-0.7880)/2.6943);
       else if (idx == 2   ) num = 0.8796*TMath::Erf((x-0.8924)/2.5517);
       else if (idx == 3   ) num = 0.8837*TMath::Erf((x-0.8413)/2.6633);
@@ -796,8 +797,8 @@ double tnp_weight_muidtrg_pp(double x, double eta, int idx)
    else
    {
       if (idx==0) num = 0.7180*TMath::Erf((x-0.8578)/0.8700);
-      else if (idx == -1   ) num =   0.7237*TMath::Erf((x-1.0005)/0.7219);
-      else if (idx == -2   ) num =   0.7120*TMath::Erf((x-0.7996)/0.9479);
+      else if (idx == -1   ) num =   0.7274*TMath::Erf((x-0.0676)/1.4583);
+      else if (idx == -2   ) num =   0.7086*TMath::Erf((x-1.1692)/0.6079);
       else if (idx == 1   ) num = 0.7166*TMath::Erf((x-1.2516)/0.5359);
       else if (idx == 2   ) num = 0.7318*TMath::Erf((x-0.0027)/1.7106);
       else if (idx == 3   ) num = 0.7214*TMath::Erf((x-0.7102)/1.0657);
@@ -907,226 +908,222 @@ double tnp_weight_muidtrg_pp(double x, double eta, int idx)
 /////////////////////////////////////////////////////////////
 //                     STA    P b P b                      //
 /////////////////////////////////////////////////////////////
-double tnp_weight_sta_pbpb(double x, double eta, int idx)
+double tnp_weight_statonly_sta_pbpb(double x, double eta, int idx)
 {
    // denominator (from MC)
    double den=1;
-   if (fabs(eta)<1.6) den = 0.9911*TMath::Erf((x-1.4336)/2.8548);
-   else den = den = 0.9132*TMath::Erf((x-0.8045)/1.8366);
+   if (fabs(eta)<1.6) den = 1.0000*TMath::Erf((x-1.5330)/2.8467);
+   else den = 0.9523*TMath::Erf((x-0.7714)/2.0628);
    
    // numerator (from data)
    double num=1;
    if (fabs(eta)<1.6)
    {
-      if (idx==0) num = 0.9891*TMath::Erf((x-1.4814)/2.5014);
-      else if (idx == -1  ) num = 0.9996*TMath::Erf((x-1.4885)/2.4666);
-      else if (idx == -2  ) num = 0.9764*TMath::Erf((x-1.4746)/2.5279);
-      else if (idx == 1   ) num = 0.9948*TMath::Erf((x-1.0027)/3.0825);
-      else if (idx == 2   ) num = 0.9658*TMath::Erf((x-1.8116)/1.9534);
-      else if (idx == 3   ) num = 0.9601*TMath::Erf((x-1.5043)/2.5557);
-      else if (idx == 4   ) num = 0.9755*TMath::Erf((x-1.5490)/2.4079);
-      else if (idx == 5   ) num = 0.9580*TMath::Erf((x-1.4780)/2.3290);
-      else if (idx == 6   ) num = 0.9459*TMath::Erf((x-1.5368)/2.1954);
-      else if (idx == 7   ) num = 0.9847*TMath::Erf((x-1.6312)/2.2940);
-      else if (idx == 8   ) num = 0.9696*TMath::Erf((x-1.6106)/2.3524);
-      else if (idx == 9   ) num = 0.9579*TMath::Erf((x-1.6494)/2.1508);
-      else if (idx == 10  ) num = 0.9611*TMath::Erf((x-1.3995)/2.3846);
-      else if (idx == 11  ) num = 0.9553*TMath::Erf((x-1.5769)/2.4887);
-      else if (idx == 12  ) num = 0.9927*TMath::Erf((x-1.2934)/2.8614);
-      else if (idx == 13  ) num = 0.9689*TMath::Erf((x-1.6733)/2.1308);
-      else if (idx == 14  ) num = 0.9677*TMath::Erf((x-1.5914)/2.3259);
-      else if (idx == 15  ) num = 0.9498*TMath::Erf((x-1.6213)/2.2265);
-      else if (idx == 16  ) num = 0.9981*TMath::Erf((x-1.5474)/2.6294);
-      else if (idx == 17  ) num = 0.9566*TMath::Erf((x-1.6260)/2.2666);
-      else if (idx == 18  ) num = 0.9637*TMath::Erf((x-1.7857)/1.9085);
-      else if (idx == 19  ) num = 0.9891*TMath::Erf((x-1.1183)/3.0663);
-      else if (idx == 20  ) num = 0.9625*TMath::Erf((x-1.7861)/1.9473);
-      else if (idx == 21  ) num = 0.9816*TMath::Erf((x-1.4461)/2.6316);
-      else if (idx == 22  ) num = 0.9533*TMath::Erf((x-1.6919)/1.9712);
-      else if (idx == 23  ) num = 0.9781*TMath::Erf((x-1.6831)/2.1241);
-      else if (idx == 24  ) num = 0.9391*TMath::Erf((x-1.6315)/2.0061);
-      else if (idx == 25  ) num = 0.9685*TMath::Erf((x-1.6208)/2.2084);
-      else if (idx == 26  ) num = 0.9378*TMath::Erf((x-1.6176)/1.8588);
-      else if (idx == 27  ) num = 0.9851*TMath::Erf((x-1.5616)/2.5608);
-      else if (idx == 28  ) num = 0.9715*TMath::Erf((x-1.4177)/2.4401);
-      else if (idx == 29  ) num = 0.9565*TMath::Erf((x-1.4087)/2.6610);
-      else if (idx == 30  ) num = 0.9866*TMath::Erf((x-1.1504)/3.0086);
-      else if (idx == 31  ) num = 0.9743*TMath::Erf((x-1.1424)/2.8948);
-      else if (idx == 32  ) num = 0.9435*TMath::Erf((x-1.5286)/2.2686);
-      else if (idx == 33  ) num = 0.9657*TMath::Erf((x-1.5931)/2.2059);
-      else if (idx == 34  ) num = 0.9857*TMath::Erf((x-1.2805)/2.9793);
-      else if (idx == 35  ) num = 0.9663*TMath::Erf((x-1.3391)/2.6491);
-      else if (idx == 36  ) num = 0.9759*TMath::Erf((x-1.4775)/2.5575);
-      else if (idx == 37  ) num = 0.9835*TMath::Erf((x-1.4982)/2.6455);
-      else if (idx == 38  ) num = 0.9946*TMath::Erf((x-1.3276)/2.7413);
-      else if (idx == 39  ) num = 0.9515*TMath::Erf((x-1.6369)/2.1667);
-      else if (idx == 40  ) num = 0.9508*TMath::Erf((x-1.4388)/2.3989);
-      else if (idx == 41  ) num = 0.9888*TMath::Erf((x-1.4619)/2.4613);
-      else if (idx == 42  ) num = 0.9731*TMath::Erf((x-1.2972)/2.7154);
-      else if (idx == 43  ) num = 0.9985*TMath::Erf((x-1.4898)/2.6072);
-      else if (idx == 44  ) num = 0.9320*TMath::Erf((x-1.4094)/2.3230);
-      else if (idx == 45  ) num = 0.9511*TMath::Erf((x-1.3477)/2.4102);
-      else if (idx == 46  ) num = 0.9864*TMath::Erf((x-1.4347)/2.6130);
-      else if (idx == 47  ) num = 0.9957*TMath::Erf((x-1.2196)/2.8369);
-      else if (idx == 48  ) num = 0.9479*TMath::Erf((x-1.6938)/2.1571);
-      else if (idx == 49  ) num = 0.9630*TMath::Erf((x-1.4457)/2.5090);
-      else if (idx == 50  ) num = 0.9838*TMath::Erf((x-1.5105)/2.4755);
-      else if (idx == 51  ) num = 0.9864*TMath::Erf((x-1.4726)/2.5555);
-      else if (idx == 52  ) num = 0.9537*TMath::Erf((x-1.7316)/1.9708);
-      else if (idx == 53  ) num = 0.9763*TMath::Erf((x-1.2341)/2.6906);
-      else if (idx == 54  ) num = 0.9688*TMath::Erf((x-1.6741)/2.1406);
-      else if (idx == 55  ) num = 0.9708*TMath::Erf((x-1.6162)/2.2292);
-      else if (idx == 56  ) num = 0.9565*TMath::Erf((x-1.2409)/2.7221);
-      else if (idx == 57  ) num = 0.9670*TMath::Erf((x-1.3479)/2.6662);
-      else if (idx == 58  ) num = 0.9569*TMath::Erf((x-1.8988)/1.8177);
-      else if (idx == 59  ) num = 0.9848*TMath::Erf((x-1.0690)/2.9668);
-      else if (idx == 60  ) num = 0.9516*TMath::Erf((x-1.5590)/2.4386);
-      else if (idx == 61  ) num = 0.9798*TMath::Erf((x-1.0860)/3.0184);
-      else if (idx == 62  ) num = 0.9580*TMath::Erf((x-1.5088)/2.5848);
-      else if (idx == 63  ) num = 0.9396*TMath::Erf((x-1.6843)/2.1154);
-      else if (idx == 64  ) num = 0.9742*TMath::Erf((x-0.9365)/3.1109);
-      else if (idx == 65  ) num = 0.9481*TMath::Erf((x-1.6703)/2.0737);
-      else if (idx == 66  ) num = 0.9642*TMath::Erf((x-1.6919)/2.1213);
-      else if (idx == 67  ) num = 0.9828*TMath::Erf((x-1.6155)/2.4307);
-      else if (idx == 68  ) num = 0.9851*TMath::Erf((x-1.5165)/2.5912);
-      else if (idx == 69  ) num = 0.9627*TMath::Erf((x-1.3952)/2.6783);
-      else if (idx == 70  ) num = 0.9556*TMath::Erf((x-1.5954)/2.0434);
-      else if (idx == 71  ) num = 0.9558*TMath::Erf((x-1.7714)/1.9476);
-      else if (idx == 72  ) num = 0.9417*TMath::Erf((x-1.3330)/2.4873);
-      else if (idx == 73  ) num = 0.9641*TMath::Erf((x-1.4129)/2.4777);
-      else if (idx == 74  ) num = 0.9753*TMath::Erf((x-1.1892)/2.8455);
-      else if (idx == 75  ) num = 0.9616*TMath::Erf((x-1.4862)/2.3338);
-      else if (idx == 76  ) num = 0.9850*TMath::Erf((x-1.2442)/2.9777);
-      else if (idx == 77  ) num = 0.9609*TMath::Erf((x-1.6084)/2.2445);
-      else if (idx == 78  ) num = 0.9847*TMath::Erf((x-1.4876)/2.6138);
-      else if (idx == 79  ) num = 0.9382*TMath::Erf((x-1.4622)/2.3917);
-      else if (idx == 80  ) num = 0.9697*TMath::Erf((x-1.5235)/2.2411);
-      else if (idx == 81  ) num = 0.9709*TMath::Erf((x-1.7719)/1.9731);
-      else if (idx == 82  ) num = 0.9544*TMath::Erf((x-1.8381)/1.7623);
-      else if (idx == 83  ) num = 0.9970*TMath::Erf((x-1.2574)/2.7917);
-      else if (idx == 84  ) num = 0.9995*TMath::Erf((x-1.3149)/2.8497);
-      else if (idx == 85  ) num = 0.9650*TMath::Erf((x-1.3187)/2.4415);
-      else if (idx == 86  ) num = 0.9700*TMath::Erf((x-1.6363)/2.1275);
-      else if (idx == 87  ) num = 0.9342*TMath::Erf((x-1.6477)/2.1985);
-      else if (idx == 88  ) num = 0.9425*TMath::Erf((x-1.6008)/2.1196);
-      else if (idx == 89  ) num = 0.9784*TMath::Erf((x-1.2755)/2.7493);
-      else if (idx == 90  ) num = 0.9691*TMath::Erf((x-1.5775)/2.3070);
-      else if (idx == 91  ) num = 0.9697*TMath::Erf((x-1.7054)/2.1071);
-      else if (idx == 92  ) num = 0.9575*TMath::Erf((x-1.3237)/2.6191);
-      else if (idx == 93  ) num = 0.9691*TMath::Erf((x-1.4130)/2.5344);
-      else if (idx == 94  ) num = 0.9677*TMath::Erf((x-1.4688)/2.4914);
-      else if (idx == 95  ) num = 0.9685*TMath::Erf((x-1.6630)/1.9997);
-      else if (idx == 96  ) num = 0.9705*TMath::Erf((x-1.5190)/2.3908);
-      else if (idx == 97  ) num = 0.9537*TMath::Erf((x-1.5912)/2.0281);
-      else if (idx == 98  ) num = 0.9409*TMath::Erf((x-1.3793)/2.3750);
-      else if (idx == 99  ) num = 0.9441*TMath::Erf((x-1.5825)/2.1456);
-      else if (idx == 100 ) num = 0.9794*TMath::Erf((x-1.3770)/2.5317);
+      if (idx==0) num = 1.0000*TMath::Erf((x-1.3923)/2.3653);
+      else if (idx == 1   ) num =    0.9283*TMath::Erf((x-0.8018)/0.5289);
+      else if (idx == 2   ) num =    0.9868*TMath::Erf((x-1.7749)/1.9886);
+      else if (idx == 3   ) num =    1.0000*TMath::Erf((x-1.4160)/2.6435);
+      else if (idx == 4   ) num =    0.9903*TMath::Erf((x-1.7822)/2.0489);
+      else if (idx == 5   ) num =    0.9925*TMath::Erf((x-1.7979)/1.9258);
+      else if (idx == 6   ) num =    1.0000*TMath::Erf((x-1.5774)/2.0736);
+      else if (idx == 7   ) num =    0.9770*TMath::Erf((x-1.3810)/2.2826);
+      else if (idx == 8   ) num =    1.0000*TMath::Erf((x-0.4958)/3.6045);
+      else if (idx == 9   ) num =    0.9969*TMath::Erf((x-1.8226)/1.9781);
+      else if (idx == 10  ) num =    1.0000*TMath::Erf((x-1.5686)/2.3597);
+      else if (idx == 11  ) num =    0.9926*TMath::Erf((x-0.0001)/3.7100);
+      else if (idx == 12  ) num =    0.9875*TMath::Erf((x-1.9680)/1.6489);
+      else if (idx == 13  ) num =    1.0000*TMath::Erf((x-1.4083)/2.0811);
+      else if (idx == 14  ) num =    0.9955*TMath::Erf((x-0.0000)/3.2313);
+      else if (idx == 15  ) num =    1.0000*TMath::Erf((x-0.1416)/3.7876);
+      else if (idx == 16  ) num =    1.0000*TMath::Erf((x-1.8611)/1.8358);
+      else if (idx == 17  ) num =    0.9938*TMath::Erf((x-1.8136)/1.9406);
+      else if (idx == 18  ) num =    0.9734*TMath::Erf((x-1.9795)/1.6737);
+      else if (idx == 19  ) num =    1.0000*TMath::Erf((x-1.0489)/2.9066);
+      else if (idx == 20  ) num =    0.9898*TMath::Erf((x-1.5882)/2.0880);
+      else if (idx == 21  ) num =    1.0000*TMath::Erf((x-0.7377)/3.4864);
+      else if (idx == 22  ) num =    0.9880*TMath::Erf((x-2.0997)/1.5132);
+      else if (idx == 23  ) num =    0.9846*TMath::Erf((x-1.9961)/1.3292);
+      else if (idx == 24  ) num =    1.0000*TMath::Erf((x-1.3637)/2.3218);
+      else if (idx == 25  ) num =    0.9774*TMath::Erf((x-0.0001)/3.2389);
+      else if (idx == 26  ) num =    0.9825*TMath::Erf((x-1.5043)/2.1429);
+      else if (idx == 27  ) num =    0.9750*TMath::Erf((x-2.0611)/1.5012);
+      else if (idx == 28  ) num =    1.0000*TMath::Erf((x-0.8897)/2.9039);
+      else if (idx == 29  ) num =    1.0000*TMath::Erf((x-1.7483)/1.9824);
+      else if (idx == 30  ) num =    0.9998*TMath::Erf((x-0.0000)/3.2694);
+      else if (idx == 31  ) num =    1.0000*TMath::Erf((x-1.1026)/2.5823);
+      else if (idx == 32  ) num =    0.9948*TMath::Erf((x-1.4452)/2.4395);
+      else if (idx == 33  ) num =    1.0000*TMath::Erf((x-1.6615)/2.1320);
+      else if (idx == 34  ) num =    0.9805*TMath::Erf((x-1.7421)/1.7236);
+      else if (idx == 35  ) num =    1.0000*TMath::Erf((x-1.5388)/2.2601);
+      else if (idx == 36  ) num =    1.0000*TMath::Erf((x-0.0726)/3.5774);
+      else if (idx == 37  ) num =    1.0000*TMath::Erf((x-0.7584)/2.9179);
+      else if (idx == 38  ) num =    0.9978*TMath::Erf((x-1.6489)/2.0877);
+      else if (idx == 39  ) num =    1.0000*TMath::Erf((x-0.0000)/3.6597);
+      else if (idx == 40  ) num =    1.0000*TMath::Erf((x-0.5244)/3.3557);
+      else if (idx == 41  ) num =    0.9591*TMath::Erf((x-0.0000)/2.8226);
+      else if (idx == 42  ) num =    0.9920*TMath::Erf((x-1.6577)/2.1163);
+      else if (idx == 43  ) num =    0.9849*TMath::Erf((x-1.4985)/2.1416);
+      else if (idx == 44  ) num =    0.9888*TMath::Erf((x-1.9475)/1.4673);
+      else if (idx == 45  ) num =    0.9936*TMath::Erf((x-0.0000)/3.9252);
+      else if (idx == 46  ) num =    0.9711*TMath::Erf((x-2.0125)/1.4974);
+      else if (idx == 47  ) num =    1.0000*TMath::Erf((x-0.0997)/3.4988);
+      else if (idx == 48  ) num =    0.9848*TMath::Erf((x-0.0000)/3.1670);
+      else if (idx == 49  ) num =    1.0000*TMath::Erf((x-0.7143)/3.4125);
+      else if (idx == 50  ) num =    1.0000*TMath::Erf((x-1.6835)/1.8343);
+      else if (idx == 51  ) num =    0.9965*TMath::Erf((x-0.9427)/2.8611);
+      else if (idx == 52  ) num =    0.9792*TMath::Erf((x-1.7839)/1.7880);
+      else if (idx == 53  ) num =    1.0000*TMath::Erf((x-0.3869)/3.4069);
+      else if (idx == 54  ) num =    0.9141*TMath::Erf((x-0.5135)/0.0071);
+      else if (idx == 55  ) num =    1.0000*TMath::Erf((x-0.8657)/2.9058);
+      else if (idx == 56  ) num =    0.9934*TMath::Erf((x-1.6966)/1.9861);
+      else if (idx == 57  ) num =    1.0000*TMath::Erf((x-0.2412)/3.7828);
+      else if (idx == 58  ) num =    0.9996*TMath::Erf((x-0.2100)/3.7623);
+      else if (idx == 59  ) num =    0.9804*TMath::Erf((x-0.0003)/3.0132);
+      else if (idx == 60  ) num =    0.9962*TMath::Erf((x-1.1849)/2.6415);
+      else if (idx == 61  ) num =    0.9928*TMath::Erf((x-1.3621)/2.4012);
+      else if (idx == 62  ) num =    0.9927*TMath::Erf((x-1.8502)/2.0504);
+      else if (idx == 63  ) num =    0.9747*TMath::Erf((x-2.0595)/1.3775);
+      else if (idx == 64  ) num =    0.9961*TMath::Erf((x-0.0000)/3.8910);
+      else if (idx == 65  ) num =    0.9991*TMath::Erf((x-0.3440)/3.5343);
+      else if (idx == 66  ) num =    1.0000*TMath::Erf((x-0.9539)/2.9385);
+      else if (idx == 67  ) num =    1.0000*TMath::Erf((x-0.4746)/3.1502);
+      else if (idx == 68  ) num =    0.9999*TMath::Erf((x-0.3916)/2.9244);
+      else if (idx == 69  ) num =    0.9903*TMath::Erf((x-2.0334)/1.6224);
+      else if (idx == 70  ) num =    1.0000*TMath::Erf((x-1.4297)/2.2086);
+      else if (idx == 71  ) num =    0.9927*TMath::Erf((x-1.6644)/2.1629);
+      else if (idx == 72  ) num =    0.9813*TMath::Erf((x-1.9220)/1.4614);
+      else if (idx == 73  ) num =    0.9940*TMath::Erf((x-1.8761)/1.8066);
+      else if (idx == 74  ) num =    1.0000*TMath::Erf((x-1.2272)/2.8578);
+      else if (idx == 75  ) num =    0.9993*TMath::Erf((x-0.0000)/4.0548);
+      else if (idx == 76  ) num =    0.9962*TMath::Erf((x-1.1186)/2.6701);
+      else if (idx == 77  ) num =    1.0000*TMath::Erf((x-2.2248)/1.6407);
+      else if (idx == 78  ) num =    0.9201*TMath::Erf((x-0.7350)/0.5938);
+      else if (idx == 79  ) num =    1.0000*TMath::Erf((x-2.0484)/1.8119);
+      else if (idx == 80  ) num =    0.9896*TMath::Erf((x-1.8440)/1.8845);
+      else if (idx == 81  ) num =    0.9763*TMath::Erf((x-0.0000)/3.1158);
+      else if (idx == 82  ) num =    0.9861*TMath::Erf((x-1.7270)/1.8453);
+      else if (idx == 83  ) num =    0.9908*TMath::Erf((x-2.1229)/1.6275);
+      else if (idx == 84  ) num =    0.9853*TMath::Erf((x-1.8884)/1.9027);
+      else if (idx == 85  ) num =    0.9293*TMath::Erf((x-0.0890)/0.7586);
+      else if (idx == 86  ) num =    1.0000*TMath::Erf((x-0.0000)/3.6480);
+      else if (idx == 87  ) num =    1.0000*TMath::Erf((x-1.5143)/2.1569);
+      else if (idx == 88  ) num =    1.0000*TMath::Erf((x-1.2379)/2.7417);
+      else if (idx == 89  ) num =    0.9804*TMath::Erf((x-1.9632)/1.7749);
+      else if (idx == 90  ) num =    0.9922*TMath::Erf((x-0.0000)/3.3929);
+      else if (idx == 91  ) num =    0.9999*TMath::Erf((x-0.1489)/3.4288);
+      else if (idx == 92  ) num =    0.9909*TMath::Erf((x-1.8919)/1.9758);
+      else if (idx == 93  ) num =    1.0000*TMath::Erf((x-1.5316)/2.0938);
+      else if (idx == 94  ) num =    1.0000*TMath::Erf((x-1.0332)/2.6627);
+      else if (idx == 95  ) num =    1.0000*TMath::Erf((x-1.5943)/2.3619);
+      else if (idx == 96  ) num =    0.9872*TMath::Erf((x-1.4365)/2.3545);
+      else if (idx == 97  ) num =    1.0000*TMath::Erf((x-1.0721)/2.6454);
+      else if (idx == 98  ) num =    0.9996*TMath::Erf((x-1.5998)/2.2637);
+      else if (idx == 99  ) num =    0.9918*TMath::Erf((x-1.7687)/2.0543);
+      else if (idx == 100 ) num =    0.9998*TMath::Erf((x-0.9006)/2.9964);
    }
    else
    {
-      if (idx==0) num = 0.8956*TMath::Erf((x-0.5162)/1.7646);
-      else if (idx == -1  ) num = 0.9153*TMath::Erf((x-0.5049)/1.7401);
-      else if (idx == -2  ) num = 0.8762*TMath::Erf((x-0.5250)/1.7942);
-      else if (idx == 1   ) num = 0.8422*TMath::Erf((x-0.2660)/1.6859);
-      else if (idx == 2   ) num = 0.9189*TMath::Erf((x-0.8973)/1.4428);
-      else if (idx == 3   ) num = 0.8999*TMath::Erf((x-0.5813)/1.7805);
-      else if (idx == 4   ) num = 0.9285*TMath::Erf((x-0.5231)/1.9030);
-      else if (idx == 5   ) num = 0.9033*TMath::Erf((x-0.5506)/1.7935);
-      else if (idx == 6   ) num = 0.9028*TMath::Erf((x-0.8598)/1.3702);
-      else if (idx == 7   ) num = 0.9259*TMath::Erf((x-0.5527)/2.0627);
-      else if (idx == 8   ) num = 0.8697*TMath::Erf((x-0.6804)/1.4575);
-      else if (idx == 9   ) num = 0.9116*TMath::Erf((x-0.9879)/1.3085);
-      else if (idx == 10  ) num = 0.9324*TMath::Erf((x-0.0001)/2.2847);
-      else if (idx == 11  ) num = 0.8728*TMath::Erf((x-0.0000)/2.0122);
-      else if (idx == 12  ) num = 0.8753*TMath::Erf((x-0.4843)/1.7428);
-      else if (idx == 13  ) num = 0.8826*TMath::Erf((x-0.6228)/1.6058);
-      else if (idx == 14  ) num = 0.8695*TMath::Erf((x-0.3728)/1.7623);
-      else if (idx == 15  ) num = 0.8912*TMath::Erf((x-0.0001)/2.3161);
-      else if (idx == 16  ) num = 0.9216*TMath::Erf((x-0.6802)/1.6184);
-      else if (idx == 17  ) num = 0.8704*TMath::Erf((x-0.0003)/2.1381);
-      else if (idx == 18  ) num = 0.9062*TMath::Erf((x-0.7328)/1.4465);
-      else if (idx == 19  ) num = 0.9094*TMath::Erf((x-0.4722)/1.7021);
-      else if (idx == 20  ) num = 0.8952*TMath::Erf((x-0.9183)/1.5092);
-      else if (idx == 21  ) num = 0.8595*TMath::Erf((x-0.1234)/1.8473);
-      else if (idx == 22  ) num = 0.8858*TMath::Erf((x-0.8695)/1.3805);
-      else if (idx == 23  ) num = 0.8362*TMath::Erf((x-0.6018)/1.5297);
-      else if (idx == 24  ) num = 0.9436*TMath::Erf((x-0.0430)/2.4950);
-      else if (idx == 25  ) num = 0.9408*TMath::Erf((x-0.9158)/1.4521);
-      else if (idx == 26  ) num = 0.8901*TMath::Erf((x-0.6716)/1.8363);
-      else if (idx == 27  ) num = 0.9394*TMath::Erf((x-0.7987)/1.7748);
-      else if (idx == 28  ) num = 0.8981*TMath::Erf((x-0.9823)/1.3582);
-      else if (idx == 29  ) num = 0.8957*TMath::Erf((x-0.3658)/1.8645);
-      else if (idx == 30  ) num = 0.8753*TMath::Erf((x-0.3396)/1.7724);
-      else if (idx == 31  ) num = 0.8746*TMath::Erf((x-0.7573)/1.3503);
-      else if (idx == 32  ) num = 0.9015*TMath::Erf((x-0.1244)/2.1035);
-      else if (idx == 33  ) num = 0.8943*TMath::Erf((x-0.8617)/1.2818);
-      else if (idx == 34  ) num = 0.8754*TMath::Erf((x-0.8873)/1.2571);
-      else if (idx == 35  ) num = 0.9094*TMath::Erf((x-0.0000)/2.2913);
-      else if (idx == 36  ) num = 0.8748*TMath::Erf((x-0.3532)/1.8459);
-      else if (idx == 37  ) num = 0.8762*TMath::Erf((x-0.1559)/1.7802);
-      else if (idx == 38  ) num = 0.8949*TMath::Erf((x-0.8620)/1.3595);
-      else if (idx == 39  ) num = 0.9234*TMath::Erf((x-0.3123)/2.0381);
-      else if (idx == 40  ) num = 0.9314*TMath::Erf((x-0.3319)/2.1803);
-      else if (idx == 41  ) num = 0.8983*TMath::Erf((x-0.7128)/1.5919);
-      else if (idx == 42  ) num = 0.9096*TMath::Erf((x-0.7037)/1.7531);
-      else if (idx == 43  ) num = 0.8963*TMath::Erf((x-0.0000)/2.1340);
-      else if (idx == 44  ) num = 0.8698*TMath::Erf((x-0.6676)/1.5945);
-      else if (idx == 45  ) num = 0.9066*TMath::Erf((x-0.5411)/1.9654);
-      else if (idx == 46  ) num = 0.9148*TMath::Erf((x-0.2244)/2.3106);
-      else if (idx == 47  ) num = 0.9024*TMath::Erf((x-0.5429)/1.6936);
-      else if (idx == 48  ) num = 0.9351*TMath::Erf((x-0.7964)/1.5699);
-      else if (idx == 49  ) num = 0.8367*TMath::Erf((x-0.0000)/2.0225);
-      else if (idx == 50  ) num = 0.8829*TMath::Erf((x-0.6488)/1.5750);
-      else if (idx == 51  ) num = 0.9118*TMath::Erf((x-0.3236)/1.9814);
-      else if (idx == 52  ) num = 0.9122*TMath::Erf((x-0.9721)/1.3455);
-      else if (idx == 53  ) num = 0.9488*TMath::Erf((x-0.0001)/2.6158);
-      else if (idx == 54  ) num = 0.9088*TMath::Erf((x-0.0000)/1.9977);
-      else if (idx == 55  ) num = 0.9224*TMath::Erf((x-0.6847)/1.8960);
-      else if (idx == 56  ) num = 0.8904*TMath::Erf((x-0.8242)/1.4509);
-      else if (idx == 57  ) num = 0.8992*TMath::Erf((x-0.7761)/1.4855);
-      else if (idx == 58  ) num = 0.8634*TMath::Erf((x-0.6169)/1.6313);
-      else if (idx == 59  ) num = 0.8947*TMath::Erf((x-0.0010)/2.2935);
-      else if (idx == 60  ) num = 0.8724*TMath::Erf((x-0.0008)/2.1255);
-      else if (idx == 61  ) num = 0.8777*TMath::Erf((x-1.1245)/1.1490);
-      else if (idx == 62  ) num = 0.8892*TMath::Erf((x-0.1847)/2.0135);
-      else if (idx == 63  ) num = 0.9294*TMath::Erf((x-0.7816)/1.5228);
-      else if (idx == 64  ) num = 0.9270*TMath::Erf((x-0.0001)/2.2717);
-      else if (idx == 65  ) num = 0.8819*TMath::Erf((x-0.1885)/1.8378);
-      else if (idx == 66  ) num = 0.9206*TMath::Erf((x-0.2796)/1.8883);
-      else if (idx == 67  ) num = 0.9468*TMath::Erf((x-0.9246)/1.6092);
-      else if (idx == 68  ) num = 0.8844*TMath::Erf((x-0.0000)/2.2454);
-      else if (idx == 69  ) num = 0.8823*TMath::Erf((x-0.7625)/1.5269);
-      else if (idx == 70  ) num = 0.8882*TMath::Erf((x-0.7528)/1.3078);
-      else if (idx == 71  ) num = 0.8822*TMath::Erf((x-0.0041)/2.3017);
-      else if (idx == 72  ) num = 0.9142*TMath::Erf((x-0.8162)/1.4932);
-      else if (idx == 73  ) num = 0.8767*TMath::Erf((x-0.3554)/1.7210);
-      else if (idx == 74  ) num = 0.8689*TMath::Erf((x-0.0000)/2.1210);
-      else if (idx == 75  ) num = 0.9012*TMath::Erf((x-0.0000)/1.9986);
-      else if (idx == 76  ) num = 0.9120*TMath::Erf((x-0.0038)/2.4376);
-      else if (idx == 77  ) num = 0.9272*TMath::Erf((x-0.1844)/2.0625);
-      else if (idx == 78  ) num = 0.8869*TMath::Erf((x-1.0120)/1.1948);
-      else if (idx == 79  ) num = 0.9220*TMath::Erf((x-0.5897)/1.8112);
-      else if (idx == 80  ) num = 0.9181*TMath::Erf((x-0.0000)/2.3025);
-      else if (idx == 81  ) num = 0.9095*TMath::Erf((x-1.0638)/1.2207);
-      else if (idx == 82  ) num = 0.9628*TMath::Erf((x-0.0001)/2.8342);
-      else if (idx == 83  ) num = 0.9052*TMath::Erf((x-0.7234)/1.6366);
-      else if (idx == 84  ) num = 0.8753*TMath::Erf((x-0.7512)/1.4707);
-      else if (idx == 85  ) num = 0.9292*TMath::Erf((x-0.3041)/2.2660);
-      else if (idx == 86  ) num = 0.8963*TMath::Erf((x-1.1185)/1.1034);
-      else if (idx == 87  ) num = 0.9214*TMath::Erf((x-0.0000)/2.5208);
-      else if (idx == 88  ) num = 0.9333*TMath::Erf((x-1.1350)/1.2039);
-      else if (idx == 89  ) num = 0.9076*TMath::Erf((x-0.1215)/2.3650);
-      else if (idx == 90  ) num = 0.8832*TMath::Erf((x-1.1867)/0.9271);
-      else if (idx == 91  ) num = 0.8747*TMath::Erf((x-0.5156)/1.5641);
-      else if (idx == 92  ) num = 0.8997*TMath::Erf((x-0.8770)/1.5595);
-      else if (idx == 93  ) num = 0.8804*TMath::Erf((x-1.0645)/1.3025);
-      else if (idx == 94  ) num = 0.9037*TMath::Erf((x-0.4540)/1.8448);
-      else if (idx == 95  ) num = 0.8897*TMath::Erf((x-0.0002)/2.2927);
-      else if (idx == 96  ) num = 0.8879*TMath::Erf((x-0.3107)/1.5989);
-      else if (idx == 97  ) num = 0.8923*TMath::Erf((x-0.9246)/1.3586);
-      else if (idx == 98  ) num = 0.8734*TMath::Erf((x-0.5715)/1.7266);
-      else if (idx == 99  ) num = 0.8638*TMath::Erf((x-0.8665)/1.3054);
-      else if (idx == 100 ) num = 0.8544*TMath::Erf((x-0.8422)/1.1597);
+      if (idx==0) num = 1.0000*TMath::Erf((x-0.0000)/2.5236);
+      else if (idx == 1   ) num =    0.9481*TMath::Erf((x-0.0849)/2.2089);
+      else if (idx == 2   ) num =    0.9996*TMath::Erf((x-1.3096)/0.9030);
+      else if (idx == 3   ) num =    0.8967*TMath::Erf((x-0.1596)/0.0350);
+      else if (idx == 4   ) num =    0.9658*TMath::Erf((x-0.0001)/3.0949);
+      else if (idx == 5   ) num =    0.9345*TMath::Erf((x-1.9142)/0.3056);
+      else if (idx == 6   ) num =    0.9618*TMath::Erf((x-0.0000)/2.4833);
+      else if (idx == 7   ) num =    0.9770*TMath::Erf((x-1.2350)/1.3051);
+      else if (idx == 8   ) num =    0.9194*TMath::Erf((x-0.0375)/0.4098);
+      else if (idx == 9   ) num =    0.9316*TMath::Erf((x-0.8750)/1.4891);
+      else if (idx == 10  ) num =    0.8889*TMath::Erf((x-0.0006)/1.1938);
+      else if (idx == 11  ) num =    0.9818*TMath::Erf((x-1.9088)/0.5913);
+      else if (idx == 12  ) num =    0.9292*TMath::Erf((x-1.3054)/0.8822);
+      else if (idx == 13  ) num =    1.0000*TMath::Erf((x-1.4920)/0.8120);
+      else if (idx == 14  ) num =    0.9845*TMath::Erf((x-1.4083)/1.1613);
+      else if (idx == 15  ) num =    1.0000*TMath::Erf((x-0.0000)/1.4744);
+      else if (idx == 16  ) num =    1.0000*TMath::Erf((x-0.0000)/1.6014);
+      else if (idx == 17  ) num =    0.9634*TMath::Erf((x-1.1828)/1.5872);
+      else if (idx == 18  ) num =    0.9743*TMath::Erf((x-0.1075)/0.5607);
+      else if (idx == 19  ) num =    1.0000*TMath::Erf((x-0.0000)/1.6534);
+      else if (idx == 20  ) num =    0.9716*TMath::Erf((x-0.0000)/3.5458);
+      else if (idx == 21  ) num =    0.9863*TMath::Erf((x-0.7443)/1.9888);
+      else if (idx == 22  ) num =    0.9154*TMath::Erf((x-0.0000)/2.5909);
+      else if (idx == 23  ) num =    0.9659*TMath::Erf((x-0.0003)/2.1273);
+      else if (idx == 24  ) num =    0.9379*TMath::Erf((x-0.0000)/2.3490);
+      else if (idx == 25  ) num =    0.9382*TMath::Erf((x-1.6603)/0.7597);
+      else if (idx == 26  ) num =    1.0000*TMath::Erf((x-0.4792)/2.8892);
+      else if (idx == 27  ) num =    0.8915*TMath::Erf((x-0.9596)/1.4987);
+      else if (idx == 28  ) num =    0.9541*TMath::Erf((x-1.5233)/1.0554);
+      else if (idx == 29  ) num =    0.9172*TMath::Erf((x-0.5824)/0.2982);
+      else if (idx == 30  ) num =    0.9455*TMath::Erf((x-0.0000)/2.6653);
+      else if (idx == 31  ) num =    0.9132*TMath::Erf((x-0.0000)/2.2027);
+      else if (idx == 32  ) num =    0.9725*TMath::Erf((x-0.0000)/2.3295);
+      else if (idx == 33  ) num =    0.9245*TMath::Erf((x-0.3694)/0.1234);
+      else if (idx == 34  ) num =    0.9999*TMath::Erf((x-0.8412)/2.0811);
+      else if (idx == 35  ) num =    0.9350*TMath::Erf((x-0.0000)/1.5345);
+      else if (idx == 36  ) num =    0.9778*TMath::Erf((x-0.0010)/2.1844);
+      else if (idx == 37  ) num =    0.9440*TMath::Erf((x-1.0147)/1.3931);
+      else if (idx == 38  ) num =    0.8931*TMath::Erf((x-0.0000)/1.4232);
+      else if (idx == 39  ) num =    0.9349*TMath::Erf((x-0.0003)/1.4833);
+      else if (idx == 40  ) num =    0.9981*TMath::Erf((x-0.7159)/2.4867);
+      else if (idx == 41  ) num =    0.9485*TMath::Erf((x-0.0190)/1.6502);
+      else if (idx == 42  ) num =    0.9828*TMath::Erf((x-1.8482)/0.3688);
+      else if (idx == 43  ) num =    0.8920*TMath::Erf((x-0.0000)/2.4177);
+      else if (idx == 44  ) num =    0.9825*TMath::Erf((x-0.6906)/2.3246);
+      else if (idx == 45  ) num =    0.9415*TMath::Erf((x-1.6796)/0.4253);
+      else if (idx == 46  ) num =    0.9338*TMath::Erf((x-0.0000)/1.9540);
+      else if (idx == 47  ) num =    0.9811*TMath::Erf((x-0.0037)/2.2145);
+      else if (idx == 48  ) num =    0.9645*TMath::Erf((x-0.2542)/2.4347);
+      else if (idx == 49  ) num =    0.9831*TMath::Erf((x-0.0812)/2.8224);
+      else if (idx == 50  ) num =    0.9812*TMath::Erf((x-1.1246)/1.5953);
+      else if (idx == 51  ) num =    0.9993*TMath::Erf((x-0.0371)/2.3661);
+      else if (idx == 52  ) num =    0.9907*TMath::Erf((x-0.0000)/2.6140);
+      else if (idx == 53  ) num =    0.9787*TMath::Erf((x-0.6703)/1.8302);
+      else if (idx == 54  ) num =    1.0000*TMath::Erf((x-0.0000)/1.7561);
+      else if (idx == 55  ) num =    0.9759*TMath::Erf((x-0.0003)/2.2481);
+      else if (idx == 56  ) num =    0.9239*TMath::Erf((x-0.0975)/0.5731);
+      else if (idx == 57  ) num =    0.9709*TMath::Erf((x-0.0000)/3.0655);
+      else if (idx == 58  ) num =    0.9833*TMath::Erf((x-0.7716)/1.7703);
+      else if (idx == 59  ) num =    0.9750*TMath::Erf((x-0.6364)/2.0577);
+      else if (idx == 60  ) num =    0.9498*TMath::Erf((x-0.0000)/2.0481);
+      else if (idx == 61  ) num =    0.9715*TMath::Erf((x-0.1071)/2.5381);
+      else if (idx == 62  ) num =    0.9770*TMath::Erf((x-1.2199)/1.1753);
+      else if (idx == 63  ) num =    0.9663*TMath::Erf((x-0.0000)/2.2335);
+      else if (idx == 64  ) num =    0.9013*TMath::Erf((x-0.0000)/1.0804);
+      else if (idx == 65  ) num =    0.9686*TMath::Erf((x-0.9913)/1.7118);
+      else if (idx == 66  ) num =    0.9688*TMath::Erf((x-0.6639)/1.7225);
+      else if (idx == 67  ) num =    1.0000*TMath::Erf((x-0.0000)/1.7845);
+      else if (idx == 68  ) num =    0.9623*TMath::Erf((x-1.5257)/1.4312);
+      else if (idx == 69  ) num =    0.9621*TMath::Erf((x-1.6150)/1.2423);
+      else if (idx == 70  ) num =    0.9270*TMath::Erf((x-0.0000)/1.9903);
+      else if (idx == 71  ) num =    0.9760*TMath::Erf((x-1.7702)/0.8194);
+      else if (idx == 72  ) num =    0.9524*TMath::Erf((x-0.0001)/2.7170);
+      else if (idx == 73  ) num =    0.9645*TMath::Erf((x-0.1824)/3.1196);
+      else if (idx == 74  ) num =    0.9932*TMath::Erf((x-0.0009)/2.9151);
+      else if (idx == 75  ) num =    0.9762*TMath::Erf((x-1.5698)/0.4964);
+      else if (idx == 76  ) num =    0.9714*TMath::Erf((x-1.0898)/2.1112);
+      else if (idx == 77  ) num =    0.9827*TMath::Erf((x-0.0000)/2.8155);
+      else if (idx == 78  ) num =    1.0000*TMath::Erf((x-1.0160)/2.3801);
+      else if (idx == 79  ) num =    0.9361*TMath::Erf((x-0.0000)/2.1362);
+      else if (idx == 80  ) num =    0.9540*TMath::Erf((x-0.0000)/2.1662);
+      else if (idx == 81  ) num =    0.8751*TMath::Erf((x-0.0004)/0.5563);
+      else if (idx == 82  ) num =    0.9617*TMath::Erf((x-0.0000)/2.5312);
+      else if (idx == 83  ) num =    0.8804*TMath::Erf((x-0.0983)/0.0548);
+      else if (idx == 84  ) num =    0.9312*TMath::Erf((x-0.0000)/1.6475);
+      else if (idx == 85  ) num =    0.9952*TMath::Erf((x-0.0000)/2.7972);
+      else if (idx == 86  ) num =    0.9543*TMath::Erf((x-1.0253)/1.7480);
+      else if (idx == 87  ) num =    0.9646*TMath::Erf((x-0.8327)/2.0778);
+      else if (idx == 88  ) num =    0.9106*TMath::Erf((x-0.0000)/0.6538);
+      else if (idx == 89  ) num =    0.9984*TMath::Erf((x-1.3079)/1.8279);
+      else if (idx == 90  ) num =    0.9728*TMath::Erf((x-1.8799)/0.6634);
+      else if (idx == 91  ) num =    0.9142*TMath::Erf((x-0.0000)/1.8201);
+      else if (idx == 92  ) num =    0.9767*TMath::Erf((x-0.6746)/2.0199);
+      else if (idx == 93  ) num =    0.9775*TMath::Erf((x-0.2966)/2.0325);
+      else if (idx == 94  ) num =    0.9490*TMath::Erf((x-0.0173)/1.5980);
+      else if (idx == 95  ) num =    0.9913*TMath::Erf((x-1.6699)/0.9143);
+      else if (idx == 96  ) num =    0.9619*TMath::Erf((x-1.4579)/0.9687);
+      else if (idx == 97  ) num =    0.9690*TMath::Erf((x-0.0000)/2.6891);
+      else if (idx == 98  ) num =    0.9806*TMath::Erf((x-0.0001)/3.0291);
+      else if (idx == 99  ) num =    0.9355*TMath::Erf((x-0.0000)/2.0367);
+      else if (idx == 100 ) num =    0.9739*TMath::Erf((x-0.4478)/2.4355);
    }
 
    // return
@@ -1136,7 +1133,7 @@ double tnp_weight_sta_pbpb(double x, double eta, int idx)
 /////////////////////////////////////////////////////////////
 //                     STA    P P                          //
 /////////////////////////////////////////////////////////////
-double tnp_weight_sta_pp(double x, double eta, int idx)
+double tnp_weight_statonly_sta_pp(double x, double eta, int idx)
 {
    // denominator (from MC)
    double den=1;
@@ -1148,8 +1145,6 @@ double tnp_weight_sta_pp(double x, double eta, int idx)
    if (fabs(eta)<1.6)
    {
       if (idx==0) num = 0.9891*TMath::Erf((x-1.4814)/2.5014);
-      else if (idx == -1  ) num = 0.9996*TMath::Erf((x-1.4885)/2.4666);
-      else if (idx == -2  ) num = 0.9764*TMath::Erf((x-1.4746)/2.5279);
       else if (idx == 1   ) num = 0.9997*TMath::Erf((x-1.2305)/2.8470);
       else if (idx == 2   ) num = 0.9808*TMath::Erf((x-1.6531)/2.2358);
       else if (idx == 3   ) num = 0.9841*TMath::Erf((x-1.5142)/2.5031);
@@ -1254,8 +1249,6 @@ double tnp_weight_sta_pp(double x, double eta, int idx)
    else
    {
       if (idx==0) num = 0.8956*TMath::Erf((x-0.5162)/1.7646);
-      else if (idx == -1  ) num = 0.9153*TMath::Erf((x-0.5049)/1.7401);
-      else if (idx == -2  ) num = 0.8762*TMath::Erf((x-0.5250)/1.7942);
       else if (idx == 1   ) num = 0.8598*TMath::Erf((x-0.3794)/1.6775);
       else if (idx == 2   ) num = 0.9071*TMath::Erf((x-0.7765)/1.5351);
       else if (idx == 3   ) num = 0.9070*TMath::Erf((x-0.5316)/1.8221);
@@ -1362,4 +1355,4 @@ double tnp_weight_sta_pp(double x, double eta, int idx)
    return num/den;
 }
 
-#endif //#ifndef tnp_weight_h
+#endif //#ifndef tnp_weight_statonly_h

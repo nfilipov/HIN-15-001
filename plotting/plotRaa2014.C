@@ -38,6 +38,7 @@ const bool FourBins=true;
 const string outSyst = "syst_outputfile.txt";
 const string outRes = "updatedResultFile.txt";
 const bool plotLin=true; // plot linear plots as well
+const bool doMB=true; // display the MB values on the RAA vs Npart plot
 
 const TString basedir1 = "~/Desktop/figs";
 const TString basedir2 = "/tmp"; //"~/Documents/PR/forTWiki/CSandRAA"
@@ -3583,7 +3584,12 @@ void doplot2010()
   syst2S_aa_Cent[2]= sqrt (pow(RMS( N2S_aa_cent4Large[2],N2S_aa_cent4Larges_30,nfitvars),2)+ pow(maxDeviation( N2S_aa_cent4Large[2],N2B_aa_cent4Larges_30,nbkgdvars),2)) ;
   syst2S_aa_Cent[1]= sqrt (pow(RMS( N2S_aa_cent4Large[1],N2S_aa_cent4Larges_50,nfitvars),2)+ pow(maxDeviation( N2S_aa_cent4Large[1],N2B_aa_cent4Larges_50,nbkgdvars),2)) ;
   syst2S_aa_Cent[0]= sqrt (pow(RMS( N2S_aa_cent4Large[0],N2S_aa_cent4Larges_100,nfitvars),2)+ pow(maxDeviation( N2S_aa_cent4Large[0],N2B_aa_cent4Larges_100,nbkgdvars),2))  ;
+<<<<<<< HEAD
   //pt4 dont care
+=======
+
+  float syst1S_pp_glob = sqrt(pow(N1S_pp_tot3p5e/N1S_pp_tot3p5,2)+pow(N1S_pp_tot3p5s,2)+pow(Aet_1S_pythia_tote/Aet_1S_pythia_tot,2));//
+>>>>>>> 1dec6bafb188a8abbdd5f78885196d69eb897f30
   float syst1S_pp_glob4 = sqrt(pow(N1S_pp_tot4e/N1S_pp_tot4,2)+pow(N1S_pp_tot4s,2)+pow(Aet_1S_pythia_tot4e,2));
   //real stuff
   float syst_global_pp = sqrt(pow(tracking_pp,2)+pow(L_pp_e,2)); // 1st part global, but incomplete generally
@@ -3853,7 +3859,17 @@ void doplot2010()
     // c1->SetTicky(1);
     // c1->SetFrameBorderMode(0);
     // c1->SetFrameBorderMode(0);
-    c1->cd();
+    // c1->Draw();
+    // c1->cd();
+    TPad *padleft = new TPad("padleft","padleft",0.,0.,doMB ? 0.9 : 1.,1.);
+    // c1->cd();
+    TPad *padright = new TPad("padright","padright",0.9,0.,1.,1.);
+    padright->SetRightMargin(0.1);
+    padright->SetLeftMargin(0.01);
+    padleft->Draw();
+    padright->Draw();
+    padleft->cd();
+
 
     TF1 *f4 = new TF1("f4","1",0,400);
     f4->SetLineWidth(1);
@@ -4059,22 +4075,120 @@ void doplot2010()
     leg2->SetFillColor(0);
     leg2->SetFillStyle(0);
     if(!plotTight){    leg2->AddEntry(box1S,"#varUpsilon(1S) global syst.","f");
-      leg2->AddEntry(box2S,"#varUpsilon(2S) global syst.","f");}
+       leg2->AddEntry(box2S,"#varUpsilon(2S) global syst.","f");}
     if(plotTight){ leg2->AddEntry(box1S,"#varUpsilon(1S) syst. unc. p_{T} > 3.5 + 4","f");
-      //      leg2->AddEntry(box1S2011,"#varUpsilon(1S) 2011 global syst. 2011","f");}
-      leg2->AddEntry(box1S4,"#varUpsilon(1S) syst. unc. p_{T} > 4","f");}
+       //      leg2->AddEntry(box1S2011,"#varUpsilon(1S) 2011 global syst. 2011","f");}
+    leg2->AddEntry(box1S4,"#varUpsilon(1S) syst. unc. p_{T} > 4","f");}
     // leg2->Draw();
     // TBox *box = new TBox(385,0.864,400,1.136);
 
     // ci = TColor::GetColor("#99ff99");
     // box->SetFillColor(ci);
     // box->Draw();
+
     //MB stuff
-    c1->cd();
-    CMS_lumi(c1,103,33);
-    c1->Update();
-    c1->RedrawAxis();
-    c1->GetFrame()->Draw();
+
+    if (doMB)
+    {
+       // padright->Draw();
+       padright->cd();
+       TF1 *f4right = new TF1("f4right","1",0.9,1.1);
+       f4right->SetLineWidth(1);
+       f4right->GetYaxis()->SetRangeUser(0.0,1.4);
+       f4right->GetXaxis()->SetTitle("");
+       f4right->GetYaxis()->SetTitle("");
+       f4right->GetXaxis()->SetTickLength(0);
+       f4right->GetYaxis()->SetTickLength(0);
+       f4right->GetXaxis()->SetLabelSize(0);
+       f4right->GetYaxis()->SetLabelSize(0);
+       f4right->GetXaxis()->SetNdivisions(1,0,0,kFALSE);
+       f4right->SetLineColor(kBlack);
+       f4right->Draw();
+
+       // 1S RAA
+       cout << CS1S_pp_tot << " +/- " << CS1S_pp_tote << " +/- " << CS1S_pp_tots << endl;
+       cout << CS1S_aa_tot << " +/- " << CS1S_aa_tote << " +/- " << CS1S_aa_tots << endl;
+       cout << RAA_1S_tot << " +/- " << RAA_1S_tote << " +/- " << RAA_1S_tots << endl;
+       float CS1S_pp_tot = N1S_pp_tot3p5/Aet_1S_pythia_tot/L_pp_invNb;
+        cout << N1S_pp_tot3p5 << "/" << Aet_1S_pythia_tot << "/" << L_pp_invNb;
+       float CS1S_pp_tote = CS1S_pp_tot
+          *sqrt(pow(N1S_pp_tot3p5e/N1S_pp_tot3p5,2));
+       float CS1S_pp_tots = CS1S_pp_tot
+          *sqrt(pow(N1S_pp_tot3p5s,2)
+             +pow(Aet_1S_pythia_tote/Aet_1S_pythia_tot,2)
+             +pow(tracking_pp,2)
+             +pow(L_pp_e,2));
+       cout << CS1S_pp_tot << " +/- " << CS1S_pp_tote << " +/- " << CS1S_pp_tots << endl;
+       float CS1S_AA_tot = N1S_aa_tot3p5/Aet_1S_pyquen_tot/N_MB_corr/T_AA_b;
+       float CS1S_AA_tote = CS1S_AA_tot
+          *sqrt(pow(N1S_aa_tot3p5e/N1S_aa_tot3p5,2));
+       float CS1S_AA_tots = CS1S_AA_tot
+          *sqrt(pow(N1S_aa_tot3p5s,2)
+             +pow(Aet_1S_pyquen_tote/Aet_1S_pyquen_tot,2)
+             +pow(tracking_aa,2)
+             +pow(N_MB_e,2)
+             +pow(T_AA_e,2));
+       cout << CS1S_AA_tot << " +/- " << CS1S_AA_tote << " +/- " << CS1S_AA_tots << endl;
+       float RAA_1S_tot = CS1S_AA_tot/CS1S_pp_tot;
+       float RAA_1S_tote = RAA_1S_tot
+          *sqrt(pow(CS1S_AA_tote/CS1S_AA_tot,2)
+                +pow(CS1S_pp_tote/CS1S_pp_tot,2));
+       float RAA_1S_tots = RAA_1S_tot
+          *sqrt(pow(CS1S_AA_tots/CS1S_AA_tot,2)
+                +pow(CS1S_pp_tots/CS1S_pp_tot,2));
+       cout << RAA_1S_tot << " +/- " << RAA_1S_tote << " +/- " << RAA_1S_tots << endl;
+       // 2S RAA
+       cout << CS2S_pp_tot << " +/- " << CS2S_pp_tote << " +/- " << CS2S_pp_tots << endl;
+       cout << CS2S_aa_tot << " +/- " << CS2S_aa_tote << " +/- " << CS2S_aa_tots << endl;
+       cout << RAA_2S_tot << " +/- " << RAA_2S_tote << " +/- " << RAA_2S_tots << endl;
+       float CS2S_pp_tot = N2S_pp_tot4/Aet_2S_pythia_tot/L_pp_invNb;
+       float CS2S_pp_tote = CS2S_pp_tot
+          *sqrt(pow(N2S_pp_tot4e/N2S_pp_tot4,2));
+       float CS2S_pp_tots = CS2S_pp_tot
+          *sqrt(pow(N2S_pp_tot4s,2)
+             +pow(Aet_2S_pythia_tote/Aet_2S_pythia_tot,2)
+             +pow(tracking_pp,2)
+             +pow(L_pp_e,2));
+       cout << CS2S_pp_tot << " +/- " << CS2S_pp_tote << " +/- " << CS2S_pp_tots << endl;
+       float CS2S_AA_tot = N2S_aa_tot4/Aet_2S_pyquen_tot/N_MB_corr/T_AA_b;
+       float CS2S_AA_tote = CS2S_AA_tot
+          *sqrt(pow(N2S_aa_tot4e/N2S_aa_tot4,2));
+       float CS2S_AA_tots = CS2S_AA_tot
+          *sqrt(pow(N2S_aa_tot4s,2)
+             +pow(Aet_2S_pyquen_tote/Aet_2S_pyquen_tot,2)
+             +pow(tracking_aa,2)
+             +pow(N_MB_e,2)
+             +pow(T_AA_e,2));
+          cout << N2S_aa_tot4s << " "
+             << Aet_2S_pyquen_tote/Aet_2S_pyquen_tot << " "
+             << tracking_aa << " "
+             << N_MB_e << " "
+             << T_AA_e << endl;
+       cout << CS2S_AA_tot << " +/- " << CS2S_AA_tote << " +/- " << CS2S_AA_tots << endl;
+       float RAA_2S_tot = CS2S_AA_tot/CS2S_pp_tot;
+       float RAA_2S_tote = RAA_2S_tot
+          *sqrt(pow(CS2S_AA_tote/CS2S_AA_tot,2)
+                +pow(CS2S_pp_tote/CS2S_pp_tot,2));
+       float RAA_2S_tots = RAA_2S_tot
+          *sqrt(pow(CS2S_AA_tots/CS2S_AA_tot,2)
+                +pow(CS2S_pp_tots/CS2S_pp_tot,2));
+       cout << RAA_2S_tot << " +/- " << RAA_2S_tote << " +/- " << RAA_2S_tots << endl;
+
+
+
+
+       padleft->cd();
+    }
+    else
+    {
+       c1->cd();
+    }
+
+    CMS_lumi(padleft,103,33);
+    gPad->Update();
+    gPad->RedrawAxis();
+    gPad->GetFrame()->Draw();
+    cout << __LINE__ << endl;
     if(plotTight){
       c1->SaveAs(basedir2 + TString("/RAA_nPart_Tight.pdf"));
       c1->SaveAs(basedir1 + TString("/RAA_nPart_Tight.png"));

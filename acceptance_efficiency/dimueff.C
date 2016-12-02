@@ -52,18 +52,20 @@ using namespace std;
 using namespace RooFit;
 
 // const double ptbins_1S[NPT1S+1] = {0,2.5,5,8,12,20,40};
-const double ptbins_1S[NPT1S+1] = {0,2.5,5,8,12,20};
-const double rapbins_1S[NRAP1S+1] = {0,0.4,0.8,1.2,1.6,2,2.4};
-const int centbins_1S[NCENT1S+1] = {0,5./2.5,10./2.5,20./2.5,30./2.5,40./2.5,50./2.5,70./2.5,100./2.5};
-const float fcentbins_1S[NCENT1S+1] = {0,5./2.5,10./2.5,20./2.5,30./2.5,40./2.5,50./2.5,70./2.5,100./2.5};
+const double ptbins_1S[NPT1S+1] = {0.,2.5,5.,8.,12.,20.};
+const double rapbins_1S[NRAP1S+1] = {0.,0.4,0.8,1.2,1.6,2.,2.4};
+// const int centbins_1S[NCENT1S+1] = {0,5./2.5,10./2.5,20./2.5,30./2.5,40./2.5,50./2.5,70./2.5,100./2.5};
+const int centbins_1S[NCENT1S+1] = {0,2,4,8,12,16,20,28,40};
+const float fcentbins_1S[NCENT1S+1] = {0.,5./2.5,10./2.5,20./2.5,30./2.5,40./2.5,50./2.5,70./2.5,100./2.5};
 
 // const double ptbins_2S[NPT2S+1] = {0,5,12,40};
 const double ptbins_2S[NPT2S+1] = {0,5,12,20};
 const double rapbins_2S[NRAP2S+1] = {0,1.2,2.4};
-const int centbins_2S[NCENT2S+1] = {0,10./2.5,30./2.5,50./2.5,100./2.5};
+// const int centbins_2S[NCENT2S+1] = {0,10./2.5,30./2.5,50./2.5,100./2.5};
+const int centbins_2S[NCENT2S+1] = {0,4,12,20,40};
 const float fcentbins_2S[NCENT2S+1] = {0,10./2.5,30./2.5,50./2.5,100./2.5};
 
-void dimueff::Loop(int YS, bool ispbpb, int strategy, int binningYS, int var_tp)
+void dimueff::Loop(int YS, bool ispbpb, int strategy, int binningYS, int var_tp1, int var_tp2)
    // YS = N for NS
    // ispbpb = true for PbPb, false for pp
    // strategy = 0 for fit + reco quantities
@@ -71,7 +73,8 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int binningYS, int var_tp)
    //            2 for count + reco quantities
    //            3 for count + reco quantities
    // binningYS = 1 for fine binning (1S in PbPb style), 2 for coarse binning (2S in PbPb style)
-   // var_tp = 0 for nominal tag and probe corrections, 1..100 for the variations
+   // var_tp1 = 0 for nominal tag and probe corrections (muid+trg), 1..100 for the variations
+   // var_tp2 = 0 for nominal tag and probe corrections (STA), 1..100 for the variations
 {
 //   In a ROOT session, you can do:
 //      Root > .L dimueff.C
@@ -159,11 +162,22 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int binningYS, int var_tp)
    TH1F *hnum_tp_rap_1[NRAP1S+1] = {NULL};TH1F *hnum_tp_rap_2[NRAP1S+1] = {NULL};TH1F *hnum_tp_rap_3[NRAP1S+1] = {NULL};TH1F *hnum_tp_rap_4[NRAP1S+1] = {NULL};TH1F *hnum_tp_rap_5[NRAP1S+1] = {NULL};
    TH1F *hnum_tp_cent_1[NCENT1S+1] = {NULL};TH1F *hnum_tp_cent_2[NCENT1S+1] = {NULL};TH1F *hnum_tp_cent_3[NCENT1S+1] = {NULL};TH1F *hnum_tp_cent_4[NCENT1S+1] = {NULL};TH1F *hnum_tp_cent_5[NCENT1S+1] = {NULL};
 
+   double num_tpsta_pt_NS[NPT1S+1] = {0};
+   double num_tpsta_rap_NS[NRAP1S+1] = {0};
+   double num_tpsta_cent_NS[NCENT1S+1] = {0};
+   double numerr_tpsta_pt_NS[NPT1S+1] = {0};
+   double numerr_tpsta_rap_NS[NRAP1S+1] = {0};
+   double numerr_tpsta_cent_NS[NCENT1S+1] = {0};
+   TH1F *hnum_tpsta_pt_NS[NPT1S+1] = {NULL};
+   TH1F *hnum_tpsta_rap_NS[NRAP1S+1] = {NULL};
+   TH1F *hnum_tpsta_cent_NS[NCENT1S+1] = {NULL};
+
    for (int ibin=0; ibin<NPT1S+1; ibin++)
    {
       hden_pt_NS[ibin] = new TH1F(Form("hden_pt_NS_%i",ibin),Form("hden_pt_NS_%i",ibin),250,7,12);
       hnum_pt_NS[ibin] = new TH1F(Form("hnum_pt_NS_%i",ibin),Form("hnum_pt_NS_%i",ibin),250,7,12);
       hnum_tp_pt_NS[ibin] = new TH1F(Form("hnum_tp_pt_NS_%i",ibin),Form("hnum_tp_pt_NS_%i",ibin),250,7,12);
+      hnum_tpsta_pt_NS[ibin] = new TH1F(Form("hnum_tpsta_pt_NS_%i",ibin),Form("hnum_tpsta_pt_NS_%i",ibin),250,7,12);
       hden_pt_1[ibin] = new TH1F(Form("hden_pt_1_%i",ibin),Form("hden_pt_1_%i",ibin),250,7,12);
       hnum_pt_1[ibin] = new TH1F(Form("hnum_pt_1_%i",ibin),Form("hnum_pt_1_%i",ibin),250,7,12);
       hnum_tp_pt_1[ibin] = new TH1F(Form("hnum_tp_pt_1_%i",ibin),Form("hnum_tp_pt_1_%i",ibin),250,7,12);
@@ -185,6 +199,7 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int binningYS, int var_tp)
       hden_rap_NS[ibin] = new TH1F(Form("hden_rap_NS_%i",ibin),Form("hden_rap_NS_%i",ibin),250,7,12);
       hnum_rap_NS[ibin] = new TH1F(Form("hnum_rap_NS_%i",ibin),Form("hnum_rap_NS_%i",ibin),250,7,12);
       hnum_tp_rap_NS[ibin] = new TH1F(Form("hnum_tp_rap_NS_%i",ibin),Form("hnum_tp_rap_NS_%i",ibin),250,7,12);
+      hnum_tpsta_rap_NS[ibin] = new TH1F(Form("hnum_tpsta_rap_NS_%i",ibin),Form("hnum_tpsta_rap_NS_%i",ibin),250,7,12);
       hden_rap_1[ibin] = new TH1F(Form("hden_rap_1_%i",ibin),Form("hden_rap_1_%i",ibin),250,7,12);
       hnum_rap_1[ibin] = new TH1F(Form("hnum_rap_1_%i",ibin),Form("hnum_rap_1_%i",ibin),250,7,12);
       hnum_tp_rap_1[ibin] = new TH1F(Form("hnum_tp_rap_1_%i",ibin),Form("hnum_tp_rap_1_%i",ibin),250,7,12);
@@ -206,6 +221,7 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int binningYS, int var_tp)
       hden_cent_NS[ibin] = new TH1F(Form("hden_cent_NS_%i",ibin),Form("hden_cent_NS_%i",ibin),250,7,12);
       hnum_cent_NS[ibin] = new TH1F(Form("hnum_cent_NS_%i",ibin),Form("hnum_cent_NS_%i",ibin),250,7,12);
       hnum_tp_cent_NS[ibin] = new TH1F(Form("hnum_tp_cent_NS_%i",ibin),Form("hnum_tp_cent_NS_%i",ibin),250,7,12);
+      hnum_tpsta_cent_NS[ibin] = new TH1F(Form("hnum_tpsta_cent_NS_%i",ibin),Form("hnum_tpsta_cent_NS_%i",ibin),250,7,12);
       hden_cent_1[ibin] = new TH1F(Form("hden_cent_1_%i",ibin),Form("hden_cent_1_%i",ibin),250,7,12);
       hnum_cent_1[ibin] = new TH1F(Form("hnum_cent_1_%i",ibin),Form("hnum_cent_1_%i",ibin),250,7,12);
       hnum_tp_cent_1[ibin] = new TH1F(Form("hnum_tp_cent_1_%i",ibin),Form("hnum_tp_cent_1_%i",ibin),250,7,12);
@@ -253,6 +269,9 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int binningYS, int var_tp)
    TH1F *hefftppt = new TH1F("hefftppt","hefftppt",NPTNS,ptbins_NS);
    TH1F *hefftprap = new TH1F("hefftprap","hefftprap",NRAPNS,rapbins_NS);
    TH1F *hefftpcent = new TH1F("hefftpcent","hefftpcent",NCENTNS,fcentbins_NS);
+   TH1F *hefftpstapt = new TH1F("hefftpstapt","hefftpstapt",NPTNS,ptbins_NS);
+   TH1F *hefftpstarap = new TH1F("hefftpstarap","hefftpstarap",NRAPNS,rapbins_NS);
+   TH1F *hefftpstacent = new TH1F("hefftpstacent","hefftpstacent",NCENTNS,fcentbins_NS);
 
    // don't read useless branches
    fChain->SetBranchStatus("Reco_mu*",0);  
@@ -303,6 +322,7 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int binningYS, int var_tp)
 
          // if (tlvgen->M()<massmin || tlvgen->M()>massmax) continue;
          if (YS==1 && !smuacc_loose(tlvgenmup,tlvgenmum)) continue;
+         // if (YS==1 && !smuacc_tight(tlvgenmup,tlvgenmum)) continue;
          if (YS!=1 && !smuacc_tight(tlvgenmup,tlvgenmum)) continue;
          // if (genupspt>ptbins_NS[NPTNS]) continue;
          if (fabs(genupsrap)>rapbins_NS[NRAPNS]) continue;
@@ -358,6 +378,7 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int binningYS, int var_tp)
 
          // cuts
          double weighttp=1.;
+         double weighttpsta=1.;
          double recupspt=-1e99;
          double recupsrap=-1e99;
          if(!idcuts(irec)) continue;
@@ -371,7 +392,12 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int binningYS, int var_tp)
          TLorentzVector *tlvmum = (TLorentzVector*) Reco_QQ_mumi_4mom->At(irec);
          if (YS==1 && !smuacc_loose(tlvmup,tlvmum)) continue;
          if (YS!=1 && !smuacc_tight(tlvmup,tlvmum)) continue;
-         weighttp=weight_tp(tlvmup->Pt(),tlvmup->Eta(),ispbpb,var_tp)*weight_tp(tlvmum->Pt(),tlvmum->Eta(),ispbpb,var_tp);
+         weighttp=weight_tp(tlvmup->Pt(),tlvmup->Eta(),ispbpb,var_tp1)
+            *weight_tp(tlvmum->Pt(),tlvmum->Eta(),ispbpb,var_tp1);
+         weighttpsta=weight_tpsta(tlvmup->Pt(),tlvmup->Eta(),ispbpb,var_tp2)
+            *weight_tpsta(tlvmum->Pt(),tlvmum->Eta(),ispbpb,var_tp2);
+         weighttp *= weighttpsta;
+         if (weighttpsta<1) cout << weighttpsta << " " <<  tlvmup->Pt() << " " << tlvmup->Eta() << " " <<  tlvmum->Pt() << " " << tlvmum->Eta() << endl;
          recupspt = tlvrec->Pt();
          recupsrap = tlvrec->Rapidity();
          // // testing
@@ -396,6 +422,7 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int binningYS, int var_tp)
                // num_pt_NS[ibin]+=weight;
                // num_tp_pt_NS[ibin]+=weight*weighttp;
                hnum_pt_NS[ibin]->Fill(tlvrec->M(),weight); hnum_tp_pt_NS[ibin]->Fill(tlvrec->M(),weight*weighttp);
+               hnum_tpsta_pt_NS[ibin]->Fill(tlvrec->M(),weight*weighttpsta);
                hnum_pt_1[ibin]->Fill(tlvrec->M(),weight1); hnum_tp_pt_1[ibin]->Fill(tlvrec->M(),weight1*weighttp);
                hnum_pt_2[ibin]->Fill(tlvrec->M(),weight2); hnum_tp_pt_2[ibin]->Fill(tlvrec->M(),weight2*weighttp);
                hnum_pt_3[ibin]->Fill(tlvrec->M(),weight3); hnum_tp_pt_3[ibin]->Fill(tlvrec->M(),weight3*weighttp);
@@ -411,6 +438,7 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int binningYS, int var_tp)
                // num_rap_NS[ibin]+=weight;
                // num_tp_rap_NS[ibin]+=weight*weighttp;
                hnum_rap_NS[ibin]->Fill(tlvrec->M(),weight); hnum_tp_rap_NS[ibin]->Fill(tlvrec->M(),weight*weighttp);
+               hnum_tpsta_rap_NS[ibin]->Fill(tlvrec->M(),weight*weighttpsta);
                hnum_rap_1[ibin]->Fill(tlvrec->M(),weight1); hnum_tp_rap_1[ibin]->Fill(tlvrec->M(),weight1*weighttp);
                hnum_rap_2[ibin]->Fill(tlvrec->M(),weight2); hnum_tp_rap_2[ibin]->Fill(tlvrec->M(),weight2*weighttp);
                hnum_rap_3[ibin]->Fill(tlvrec->M(),weight3); hnum_tp_rap_3[ibin]->Fill(tlvrec->M(),weight3*weighttp);
@@ -425,6 +453,7 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int binningYS, int var_tp)
                // num_cent_NS[ibin]+=weight;
                // num_tp_cent_NS[ibin]+=weight*weighttp;
                hnum_cent_NS[ibin]->Fill(tlvrec->M(),weight); hnum_tp_cent_NS[ibin]->Fill(tlvrec->M(),weight*weighttp);
+               hnum_tpsta_cent_NS[ibin]->Fill(tlvrec->M(),weight*weighttpsta);
                hnum_cent_1[ibin]->Fill(tlvrec->M(),weight1); hnum_tp_cent_1[ibin]->Fill(tlvrec->M(),weight1*weighttp);
                hnum_cent_2[ibin]->Fill(tlvrec->M(),weight2); hnum_tp_cent_2[ibin]->Fill(tlvrec->M(),weight2*weighttp);
                hnum_cent_3[ibin]->Fill(tlvrec->M(),weight3); hnum_tp_cent_3[ibin]->Fill(tlvrec->M(),weight3*weighttp);
@@ -446,6 +475,7 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int binningYS, int var_tp)
       den_pt_NS[ibin] = countNS(hden_pt_NS[ibin],massmin,massmax,denerr_pt_NS[ibin]);
       num_pt_NS[ibin] = (strategy<2) ? fitNS(hnum_pt_NS[ibin],numerr_pt_NS[ibin],YS) : countNS(hnum_pt_NS[ibin],massmin,massmax,numerr_pt_NS[ibin]);
       num_tp_pt_NS[ibin] = (strategy<2) ? fitNS(hnum_tp_pt_NS[ibin],numerr_tp_pt_NS[ibin],YS) : countNS(hnum_tp_pt_NS[ibin],massmin,massmax,numerr_tp_pt_NS[ibin]);
+      num_tpsta_pt_NS[ibin] = (strategy<2) ? fitNS(hnum_tpsta_pt_NS[ibin],numerr_tpsta_pt_NS[ibin],YS) : countNS(hnum_tpsta_pt_NS[ibin],massmin,massmax,numerr_tpsta_pt_NS[ibin]);
       den_pt_1[ibin] = countNS(hden_pt_1[ibin],massmin,massmax,dummyerr);
       num_pt_1[ibin] = (strategy<2) ? fitNS(hnum_pt_1[ibin],dummyerr,YS) : countNS(hnum_pt_1[ibin],massmin,massmax,dummyerr);
       num_tp_pt_1[ibin] = (strategy<2) ? fitNS(hnum_tp_pt_1[ibin],dummyerr,YS) : countNS(hnum_tp_pt_1[ibin],massmin,massmax,dummyerr);
@@ -467,6 +497,7 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int binningYS, int var_tp)
       den_rap_NS[ibin] = countNS(hden_rap_NS[ibin],massmin,massmax,denerr_rap_NS[ibin]);
       num_rap_NS[ibin] = (strategy<2) ? fitNS(hnum_rap_NS[ibin],numerr_rap_NS[ibin],YS) : countNS(hnum_rap_NS[ibin],massmin,massmax,numerr_rap_NS[ibin]);
       num_tp_rap_NS[ibin] = (strategy<2) ? fitNS(hnum_tp_rap_NS[ibin],numerr_tp_rap_NS[ibin],YS) : countNS(hnum_tp_rap_NS[ibin],massmin,massmax,numerr_tp_rap_NS[ibin]);
+      num_tpsta_rap_NS[ibin] = (strategy<2) ? fitNS(hnum_tpsta_rap_NS[ibin],numerr_tpsta_rap_NS[ibin],YS) : countNS(hnum_tpsta_rap_NS[ibin],massmin,massmax,numerr_tpsta_rap_NS[ibin]);
       den_rap_1[ibin] = countNS(hden_rap_1[ibin],massmin,massmax,dummyerr);
       num_rap_1[ibin] = (strategy<2) ? fitNS(hnum_rap_1[ibin],dummyerr,YS) : countNS(hnum_rap_1[ibin],massmin,massmax,dummyerr);
       num_tp_rap_1[ibin] = (strategy<2) ? fitNS(hnum_tp_rap_1[ibin],dummyerr,YS) : countNS(hnum_tp_rap_1[ibin],massmin,massmax,dummyerr);
@@ -490,6 +521,7 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int binningYS, int var_tp)
          den_cent_NS[ibin] = countNS(hden_cent_NS[ibin],massmin,massmax,denerr_cent_NS[ibin]);
          num_cent_NS[ibin] = (strategy<2) ? fitNS(hnum_cent_NS[ibin],numerr_cent_NS[ibin],YS) : countNS(hnum_cent_NS[ibin],massmin,massmax,numerr_cent_NS[ibin]);
          num_tp_cent_NS[ibin] = (strategy<2) ? fitNS(hnum_tp_cent_NS[ibin],numerr_tp_cent_NS[ibin],YS) : countNS(hnum_tp_cent_NS[ibin],massmin,massmax,numerr_tp_cent_NS[ibin]);
+         num_tpsta_cent_NS[ibin] = (strategy<2) ? fitNS(hnum_tpsta_cent_NS[ibin],numerr_tpsta_cent_NS[ibin],YS) : countNS(hnum_tpsta_cent_NS[ibin],massmin,massmax,numerr_tpsta_cent_NS[ibin]);
          den_cent_1[ibin] = countNS(hden_cent_1[ibin],massmin,massmax,dummyerr);
          num_cent_1[ibin] = (strategy<2) ? fitNS(hnum_cent_1[ibin],dummyerr,YS) : countNS(hnum_cent_1[ibin],massmin,massmax,dummyerr);
          num_tp_cent_1[ibin] = (strategy<2) ? fitNS(hnum_tp_cent_1[ibin],dummyerr,YS) : countNS(hnum_tp_cent_1[ibin],massmin,massmax,dummyerr);
@@ -723,6 +755,58 @@ void dimueff::Loop(int YS, bool ispbpb, int strategy, int binningYS, int var_tp)
       }
    }
 
+   cout << endl;
+   cout << "=====================" << endl;
+   cout << "Scale factors for STA" << endl;
+   cout << "=====================" << endl;
+   for (unsigned int ibin=0; ibin<NPTNS+1; ibin++)
+   {
+      double binmin = (ibin==0) ? ptbins_NS[0] : ptbins_NS[ibin-1];
+      double binmax = (ibin==0) ? ptbins_NS[NPTNS] : ptbins_NS[ibin];
+      double val = num_tpsta_pt_NS[ibin]/num_pt_NS[ibin];
+      double err = RError(num_tpsta_pt_NS[ibin],numerr_tpsta_pt_NS[ibin],num_pt_NS[ibin],numerr_pt_NS[ibin]);
+      cout << "[" << binmin << "," << binmax << "]: " << val << " +/- " << err << " +/- " << 0 << endl;
+      textfile << "pt_SF_sta " << binmin << " " << binmax << " " << val << " " << err << " " << 0 << endl;
+      if (ibin>0) 
+      {
+         hefftpstapt->SetBinContent(ibin,val);
+         hefftpstapt->SetBinError(ibin,err);
+      }
+   }
+   cout << endl << "rapidity" << endl;
+   for (unsigned int ibin=0; ibin<NRAPNS+1; ibin++)
+   {
+      double binmin = (ibin==0) ? rapbins_NS[0] : rapbins_NS[ibin-1];
+      double binmax = (ibin==0) ? rapbins_NS[NRAPNS] : rapbins_NS[ibin];
+      double val = num_tpsta_rap_NS[ibin]/num_rap_NS[ibin];
+      double err = RError(num_tpsta_rap_NS[ibin],numerr_tpsta_rap_NS[ibin],num_rap_NS[ibin],numerr_rap_NS[ibin]);
+      cout << "[" << binmin << "," << binmax << "]: " << val << " +/- " << err << " +/- " << 0 << endl;
+      textfile << "rapidity_SF_sta " << binmin << " " << binmax << " " << val << " " << err << " " << 0 << endl;
+      if (ibin>0) 
+      {
+         hefftpstarap->SetBinContent(ibin,val);
+         hefftpstarap->SetBinError(ibin,err);
+      }
+   }
+   if (ispbpb)
+   {
+      cout << endl << "centrality" << endl;
+      for (unsigned int ibin=0; ibin<NCENTNS+1; ibin++)
+      {
+         double binmin = (ibin==0) ? 2.5*centbins_NS[0] : 2.5*centbins_NS[ibin-1];
+         double binmax = (ibin==0) ? 2.5*centbins_NS[NCENTNS] : 2.5*centbins_NS[ibin];
+         double val = num_tpsta_cent_NS[ibin]/num_cent_NS[ibin];
+         double err = RError(num_tpsta_cent_NS[ibin],numerr_tpsta_cent_NS[ibin],num_cent_NS[ibin],numerr_cent_NS[ibin]);
+         cout << "[" << binmin << "," << binmax << "]: " << val << " +/- " << err << " +/- " << 0 << endl;
+         textfile << "centrality_SF_sta " << binmin << " " << binmax << " " << val << " " << err << " " << 0 << endl;
+         if (ibin>0) 
+         {
+            hefftpstacent->SetBinContent(ibin,val);
+            hefftpstacent->SetBinError(ibin,err);
+         }
+      }
+   }
+
    f->Write(); f->Close();
    textfile.close();
    // testing.close();
@@ -828,19 +912,33 @@ double dimueff::weightrap(double rap, int dosyst)
 
 double dimueff::weight_tp(double pt, double eta, bool ispbpb, int idx_variation)
 {
-   if (!ispbpb)
+   if (ispbpb)
    {
-      if (fabs(eta)<1.6)
-         return tnp_weight_pp_midrap(pt, idx_variation);
-      else
-         return tnp_weight_pp_fwdrap(pt, idx_variation);
+      return tnp_weight_muidtrg_pbpb(pt, eta, idx_variation);
+      // if (fabs(eta)<1.6)
+      //    return tnp_weight_pp_midrap(pt, idx_variation);
+      // else
+      //    return tnp_weight_pp_fwdrap(pt, idx_variation);
    }
    else
    {
-      if (fabs(eta)<1.6)
-         return tnp_weight_pbpb_midrap(pt, idx_variation);
-      else
-         return tnp_weight_pbpb_fwdrap(pt, idx_variation);
+      return tnp_weight_muidtrg_pp(pt, eta, idx_variation);
+      // if (fabs(eta)<1.6)
+      //    return tnp_weight_pbpb_midrap(pt, idx_variation);
+      // else
+      //    return tnp_weight_pbpb_fwdrap(pt, idx_variation);
+   }
+}
+
+double dimueff::weight_tpsta(double pt, double eta, bool ispbpb, int idx_variation)
+{
+   if (ispbpb)
+   {
+      return tnp_weight_sta_pbpb(pt, eta, idx_variation);
+   }
+   else
+   {
+      return tnp_weight_sta_pp(pt, eta, idx_variation);
    }
 }
 
