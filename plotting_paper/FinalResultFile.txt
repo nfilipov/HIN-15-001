@@ -1,0 +1,128 @@
+1S pp Pt Bins | Cross section +/- stat err. +/- syst err. +/- global unc. 
+\pt [{\rm GeV}/c] $<$ 2.5 & 0.0714 \pm 0.00242 \pm 0.00738 \pm 0.00267 \\
+2.5 $<$ \pt [{\rm GeV}/c] $<$ 5 & 0.103 \pm 0.00333 \pm 0.00605 \pm 0.00387 \\
+5 $<$ \pt [{\rm GeV}/c] $<$ 8 & 0.0616 \pm 0.00208 \pm 0.00512 \pm 0.00231 \\
+8 $<$ \pt [{\rm GeV}/c] $<$ 12 & 0.0209 \pm 0.000961 \pm 0.000955 \pm 0.000783 \\
+12 $<$ \pt [{\rm GeV}/c] $<$ 20 & 0.00407 \pm 0.000244 \pm 0.000146 \pm 0.000153 \\
+2S pp Pt Bins | Cross section +/- stat err. +/- syst err. +/- global unc. 
+\pt [{\rm GeV}/c] $<$ 2.5 & 0.0157 \pm 0.00151 \pm 0.00181 \pm 0.000587  \\
+2.5 $<$ \pt [{\rm GeV}/c] $<$ 5 & 0.0228 \pm 0.00215 \pm 0.00108 \pm 0.000853  \\
+5 $<$ \pt [{\rm GeV}/c] $<$ 8 & 0.0184 \pm 0.00152 \pm 0.0012 \pm 0.00069  \\
+8 $<$ \pt [{\rm GeV}/c] $<$ 12 & 0.00776 \pm 0.000694 \pm 0.000413 \pm 0.000291  \\
+12 $<$ \pt [{\rm GeV}/c] $<$ 20 & 0.00152 \pm 0.000167 \pm 5.61e-05 \pm 5.71e-05  \\
+3S pp Pt Bins | Cross section +/- stat err. +/- syst err. +/- global unc. 
+\pt [{\rm GeV}/c] $<$ 2.5 & 0.00555 \pm 0.00102 \pm 0.000851 \pm 0.000208  \\
+2.5 $<$ \pt [{\rm GeV}/c] $<$ 5 & 0.0119 \pm 0.00157 \pm 0.000576 \pm 0.000446  \\
+5 $<$ \pt [{\rm GeV}/c] $<$ 8 & 0.00733 \pm 0.00105 \pm 0.000658 \pm 0.000275  \\
+8 $<$ \pt [{\rm GeV}/c] $<$ 12 & 0.00328 \pm 0.000495 \pm 0.000244 \pm 0.000123  \\
+12 $<$ \pt [{\rm GeV}/c] $<$ 20 & 0.000867 \pm 0.000133 \pm 3.28e-05 \pm 3.25e-05  \\
+1S pp Rap Bins | Cross section +/- stat err. +/- syst err. +/- global unc. 
+$|y| <$ 0.4 & 0.837 \pm 0.029 \pm 0.0517 \pm 0.0314 \\
+0.4 $< |y| <$ 0.8   & 0.862 \pm 0.0303 \pm 0.0413 \pm 0.0323 \\
+0.8 $< |y| <$ 1.2  & 0.748 \pm 0.0291 \pm 0.0467 \pm 0.028 \\
+1.2 $< |y| <$ 1.6  & 0.741 \pm 0.031 \pm 0.0527 \pm 0.0278 \\
+1.6 $< |y| <$ 2    & 0.655 \pm 0.0342 \pm 0.0601 \pm 0.0246 \\
+2 $< |y| <$ 2.4    & 0.677 \pm 0.0536 \pm 0.0679 \pm 0.0254 \\
+2S pp Rap Bins | Cross section +/- stat err. +/- syst err. +/- global unc. 
+$|y| <$ 0.4 & 0.241 \pm 0.019 \pm 0.0165 \pm 0.00904  \\
+0.4 $< |y| <$ 0.8   & 0.237 \pm 0.0192 \pm 0.0182 \pm 0.00887  \\
+0.8 $< |y| <$ 1.2  & 0.22 \pm 0.0198 \pm 0.0234 \pm 0.00825  \\
+1.2 $< |y| <$ 1.6  & 0.228 \pm 0.022 \pm 0.0245 \pm 0.00856  \\
+1.6 $< |y| <$ 2    & 0.224 \pm 0.0248 \pm 0.0359 \pm 0.00841  \\
+2 $< |y| <$ 2.4    & 0.145 \pm 0.0378 \pm 0.0105 \pm 0.00542  \\
+3S pp Rap Bins | Cross section +/- stat err. +/- syst err. +/- global unc. 
+$|y| <$ 0.4 & 0.0992 \pm 0.0125 \pm 0.00938 \pm 0.00372  \\
+0.4 $< |y| <$ 0.8   & 0.0965 \pm 0.0131 \pm 0.00859 \pm 0.00362  \\
+0.8 $< |y| <$ 1.2  & 0.106 \pm 0.0141 \pm 0.014 \pm 0.00396  \\
+1.2 $< |y| <$ 1.6  & 0.0843 \pm 0.0154 \pm 0.00985 \pm 0.00316  \\
+1.6 $< |y| <$ 2    & 0.0822 \pm 0.0171 \pm 0.0103 \pm 0.00308  \\
+2 $< |y| <$ 2.4    & 0.128 \pm 0.0313 \pm 0.00906 \pm 0.00479  \\
+1S PbPb Pt Bins | Cross section +/- stat err. +/- syst err. +/- global unc. 
+\pt [{\rm GeV}/c] $<$ 2.5 & 0.0325 \pm 0.00185 \pm 0.00361 \pm 0.00227 \\
+2.5 $<$ \pt [{\rm GeV}/c] $<$ 5 & 0.045 \pm 0.00275 \pm 0.00403 \pm 0.00315 \\
+5 $<$ \pt [{\rm GeV}/c] $<$ 8 & 0.0289 \pm 0.00191 \pm 0.0025 \pm 0.00202 \\
+8 $<$ \pt [{\rm GeV}/c] $<$ 12 & 0.0103 \pm 0.000762 \pm 0.000697 \pm 0.000718 \\
+12 $<$ \pt [{\rm GeV}/c] $<$ 20 & 0.00177 \pm 0.000164 \pm 9.93e-05 \pm 0.000124 \\
+2S PbPb Pt Bins | Cross section +/- stat err. +/- syst err. +/- global unc. 
+\pt [{\rm GeV}/c] $<$ 5 & 0.00172 \pm 0.00098 \pm 0.000602 \pm 6.44e-05 \\
+5 $<$ \pt [{\rm GeV}/c] $<$ 12 & 0.000851 \pm 0.00059 \pm 0.000149 \pm 3.19e-05 \\
+12 $<$ \pt [{\rm GeV}/c] $<$ 40 & 0.000226 \pm 9.08e-05 \pm 2.88e-05 \pm 8.49e-06 \\
+2S pp Pt Large Bins | Cross section +/- stat err. +/- syst err. +/- global unc. 
+\pt [{\rm GeV}/c] $<$ 5 & 0.0204 \pm 0.00136 \pm 0.00114 \pm 0.000766  \\
+5 $<$ \pt [{\rm GeV}/c] $<$ 12 & 0.0125 \pm 0.000765 \pm 0.000782 \pm 0.000467  \\
+12 $<$ \pt [{\rm GeV}/c] $<$ 40 & 0.00152 \pm 0.000167 \pm 5.75e-05 \pm 5.71e-05  \\
+1S RAA Pt Bins | RAA +/- stat err. +/- syst err. +/- global unc. 
+\pt [{\rm GeV}/c] $<$ 2.5 & 0.455 \pm 0.026 \pm 0.0707 \pm 0.0361 \\
+2.5 $<$ \pt [{\rm GeV}/c] $<$ 5 & 0.436 \pm 0.0267 \pm 0.0487 \pm 0.0346 \\
+5 $<$ \pt [{\rm GeV}/c] $<$ 8 & 0.469 \pm 0.031 \pm 0.0584 \pm 0.0372 \\
+8 $<$ \pt [{\rm GeV}/c] $<$ 12 & 0.491 \pm 0.0365 \pm 0.0461 \pm 0.039 \\
+12 $<$ \pt [{\rm GeV}/c] $<$ 20 & 0.435 \pm 0.0403 \pm 0.039 \pm 0.0345 \\
+2S RAA Pt Bins | RAA +/- stat err. +/- syst err. +/- global unc. 
+\pt [{\rm GeV}/c] $<$ 5 & 0.0841 \pm 0.0479 \pm 0.0303 \pm 0.00667 \\
+5 $<$ \pt [{\rm GeV}/c] $<$ 12 & 0.0683 \pm 0.0474 \pm 0.0134 \pm 0.00542 \\
+12 $<$ \pt [{\rm GeV}/c] $<$ 40 & 0.149 \pm 0.0596 \pm 0.0256 \pm 0.0118 \\
+1S PbPb Rap Bins | Cross section +/- stat err. +/- syst err. +/- global unc. 
+$|y| <$ 0.4 & 0.374 \pm 0.0238 \pm 0.0249 \pm  0.0262  \\
+0.4 $< |y| <$ 0.8   & 0.358 \pm 0.0245 \pm 0.056 \pm  0.0251  \\
+0.8 $< |y| <$ 1.2  & 0.368 \pm 0.025 \pm 0.0405 \pm  0.0257  \\
+1.2 $< |y| <$ 1.6  & 0.363 \pm 0.0267 \pm 0.0445 \pm  0.0254  \\
+1.6 $< |y| <$ 2    & 0.314 \pm 0.025 \pm 0.0338 \pm  0.0219  \\
+2 $< |y| <$ 2.4    & 0.27 \pm 0.0409 \pm 0.0455 \pm  0.0189  \\
+2S PbPb Rap Bins | Cross section +/- stat err. +/- syst err. +/- global unc. 
+$|y| <$ 1.2  & 0.0271 \pm 0.00798 \pm 0.00882 \pm 0.00189 \\
+1.2 $< |y| <$ 2.4    & 0.0278 \pm 0.00989 \pm 0.0126 \pm 0.00195 \\
+2S pp Rap Large Bins | Cross section +/- stat err. +/- syst err. +/- global unc. 
+$|y| <$ 1.2  & 0.234 \pm 0.0113 \pm 0.0191 \pm 0.00876  \\
+1.2 $< |y| <$ 2.4    & 0.202 \pm 0.0141 \pm 0.0165 \pm 0.00758  \\
+1S RAA Rap Bins | RAA +/- stat err. +/- syst err. +/- global unc. 
+$|y| <$ 0.4 & 0.447 \pm 0.0284 \pm 0.0434 \pm 0.0354 \\
+0.4 $< |y| <$ 0.8   & 0.416 \pm 0.0284 \pm 0.0695 \pm 0.033 \\
+0.8 $< |y| <$ 1.2  & 0.492 \pm 0.0334 \pm 0.0651 \pm 0.039 \\
+1.2 $< |y| <$ 1.6  & 0.49 \pm 0.0361 \pm 0.0724 \pm 0.0389 \\
+1.6 $< |y| <$ 2    & 0.479 \pm 0.0382 \pm 0.0723 \pm 0.038 \\
+2 $< |y| <$ 2.4    & 0.399 \pm 0.0605 \pm 0.0845 \pm 0.0317 \\
+2S RAA Rap Bins | RAA +/- stat err. +/- syst err. +/- global unc. 
+$|y| <$ 1.2  & 0.116 \pm 0.0342 \pm 0.0393 \pm 0.00919 \\
+1.2 $< |y| <$ 2.4    & 0.138 \pm 0.0489 \pm 0.0642 \pm 0.0109 \\
+1S integrated Cross section | CS +/- stat err. +/- syst err. +/- global unc. 
+0-inf & 0.738 \pm 0.0128 \pm 0.0356 \pm 0.0277 \\
+2S integrated Cross section | CS +/- stat err. +/- syst err. +/- global unc. 
+0-inf & 0.215 \pm 0.00903 \pm 0.00854 \pm 0.00805 \\
+3S integrated Cross section | CS +/- stat err. +/- syst err. +/- global unc. 
+0-inf & 0.0907 \pm 0.00645 \pm 0.00532 \pm 0.0034 \\
+1S integrated Cross section | CS +/- stat err. +/- syst err. +/- global unc. 
+0-inf & 0.334 \pm 0.01 \pm 0.0159 \pm 0.0234 \\
+2S integrated Cross section | CS +/- stat err. +/- syst err. +/- global unc. 
+0-inf & 0.0256 \pm 0.00607 \pm 0.0021 \pm 0.00179 \\
+1S Cross section (cent)| CS +/- stat err. +/- syst err. +/- global PbPb unc. 
+0-5 & 0.244 \pm 0.0217 \pm 0.0516 \pm 0.00788 \\
+5-10 & 0.301 \pm 0.0245 \pm 0.0541 \pm 0.00974 \\
+10-20 & 0.326 \pm 0.0205 \pm 0.0687 \pm 0.0105 \\
+20-30 & 0.352 \pm 0.026 \pm 0.0434 \pm 0.0114 \\
+30-40 & 0.403 \pm 0.035 \pm 0.0884 \pm 0.013 \\
+40-50 & 0.446 \pm 0.0482 \pm 0.106 \pm 0.0144 \\
+50-70 & 0.6 \pm 0.0611 \pm 0.102 \pm 0.0194 \\
+70-100 & 0.903 \pm 0.162 \pm 0.27 \pm 0.0292 \\
+2S  Cross section (cent) | CS +/- stat err. +/- syst err. +/- global unc. 
+0-10 & 0.0163 \pm 0.0096 \pm 0.00821 \pm 0.000528 \\
+10-30 & 0.0197 \pm 0.00934 \pm 0.0141 \pm 0.000638 \\
+30-50 & 0.0631 \pm 0.017 \pm 0.024 \pm 0.00204 \\
+50-100 & 0.0486 \pm 0.0321 \pm 0.0266 \pm 0.00157 \\
+1S RAA (cent)| CS +/- stat err. +/- syst err. +/- global unc. 
+0-5 & 0.33 \pm 0.0294 \pm 0.0699 \pm 0.0107 \pm0.021 \\ 
+5-10 & 0.408 \pm 0.0332 \pm 0.0733 \pm 0.0132 \pm0.0259 \\ 
+10-20 & 0.442 \pm 0.0278 \pm 0.0931 \pm 0.0143 \pm0.0281 \\ 
+20-30 & 0.476 \pm 0.0353 \pm 0.0587 \pm 0.0154 \pm0.0303 \\ 
+30-40 & 0.546 \pm 0.0474 \pm 0.12 \pm 0.0176 \pm0.0347 \\ 
+40-50 & 0.604 \pm 0.0653 \pm 0.144 \pm 0.0195 \pm0.0384 \\ 
+50-70 & 0.813 \pm 0.0828 \pm 0.138 \pm 0.0263 \pm0.0516 \\ 
+70-100 & 1.22 \pm 0.22 \pm 0.365 \pm 0.0395 \pm0.0777 \\ 
+2S RAA (cent)| CS +/- stat err. +/- syst err. +/- global unc. 
+0-10 & 0.0761 \pm 0.0447 \pm 0.0382 \pm 0.00246 \pm 0.00524\\
+10-30 & 0.0919 \pm 0.0435 \pm 0.0655 \pm 0.00297 \pm 0.00633\\
+30-50 & 0.294 \pm 0.0793 \pm 0.112 \pm 0.00949 \pm 0.0202\\
+50-100 & 0.226 \pm 0.149 \pm 0.124 \pm 0.00731 \pm 0.0156\\
+1S integrated RAA | RAA +/- stat err. +/- syst err. +/- global PbPb unc. +/- global pp unc 
+0-100 & 0.453 \pm 0.0136 \pm 0.0383 \pm 0.0288 \\ 
+2S integrated RAA | RAA +/- stat err. +/- syst err. +/- global PbPb unc. +/- global pp unc. 
+0-100 & 0.119 \pm 0.0282 \pm 0.0129 \pm 0.00821 \\ 
