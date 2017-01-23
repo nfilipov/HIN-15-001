@@ -2,11 +2,11 @@
 float L_pp_invNbe =199.8;
 float N_MB_uncorr= 1.126653312	;
 
-#define T_AA_b 5662
-float T_AA_mb =5.662;
-float T_AA_e =0.062; //// relative!
-float L_pp_e =0.037 ;///relative !!
-float N_MB_e =0.030  ;/// relative?? where does it come from ?
+#define T_AA_b 5666
+float T_AA_mb =5.666;
+float T_AA_e =0.0564; //// relative! 0.323/5.666 check CentralityWishlist TWiki tables.
+float L_pp_e =0.037 ;///relative ! 
+float N_MB_e =0.030  ;/// relative. comes from an old paper (10-006 or even earlier...)
 /* #define tracking_pp 0.034  */
 /* #define tracking_aa 0.10  */
 float tracking_pp =0.006; // relative. 2 times the syst per muon.
@@ -59,7 +59,7 @@ float cent2010[5]={308.6,64.24,261.3,355.7};//0-20,20-100,10-20,0-10
 float nPart1[nCentBins_2014] ={8.75,42.02, 86.3, 130.1, 187.3, 261.4, 330.3, 381.2}; // with 70-100, 50-70, 40-50, 30-40, 20-30, 10-20, 5-10, 0-5
 float nPart2[nCentBins2S] ={22.059352,108.1915,224.30475,355.7875};
 
-float nPart2014[nCentBins_2014]  ={8.75, 42.02, 86.23, 130.06, 187.35, 261.49, 329.48, 381.41}; //from 2012_246_v5
+float nPart2014[nCentBins_2014]={8.75, 42.02, 86.23, 130.06, 187.35, 261.49, 329.48, 381.41}; //from 2012_246_v5
 //float nPart2015[nCentBins_2014+1]  ={8.75, 42.02, 86.23, 130.06, 187.35, 261.49, 329.48, 368, 393}; //from 2012_246_v5
 float nPart2014e[nCentBins_2014] ={1.13,3.48,4.35,4.60,4.44,3.96,3.53,2.21}; //from 2012_246_v5
  
@@ -91,16 +91,16 @@ float cent[7]  ={22.05, 86.3, 130.0, 187.1, 261.4, 330.4, 381.3}; // with 40-50 
 float centErr2014[nCentBins_2014]={6,6,6,6,6,6,6,6};
 float centnoErr[nCentBins_2014+1]={0,0,0,0,0,0,0,0,0};
 float rap2014[6] = {0.2 , 0.6, 1.0, 1.4, 1.8,2.2}; // for the moment with bins of ∆y =0.8 except the last one which is 1.6-2.4
-float rap2014Shift[6] = {0.3 , 0.7, 1.1, 1.5, 1.9,2.3}; // for the moment with bins of ∆y =0.8 except the last one which is 1.6-2.4
+float rap2014Shift[6] = {0.3 , 0.7, 1.1, 1.5, 1.9,2.3}; // for thxe moment with bins of ∆y =0.8 except the last one which is 1.6-2.4
 //float rap2014e[6] = {0.2,0.2,0.2,0.2,0.2,0.2}; // for the moment with bins of ∆y =0.8 except the last one which is 1.6-2.4
 
 float rap2014e[6] = {0.05,0.05,0.05,0.05,0.05,0.05}; // for the moment with bins of ∆y =0.8 except the last one which is 1.6-2.4
-float taa[7] = {0.486,2.748,5.089,8.782,14.477,20.47,25.901}; // taa of 40-50, 50-100
+float taa[7] = {0.486,2.75,5.09,8.80,14.48,20.48,25.91}; // taa of 40-50, 50-100
 float taae[7]= {0.073,0.30 , 0.43,0.58 ,0.76  , 0.94, 1.06};
 float taaDD[nCentBins_2010]={2.37,18.83171875};
-float taa2014[nCentBins_2014]   = {0.13,0.985,2.75,5.089,8.80,14.48,20.48,25.91}; //taa of 50-70, 70-100
+float taa2014[nCentBins_2014]   = {0.125,0.982,2.746,5.095,8.800,14.481,20.476,25.914}; //taa of 50-70, 70-100
 //float taa2015[nCentBins_2014+1] = {0.13,0.985,2.75,5.089,8.80,14.48,20.48,24.5,27.3}; //taa of 0-2.5, 2.5-5,... 50-70, 70-100
-float taa2014e[nCentBins_2014] = {0.02,0.145,0.30,0.43,0.58,0.76,0.94,1.06};
+float taa2014e[nCentBins_2014] = {0.023,0.143,0.299,0.434,0.583,0.757,0.945,1.057};
 
 float mb_percentage2014[nCentBins_2014] = {0.3,0.2,0.1,0.1,0.1,0.1,0.05,0.05};
 float mb_percentage2015[nCentBins_2014+1] = {0.3,0.2,0.1,0.1,0.1,0.1,0.05,0.025,0.025};
@@ -108,8 +108,8 @@ float mb_percentage[7] = {0.5,0.1,0.1,0.1,0.1,0.05,0.05};
 float mb_percentageDD[2]={0.8,0.2};
 //////
 float taa1S[nCentBins_2014]={0.13,0.985,2.75,5.089,8.80,14.48,20.48,25.91}; //taa of  70-100, 50-70, 40-50, 30-40, 20-30, 10-20, 5-10, 0-5
-float taa2S[nCentBins2S]={0.486,3.918791,11.63034,23.18574}; // taa of 50-100, 30-50, 10-30, 0-10.
-float taa2Se[nCentBins2S]={0.073,0.365   ,0.67    ,0.99}; // taa of 50-100, 30-50, 10-30, 0-10.
+float taa2S[nCentBins2S]={0.468,3.921,11.641,23.195}; // taa of 50-100, 30-50, 10-30, 0-10.
+float taa2Se[nCentBins2S]={0.070,0.366,0.665,0.993}; // taa of 50-100, 30-50, 10-30, 0-10.
 float mb_percentage1S[nCentBins_2014] = {0.3,0.2,0.1,0.1,0.1,0.1,0.05,0.05};
 float mb_percentage2S[nCentBins2S] = {0.5,0.2,0.2,0.1};
 /* ------------------------------------------- */
@@ -847,10 +847,14 @@ float Aet_1S_pythia_rap4s[nRapBins_2014]={0.001,0.001,0.001,0.001,0.002,0.001};
 /* ------------------------------------------- */
 /*                     2S pT                   */
 /* ------------------------------------------- */
+//Acc
+float A_2S_pythia_tot= 0.279;//new Acc. 
+float A_2S_pythia_tote=0.001;///stat. err.
+float A_2S_pythia_tots=0.006;///syst.: shape vars
 //Acc*eff
-float Ae_2S_pythia_tot= 0.279;//new
-float Ae_2S_pythia_tote=0.001;///stat. err.
-float Ae_2S_pythia_tots=0.006;///syst.: shape vars
+float Ae_2S_pythia_tot=0.207;
+float Ae_2S_pythia_tote=0.001;
+float Ae_2S_pythia_tots=0.006;
 //eff
 float e_2S_pythia_tot= 0.743;//new
 float e_2S_pythia_tote=0.002;///stat. unc
@@ -950,11 +954,14 @@ float Aet_2S_pythia_rap2014Large_STAe[nRapBins2S]={0.009,0.008}; //STA
 /*                     3S pT                   */
 /* ------------------------------------------- */
 /// TOTAL
-//CAREFUL :  ERRORS FOR TAG AND PROBE ARE ONLY STAT FOR THE MOMENT
+//Acc
+float A_3S_pythia_tot= 0.329;//new
+float A_3S_pythia_tote=0.001;///stat. err.
+float A_3S_pythia_tots=0.007;///syst.: shape vars
 //Acc*eff
-float Ae_3S_pythia_tot= 0.329;//new
+float Ae_3S_pythia_tot= 0.247;//new
 float Ae_3S_pythia_tote=0.001;///stat. err.
-float Ae_3S_pythia_tots=0.007;///syst.: shape vars
+float Ae_3S_pythia_tots=0.009;///syst.: shape vars +tnp
 //eff
 float e_3S_pythia_tot= 0.752;//new
 float e_3S_pythia_tote=0.001;///stat. unc

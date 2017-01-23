@@ -1039,6 +1039,7 @@ void plotRaa2016()
    /// 4. Compute the CS.
    /// 5. Print the outputs
    /// 6. Draw and save
+   /// 7. Draw the theory comparisons if wanted. and save.
    ///-------------------------------
    /// 1.a. Y(1S)
    float RAA_1S_tnp_pt[nPtBins_2013] = {};
@@ -1216,6 +1217,9 @@ void plotRaa2016()
      }
    
    // 6. RAA pt plot
+
+   int plug=2;
+   
    TCanvas *cRaapt = new TCanvas("cRaapt","cRaapt"); 
    cRaapt->cd();
    TF1 *f4RaaPt = new TF1("f4RaaPt","1",0,20);
@@ -1242,78 +1246,80 @@ void plotRaa2016()
    gPt1RAAsyst->SetFillStyle(0);
    gPt1RAAsyst->SetLineWidth(2);
    gPt1RAAsyst->SetMarkerSize(0);
-   // drawing theory stuff
-    //M.Strickland data part
-      ////Strickland comparisons are now based on his '5TeV predictions' paper, which has 2.76 as a reference. The advantage is basically more points on the prediction curve, except on the pt curve. Check out https://arxiv.org/src/1605.03561v1/anc
-      float pt_th[6];       float pt2_th[6];
-      float raa1Spt_the1x0[6], raa1Spt_the2x0[6], raa1Spt_the3x0[6];
-      float raa2Spt_the1x0[6], raa2Spt_the2x0[6], raa2Spt_the3x0[6];
-      ifstream ipt1Sx0;
-      ifstream ipt2Sx0;
-      // this is the input file for 1Srap and xi=0
-      ipt1Sx0.open("Strick_Pt_1S_xi0.tsv");
-      ipt2Sx0.open("Strick_Pt_2S_xi0.tsv");
-      for (int i=0; i<6;i++){
-	ipt1Sx0>> pt_th[i]>> raa1Spt_the1x0[i]>> raa1Spt_the2x0[i]>> raa1Spt_the3x0[i];
-	ipt2Sx0>> pt2_th[i]>> raa2Spt_the1x0[i]>> raa2Spt_the2x0[i]>> raa2Spt_the3x0[i];
-      }
-      TGraph *sups1Spt1x0 = new TGraph(5,pt_th,raa1Spt_the1x0);
-      sups1Spt1x0->SetLineWidth(2);
-      sups1Spt1x0->SetLineColor(color1Sraa);
-      sups1Spt1x0->SetLineStyle(1);
-      sups1Spt1x0->Draw("l same");
-      TGraph *sups1Spt2x0 = new TGraph(5,pt_th,raa1Spt_the2x0);
-      sups1Spt2x0->SetLineWidth(2);
-      sups1Spt2x0->SetLineColor(color1Sraa);
-      sups1Spt2x0->SetLineStyle(2);
-      sups1Spt2x0->Draw("l same");
-      TGraph *sups1Spt3x0 = new TGraph(5,pt_th,raa1Spt_the3x0);
-      sups1Spt3x0->SetLineWidth(2);
-      sups1Spt3x0->SetLineColor(color1Sraa);
-      sups1Spt3x0->SetLineStyle(3);
-      sups1Spt3x0->Draw("l same");
-      TGraph *sups2Spt1x0 = new TGraph(3,pt2_th,raa2Spt_the1x0);
-      sups2Spt1x0->SetLineWidth(2);
-      sups2Spt1x0->SetLineColor(color2Sraa);
-      sups2Spt1x0->SetLineStyle(1);
-      sups2Spt1x0->Draw("l same");
-      TGraph *sups2Spt2x0 = new TGraph(3,pt2_th,raa2Spt_the2x0);
-      sups2Spt2x0->SetLineWidth(2);
-      sups2Spt2x0->SetLineColor(color2Sraa);
-      sups2Spt2x0->SetLineStyle(2);
-      sups2Spt2x0->Draw("l same");
-      TGraph *sups2Spt3x0 = new TGraph(3,pt2_th,raa2Spt_the3x0);
-      sups2Spt3x0->SetLineWidth(2);
-      sups2Spt3x0->SetLineColor(color2Sraa);
-      sups2Spt3x0->SetLineStyle(3);
-      sups2Spt3x0->Draw("l same");
-      TLegend *legR2= new TLegend(0.45,0.69,0.8,0.75);
-      legR2->SetBorderSize(0);
-      legR2->SetTextSize(gTextSize-0.01);
-      legR2->SetTextFont(42);
-      legR2->SetLineColor(0);
-      legR2->SetLineStyle(1);
-      legR2->SetLineWidth(2);
-      legR2->SetFillColor(0);
-      legR2->SetFillStyle(0);
-      TLegend *legR3 = new TLegend(0.45,0.55,0.8,0.7);
-      legR3->SetBorderSize(0);
-      legR3->SetTextSize(gTextSize-0.01);
-      legR3->SetTextFont(42);
-      legR3->SetLineColor(0);
-      legR3->SetLineStyle(2);
-      legR3->SetLineWidth(1);
-      legR3->SetFillColor(0);
-      legR3->SetFillStyle(0);
-      legR3->SetHeader("Strickland et al., Universe 2016, 2(3), 16");
-      legR2->SetHeader("");
-      legR3->AddEntry(sups1Spt3x0," 4#pi#eta/s = 3","L");
-      legR3->AddEntry(sups1Spt2x0," 4#pi#eta/s = 2","L");
-      legR3->AddEntry(sups1Spt1x0," 4#pi#eta/s = 1","L");
+
+   if (plug==0){
+     // drawing theory stuff
+     //M.Strickland data part
+     ////Strickland comparisons are now based on his '5TeV predictions' paper, which has 2.76 as a reference. The advantage is basically more points on the prediction curve, except on the pt curve. Check out https://arxiv.org/src/1605.03561v1/anc
+     float pt_th[6];       float pt2_th[6];
+     float raa1Spt_the1x0[6], raa1Spt_the2x0[6], raa1Spt_the3x0[6];
+     float raa2Spt_the1x0[6], raa2Spt_the2x0[6], raa2Spt_the3x0[6];
+     ifstream ipt1Sx0;
+     ifstream ipt2Sx0;
+     // this is the input file for 1Srap and xi=0
+     ipt1Sx0.open("Strick_Pt_1S_xi0.tsv");
+     ipt2Sx0.open("Strick_Pt_2S_xi0.tsv");
+     for (int i=0; i<6;i++){
+       ipt1Sx0>> pt_th[i]>> raa1Spt_the1x0[i]>> raa1Spt_the2x0[i]>> raa1Spt_the3x0[i];
+       ipt2Sx0>> pt2_th[i]>> raa2Spt_the1x0[i]>> raa2Spt_the2x0[i]>> raa2Spt_the3x0[i];
+     }
+     TGraph *sups1Spt1x0 = new TGraph(5,pt_th,raa1Spt_the1x0);
+     sups1Spt1x0->SetLineWidth(2);
+     sups1Spt1x0->SetLineColor(color1Sraa);
+     sups1Spt1x0->SetLineStyle(1);
+     sups1Spt1x0->Draw("l same");
+     TGraph *sups1Spt2x0 = new TGraph(5,pt_th,raa1Spt_the2x0);
+     sups1Spt2x0->SetLineWidth(2);
+     sups1Spt2x0->SetLineColor(color1Sraa);
+     sups1Spt2x0->SetLineStyle(2);
+     sups1Spt2x0->Draw("l same");
+     TGraph *sups1Spt3x0 = new TGraph(5,pt_th,raa1Spt_the3x0);
+     sups1Spt3x0->SetLineWidth(2);
+     sups1Spt3x0->SetLineColor(color1Sraa);
+     sups1Spt3x0->SetLineStyle(3);
+     sups1Spt3x0->Draw("l same");
+     TGraph *sups2Spt1x0 = new TGraph(3,pt2_th,raa2Spt_the1x0);
+     sups2Spt1x0->SetLineWidth(2);
+     sups2Spt1x0->SetLineColor(color2Sraa);
+     sups2Spt1x0->SetLineStyle(1);
+     sups2Spt1x0->Draw("l same");
+     TGraph *sups2Spt2x0 = new TGraph(3,pt2_th,raa2Spt_the2x0);
+     sups2Spt2x0->SetLineWidth(2);
+     sups2Spt2x0->SetLineColor(color2Sraa);
+     sups2Spt2x0->SetLineStyle(2);
+     sups2Spt2x0->Draw("l same");
+     TGraph *sups2Spt3x0 = new TGraph(3,pt2_th,raa2Spt_the3x0);
+     sups2Spt3x0->SetLineWidth(2);
+     sups2Spt3x0->SetLineColor(color2Sraa);
+     sups2Spt3x0->SetLineStyle(3);
+     sups2Spt3x0->Draw("l same");
+     TLegend *legR2= new TLegend(0.45,0.69,0.8,0.75);
+     legR2->SetBorderSize(0);
+     legR2->SetTextSize(gTextSize-0.01);
+     legR2->SetTextFont(42);
+     legR2->SetLineColor(0);
+     legR2->SetLineStyle(1);
+     legR2->SetLineWidth(2);
+     legR2->SetFillColor(0);
+     legR2->SetFillStyle(0);
+     TLegend *legR3 = new TLegend(0.2,0.55,0.7,0.73);
+     legR3->SetBorderSize(0);
+     legR3->SetTextSize(gTextSize-0.01);
+     legR3->SetTextFont(42);
+     legR3->SetLineColor(0);
+     legR3->SetLineStyle(2);
+     legR3->SetLineWidth(1);
+     legR3->SetFillColor(0);
+     legR3->SetFillStyle(0);
+     legR3->SetHeader("Strickland et al., Universe 2016, 2(3), 16");
+     legR2->SetHeader("");
+     legR3->AddEntry(sups1Spt3x0," 4#pi#eta/s = 3","L");
+     legR3->AddEntry(sups1Spt2x0," 4#pi#eta/s = 2","L");
+     legR3->AddEntry(sups1Spt1x0," 4#pi#eta/s = 1","L");
      
-      legR2->Draw();
-      legR3->Draw();
-      
+     legR2->Draw();
+     legR3->Draw();
+   }  
    gPt1RAAsyst->Draw("2");
    gpt1TNPRAA->Draw("pe");
    gpt1circleRAA->Draw("p");
@@ -1335,7 +1341,7 @@ void plotRaa2016()
    gpt2TNPRAA->Draw("pe");
    gpt2circleRAA->Draw("p");
 
-   TLegend *legend_RAApt = new TLegend(0.24,0.5,0.49,0.66);
+   TLegend *legend_RAApt = new TLegend(0.54,0.55,0.7,0.7);
    legend_RAApt->SetTextSize(gTextSize);
    legend_RAApt->SetFillStyle(0);
    legend_RAApt->SetFillColor(0);
@@ -1363,15 +1369,105 @@ void plotRaa2016()
    cRaapt->Update();
    cRaapt->RedrawAxis();
    cRaapt->GetFrame()->Draw();
-   // cRaapt->SaveAs(basedir2 + TString("/RAA_Pt.pdf"));
-   // cRaapt->SaveAs(basedir2 + TString("/RAA_Pt.png"));
-   // cRaapt->SaveAs(basedir1 + TString("/pdf/RAA_Pt.pdf"));
-   // cRaapt->SaveAs(basedir1 + TString("/png/RAA_Pt.png"));
-
+   cRaapt->SaveAs(basedir2 + TString("/RAA_Pt2.pdf"));
+   cRaapt->SaveAs(basedir2 + TString("/RAA_Pt.png"));
+   cRaapt->SaveAs(basedir1 + TString("/pdf/RAA_Pt2.pdf"));
+   cRaapt->SaveAs(basedir1 + TString("/png/RAA_Pt.png"));
+   if (plug==0){
     cRaapt->SaveAs(basedir2 + TString("/RAA_Pt_Strickland.pdf"));	 
     cRaapt->SaveAs(basedir2 + TString("/RAA_Pt_Strickland.png"));	 
     cRaapt->SaveAs(basedir1 + TString("/pdf/RAA_Pt_Strickland.pdf"));
-    cRaapt->SaveAs(basedir1 + TString("/png/RAA_Pt_Strickland.png"));///===============================
+    cRaapt->SaveAs(basedir1 + TString("/png/RAA_Pt_Strickland.png"));
+   }
+    cRaapt->Close();
+    /// 7. Theory comparison plots.
+
+    TCanvas *cRaaptRapp = new TCanvas("cRaaptRapp","cRaaptRapp"); 
+    cRaaptRapp->cd();
+    TF1 *f4RaaPtRapp = new TF1("f4RaaPtRapp","1",0,20);
+    f4RaaPtRapp->SetLineWidth(1);
+    f4RaaPtRapp->SetLineColor(kBlack);
+    f4RaaPtRapp->GetXaxis()->SetTitle("p_{T}^{#varUpsilon} (GeV/c)");
+    f4RaaPtRapp->GetYaxis()->SetTitle("R_{AA}");
+    f4RaaPtRapp->GetXaxis()->SetTitleOffset(f4RaaPtRapp->GetXaxis()->GetTitleOffset()*1.1);
+    f4RaaPtRapp->GetXaxis()->SetTitleSize(gTextSize+0.01);
+    f4RaaPtRapp->GetYaxis()->SetRangeUser(0.,1.2);
+    f4RaaPtRapp->GetXaxis()->CenterTitle(kTRUE);
+    f4RaaPtRapp->Draw();
+    
+    gpt1TNPRAA->Draw("pe");
+    gpt1circleRAA->Draw("p");
+    gPt1RAAsyst->Draw("2");
+
+    gpt2TNPRAA->Draw("pe");
+    gpt2circleRAA->Draw("p");
+    gPt2RAAsyst->Draw("2");
+    
+    
+     // //M.Rapp data part
+     
+      	ifstream in_tamu1, in_tamu2;
+      	in_tamu1.open("tamu_pt1.dat");
+      	in_tamu2.open("tamu_pt2.dat");
+      	float ptTamu1[41], ptTamu2[41], raaPtTamu1_min[41], raaPtTamu1_max[41],raaPtTamu2_min[41], raaPtTamu2_max[41];
+      	float tamu1[41], tamu2[41], tamu1err[41], tamu2err[41];
+      	for (int i=0; i<41; i++) {
+    	  in_tamu1 >> ptTamu1[i] >> raaPtTamu1_min[i] >> raaPtTamu1_max[i];
+      	  in_tamu2 >> ptTamu2[i] >> raaPtTamu2_min[i] >> raaPtTamu2_max[i];
+      	  tamu1[i]= (raaPtTamu1_max[i] + raaPtTamu1_min[i])/2;
+      	  tamu2[i]= (raaPtTamu2_max[i] + raaPtTamu2_min[i])/2;
+      	  tamu1err[i]= (raaPtTamu1_max[i] - raaPtTamu1_min[i])/2;
+      	  tamu2err[i]= (raaPtTamu2_max[i] - raaPtTamu2_min[i])/2;
+     	}
+     	TGraphErrors* tamu1S = new TGraphErrors(41, ptTamu1, tamu1, 0, tamu1err);
+     	TGraphErrors* tamu2S = new TGraphErrors(41, ptTamu2, tamu2, 0, tamu2err);
+     	tamu1S->SetFillColor(kRed+1);
+     	tamu1S->SetLineColor(kRed+1);
+     	tamu2S->SetFillColor(kBlue+1);
+     	tamu2S->SetLineColor(kBlue+1);
+	tamu1S->SetFillStyle(3002);
+	tamu2S->SetFillStyle(3002);
+	//f4RaaPtRapp->Draw();
+      	tamu1S->Draw("3");
+	tamu2S->Draw("3");
+
+
+	
+	// Cent. 0-100 %
+	TLatex latexptRaaRapp;
+	latexptRaaRapp.SetTextSize(gTextSize);
+	latexptRaaRapp.SetTextFont(42);
+	latexptRaaRapp.DrawLatex(1.5,1.08,"Cent. 0-100%, |y| < 2.4"); // y=1.2 before
+	if (!plotBox) {
+	  latexptRaaRapp.DrawLatex(1.5,0.83,Form("Global uncertainty: %.1f",100*systXS_raa_glob));
+	  latexptRaaRapp.DrawLatex(10.5,0.83,"%"); /// y=1.1 before
+	} else{
+	  /// plotBox goes here.
+	  TBox *boxPt = new TBox(19,1-systXS_raa_glob,20,1+systXS_raa_glob); 
+	  boxPt->SetFillColor(kGray);
+	  boxPt->Draw();
+	}
+	TLegend *legRappPt = new TLegend(0.29,0.55,0.45,0.77);
+	legRappPt->SetBorderSize(0);
+	legRappPt->SetTextSize(gTextSize-0.005);
+	legRappPt->SetTextFont(42);
+	legRappPt->SetLineColor(0);
+	legRappPt->SetLineStyle(2);
+	legRappPt->SetLineWidth(1);
+	legRappPt->SetFillColor(0);
+	legRappPt->SetFillStyle(0);
+	legRappPt->SetHeader("Rapp et al., private comm.");
+	legRappPt->AddEntry(tamu1S," ","f");
+	legRappPt->AddEntry(tamu2S," ","f");
+	legRappPt->Draw();
+	legend_RAApt->SetX1(0.33), legend_RAApt->SetX2(0.6);
+	legend_RAApt->Draw();
+	CMS_lumi(cRaaptRapp,104,33);
+	cRaaptRapp->SaveAs(basedir2 + TString("/RAA_Pt_Rapp.pdf"));
+	cRaaptRapp->SaveAs(basedir1 + TString("/RAA_Pt_Rapp.pdf"));
+ 
+      /// done.
+    ///===============================
    /// (PbPb cross sections + pp cross sections in Large Bins) vs Rap
    ///===============================
    /// 1. Define variables
@@ -1924,7 +2020,7 @@ void plotRaa2016()
    // 6. RAA rap plot
    TCanvas *cRaarapAS = new TCanvas("cRaarapAS","cRaarapAS"); 
    cRaarapAS->cd();
-   TF1 *f4RaaRapAS = new TF1("f4RaaRapAS","1",0,4);
+   TF1 *f4RaaRapAS = new TF1("f4RaaRapAS","1",0,2.4);
    f4RaaRapAS->SetLineWidth(1);
    f4RaaRapAS->SetLineColor(kBlack);
    f4RaaRapAS->GetXaxis()->SetTitle("|y|");
@@ -1971,19 +2067,19 @@ void plotRaa2016()
    grapAS2circleRAA->Draw("p");
 
    //defining ALICE stuff in a larger scope...
-///RAA Upsilon ALICE 
-// http://arxiv.org/pdf/1405.4493v3.pdf
-float ALICE_RAP[2]={2.85,3.6};
-float ALICE_RAPe[2]={0.35,0.4};
+   ///RAA Upsilon ALICE 
+   // http://arxiv.org/pdf/1405.4493v3.pdf
+   float ALICE_RAP[2]={2.85,3.6};
+   float ALICE_RAPe[2]={0.35,0.4};
 
-float ALICE_PT[7]= {0.5,1.5,2.5,3.5,4.5,5.5,7};
-float ALICE_PTe[7]={0.5,0.5,0.5,0.5,0.5,0.5,1};
-
-float ALICE_RAA_1S_rap[2]={0.30,0.29};
-float ALICE_RAA_1S_rape[2]={0.05,0.07};
-float ALICE_RAA_1S_raps[2]={0.04,0.05};
-float AliceBox=0.12;
-float AliceBoxKin=0.08;
+   float ALICE_PT[7]= {0.5,1.5,2.5,3.5,4.5,5.5,7};
+   float ALICE_PTe[7]={0.5,0.5,0.5,0.5,0.5,0.5,1};
+   
+   float ALICE_RAA_1S_rap[2]={0.30,0.29};
+   float ALICE_RAA_1S_rape[2]={0.05,0.07};
+   float ALICE_RAA_1S_raps[2]={0.04,0.05};
+   float AliceBox=0.12;
+   float AliceBoxKin=0.08;
  
    TGraphErrors *ga1rps= new TGraphErrors(2,ALICE_RAP,ALICE_RAA_1S_rap,rapbin1_e,ALICE_RAA_1S_raps); 
   ga1rps->SetLineColor(ALICE);
@@ -1999,9 +2095,10 @@ float AliceBoxKin=0.08;
   ga1rc->SetMarkerSize(1.5*markerSize);
   ga1rc->SetLineColor(ALICE);
   ga1rc->SetLineWidth(2);
-  ga1rps->Draw("2");
-      ga1r->Draw("pe");
-      ga1rc->Draw("p");
+  // DONT DRAW IF YOU DONT WANT TO
+  // ga1rps->Draw("2");
+  //     ga1r->Draw("pe");
+  //     ga1rc->Draw("p");
    //M.Strickland data part
       ////Strickland comparisons are now based on his '5TeV predictions' paper, which has 2.76 as a reference. The advantage is basically more points on the prediction curve. Check out https://arxiv.org/src/1605.03561v1/anc
       float rap_th[36];
@@ -2046,7 +2143,7 @@ float AliceBoxKin=0.08;
       sups2Srap3x0->SetLineColor(color2Sraa);
       sups2Srap3x0->SetLineStyle(3);
       sups2Srap3x0->Draw("l same");
-      TLegend *legR2AS= new TLegend(0.25,0.69,0.4,0.75);
+      TLegend *legR2AS= new TLegend(0.42,0.68,0.75,0.78);
       legR2AS->SetBorderSize(0);
       legR2AS->SetTextSize(gTextSize-0.01);
       legR2AS->SetTextFont(42);
@@ -2055,7 +2152,7 @@ float AliceBoxKin=0.08;
       legR2AS->SetLineWidth(2);
       legR2AS->SetFillColor(0);
       legR2AS->SetFillStyle(0);
-      TLegend *legR3AS = new TLegend(0.25,0.55,0.4,0.7);
+      TLegend *legR3AS = new TLegend(0.22,0.52,0.48,0.66);
       legR3AS->SetBorderSize(0);
       legR3AS->SetTextSize(gTextSize-0.01);
       legR3AS->SetTextFont(42);
@@ -2066,16 +2163,17 @@ float AliceBoxKin=0.08;
       legR3AS->SetFillStyle(0);
       legR3AS->SetHeader("Strickland et al., Universe 2016, 2(3), 16");
 
-      legR2AS->SetHeader("ALICE "); // (PLB 738 (2014) 361)
+      //      legR2AS->SetHeader("ALICE "); // (PLB 738 (2014) 361)
       legR2AS->AddEntry(ga1rc,"#varUpsilon(1S) PLB 738(2014) 361","P");
+      //      legR3AS->SetTextSize(gTextSize-08005);
       legR3AS->AddEntry(sups1Srap3x0," 4#pi#eta/s = 3","L");
       legR3AS->AddEntry(sups1Srap2x0," 4#pi#eta/s = 2","L");
       legR3AS->AddEntry(sups1Srap1x0," 4#pi#eta/s = 1","L");
 
-      legR2AS->Draw();
+      //      legR2AS->Draw();
       legR3AS->Draw();
-   TLegend *legend_RAArapAS = new TLegend(0.24,0.5,0.49,0.66);
-   legend_RAArapAS->SetTextSize(gTextSize);
+   TLegend *legend_RAArapAS = new TLegend(0.2,0.67,0.6,0.78);
+   legend_RAArapAS->SetTextSize(gTextSize-0.005);
    legend_RAArapAS->SetFillStyle(0);
    legend_RAArapAS->SetFillColor(0);
    legend_RAArapAS->SetBorderSize(0);
@@ -2088,13 +2186,13 @@ float AliceBoxKin=0.08;
    TLatex latexrapASRaa;
    latexrapASRaa.SetTextSize(gTextSize);
    latexrapASRaa.SetTextFont(42);
-   latexrapASRaa.DrawLatex(0.2,.9,"Cent. 0-100%"); // y=1.2 in the previous version
+   latexrapASRaa.DrawLatex(0.2,1.08,"Cent. 0-100%"); // y=1.2 in the previous version
    if (!plotBox) {
      latexrapASRaa.DrawLatex(0.2,0.83,Form("Global uncertainty: %.1f",100*systXS_raa_glob));
      latexrapASRaa.DrawLatex(1.27,0.83,"%"); /// y=1.1
    } else{
      //plotBox
-     TBox *boxRapAS = new TBox(3.8,1-systXS_raa_glob,4,1+systXS_raa_glob); 
+     TBox *boxRapAS = new TBox(2.25,1-systXS_raa_glob,2.4,1+systXS_raa_glob);  // OR 3.8/4
      boxRapAS->SetFillColor(kGray);
      boxRapAS->Draw();
    }   
@@ -2105,8 +2203,8 @@ float AliceBoxKin=0.08;
    cRaarapAS->GetFrame()->Draw();
    cRaarapAS->SaveAs(basedir2 + TString("/RAA_RapAliceStrickland.pdf"));
    cRaarapAS->SaveAs(basedir2 + TString("/RAA_RapAliceStrickland.png"));
-   cRaarapAS->SaveAs(basedir1 + TString("/pdf/RAA_RapAliceStrickland.pdf"));
-   cRaarapAS->SaveAs(basedir1 + TString("/png/RAA_RapAliceStrickland.png"));
+   cRaarapAS->SaveAs(basedir1 + TString("/pdf/RAA_Rap_Strickland.pdf"));
+   cRaarapAS->SaveAs(basedir1 + TString("/png/RAA_Rap_Strickland.png"));
 
    ///===============================
    /// Integrated cross sections (pt<40 actually)
@@ -2679,13 +2777,13 @@ float AliceBoxKin=0.08;
    haxes->GetXaxis()->SetTickLength(gStyle->GetTickLength("X")/xfrac);
    // haxes->GetYaxis()->SetTickLength(gStyle->GetTickLength("Y")*xfrac);
    line = TLine(0,1,420,1);
-   haxes->GetYaxis()->SetRangeUser(0,1.6);
+   haxes->GetYaxis()->SetRangeUser(0,1.7);
    TH1F *haxesr = new TH1F("haxesr","haxesr",1,0,2);
    haxesr->GetXaxis()->SetTickLength(0);
    haxesr->GetYaxis()->SetTickLength(gStyle->GetTickLength("Y")/(1.1-xfrac));
    haxesr->GetXaxis()->SetTitleSize(0);
    haxesr->GetXaxis()->SetLabelSize(0);
-   haxesr->GetYaxis()->SetRangeUser(0,1.6);
+   haxesr->GetYaxis()->SetRangeUser(0,1.7);
    liner = TLine(0,1,2,1);
    haxes->GetYaxis()->SetTitle("R_{AA}");
    haxes->GetXaxis()->SetTitle("#LTN_{part}#GT");
@@ -2705,7 +2803,7 @@ float AliceBoxKin=0.08;
    // f4RaaCent->GetYaxis()->SetRangeUser(0.,1.6);
    // f4RaaCent->GetXaxis()->CenterTitle(kTRUE);
    // f4RaaCent->Draw();
-   int plug=1;
+
    TLegend *leg2= new TLegend(0.25,0.65,0.4,0.72);
    TLegend *leg3 = new TLegend(0.25,0.7,0.4,0.85);
    leg3->SetBorderSize(0);
@@ -2780,27 +2878,27 @@ float AliceBoxKin=0.08;
 
       leg2->Draw();
       leg3->Draw();
-}else if (plug==1){
-      //M.Rapp data part
-
-      ifstream in_SBS1S, in_SBS2S;
-      in_SBS1S.open("LHC-SBS-nabs0.0-2.0-1sRAA.dat");
-      in_SBS2S.open("LHC-SBS-nabs0.0-2.0-2sRAA.dat");
-
-      float N_part_1S[28], N_coll_1S[28], Absorp_l_1S[28], Primordial_l_1S[28], Total_l_1S[28], Absorp_h_1S[28], Primordial_h_1S[28], Total_h_1S[28];
-      float N_part_Err[28], Absorp_1S[28], Primordial_1S[28], Total_1S[28], Absorp_1S_err[28], Primordial_1S_err[28], Total_1S_err[28];
-      float regen_l_1S[28], regen_h_1S[28],  regen_mean_1S[28], regen_err_1S[28];
-
-   
-      float N_part_2S[50], N_coll_2S[50], Absorp_l_2S[50], Primordial_l_2S[50], Total_l_2S[50], Absorp_h_2S[50], Primordial_h_2S[50], Total_h_2S[50];
-      float Absorp_2S[50], Primordial_2S[50], Total_2S[50], Absorp_2S_err[50], Primordial_2S_err[50], Total_2S_err[50];
-      float regen_l_2S[50], regen_h_2S[50], regen_mean_2S[50], regen_err_2S[50];
-      for (int i=0; i<28; i++) {
-	in_SBS1S >> N_part_1S[i] >> N_coll_1S[i] >> Absorp_l_1S[i] >> Primordial_l_1S[i] >> Total_l_1S[i] >> Absorp_h_1S[i] >> Primordial_h_1S[i] >> Total_h_1S[i];
-   
-	Absorp_1S[i] = (Absorp_l_1S[i] + Absorp_h_1S[i])/2;
-	Primordial_1S[i] = (Primordial_l_1S[i] + Primordial_h_1S[i])/2;
-	Total_1S[i] = (Total_l_1S[i] + Total_h_1S[i])/2;
+   }else if (plug==1){
+     //M.Rapp data part
+     
+     ifstream in_SBS1S, in_SBS2S;
+     in_SBS1S.open("LHC-SBS-nabs0.0-2.0-1sRAA.dat");
+     in_SBS2S.open("LHC-SBS-nabs0.0-2.0-2sRAA.dat");
+     
+     float N_part_1S[28], N_coll_1S[28], Absorp_l_1S[28], Primordial_l_1S[28], Total_l_1S[28], Absorp_h_1S[28], Primordial_h_1S[28], Total_h_1S[28];
+     float N_part_Err[28], Absorp_1S[28], Primordial_1S[28], Total_1S[28], Absorp_1S_err[28], Primordial_1S_err[28], Total_1S_err[28];
+     float regen_l_1S[28], regen_h_1S[28],  regen_mean_1S[28], regen_err_1S[28];
+     
+     
+     float N_part_2S[50], N_coll_2S[50], Absorp_l_2S[50], Primordial_l_2S[50], Total_l_2S[50], Absorp_h_2S[50], Primordial_h_2S[50], Total_h_2S[50];
+     float Absorp_2S[50], Primordial_2S[50], Total_2S[50], Absorp_2S_err[50], Primordial_2S_err[50], Total_2S_err[50];
+     float regen_l_2S[50], regen_h_2S[50], regen_mean_2S[50], regen_err_2S[50];
+     for (int i=0; i<28; i++) {
+       in_SBS1S >> N_part_1S[i] >> N_coll_1S[i] >> Absorp_l_1S[i] >> Primordial_l_1S[i] >> Total_l_1S[i] >> Absorp_h_1S[i] >> Primordial_h_1S[i] >> Total_h_1S[i];
+       
+       Absorp_1S[i] = (Absorp_l_1S[i] + Absorp_h_1S[i])/2;
+       Primordial_1S[i] = (Primordial_l_1S[i] + Primordial_h_1S[i])/2;
+       Total_1S[i] = (Total_l_1S[i] + Total_h_1S[i])/2;
 	Absorp_1S_err[i] = (Absorp_l_1S[i] - Absorp_h_1S[i])/2;
 	Primordial_1S_err[i] = (Primordial_l_1S[i] - Primordial_h_1S[i])/2;
 	Total_1S_err[i] = (Total_l_1S[i] - Total_h_1S[i])/2;
@@ -2835,10 +2933,10 @@ float AliceBoxKin=0.08;
 
       SBS_Total_1S->SetLineWidth(2);
       SBS_Total_2S->SetLineWidth(2);
-      SBS_Total_1S->SetFillColorAlpha(color1Spp,1);
-      SBS_Total_1S->SetFillStyle(3001);
-      SBS_Total_2S->SetFillColorAlpha(color1Saa,1);
-      SBS_Total_2S->SetFillStyle(1001);
+      SBS_Total_1S->SetFillColorAlpha(kRed+1,1); //color1Saa
+      SBS_Total_1S->SetFillStyle(3002);
+      SBS_Total_2S->SetFillColorAlpha(kBlue+1,1); //color2Saa
+      SBS_Total_2S->SetFillStyle(3002);
  
       SBS_Total_1S->Draw("3");
       SBS_Total_2S->Draw("3");   
@@ -2847,7 +2945,7 @@ float AliceBoxKin=0.08;
       SBS_Absorp_1S->SetLineColor(kOrange-4);
       SBS_Absorp_1S->Draw("3");
 
-      TLegend *legR3 = new TLegend(0.29,0.68,0.45,0.81);
+      TLegend *legR3 = new TLegend(0.29,0.68,0.55,0.81);
       legR3->SetBorderSize(0);
       legR3->SetTextSize(gTextSize-0.005);
       legR3->SetTextFont(42);
@@ -2857,15 +2955,15 @@ float AliceBoxKin=0.08;
       legR3->SetFillColor(0);
       legR3->SetFillStyle(0);
       // legR3->SetHeader("");
-      legR3->AddEntry(SBS_Total_1S,"#varUpsilon(1S)","f");
-      legR3->AddEntry(SBS_Total_2S,"#varUpsilon(2S)","f");
+      legR3->AddEntry(SBS_Total_1S," ","f");
+      legR3->AddEntry(SBS_Total_2S," ","f");
       legR3->Draw();
       TLatex *NucAbs = new TLatex(200,0.85,"Nuc. Abs.");
       NucAbs->Draw();
       TLatex latexrappC;
       latexrappC.SetTextSize(gTextSize);
       latexrappC.SetTextFont(42);
-      latexrappC.DrawLatex(40,1.45,"Eur. Phys. J. A 48 (2012) 72");
+      latexrappC.DrawLatex(40,1.5,"Eur. Phys. J. A 48 (2012) 72");
     } 
    TGraphErrors *gcent1syst = new TGraphErrors(nCentBins_2014,nPart2014,RAA_1S_cent,centErr2014,RAA_1S_cents); //for fun
    gcent1syst->SetLineColor(color1Sraa);
@@ -2930,7 +3028,7 @@ float AliceBoxKin=0.08;
    TLatex latexcentRaa;
    latexcentRaa.SetTextSize(gTextSize);
    latexcentRaa.SetTextFont(42);
-   latexcentRaa.DrawLatex(150,0.8,"|y| < 2.4");
+   latexcentRaa.DrawLatex(315,1.2,"|y| < 2.4");
 
 
    TBox *box1S = new TBox(390,1-syst1S_pp_glob,405,1+syst1S_pp_glob); 
@@ -3031,7 +3129,7 @@ float AliceBoxKin=0.08;
    
    main->cd();
    legend_RAAcent->AddEntry(arrow,"#varUpsilon(3S) ","l");
-   legend_RAAcent->Draw();
+   //legend_RAAcent->Draw();
 
    //   main->Draw();
    CMS_lumi(main,104,33);
@@ -3045,9 +3143,9 @@ float AliceBoxKin=0.08;
      cRaacent->SaveAs(basedir1 + TString("/pdf/RAA_Cent_Strickland.pdf"));
      cRaacent->SaveAs(basedir1 + TString("/png/RAA_Cent_Strickland.png"));
    }else if (plug==1){
-     legend_RAAcent->SetX1(0.34);
-     legend_RAAcent->SetX2(0.54);
-     legend_RAAcent->SetY1(0.68);
+     legend_RAAcent->SetX1(0.3);
+     legend_RAAcent->SetX2(0.5);
+     legend_RAAcent->SetY1(0.62);
      legend_RAAcent->SetY2(0.81);
      legend_RAAcent->Draw();
       // CMS_lumi(cRaacent,104,33);
@@ -3114,7 +3212,7 @@ void plotComparisons(bool exp, int plug)
   haxes->GetXaxis()->SetTickLength(gStyle->GetTickLength("X")/xfrac);
   // haxes->GetYaxis()->SetTickLength(gStyle->GetTickLength("Y")*xfrac);
   line = TLine(0,1,420,1);
-  haxes->GetYaxis()->SetRangeUser(0,1.6);
+  haxes->GetYaxis()->SetRangeUser(0,1.7);
   TH1F *haxesr = new TH1F("haxesr","haxesr",1,0,2);
   haxesr->GetXaxis()->SetTickLength(0);
   haxesr->GetYaxis()->SetTickLength(gStyle->GetTickLength("Y")/(1.1-xfrac));
