@@ -40,7 +40,8 @@ const bool plotBox =true;
 const bool plotLin=true; // plot linear plots as well
 
 const TString basedir1 = "~/Desktop/figs";
-const TString basedir2 = "/tmp"; //"~/Documents/PR/forTWiki/CSandRAA"
+//const TString basedir2 = "/tmp"; //"~/Documents/PR/forTWiki/CSandRAA"
+const TString basedir2 = "/tmp";
 const string outSyst = "FinalSystFile.txt";
 const string outRes = "FinalResultFile.txt";
 const string outplot = "RAA2016.h";
@@ -1218,7 +1219,7 @@ void plotRaa2016()
    
    // 6. RAA pt plot
 
-   int plug=1;
+   int plug=0;
    
    TCanvas *cRaapt = new TCanvas("cRaapt","cRaapt"); 
    cRaapt->cd();
@@ -1341,8 +1342,8 @@ void plotRaa2016()
    gpt2TNPRAA->Draw("pe");
    gpt2circleRAA->Draw("p");
 
-   TLegend *legend_RAApt = new TLegend(0.54,0.55,0.7,0.7);
-   legend_RAApt->SetTextSize(gTextSize);
+   TLegend *legend_RAApt = new TLegend(0.54,0.56,0.7,0.68);
+   legend_RAApt->SetTextSize(gTextSize-0.003);
    legend_RAApt->SetFillStyle(0);
    legend_RAApt->SetFillColor(0);
    legend_RAApt->SetBorderSize(0);
@@ -1361,7 +1362,7 @@ void plotRaa2016()
      latexptRaa.DrawLatex(10.5,0.83,"%"); /// y=1.1 before
    } else{
    /// plotBox goes here.
-     TBox *boxPt = new TBox(19,1-systXS_raa_glob,20,1+systXS_raa_glob); 
+     TBox *boxPt = new TBox(19.2,1-systXS_raa_glob,20,1+systXS_raa_glob); 
      boxPt->SetFillColor(kGray);
      boxPt->Draw();
    }
@@ -1369,16 +1370,19 @@ void plotRaa2016()
    cRaapt->Update();
    cRaapt->RedrawAxis();
    cRaapt->GetFrame()->Draw();
-   cRaapt->SaveAs(basedir2 + TString("/RAA_Pt2.pdf"));
-   cRaapt->SaveAs(basedir2 + TString("/RAA_Pt.png"));
-   cRaapt->SaveAs(basedir1 + TString("/pdf/RAA_Pt2.pdf"));
-   cRaapt->SaveAs(basedir1 + TString("/png/RAA_Pt.png"));
+  
    if (plug==0){
-    cRaapt->SaveAs(basedir2 + TString("/RAA_Pt_Strickland.pdf"));	 
-    cRaapt->SaveAs(basedir2 + TString("/RAA_Pt_Strickland.png"));	 
-    cRaapt->SaveAs(basedir1 + TString("/pdf/RAA_Pt_Strickland.pdf"));
-    cRaapt->SaveAs(basedir1 + TString("/png/RAA_Pt_Strickland.png"));
+     cRaapt->SaveAs(basedir2 + TString("/RAA_Pt_Strickland.pdf"));	 
+     cRaapt->SaveAs(basedir2 + TString("/RAA_Pt_Strickland.png"));	 
+     cRaapt->SaveAs(basedir1 + TString("/pdf/RAA_Pt_Strickland.pdf"));
+     cRaapt->SaveAs(basedir1 + TString("/png/RAA_Pt_Strickland.png"));
+   }else{
+     cRaapt->SaveAs(basedir2 + TString("/RAA_Pt.pdf"));
+     cRaapt->SaveAs(basedir2 + TString("/RAA_Pt.png"));
+     cRaapt->SaveAs(basedir1 + TString("/pdf/RAA_Pt.pdf"));
+     cRaapt->SaveAs(basedir1 + TString("/png/RAA_Pt.png"));
    }
+   
     cRaapt->Close();
     /// 7. Theory comparison plots.
 
@@ -1395,44 +1399,41 @@ void plotRaa2016()
     f4RaaPtRapp->GetXaxis()->CenterTitle(kTRUE);
     f4RaaPtRapp->Draw();
     
-    gpt1TNPRAA->Draw("pe");
-    gpt1circleRAA->Draw("p");
-    gPt1RAAsyst->Draw("2");
-
-    gpt2TNPRAA->Draw("pe");
-    gpt2circleRAA->Draw("p");
-    gPt2RAAsyst->Draw("2");
     
-    
-     // //M.Rapp data part
+    if (plug==1){
+      // //M.Rapp data part
      
-      	ifstream in_tamu1, in_tamu2;
-      	in_tamu1.open("tamu_pt1.dat");
-      	in_tamu2.open("tamu_pt2.dat");
-      	float ptTamu1[41], ptTamu2[41], raaPtTamu1_min[41], raaPtTamu1_max[41],raaPtTamu2_min[41], raaPtTamu2_max[41];
-      	float tamu1[41], tamu2[41], tamu1err[41], tamu2err[41];
-      	for (int i=0; i<41; i++) {
-    	  in_tamu1 >> ptTamu1[i] >> raaPtTamu1_min[i] >> raaPtTamu1_max[i];
-      	  in_tamu2 >> ptTamu2[i] >> raaPtTamu2_min[i] >> raaPtTamu2_max[i];
-      	  tamu1[i]= (raaPtTamu1_max[i] + raaPtTamu1_min[i])/2;
-      	  tamu2[i]= (raaPtTamu2_max[i] + raaPtTamu2_min[i])/2;
-      	  tamu1err[i]= (raaPtTamu1_max[i] - raaPtTamu1_min[i])/2;
-      	  tamu2err[i]= (raaPtTamu2_max[i] - raaPtTamu2_min[i])/2;
-     	}
-     	TGraphErrors* tamu1S = new TGraphErrors(41, ptTamu1, tamu1, 0, tamu1err);
-     	TGraphErrors* tamu2S = new TGraphErrors(41, ptTamu2, tamu2, 0, tamu2err);
-     	tamu1S->SetFillColor(kRed+1);
-     	tamu1S->SetLineColor(kRed+1);
-     	tamu2S->SetFillColor(kBlue+1);
-     	tamu2S->SetLineColor(kBlue+1);
-	tamu1S->SetFillStyle(3001);
-	tamu2S->SetFillStyle(3001);
-	//f4RaaPtRapp->Draw();
-      	tamu1S->Draw("3");
-	tamu2S->Draw("3");
+      ifstream in_tamu1, in_tamu2;
+      in_tamu1.open("tamu_pt1.dat");
+      in_tamu2.open("tamu_pt2.dat");
+      float ptTamu1[41], ptTamu2[41], raaPtTamu1_min[41], raaPtTamu1_max[41],raaPtTamu2_min[41], raaPtTamu2_max[41];
+      float tamu1[41], tamu2[41], tamu1err[41], tamu2err[41];
+      for (int i=0; i<41; i++) {
+	in_tamu1 >> ptTamu1[i] >> raaPtTamu1_min[i] >> raaPtTamu1_max[i];
+	in_tamu2 >> ptTamu2[i] >> raaPtTamu2_min[i] >> raaPtTamu2_max[i];
+	tamu1[i]= (raaPtTamu1_max[i] + raaPtTamu1_min[i])/2;
+	tamu2[i]= (raaPtTamu2_max[i] + raaPtTamu2_min[i])/2;
+	tamu1err[i]=(raaPtTamu1_max[i] - raaPtTamu1_min[i])/2 + 0.02; //add 0.01 for thicker look
+	tamu2err[i]=(raaPtTamu2_max[i] - raaPtTamu2_min[i])/2 + 0.005;
+      }
+      TGraphErrors* tamu1S = new TGraphErrors(41, ptTamu1, tamu1, 0, tamu1err);
+      TGraphErrors* tamu2S = new TGraphErrors(41, ptTamu2, tamu2, 0, tamu2err);
+      tamu1S->SetLineWidth(2);
+      tamu2S->SetLineWidth(2);
+      tamu1S->SetFillColorAlpha(kRed+1,0.4); //color1Saa
+      tamu1S->SetFillStyle(1001);
+      tamu2S->SetFillColorAlpha(kBlue+1,0.6); //color2Saa
+      tamu2S->SetFillStyle(1001);
+      tamu1S->Draw("3");
+      tamu2S->Draw("3");
 
+      gpt1TNPRAA->Draw("pe");
+      gpt1circleRAA->Draw("p");
+      gPt1RAAsyst->Draw("2");
 
-	
+      gpt2TNPRAA->Draw("pe");
+      gpt2circleRAA->Draw("p");
+      gPt2RAAsyst->Draw("2");
 	// Cent. 0-100 %
 	TLatex latexptRaaRapp;
 	latexptRaaRapp.SetTextSize(gTextSize);
@@ -1443,11 +1444,11 @@ void plotRaa2016()
 	  latexptRaaRapp.DrawLatex(10.5,0.83,"%"); /// y=1.1 before
 	} else{
 	  /// plotBox goes here.
-	  TBox *boxPt = new TBox(19,1-systXS_raa_glob,20,1+systXS_raa_glob); 
+	  TBox *boxPt = new TBox(19.2,1-systXS_raa_glob,20,1+systXS_raa_glob); 
 	  boxPt->SetFillColor(kGray);
 	  boxPt->Draw();
 	}
-	TLegend *legRappPt = new TLegend(0.29,0.55,0.45,0.77);
+	TLegend *legRappPt = new TLegend(0.23,0.55,0.45,0.77);
 	legRappPt->SetBorderSize(0);
 	legRappPt->SetTextSize(gTextSize-0.005);
 	legRappPt->SetTextFont(42);
@@ -1464,8 +1465,11 @@ void plotRaa2016()
 	legend_RAApt->Draw();
 	CMS_lumi(cRaaptRapp,104,33);
 	cRaaptRapp->SaveAs(basedir2 + TString("/RAA_Pt_Rapp.pdf"));
+	cRaaptRapp->SaveAs("~/Desktop/RAA_Pt_Rapp.pdf");
 	cRaaptRapp->SaveAs(basedir1 + TString("/RAA_Pt_Rapp.pdf"));
- 
+
+    }
+
       /// done.
     ///===============================
    /// (PbPb cross sections + pp cross sections in Large Bins) vs Rap
@@ -2934,12 +2938,12 @@ void plotRaa2016()
       SBS_Total_1S->SetLineWidth(2);
       SBS_Total_2S->SetLineWidth(2);
       SBS_Total_1S->SetFillColorAlpha(kRed+1,0.4); //color1Saa
-      SBS_Total_1S->SetFillStyle(1000);
+      SBS_Total_1S->SetFillStyle(1001);
       SBS_Total_2S->SetFillColorAlpha(kBlue+1,0.8); //color2Saa
       SBS_Total_2S->SetFillStyle(1001);
  
-      SBS_Total_1S->Draw("4");
-      SBS_Total_2S->Draw("4");   
+      SBS_Total_1S->Draw("3");
+      SBS_Total_2S->Draw("3");   
 
       SBS_Absorp_1S->SetFillColor(kOrange-4);
       SBS_Absorp_1S->SetLineColor(kOrange-4);
