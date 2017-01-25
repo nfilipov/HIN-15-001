@@ -11,7 +11,7 @@
 TString cmsText     = "CMS";
 float cmsTextFont   = 61;  // default is helvetic-bold
 
-bool writeExtraText = false;//false;
+bool writeExtraText = true;//false;
 TString extraText   = "Supplementary";
 float extraTextFont = 52;  // default is helvetica-italics
 
@@ -24,7 +24,7 @@ float cmsTextOffset    = 0.01;  // in case of ticks
 
 float relPosX    = 0.045;
 float relPosY    = 0.045;
-float relExtraDY = 1.2;
+float relExtraDY = 1.45;
 
 // ratio of "CMS" and extra text size
 float extraOverCmsTextSize  = 0.76;

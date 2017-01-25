@@ -78,8 +78,8 @@ CMS_lumi( TPad* pad, int iPeriod, int iPosX )
     }
   else if (iPeriod==101)
     {
-      //      lumiText += lumi_PbPb2011;
-      lumiText += "PbPb #sqrt{s_{NN}} = 2.76 TeV";
+      lumiText += lumi_PbPb2011;
+      lumiText += ", #sqrt{s_{NN}} = 2.76 TeV";
       // lumiText += " (2.76 TeV)";
     }
   else if (iPeriod==102)

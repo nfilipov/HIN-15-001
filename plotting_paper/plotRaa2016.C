@@ -1218,7 +1218,7 @@ void plotRaa2016()
    
    // 6. RAA pt plot
 
-   int plug=2;
+   int plug=1;
    
    TCanvas *cRaapt = new TCanvas("cRaapt","cRaapt"); 
    cRaapt->cd();
@@ -1425,8 +1425,8 @@ void plotRaa2016()
      	tamu1S->SetLineColor(kRed+1);
      	tamu2S->SetFillColor(kBlue+1);
      	tamu2S->SetLineColor(kBlue+1);
-	tamu1S->SetFillStyle(3002);
-	tamu2S->SetFillStyle(3002);
+	tamu1S->SetFillStyle(3001);
+	tamu2S->SetFillStyle(3001);
 	//f4RaaPtRapp->Draw();
       	tamu1S->Draw("3");
 	tamu2S->Draw("3");
@@ -2192,7 +2192,7 @@ void plotRaa2016()
      latexrapASRaa.DrawLatex(1.27,0.83,"%"); /// y=1.1
    } else{
      //plotBox
-     TBox *boxRapAS = new TBox(2.25,1-systXS_raa_glob,2.4,1+systXS_raa_glob);  // OR 3.8/4
+     TBox *boxRapAS = new TBox(2.3,1-systXS_raa_glob,2.4,1+systXS_raa_glob);  // OR 3.8/4
      boxRapAS->SetFillColor(kGray);
      boxRapAS->Draw();
    }   
@@ -2933,13 +2933,13 @@ void plotRaa2016()
 
       SBS_Total_1S->SetLineWidth(2);
       SBS_Total_2S->SetLineWidth(2);
-      SBS_Total_1S->SetFillColorAlpha(kRed+1,1); //color1Saa
-      SBS_Total_1S->SetFillStyle(3002);
-      SBS_Total_2S->SetFillColorAlpha(kBlue+1,1); //color2Saa
-      SBS_Total_2S->SetFillStyle(3002);
+      SBS_Total_1S->SetFillColorAlpha(kRed+1,0.4); //color1Saa
+      SBS_Total_1S->SetFillStyle(1000);
+      SBS_Total_2S->SetFillColorAlpha(kBlue+1,0.8); //color2Saa
+      SBS_Total_2S->SetFillStyle(1001);
  
-      SBS_Total_1S->Draw("3");
-      SBS_Total_2S->Draw("3");   
+      SBS_Total_1S->Draw("4");
+      SBS_Total_2S->Draw("4");   
 
       SBS_Absorp_1S->SetFillColor(kOrange-4);
       SBS_Absorp_1S->SetLineColor(kOrange-4);
@@ -3014,7 +3014,7 @@ void plotRaa2016()
    // gcent2->SetMarkerSize(markerSize);
 
    
-   TLegend *legend_RAAcent = new TLegend(0.75,0.45,0.88,0.6);
+   TLegend *legend_RAAcent = new TLegend(0.75,0.42,0.88,0.55);
    legend_RAAcent->SetTextSize(gTextSize);
    legend_RAAcent->SetFillStyle(0);
    legend_RAAcent->SetFillColor(0);
@@ -3129,34 +3129,44 @@ void plotRaa2016()
    
    main->cd();
    legend_RAAcent->AddEntry(arrow,"#varUpsilon(3S) ","l");
-   //legend_RAAcent->Draw();
+   TArrow *arrowl = new TArrow(296,0.683,296,0.625,0.025,"|->");
+   arrowl->SetLineColor(color3Spp);
+   arrowl->SetLineStyle(1);
+   arrowl->SetLineWidth(2);
+   
+   if(plug!=1){arrowl->Draw(); legend_RAAcent->Draw();}
 
    //   main->Draw();
-   CMS_lumi(main,104,33);
-   cRaacent->cd();
-   cRaacent->Update();
-   cRaacent->RedrawAxis();
+
    // cRaacent->GetFrame()->Draw();
    if (plug==0){
+     CMS_lumi(main,104,33);
+     cRaacent->cd();
+     cRaacent->Update();
+     cRaacent->RedrawAxis();
      cRaacent->SaveAs(basedir2 + TString("/RAA_Cent_Strickland.pdf"));    
      cRaacent->SaveAs(basedir2 + TString("/RAA_Cent_Strickland.png"));    
      cRaacent->SaveAs(basedir1 + TString("/pdf/RAA_Cent_Strickland.pdf"));
      cRaacent->SaveAs(basedir1 + TString("/png/RAA_Cent_Strickland.png"));
    }else if (plug==1){
+     CMS_lumi(main,104,33);
+     cRaacent->cd();
+     cRaacent->Update();
+     cRaacent->RedrawAxis();
      legend_RAAcent->SetX1(0.3);
      legend_RAAcent->SetX2(0.5);
      legend_RAAcent->SetY1(0.62);
      legend_RAAcent->SetY2(0.81);
      legend_RAAcent->Draw();
-      // CMS_lumi(cRaacent,104,33);
-      // cRaacent->Update();
-      // cRaacent->RedrawAxis();
-      // cRaacent->GetFrame()->Draw();
       cRaacent->SaveAs(basedir2 + TString("/RAA_Cent_Rapp.pdf"));    
       cRaacent->SaveAs(basedir2 + TString("/RAA_Cent_Rapp.png"));    
       cRaacent->SaveAs(basedir1 + TString("/pdf/RAA_Cent_Rapp.pdf"));
       cRaacent->SaveAs(basedir1 + TString("/png/RAA_Cent_Rapp.png"));
    }else if (plug==2){
+     CMS_lumi(main,104,33);
+     cRaacent->cd();
+     cRaacent->Update();
+     cRaacent->RedrawAxis();
      cRaacent->SaveAs(basedir2 + TString("/RAA_Cent.pdf"));    
      cRaacent->SaveAs(basedir2 + TString("/RAA_Cent.png"));    
      cRaacent->SaveAs(basedir1 + TString("/pdf/RAA_Cent.pdf"));
