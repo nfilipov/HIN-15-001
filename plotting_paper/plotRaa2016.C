@@ -81,6 +81,7 @@ void plotComparisons(bool exp, int plug);
 
 void plotRaa2016()
 {
+  int plug=2;
   setTDRStyle();
   std::ofstream ofplot;
   std::ofstream ofRes;
@@ -354,9 +355,9 @@ void plotRaa2016()
    legend_cspppt->SetFillColor(0);
    legend_cspppt->SetBorderSize(0);
    legend_cspppt->SetTextFont(42);
-   legend_cspppt->AddEntry(gpt1TNPpp,"#varUpsilon(1S) ","p"); 
-   legend_cspppt->AddEntry(gpt2TNPpp,"#varUpsilon(2S) ","p");
-   legend_cspppt->AddEntry(gpt3TNPpp,"#varUpsilon(3S) ","p");
+   legend_cspppt->AddEntry(gpt1TNPpp,"#varUpsilon(1S) ","pe"); 
+   legend_cspppt->AddEntry(gpt2TNPpp,"#varUpsilon(2S) ","pe");
+   legend_cspppt->AddEntry(gpt3TNPpp,"#varUpsilon(3S) ","pe");
    legend_cspppt->Draw();
    
    // |y| < 2.4
@@ -666,9 +667,9 @@ void plotRaa2016()
    legend_cspprap->SetFillColor(0);
    legend_cspprap->SetBorderSize(0);
    legend_cspprap->SetTextFont(42);
-   legend_cspprap->AddEntry(gRap1TNPpp,"#varUpsilon(1S) ","p"); 
-   legend_cspprap->AddEntry(gRap2TNPpp,"#varUpsilon(2S) ","p");
-   legend_cspprap->AddEntry(gRap3TNPpp,"#varUpsilon(3S) ","p");
+   legend_cspprap->AddEntry(gRap1TNPpp,"#varUpsilon(1S) ","pe"); 
+   legend_cspprap->AddEntry(gRap2TNPpp,"#varUpsilon(2S) ","pe");
+   legend_cspprap->AddEntry(gRap3TNPpp,"#varUpsilon(3S) ","pe");
    legend_cspprap->Draw();
 
    if (!plotLin && !plotBox) {
@@ -977,8 +978,8 @@ void plotRaa2016()
    legend_csaapt->SetFillColor(0);
    legend_csaapt->SetBorderSize(0);
    legend_csaapt->SetTextFont(42);
-   legend_csaapt->AddEntry(gpt1TNPaa,"#varUpsilon(1S) ","p"); 
-   legend_csaapt->AddEntry(gpt2TNPaa,"#varUpsilon(2S) ","p");
+   legend_csaapt->AddEntry(gpt1TNPaa,"#varUpsilon(1S) ","pe"); 
+   legend_csaapt->AddEntry(gpt2TNPaa,"#varUpsilon(2S) ","pe");
    legend_csaapt->Draw();
    
 
@@ -1219,7 +1220,7 @@ void plotRaa2016()
    
    // 6. RAA pt plot
 
-   int plug=0;
+
    
    TCanvas *cRaapt = new TCanvas("cRaapt","cRaapt"); 
    cRaapt->cd();
@@ -1247,6 +1248,9 @@ void plotRaa2016()
    gPt1RAAsyst->SetFillStyle(0);
    gPt1RAAsyst->SetLineWidth(2);
    gPt1RAAsyst->SetMarkerSize(0);
+   
+   TLegend *legR3 = new TLegend(0.2,0.78,0.8,0.9);
+   TLegend *legR2= new TLegend(0.2,0.51,0.8,0.8);
 
    if (plug==0){
      // drawing theory stuff
@@ -1294,18 +1298,9 @@ void plotRaa2016()
      sups2Spt3x0->SetLineColor(color2Sraa);
      sups2Spt3x0->SetLineStyle(3);
      sups2Spt3x0->Draw("l same");
-     TLegend *legR2= new TLegend(0.45,0.69,0.8,0.75);
-     legR2->SetBorderSize(0);
-     legR2->SetTextSize(gTextSize-0.01);
-     legR2->SetTextFont(42);
-     legR2->SetLineColor(0);
-     legR2->SetLineStyle(1);
-     legR2->SetLineWidth(2);
-     legR2->SetFillColor(0);
-     legR2->SetFillStyle(0);
-     TLegend *legR3 = new TLegend(0.2,0.55,0.7,0.73);
+
      legR3->SetBorderSize(0);
-     legR3->SetTextSize(gTextSize-0.01);
+     legR3->SetTextSize(gTextSize-0.006);
      legR3->SetTextFont(42);
      legR3->SetLineColor(0);
      legR3->SetLineStyle(2);
@@ -1313,12 +1308,20 @@ void plotRaa2016()
      legR3->SetFillColor(0);
      legR3->SetFillStyle(0);
      legR3->SetHeader("Strickland et al., Universe 2016, 2(3), 16");
+     legR2->SetBorderSize(0);
+     legR2->SetTextSize(gTextSize-0.006);
+     legR2->SetTextFont(42);
+     legR2->SetLineColor(0);
+     legR2->SetLineStyle(1);
+     legR2->SetLineWidth(2);
+     legR2->SetFillColor(0);
+     legR2->SetFillStyle(0);
      legR2->SetHeader("");
-     legR3->AddEntry(sups1Spt3x0," 4#pi#eta/s = 3","L");
-     legR3->AddEntry(sups1Spt2x0," 4#pi#eta/s = 2","L");
-     legR3->AddEntry(sups1Spt1x0," 4#pi#eta/s = 1","L");
+     legR2->AddEntry(sups1Spt3x0," 4#pi#eta/s = 3","L");
+     legR2->AddEntry(sups1Spt2x0," 4#pi#eta/s = 2","L");
+     legR2->AddEntry(sups1Spt1x0," 4#pi#eta/s = 1","L");
      
-     legR2->Draw();
+
      legR3->Draw();
    }  
    gPt1RAAsyst->Draw("2");
@@ -1342,21 +1345,26 @@ void plotRaa2016()
    gpt2TNPRAA->Draw("pe");
    gpt2circleRAA->Draw("p");
 
-   TLegend *legend_RAApt = new TLegend(0.54,0.56,0.7,0.68);
-   legend_RAApt->SetTextSize(gTextSize-0.003);
+   TLegend *legend_RAApt = new TLegend(0.24,0.53,0.6,0.65);
+   legend_RAApt->SetTextSize(gTextSize);
    legend_RAApt->SetFillStyle(0);
    legend_RAApt->SetFillColor(0);
    legend_RAApt->SetBorderSize(0);
    legend_RAApt->SetTextFont(42);
-   legend_RAApt->AddEntry(gpt1TNPRAA,"#varUpsilon(1S) ","p"); 
-   legend_RAApt->AddEntry(gpt2TNPRAA,"#varUpsilon(2S) ","p");
-   legend_RAApt->Draw();
+   legend_RAApt->AddEntry(gpt1TNPRAA,"#varUpsilon(1S) ","pe");
+   legend_RAApt->AddEntry(gpt2TNPRAA,"#varUpsilon(2S) ","pe");
+   
+   legR2->AddEntry(gpt1TNPRAA,"#varUpsilon(1S) ","pe");
+   legR2->AddEntry(gpt2TNPRAA,"#varUpsilon(2S) ","pe");
+   if(plug!=0){   legend_RAApt->Draw();} else {
+     legR2->Draw();
+   }
    
    // Cent. 0-100 %
    TLatex latexptRaa;
-   latexptRaa.SetTextSize(gTextSize);
+   latexptRaa.SetTextSize(gTextSize-0.005);
    latexptRaa.SetTextFont(42);
-   latexptRaa.DrawLatex(1.5,1.08,"Cent. 0-100%, |y| < 2.4"); // y=1.2 before
+   latexptRaa.DrawLatex(10,0.7,"Cent. 0-100%, |y| < 2.4"); // y=1.2 before
    if (!plotBox) {
      latexptRaa.DrawLatex(1.5,0.83,Form("Global uncertainty: %.1f",100*systXS_raa_glob));
      latexptRaa.DrawLatex(10.5,0.83,"%"); /// y=1.1 before
@@ -1366,7 +1374,7 @@ void plotRaa2016()
      boxPt->SetFillColor(kGray);
      boxPt->Draw();
    }
-   CMS_lumi(cRaapt,104,33);
+   CMS_lumi(cRaapt,103,33);
    cRaapt->Update();
    cRaapt->RedrawAxis();
    cRaapt->GetFrame()->Draw();
@@ -1721,8 +1729,8 @@ void plotRaa2016()
    legend_csaarap->SetFillColor(0);
    legend_csaarap->SetBorderSize(0);
    legend_csaarap->SetTextFont(42);
-   legend_csaarap->AddEntry(grap1TNPaa,"#varUpsilon(1S) ","p"); 
-   legend_csaarap->AddEntry(grap2TNPaa,"#varUpsilon(2S) ","p");
+   legend_csaarap->AddEntry(grap1TNPaa,"#varUpsilon(1S) ","pe"); 
+   legend_csaarap->AddEntry(grap2TNPaa,"#varUpsilon(2S) ","pe");
    legend_csaarap->Draw();
 
    // |y| < 2.4
@@ -1986,14 +1994,14 @@ void plotRaa2016()
    grap2TNPRAA->Draw("pe");
    grap2circleRAA->Draw("p");
 
-   TLegend *legend_RAArap = new TLegend(0.24,0.5,0.49,0.66);
+   TLegend *legend_RAArap = new TLegend(0.24,0.55,0.49,0.66);
    legend_RAArap->SetTextSize(gTextSize);
    legend_RAArap->SetFillStyle(0);
    legend_RAArap->SetFillColor(0);
    legend_RAArap->SetBorderSize(0);
    legend_RAArap->SetTextFont(42);
-   legend_RAArap->AddEntry(grap1TNPRAA,"#varUpsilon(1S) ","p"); 
-   legend_RAArap->AddEntry(grap2TNPRAA,"#varUpsilon(2S) ","p");
+   legend_RAArap->AddEntry(grap1TNPRAA,"#varUpsilon(1S) ","pe"); 
+   legend_RAArap->AddEntry(grap2TNPRAA,"#varUpsilon(2S) ","pe");
    legend_RAArap->Draw();
    
    // Cent. 0-100 %
@@ -2011,7 +2019,7 @@ void plotRaa2016()
      boxRap->Draw();
    }   
 
-   CMS_lumi(cRaarap,104,33);
+   CMS_lumi(cRaarap,103,33);
    cRaarap->Update();
    cRaarap->RedrawAxis();
    cRaarap->GetFrame()->Draw();
@@ -2156,9 +2164,9 @@ void plotRaa2016()
       legR2AS->SetLineWidth(2);
       legR2AS->SetFillColor(0);
       legR2AS->SetFillStyle(0);
-      TLegend *legR3AS = new TLegend(0.22,0.52,0.48,0.66);
+      TLegend *legR3AS = new TLegend(0.2,0.79,0.48,0.9);
       legR3AS->SetBorderSize(0);
-      legR3AS->SetTextSize(gTextSize-0.01);
+      legR3AS->SetTextSize(gTextSize-0.006);
       legR3AS->SetTextFont(42);
       legR3AS->SetLineColor(0);
       legR3AS->SetLineStyle(2);
@@ -2170,27 +2178,27 @@ void plotRaa2016()
       //      legR2AS->SetHeader("ALICE "); // (PLB 738 (2014) 361)
       legR2AS->AddEntry(ga1rc,"#varUpsilon(1S) PLB 738(2014) 361","P");
       //      legR3AS->SetTextSize(gTextSize-08005);
-      legR3AS->AddEntry(sups1Srap3x0," 4#pi#eta/s = 3","L");
-      legR3AS->AddEntry(sups1Srap2x0," 4#pi#eta/s = 2","L");
-      legR3AS->AddEntry(sups1Srap1x0," 4#pi#eta/s = 1","L");
-
+    
       //      legR2AS->Draw();
-      legR3AS->Draw();
-   TLegend *legend_RAArapAS = new TLegend(0.2,0.67,0.6,0.78);
-   legend_RAArapAS->SetTextSize(gTextSize-0.005);
+       legR3AS->Draw();
+   TLegend *legend_RAArapAS = new TLegend(0.2,0.52,0.6,0.78);
+   legend_RAArapAS->SetTextSize(gTextSize-0.006);
    legend_RAArapAS->SetFillStyle(0);
    legend_RAArapAS->SetFillColor(0);
    legend_RAArapAS->SetBorderSize(0);
    legend_RAArapAS->SetTextFont(42);
-   legend_RAArapAS->AddEntry(grapAS1TNPRAA,"#varUpsilon(1S) ","p"); 
-   legend_RAArapAS->AddEntry(grapAS2TNPRAA,"#varUpsilon(2S) ","p");
+   legend_RAArapAS->AddEntry(sups1Srap3x0," 4#pi#eta/s = 3","L");
+   legend_RAArapAS->AddEntry(sups1Srap2x0," 4#pi#eta/s = 2","L");
+   legend_RAArapAS->AddEntry(sups1Srap1x0," 4#pi#eta/s = 1","L");
+   legend_RAArapAS->AddEntry(grapAS1TNPRAA,"#varUpsilon(1S) ","pe"); 
+   legend_RAArapAS->AddEntry(grapAS2TNPRAA,"#varUpsilon(2S) ","pe");
    legend_RAArapAS->Draw();
    
    // Cent. 0-100 %
    TLatex latexrapASRaa;
    latexrapASRaa.SetTextSize(gTextSize);
    latexrapASRaa.SetTextFont(42);
-   latexrapASRaa.DrawLatex(0.2,1.08,"Cent. 0-100%"); // y=1.2 in the previous version
+   latexrapASRaa.DrawLatex(1.2,0.65,"Cent. 0-100%"); // y=1.2 in the previous version
    if (!plotBox) {
      latexrapASRaa.DrawLatex(0.2,0.83,Form("Global uncertainty: %.1f",100*systXS_raa_glob));
      latexrapASRaa.DrawLatex(1.27,0.83,"%"); /// y=1.1
@@ -2205,10 +2213,10 @@ void plotRaa2016()
    cRaarapAS->Update();
    cRaarapAS->RedrawAxis();
    cRaarapAS->GetFrame()->Draw();
-   cRaarapAS->SaveAs(basedir2 + TString("/RAA_RapAliceStrickland.pdf"));
-   cRaarapAS->SaveAs(basedir2 + TString("/RAA_RapAliceStrickland.png"));
    cRaarapAS->SaveAs(basedir1 + TString("/pdf/RAA_Rap_Strickland.pdf"));
    cRaarapAS->SaveAs(basedir1 + TString("/png/RAA_Rap_Strickland.png"));
+   cRaarapAS->SaveAs(basedir2 + TString("/RAA_Rap_Strickland.pdf"));
+   cRaarapAS->SaveAs(basedir2 + TString("/RAA_Rap_Strickland.png"));
 
    ///===============================
    /// Integrated cross sections (pt<40 actually)
@@ -2808,10 +2816,10 @@ void plotRaa2016()
    // f4RaaCent->GetXaxis()->CenterTitle(kTRUE);
    // f4RaaCent->Draw();
 
-   TLegend *leg2= new TLegend(0.25,0.65,0.4,0.72);
-   TLegend *leg3 = new TLegend(0.25,0.7,0.4,0.85);
+   TLegend *leg2= new TLegend(0.27,0.58,0.4,0.80);
+   TLegend *leg3 = new TLegend(0.27,0.60,0.4,0.80);
    leg3->SetBorderSize(0);
-   leg3->SetTextSize(gTextSize-0.01);
+   leg3->SetTextSize(gTextSize-0.005);
    leg3->SetTextFont(42);
    leg3->SetLineColor(0);
    leg3->SetLineStyle(2);
@@ -2819,7 +2827,7 @@ void plotRaa2016()
    leg3->SetFillColor(0);
    leg3->SetFillStyle(0);
    leg2->SetBorderSize(0);
-   leg2->SetTextSize(gTextSize-0.01);
+   leg2->SetTextSize(gTextSize);
    leg2->SetTextFont(42);
    leg2->SetLineColor(0);
    leg2->SetLineStyle(1);
@@ -2959,16 +2967,16 @@ void plotRaa2016()
       legR3->SetFillColor(0);
       legR3->SetFillStyle(0);
       // legR3->SetHeader("");
-      legR3->AddEntry(SBS_Total_1S," ","f");
-      legR3->AddEntry(SBS_Total_2S," ","f");
+      legR3->AddEntry(SBS_Total_1S,"#varUpsilon(1S)","f");
+      legR3->AddEntry(SBS_Total_2S,"#varUpsilon(2S)","f");
       legR3->Draw();
       TLatex *NucAbs = new TLatex(200,0.85,"Nuc. Abs.");
       NucAbs->Draw();
       TLatex latexrappC;
-      latexrappC.SetTextSize(gTextSize);
+      latexrappC.SetTextSize(gTextSize-0.005);
       latexrappC.SetTextFont(42);
       latexrappC.DrawLatex(40,1.5,"Eur. Phys. J. A 48 (2012) 72");
-    } 
+   } 
    TGraphErrors *gcent1syst = new TGraphErrors(nCentBins_2014,nPart2014,RAA_1S_cent,centErr2014,RAA_1S_cents); //for fun
    gcent1syst->SetLineColor(color1Sraa);
    gcent1syst->SetFillStyle(0);
@@ -3018,21 +3026,21 @@ void plotRaa2016()
    // gcent2->SetMarkerSize(markerSize);
 
    
-   TLegend *legend_RAAcent = new TLegend(0.75,0.42,0.88,0.55);
-   legend_RAAcent->SetTextSize(gTextSize);
+   TLegend *legend_RAAcent = new TLegend(0.1,0.42,120.88,0.55); 
+   //
+   legend_RAAcent->SetTextSize(gTextSize-0.005); 
    legend_RAAcent->SetFillStyle(0);
    legend_RAAcent->SetFillColor(0);
    legend_RAAcent->SetBorderSize(0);
    legend_RAAcent->SetTextFont(42);
-   legend_RAAcent->AddEntry(gcent1,"#varUpsilon(1S) ","p"); 
-   legend_RAAcent->AddEntry(gcent2,"#varUpsilon(2S) ","p");
-
+   legend_RAAcent->AddEntry(gcent1,"#varUpsilon(1S) ","pe"); 
+   legend_RAAcent->AddEntry(gcent2,"#varUpsilon(2S) ","pe");
 
    // Cent. 0-100 %
    TLatex latexcentRaa;
    latexcentRaa.SetTextSize(gTextSize);
    latexcentRaa.SetTextFont(42);
-   latexcentRaa.DrawLatex(315,1.2,"|y| < 2.4");
+   //   latexcentRaa.DrawLatex(315,1.2,"|y| < 2.4");
 
 
    TBox *box1S = new TBox(390,1-syst1S_pp_glob,405,1+syst1S_pp_glob); 
@@ -3138,22 +3146,23 @@ void plotRaa2016()
    arrowl->SetLineStyle(1);
    arrowl->SetLineWidth(2);
    
-   if(plug!=1){arrowl->Draw(); legend_RAAcent->Draw();}
+   if(plug!=1){arrowl->Draw(); }
 
-   //   main->Draw();
+     main->Draw();
 
-   // cRaacent->GetFrame()->Draw();
+     //     cRaacent->GetFrame()->Draw();
    if (plug==0){
-     CMS_lumi(main,104,33);
+     CMS_lumi(main,103,33);
      cRaacent->cd();
      cRaacent->Update();
      cRaacent->RedrawAxis();
+     //legend_RAAcent->Draw();
      cRaacent->SaveAs(basedir2 + TString("/RAA_Cent_Strickland.pdf"));    
      cRaacent->SaveAs(basedir2 + TString("/RAA_Cent_Strickland.png"));    
      cRaacent->SaveAs(basedir1 + TString("/pdf/RAA_Cent_Strickland.pdf"));
      cRaacent->SaveAs(basedir1 + TString("/png/RAA_Cent_Strickland.png"));
    }else if (plug==1){
-     CMS_lumi(main,104,33);
+     CMS_lumi(main,103,33);
      cRaacent->cd();
      cRaacent->Update();
      cRaacent->RedrawAxis();
@@ -3167,10 +3176,22 @@ void plotRaa2016()
       cRaacent->SaveAs(basedir1 + TString("/pdf/RAA_Cent_Rapp.pdf"));
       cRaacent->SaveAs(basedir1 + TString("/png/RAA_Cent_Rapp.png"));
    }else if (plug==2){
-     CMS_lumi(main,104,33);
-     cRaacent->cd();
-     cRaacent->Update();
-     cRaacent->RedrawAxis();
+     CMS_lumi(main,103,33);
+     //cRaacent->cd();
+     //cRaacent->Update();
+     //cRaacent->RedrawAxis();
+     //     arrowl->Draw();
+     TLegend *legend_try = new TLegend(0.75,0.42,0.88,0.55); 
+     //
+     legend_try->SetTextSize(gTextSize-0.005); 
+     legend_try->SetFillStyle(0);
+     legend_try->SetFillColor(0);
+     legend_try->SetBorderSize(0);
+     legend_try->SetTextFont(42);
+     legend_try->AddEntry(gcent1,"#varUpsilon(1S) ","pe"); 
+     legend_try->AddEntry(gcent2,"#varUpsilon(2S) ","pe");
+     legend_try->AddEntry(arrow,"#varUpsilon(3S) ","");
+     legend_try->Draw();
      cRaacent->SaveAs(basedir2 + TString("/RAA_Cent.pdf"));    
      cRaacent->SaveAs(basedir2 + TString("/RAA_Cent.png"));    
      cRaacent->SaveAs(basedir1 + TString("/pdf/RAA_Cent.pdf"));

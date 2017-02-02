@@ -76,19 +76,19 @@ CMS_lumi( TPad* pad, int iPeriod, int iPosX )
       // lumiText += " (#sqrt{s_{NN}} = 5.02 TeV)";
       lumiText2 += " #sqrt{s_{NN}} = 5.02 TeV";
     }
-  else if (iPeriod==101)
+  else if (iPeriod==101) // also PbPb cross section
     {
       lumiText += lumi_PbPb2011;
       lumiText += ", #sqrt{s_{NN}} = 2.76 TeV";
       // lumiText += " (2.76 TeV)";
     }
-  else if (iPeriod==102)
+  else if (iPeriod==102) // cross section of pp data
     {
       lumiText += lumi_pp2013;
       lumiText2 +=" #sqrt{s} = 2.76 TeV";
       // lumiText += " (2.76 TeV)";
     }
-  else if (iPeriod==103)
+  else if (iPeriod==103) // RAA
     {
       lumiText += lumi_PbPb2011;
       lumiText += ", ";
@@ -96,11 +96,11 @@ CMS_lumi( TPad* pad, int iPeriod, int iPosX )
       lumiText2 += " #sqrt{s_{NN}} = 2.76 TeV";
       // lumiText += " (2.76 TeV)";
     }
-  else if (iPeriod==104)
+  else if (iPeriod==104) // cross section of AA data
     {
       lumiText += lumi_PbPb2011;
-      // lumiText += ", ";
-      // lumiText += lumi_pp2013;
+      //lumiText += ", ";
+      //lumiText += lumi_pp2013;
       lumiText2 +=" #sqrt{s_{NN}} = 2.76 TeV";
       // lumiText += " (2.76 TeV)";
     }
